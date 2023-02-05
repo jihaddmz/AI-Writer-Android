@@ -61,61 +61,6 @@ fun Output(
                 .animateContentSize(animationSpec = tween(durationMillis = 1000))
         ) {
 
-            if (showDialog.value) Dialog(onDismissRequest = {
-                showDialog.value = false
-            }) {
-
-                Column(
-                    modifier = Modifier
-                        .layout { measurable, constraints ->
-                            val placeable = measurable.measure(constraints)
-                            layout(constraints.maxWidth, constraints.constrainHeight(constraints.maxHeight - 500), placementBlock = {
-                                placeable.place(0, 0)
-                            })
-                        }
-                        .fillMaxWidth()
-                        .background(color = Glass, shape = Shapes.medium)
-                        .verticalScroll(verticalScroll)
-                        .padding(SpacersSize.medium),
-                ) {
-
-                    if (showLinearProgressIndicator.value) {
-                        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                        Spacer(modifier = Modifier.height(SpacersSize.small))
-                    }
-
-                    val language = myDropDown(modifier = Modifier.fillMaxWidth(),
-                        label = stringResource(id = R.string.language),
-                        list = App.listOfLanguages,
-                        onItemSelect = {
-                            showLinearProgressIndicator.value = true
-                        })
-
-                    Spacer(modifier = Modifier.height(SpacersSize.small))
-
-                    AnimatedVisibility(visible = translatedText.value.isNotEmpty()) {
-                        MyText(text = translatedText.value, modifier = Modifier.clickable {
-                            HelperUI.showToast(
-                                context, App.getTextFromString(R.string.text_copied)
-                            )
-                            Helpers.copyToClipBoard(translatedText.value, context)
-                        })
-                    }
-
-                    HelperTranslate.identifyText(outputText.value) { initialLanguage ->
-                        HelperTranslate.downloadLanguageModel(language.lowercase(),
-                            onSuccessListener = {
-                                HelperTranslate.translating(
-                                    initialLanguage, outputText.value, language.lowercase()
-                                ) { textTranslate ->
-                                    showLinearProgressIndicator.value = false
-                                    translatedText.value = textTranslate
-                                }
-                            })
-                    }
-                }
-            }
-
             MyTextField(
                 modifier = Modifier.defaultMinSize(minHeight = 250.dp),
                 value = outputText.value,
@@ -153,18 +98,6 @@ fun Output(
                         )
                     )
                     else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
-                }
-
-                IconButton(onClick = {
-                    if (outputText.value.isNotEmpty())
-                        showDialog.value = true
-                    else
-                        HelperUI.showToast(context, App.getTextFromString(R.string.no_text_to_translate))
-                }) {
-                    MyIcon(
-                        iconID = R.drawable.icon_translate,
-                        contentDesc = stringResource(id = R.string.translate_text)
-                    )
                 }
 
                 when (rememberWindowInfo().screenWidthInfo) {

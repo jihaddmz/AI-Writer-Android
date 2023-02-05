@@ -94,6 +94,6 @@
     <string name="write_a_song">Write a song</string>
     <string name="song_input_label">Illustarting my passion in coding</string>
     <string name="nb_of_generations">Number of Generations</string>
-    <string name="back_button_disabled">Back button is disabled, please use the app navigation system</string>
+    <string name="back_button_exit_text">Press back again to exit app</string>
     <string name="subscribed">Subscribed</string>
 </resources>

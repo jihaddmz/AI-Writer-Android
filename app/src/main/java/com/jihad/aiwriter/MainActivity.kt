@@ -2,6 +2,7 @@ package com.jihad.aiwriter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
@@ -18,30 +19,27 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.jihad.aiwriter.components.DialogNbOfGenerationsExceeded
 import com.jihad.aiwriter.components.DrawerListItem
+import com.jihad.aiwriter.components.MyBackHandler
 import com.jihad.aiwriter.feature_generate_text.presentation.*
 import com.jihad.aiwriter.feature_generate_text.util.Screens
 import com.jihad.aiwriter.helpers.Constants
 import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.helpers.HelperUI
+import com.jihad.aiwriter.helpers.Helpers
 import com.jihad.aiwriter.ui.theme.*
-import com.jihad.aiwriter.viewModels.ViewModelSettings
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.net.URL
 import java.util.*
+import kotlin.concurrent.timerTask
 
 class MainActivity : ComponentActivity() {
     lateinit var clientBilling: BillingClient
@@ -200,22 +198,15 @@ class MainActivity : ComponentActivity() {
 
                                 // region composables
                                 composable(route = Screens.ScreenLaunch.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
-                                    ScreenLaunch(navController = navController)
+                                    MyBackHandler(context = this@MainActivity)
+                                    ScreenLaunch(
+                                        modifier = Modifier.padding(top = SpacersSize.medium),
+                                        navController = navController
+                                    )
                                 }
 
                                 composable(route = Screens.ScreenHome.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenHome(
                                         modifier = Modifier.padding(top = SpacersSize.medium),
                                         navController = navController
@@ -223,172 +214,87 @@ class MainActivity : ComponentActivity() {
                                 }
 
                                 composable(route = Screens.ScreenArticle.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenArticle(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenBlog.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenBlog(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenCode.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenCode(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenCV.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenCV(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenResume.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenResume(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenEmail.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenEmail(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenEssay.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenEssay(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenInstagram.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenInstagram(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenLetter.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenLetter(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenPoem.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenPoem(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenTiktok.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenTiktok(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenTwitter.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenTweet(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenPersonalBio.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenPersonalBio(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenCustom.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenCustom(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenYoutube.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenYoutube(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenFacebook.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenFacebook(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenSong.route) {
-                                    BackHandler(true) {
-                                        HelperUI.showToast(
-                                            this@MainActivity,
-                                            getString(R.string.back_button_disabled)
-                                        )
-                                    }
+                                    MyBackHandler(context = this@MainActivity)
                                     ScreenSong(navController = navController)
                                 }
                                 // endregion
