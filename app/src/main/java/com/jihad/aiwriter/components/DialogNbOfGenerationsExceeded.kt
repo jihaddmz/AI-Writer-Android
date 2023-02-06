@@ -16,6 +16,7 @@ import com.jihad.aiwriter.MainActivity
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.SettingsNotifier
 import com.jihad.aiwriter.helpers.Constants
+import com.jihad.aiwriter.helpers.HelperAuth
 import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.helpers.HelperUI
 import com.jihad.aiwriter.ui.theme.Shapes
@@ -85,16 +86,7 @@ fun DialogNbOfGenerationsExceeded(
                                     storeTransaction: StoreTransaction,
                                     customerInfo: CustomerInfo
                                 ) {
-                                    // changing the nb of generations state to reflect it in the topbar
-                                    SettingsNotifier.nbOfGenerationsLeft.value =
-                                        Constants.SUBSCRIBED_NB_OF_TRIES_ALLOWED
-
-                                    // changing it in sharedpreference
-                                    HelperSharedPreference.setInt(
-                                        HelperSharedPreference.SP_SETTINGS,
-                                        HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                                        Constants.MAX_NB_OF_TRIES_ALLOWED
-                                    )
+                                    HelperAuth.makeUserSubscribed()
                                 }
 
                                 override fun onError(

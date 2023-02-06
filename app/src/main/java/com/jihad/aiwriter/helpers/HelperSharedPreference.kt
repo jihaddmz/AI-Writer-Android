@@ -10,11 +10,11 @@ object HelperSharedPreference {
      * shared preferences name
      **/
     const val SP_SETTINGS = "settings"
+    const val SP_AUTHENTICATION = "authentication"
 
     /**
      * keys for settings shared preferences
      **/
-    const val SP_SETTINGS_SUBSCRIPTION_MONTHLY_TOKEN = "monthly_subscription"
     const val SP_SETTINGS_NB_OF_GENERATIONS_LEFT = "nb_of_generations_left"
     const val SP_SETTINGS_NB_OF_GENERATIONS = "nb_of_generations"
     const val SP_SETTINGS_IS_FIRST_TIME_LAUNCHED = "is_first_time_launched"
@@ -24,6 +24,11 @@ object HelperSharedPreference {
     const val SP_SETTINGS_CV_TYPE = "cv_type"
     const val SP_SETTINGS_PROGRAMMING_LANGUAGE = "programming_language"
     const val SP_SETTINGS_ESSAY_TYPE = "essay_type"
+
+    /**
+     * keys for authentication shared preferences
+     **/
+    const val SP_AUTHENTICATION_IS_SUBSCRIBED = "is_subscribed"
 
     fun setString(name: String, key: String, value: String, context: Context) {
         val sp = context.getSharedPreferences(name, Context.MODE_PRIVATE)

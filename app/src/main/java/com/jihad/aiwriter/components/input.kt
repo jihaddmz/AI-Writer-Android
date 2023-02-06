@@ -138,7 +138,7 @@ fun input(
         }
         MyButton(
             modifier = Modifier
-                .align(alignment = Alignment.End)
+                .fillMaxWidth()
                 .animateContentSize(),
             text = generateText.value,
             content = {
@@ -160,8 +160,8 @@ fun input(
                     HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
                     3,
                     context = context
-                ) == 0
-            ) {
+                ) == 0 && !HelperAuth.getUserSubscriptionState()
+            ) { // if the nb of generations left is 0, make the user to subscribe
                 SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value = true
             } else {
                 keyboardController?.hide()
@@ -176,24 +176,18 @@ fun input(
                         nbOfGenerations,
                         listOfGeneratedTexts,
                         output
-                    ) {
+                    ) { // on fetching response action done
                         showDialog.value = false
                         generateText.value = App.getTextFromString(R.string.generated)
 
-                        if (HelperSharedPreference.getInt(
-                                HelperSharedPreference.SP_SETTINGS,
-                                HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                                3
-                            ) <= 3
-                        ) {
+                        if (!HelperAuth.getUserSubscriptionState()) { // if the user is not yet subscribed, decrement the nb of generations left
+                            SettingsNotifier.nbOfGenerationsLeft.value -= 1
                             HelperSharedPreference.setInt(
                                 HelperSharedPreference.SP_SETTINGS,
                                 HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                                viewModel.nbOfGenerationsLeft.value - 1,
+                                SettingsNotifier.nbOfGenerationsLeft.value,
                                 context
                             )
-                            SettingsNotifier.nbOfGenerationsLeft.value -= 1
-                            viewModel.decrementNbOfGenerationsLeft()
                         }
 
                         Timer().schedule(timerTask {

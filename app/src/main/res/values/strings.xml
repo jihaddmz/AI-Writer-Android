@@ -10,7 +10,6 @@
     <string name="navigate_back">Navigate Back</string>
     <string name="write_an_email">Write an Email</string>
     <string name="generate">Generate</string>
-    <string name="youre_not_connected">You don\'t have network access, please reconnect and try again</string>
     <string name="write_a_blog">Write a Blog</string>
     <string name="write_an_article">Write an Article</string>
     <string name="write_an_essay">Write an Essay</string>
@@ -45,7 +44,7 @@
     <string name="type">Type</string>
     <string name="write_a_resume">Write a Resume</string>
     <string name="write_a_resume_of_type">Write a %s Resume</string>
-    <string name="no_connection">You\'re not connected, please reconnect and try again</string>
+    <string name="no_connection">You don\'t have network access, please connect and try again</string>
     <string name="placeholder_email_name">person@gmail.com</string>
     <string name="cover_letter">Cover Letter</string>
     <string name="reference_letter">Reference Letter</string>

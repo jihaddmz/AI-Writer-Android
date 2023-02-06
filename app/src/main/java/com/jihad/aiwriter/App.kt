@@ -4,8 +4,16 @@ import android.app.Application
 import android.content.Context
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.languageid.LanguageIdentification
+import com.jihad.aiwriter.helpers.Constants
+import com.jihad.aiwriter.helpers.HelperAuth
+import com.jihad.aiwriter.helpers.HelperSharedPreference
+import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
+import com.revenuecat.purchases.PurchasesError
+import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
+import java.util.*
+import kotlin.concurrent.timerTask
 
 class App : Application() {
 
@@ -26,7 +34,45 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        App.context = this
+        context = this
+
+        // mark checking purchase state
+        Timer().scheduleAtFixedRate(timerTask {
+            Purchases.sharedInstance.getCustomerInfo(object : ReceiveCustomerInfoCallback {
+                override fun onError(error: PurchasesError) {
+                }
+
+                override fun onReceived(customerInfo: CustomerInfo) {
+                    if (customerInfo.entitlements["premium"]?.isActive == true) { // if the user is subscribed
+                        // set the nb of generations left to unlimited
+//                        HelperSharedPreference.setInt(
+//                            HelperSharedPreference.SP_SETTINGS,
+//                            HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
+//                            Constants.SUBSCRIBED_NB_OF_TRIES_ALLOWED
+//                        )
+//                        SettingsNotifier.nbOfGenerationsLeft.value =
+//                            Constants.SUBSCRIBED_NB_OF_TRIES_ALLOWED
+                        HelperAuth.makeUserSubscribed()
+                    } else { // user has no access to the product
+//                        if (HelperSharedPreference.getInt(
+//                                HelperSharedPreference.SP_SETTINGS,
+//                                HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
+//                                0
+//                            ) == Constants.SUBSCRIBED_NB_OF_TRIES_ALLOWED
+//                        ) { // if the user was been subscribed, set the nb of generations left to 0, so he nedd
+//                            // to resubscribed
+//                            HelperSharedPreference.setInt(
+//                                HelperSharedPreference.SP_SETTINGS,
+//                                HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
+//                                0
+//                            )
+//                            SettingsNotifier.nbOfGenerationsLeft.value = 0
+//                        }
+                            HelperAuth.makeUserNotSubscribed()
+                    }
+                }
+            })
+        }, 5000, 10000)
 
 //        val qonversionConfig = QonversionConfig.Builder(
 //            this,
@@ -36,7 +82,9 @@ class App : Application() {
 //        Qonversion.initialize(qonversionConfig)
 
         Purchases.debugLogsEnabled = true
-        Purchases.configure(PurchasesConfiguration.Builder(this, "goog_NECfLQxMlFFmYmWUVNINyyiEEmb").build())
+        Purchases.configure(
+            PurchasesConfiguration.Builder(this, "goog_NECfLQxMlFFmYmWUVNINyyiEEmb").build()
+        )
 
         mapOfScreens = hashMapOf(
             0 to listOf(

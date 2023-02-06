@@ -1,11 +1,8 @@
 package com.jihad.aiwriter
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
@@ -30,19 +27,11 @@ import com.jihad.aiwriter.feature_generate_text.presentation.*
 import com.jihad.aiwriter.feature_generate_text.util.Screens
 import com.jihad.aiwriter.helpers.Constants
 import com.jihad.aiwriter.helpers.HelperSharedPreference
-import com.jihad.aiwriter.helpers.HelperUI
-import com.jihad.aiwriter.helpers.Helpers
 import com.jihad.aiwriter.ui.theme.*
-import com.revenuecat.purchases.CustomerInfo
-import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.PurchasesError
-import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.concurrent.timerTask
 
 class MainActivity : ComponentActivity() {
-    lateinit var clientBilling: BillingClient
 
     @SuppressLint("UnrememberedMutableState")
     @OptIn(ExperimentalMaterialApi::class)
@@ -56,38 +45,6 @@ class MainActivity : ComponentActivity() {
             val coroutineScope = rememberCoroutineScope()
 
             App.context = this
-
-            // mark checking purchase state
-            Purchases.sharedInstance.getCustomerInfo(object : ReceiveCustomerInfoCallback {
-                override fun onError(error: PurchasesError) {
-                }
-
-                override fun onReceived(customerInfo: CustomerInfo) {
-                    if (customerInfo.entitlements["premium"]?.isActive == true) { // if the user is subscribed
-                        // set the nb of generations left to unlimited
-                        HelperSharedPreference.setInt(
-                            HelperSharedPreference.SP_SETTINGS,
-                            HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                            Constants.SUBSCRIBED_NB_OF_TRIES_ALLOWED
-                        )
-                    } else { // user has no access to the product
-                        if (HelperSharedPreference.getInt(
-                                HelperSharedPreference.SP_SETTINGS,
-                                HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                                0
-                            ) == Constants.SUBSCRIBED_NB_OF_TRIES_ALLOWED
-                        ) { // if the user was been subscribed, set the nb of generations left to 0, so he nedd
-                            // to resubscribed
-                            HelperSharedPreference.setInt(
-                                HelperSharedPreference.SP_SETTINGS,
-                                HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                                0
-                            )
-                            SettingsNotifier.nbOfGenerationsLeft.value = 0
-                        }
-                    }
-                }
-            })
 
             AIWriterTheme {
                 Scaffold(
@@ -200,7 +157,7 @@ class MainActivity : ComponentActivity() {
                                 composable(route = Screens.ScreenLaunch.route) {
                                     MyBackHandler(context = this@MainActivity)
                                     ScreenLaunch(
-                                        modifier = Modifier.padding(top = SpacersSize.medium),
+                                        modifier = Modifier,
                                         navController = navController
                                     )
                                 }
@@ -208,7 +165,7 @@ class MainActivity : ComponentActivity() {
                                 composable(route = Screens.ScreenHome.route) {
                                     MyBackHandler(context = this@MainActivity)
                                     ScreenHome(
-                                        modifier = Modifier.padding(top = SpacersSize.medium),
+                                        modifier = Modifier,
                                         navController = navController
                                     )
                                 }
