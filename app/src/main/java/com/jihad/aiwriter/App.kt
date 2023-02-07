@@ -23,7 +23,6 @@ class App : Application() {
         val listOfLetterTypes by lazy { mutableListOf<String>() }
         val modelManager by lazy { RemoteModelManager.getInstance() }
         val languageIdentifier by lazy { LanguageIdentification.getClient() }
-        val listOfLanguages by lazy { mutableListOf<String>() }
         val listOfEssays by lazy { mutableListOf<String>() }
         lateinit var mapOfScreens: HashMap<Int, List<Any>>
         fun getTextFromString(textID: Int): String {
@@ -44,42 +43,13 @@ class App : Application() {
 
                 override fun onReceived(customerInfo: CustomerInfo) {
                     if (customerInfo.entitlements["premium"]?.isActive == true) { // if the user is subscribed
-                        // set the nb of generations left to unlimited
-//                        HelperSharedPreference.setInt(
-//                            HelperSharedPreference.SP_SETTINGS,
-//                            HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-//                            Constants.SUBSCRIBED_NB_OF_TRIES_ALLOWED
-//                        )
-//                        SettingsNotifier.nbOfGenerationsLeft.value =
-//                            Constants.SUBSCRIBED_NB_OF_TRIES_ALLOWED
                         HelperAuth.makeUserSubscribed()
                     } else { // user has no access to the product
-//                        if (HelperSharedPreference.getInt(
-//                                HelperSharedPreference.SP_SETTINGS,
-//                                HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-//                                0
-//                            ) == Constants.SUBSCRIBED_NB_OF_TRIES_ALLOWED
-//                        ) { // if the user was been subscribed, set the nb of generations left to 0, so he nedd
-//                            // to resubscribed
-//                            HelperSharedPreference.setInt(
-//                                HelperSharedPreference.SP_SETTINGS,
-//                                HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-//                                0
-//                            )
-//                            SettingsNotifier.nbOfGenerationsLeft.value = 0
-//                        }
                             HelperAuth.makeUserNotSubscribed()
                     }
                 }
             })
         }, 5000, 10000)
-
-//        val qonversionConfig = QonversionConfig.Builder(
-//            this,
-//            "KZvH_dnMjzNV1wkNcLJAu5aNSwSVeScT",
-//            QLaunchMode.SubscriptionManagement
-//        ).setEnvironment(QEnvironment.Sandbox).build()
-//        Qonversion.initialize(qonversionConfig)
 
         Purchases.debugLogsEnabled = true
         Purchases.configure(
@@ -91,36 +61,36 @@ class App : Application() {
                 getTextFromString(R.string.write_an_email),
                 R.drawable.icon_email
             ),
-            1 to listOf(getTextFromString(R.string.write_a_blog), R.drawable.icon_blog),
+            1 to listOf(getTextFromString(R.string.write_a_blog_top_bar), R.drawable.icon_blog),
             2 to listOf(getTextFromString(R.string.write_an_essay), R.drawable.icon_essay),
-            3 to listOf(getTextFromString(R.string.write_an_article), R.drawable.icon_article),
+            3 to listOf(getTextFromString(R.string.write_an_article_top_bar), R.drawable.icon_article),
             4 to listOf(getTextFromString(R.string.write_a_letter), R.drawable.emoji_letter),
             5 to listOf(getTextFromString(R.string.write_a_cv), R.drawable.icon_cv),
             6 to listOf(getTextFromString(R.string.write_a_resume), R.drawable.icon_resume),
-            7 to listOf(getTextFromString(R.string.write_a_poem), R.drawable.icon_poem_heart),
-            8 to listOf(getTextFromString(R.string.write_a_song), R.drawable.icon_song),
+            7 to listOf(getTextFromString(R.string.write_a_poem_top_bar), R.drawable.icon_poem_heart),
+            8 to listOf(getTextFromString(R.string.write_a_song_top_bar), R.drawable.icon_song),
             9 to listOf(
-                getTextFromString(R.string.write_a_tweet),
+                getTextFromString(R.string.write_a_tweet_top_bar),
                 R.drawable.icon_logo_twitter
             ),
             10 to listOf(
-                getTextFromString(R.string.write_a_viral_tiktok_captions),
+                getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar),
                 R.drawable.icon_tiktok
             ),
             11 to listOf(
-                getTextFromString(R.string.write_an_instagram_caption),
+                getTextFromString(R.string.write_an_instagram_caption_top_bar),
                 R.drawable.icon_instagram
             ),
             12 to listOf(
-                getTextFromString(R.string.write_a_facebook_post),
+                getTextFromString(R.string.write_a_facebook_post_top_bar),
                 R.drawable.icon_facebook
             ),
             13 to listOf(
-                getTextFromString(R.string.write_a_youtube_caption),
+                getTextFromString(R.string.write_a_youtube_caption_top_bar),
                 R.drawable.icon_youtube
             ),
             14 to listOf(
-                getTextFromString(R.string.write_a_personal_bio),
+                getTextFromString(R.string.write_a_personal_bio_top_bar),
                 R.drawable.social_bio
             ),
             15 to listOf(getTextFromString(R.string.write_a_code), R.drawable.icon_code),
@@ -135,11 +105,6 @@ class App : Application() {
         listOfLetterTypes.add(getString(R.string.cover_letter))
         listOfLetterTypes.add(getString(R.string.reference_letter))
         listOfLetterTypes.add(getString(R.string.resignation_letter))
-
-        listOfLanguages.add(getString(R.string.en))
-        listOfLanguages.add(getString(R.string.ar))
-        listOfLanguages.add(getString(R.string.de))
-        listOfLanguages.add(getString(R.string.fr))
 
         listOfEssays.add(getTextFromString(R.string.normal_essay))
         listOfEssays.add(getTextFromString(R.string.narrative))

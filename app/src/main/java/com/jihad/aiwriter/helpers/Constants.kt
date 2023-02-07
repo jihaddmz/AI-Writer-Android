@@ -1,5 +1,8 @@
 package com.jihad.aiwriter.helpers
 
+import com.jihad.aiwriter.App
+import com.jihad.aiwriter.R
+
 
 object Constants {
 
@@ -12,6 +15,20 @@ object Constants {
     val SUBSCRIPTION_MONTHLY_ID = "generations_monthly_fee"
     val EXIT_TIME_BETWEEN = 3000L
     val Toast_Lenght = 6000
+    val OUTPUT_LANGUAGES by lazy {
+        listOf(
+            App.getTextFromString(R.string.english),
+            App.getTextFromString(R.string.french),
+            App.getTextFromString(R.string.arabic),
+            App.getTextFromString(R.string.german),
+            App.getTextFromString(R.string.hindi),
+            App.getTextFromString(R.string.italian),
+            App.getTextFromString(R.string.purtaguese),
+            App.getTextFromString(R.string.russian),
+            App.getTextFromString(R.string.turkish),
+            App.getTextFromString(R.string.swedish),
+        )
+    }
     val listOfProgrammingLanguages by lazy {
         listOf(
             "Java",
@@ -36,5 +53,4 @@ object Constants {
             "CSS"
         )
     }
-
 }

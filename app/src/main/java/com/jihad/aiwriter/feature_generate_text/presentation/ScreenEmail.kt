@@ -15,6 +15,7 @@ import com.jihad.aiwriter.components.Output
 import com.jihad.aiwriter.components.TopBar
 import com.jihad.aiwriter.components.input
 import com.jihad.aiwriter.components.myEditTextLabel
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -56,7 +57,7 @@ fun ScreenEmail(
             val output = input(
                 label = stringResource(id = R.string.email_input_label),
                 inputPrefix = stringResource(
-                    id = R.string.write_an_email_to, name
+                    id = R.string.write_an_email_to, HelperSharedPreference.getOutputLanguage(), name
                 ),
                 showDialog = showDialog
             )

@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import com.jihad.aiwriter.App
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.components.*
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -74,6 +75,7 @@ fun ScreenLetter(
                 "${
                     stringResource(
                         id = R.string.write_a_letter_of_type,
+                        HelperSharedPreference.getOutputLanguage(),
                         type
                     )
                 } for a job position of $jobTitle to $name "
@@ -81,6 +83,7 @@ fun ScreenLetter(
                 "${
                     stringResource(
                         id = R.string.write_a_letter_of_type,
+                        HelperSharedPreference.getOutputLanguage(),
                         type
                     )
                 } to $name "

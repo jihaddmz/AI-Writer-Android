@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.components.*
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -31,7 +32,7 @@ fun ScreenYoutube(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_youtube_caption), navController = navController
+        text = stringResource(id = R.string.write_a_youtube_caption_top_bar), navController = navController
     ) {
 
         Column(
@@ -49,7 +50,7 @@ fun ScreenYoutube(
 
             val output = input(
                 label = stringResource(id = R.string.youtube_input_label),
-                inputPrefix = stringResource(id = R.string.write_a_youtube_caption),
+                inputPrefix = stringResource(id = R.string.write_a_youtube_caption, HelperSharedPreference.getOutputLanguage()),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
                 listOfGeneratedTexts = listOfGenerations

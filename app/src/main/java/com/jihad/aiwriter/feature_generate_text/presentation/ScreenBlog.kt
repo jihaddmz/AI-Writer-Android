@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.components.*
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 
@@ -33,7 +34,7 @@ fun ScreenBlog(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(verticalScroll),
-        text = stringResource(id = R.string.write_a_blog),
+        text = stringResource(id = R.string.write_a_blog_top_bar),
         navController = navController
     ) {
 
@@ -56,11 +57,12 @@ fun ScreenBlog(
             val inputPrefix = if (isHeadlinesEnabled) {
                 "${
                     stringResource(
-                        id = R.string.write_a_blog
+                        id = R.string.write_a_blog,
+                        HelperSharedPreference.getOutputLanguage()
                     )
                 } with headlines "
             } else {
-                "${stringResource(id = R.string.write_a_blog)} "
+                "${stringResource(id = R.string.write_a_blog, HelperSharedPreference.getOutputLanguage())} "
             }
 
             val output = input(

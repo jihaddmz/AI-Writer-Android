@@ -14,6 +14,8 @@ import com.jihad.aiwriter.R
 import com.jihad.aiwriter.components.Output
 import com.jihad.aiwriter.components.TopBar
 import com.jihad.aiwriter.components.input
+import com.jihad.aiwriter.helpers.HelperSharedPreference
+import com.jihad.aiwriter.helpers.Helpers
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -30,7 +32,7 @@ fun ScreenPersonalBio(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_personal_bio), navController = navController
+        text = stringResource(id = R.string.write_a_personal_bio_top_bar), navController = navController
     ) {
 
         if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -42,7 +44,7 @@ fun ScreenPersonalBio(
                 .verticalScroll(verticalScroll)
         ) {
 
-            val inputPrefix = stringResource(id = R.string.write_a_personal_bio)
+            val inputPrefix = stringResource(id = R.string.write_a_personal_bio, HelperSharedPreference.getOutputLanguage())
 
             val output = input(
                 label = stringResource(id = R.string.that_captures_attention),

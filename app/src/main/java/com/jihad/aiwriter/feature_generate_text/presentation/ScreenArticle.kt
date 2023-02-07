@@ -15,6 +15,7 @@ import com.jihad.aiwriter.components.Output
 import com.jihad.aiwriter.components.TopBar
 import com.jihad.aiwriter.components.input
 import com.jihad.aiwriter.components.length
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -31,7 +32,7 @@ fun ScreenArticle(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_an_article),
+        text = stringResource(id = R.string.write_an_article_top_bar),
         navController = navController
     ) {
         if (showDialog.value)
@@ -50,7 +51,7 @@ fun ScreenArticle(
 
             val output = input(
                 label = stringResource(id = R.string.article_input_label),
-                inputPrefix = stringResource(id = R.string.write_an_article),
+                inputPrefix = stringResource(id = R.string.write_an_article, HelperSharedPreference.getOutputLanguage()),
                 length = length,
                 showDialog = showDialog
             )

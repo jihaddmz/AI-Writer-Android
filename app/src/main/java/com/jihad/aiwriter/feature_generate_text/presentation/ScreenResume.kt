@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import com.jihad.aiwriter.App
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.components.*
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -58,6 +59,7 @@ fun ScreenResume(
                 inputPrefix = "${
                     stringResource(
                         id = R.string.write_a_resume_of_type,
+                        HelperSharedPreference.getOutputLanguage(),
                         resumeType
                     )
                 } for a $jobTitle",

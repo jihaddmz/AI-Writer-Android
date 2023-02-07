@@ -32,7 +32,7 @@ import com.jihad.aiwriter.ui.theme.SpacersSize
 fun myDropDown(
     modifier: Modifier = Modifier,
     label: String = "",
-    list: MutableList<String> = Constants.listOfProgrammingLanguages.toMutableList(),
+    list: List<String> = Constants.listOfProgrammingLanguages.toMutableList(),
     onItemSelect: () -> Unit = {}
 ): String {
 
@@ -79,6 +79,16 @@ fun myDropDown(
                         HelperSharedPreference.SP_SETTINGS,
                         HelperSharedPreference.SP_SETTINGS_ESSAY_TYPE,
                         App.getTextFromString(R.string.normal_essay),
+                        context
+                    )
+                )
+            }
+            Constants.OUTPUT_LANGUAGES -> {
+                mutableStateOf(
+                    HelperSharedPreference.getString(
+                        HelperSharedPreference.SP_SETTINGS,
+                        HelperSharedPreference.SP_SETTINGS_OUTPUT_LANGUAGE,
+                        App.getTextFromString(R.string.english),
                         context
                     )
                 )
@@ -178,6 +188,14 @@ fun myDropDown(
                                     HelperSharedPreference.setString(
                                         HelperSharedPreference.SP_SETTINGS,
                                         HelperSharedPreference.SP_SETTINGS_ESSAY_TYPE,
+                                        it,
+                                        context
+                                    )
+                                }
+                                Constants.OUTPUT_LANGUAGES -> {
+                                    HelperSharedPreference.setString(
+                                        HelperSharedPreference.SP_SETTINGS,
+                                        HelperSharedPreference.SP_SETTINGS_OUTPUT_LANGUAGE,
                                         it,
                                         context
                                     )

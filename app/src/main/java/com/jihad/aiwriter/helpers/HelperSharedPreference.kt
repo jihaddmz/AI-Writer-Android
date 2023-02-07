@@ -3,6 +3,7 @@ package com.jihad.aiwriter.helpers
 import android.content.Context
 import androidx.core.content.edit
 import com.jihad.aiwriter.App
+import com.jihad.aiwriter.R
 
 object HelperSharedPreference {
 
@@ -24,12 +25,24 @@ object HelperSharedPreference {
     const val SP_SETTINGS_CV_TYPE = "cv_type"
     const val SP_SETTINGS_PROGRAMMING_LANGUAGE = "programming_language"
     const val SP_SETTINGS_ESSAY_TYPE = "essay_type"
+    const val SP_SETTINGS_OUTPUT_LANGUAGE = "output_language"
 
     /**
      * keys for authentication shared preferences
      **/
     const val SP_AUTHENTICATION_IS_SUBSCRIBED = "is_subscribed"
 
+    /**
+     * most common shared preferences keys
+     **/
+    fun getOutputLanguage(): String{
+        val sp = App.context.getSharedPreferences(SP_SETTINGS, Context.MODE_PRIVATE)
+        return sp.getString(SP_SETTINGS_OUTPUT_LANGUAGE, App.getTextFromString(R.string.english))!!
+    }
+
+    /**
+     * getters and setters for shared preferences keys as per type
+     **/
     fun setString(name: String, key: String, value: String, context: Context) {
         val sp = context.getSharedPreferences(name, Context.MODE_PRIVATE)
         sp.edit {
@@ -77,7 +90,7 @@ object HelperSharedPreference {
         }
     }
 
-    fun getString(name: String, key: String, value: String, context: Context): String {
+    fun getString(name: String, key: String, value: String, context: Context = App.context): String {
         val sp = context.getSharedPreferences(name, Context.MODE_PRIVATE)
         return sp.getString(key, value)!!
     }
@@ -87,12 +100,12 @@ object HelperSharedPreference {
         return sp.getInt(key, value)
     }
 
-    fun getFloat(name: String, key: String, value: Float, context: Context): Float {
+    fun getFloat(name: String, key: String, value: Float, context: Context = App.context): Float {
         val sp = context.getSharedPreferences(name, Context.MODE_PRIVATE)
         return sp.getFloat(key, value)
     }
 
-    fun getBool(name: String, key: String, value: Boolean, context: Context): Boolean{
+    fun getBool(name: String, key: String, value: Boolean, context: Context = App.context): Boolean{
         val sp = context.getSharedPreferences(name, Context.MODE_PRIVATE)
         return sp.getBoolean(key, value)
     }

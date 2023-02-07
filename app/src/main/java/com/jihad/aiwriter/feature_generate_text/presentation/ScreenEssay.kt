@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import com.jihad.aiwriter.App
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.components.*
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -53,7 +54,11 @@ fun ScreenEssay(
 
             val output = input(
                 label = stringResource(id = R.string.essay_input_label),
-                inputPrefix = stringResource(id = R.string.write_an_essay_of_type, essayType),
+                inputPrefix = stringResource(
+                    id = R.string.write_an_essay_of_type,
+                    HelperSharedPreference.getOutputLanguage(),
+                    essayType
+                ),
                 length = length,
                 showDialog = showDialog
             )

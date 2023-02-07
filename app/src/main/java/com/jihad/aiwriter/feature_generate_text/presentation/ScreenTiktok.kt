@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.components.*
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -32,7 +33,7 @@ fun ScreenTiktok(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_viral_tiktok_captions), navController = navController
+        text = stringResource(id = R.string.write_a_viral_tiktok_captions_top_bar), navController = navController
     ) {
 
         Column(
@@ -50,7 +51,7 @@ fun ScreenTiktok(
 
             val output = input(
                 label = stringResource(id = R.string.tiktok_input_label),
-                inputPrefix = stringResource(id = R.string.write_a_viral_tiktok_captions),
+                inputPrefix = stringResource(id = R.string.write_a_viral_tiktok_captions, HelperSharedPreference.getOutputLanguage()),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
                 listOfGeneratedTexts = listOfGenerations

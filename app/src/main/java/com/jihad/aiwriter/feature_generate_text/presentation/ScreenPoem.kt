@@ -15,6 +15,7 @@ import com.jihad.aiwriter.components.Output
 import com.jihad.aiwriter.components.TopBar
 import com.jihad.aiwriter.components.input
 import com.jihad.aiwriter.components.length
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -31,7 +32,7 @@ fun ScreenPoem(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_poem), navController = navController
+        text = stringResource(id = R.string.write_a_poem_top_bar), navController = navController
     ) {
 
         if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -50,7 +51,7 @@ fun ScreenPoem(
 
             val output = input(
                 label = stringResource(id = R.string.poem_input_label),
-                inputPrefix = stringResource(id = R.string.write_a_poem),
+                inputPrefix = stringResource(id = R.string.write_a_poem, HelperSharedPreference.getOutputLanguage()),
                 length = length,
                 showDialog = showDialog
             )

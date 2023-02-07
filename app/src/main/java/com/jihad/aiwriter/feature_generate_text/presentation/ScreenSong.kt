@@ -15,6 +15,7 @@ import com.jihad.aiwriter.components.Output
 import com.jihad.aiwriter.components.TopBar
 import com.jihad.aiwriter.components.input
 import com.jihad.aiwriter.components.length
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -31,7 +32,7 @@ fun ScreenSong(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_song), navController = navController
+        text = stringResource(id = R.string.write_a_song_top_bar), navController = navController
     ) {
 
         if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -47,7 +48,7 @@ fun ScreenSong(
 
             val output = input(
                 label = stringResource(id = R.string.song_input_label),
-                inputPrefix = stringResource(id = R.string.write_a_song),
+                inputPrefix = stringResource(id = R.string.write_a_song, HelperSharedPreference.getOutputLanguage()),
                 showDialog = showDialog,
                 length = length
             )

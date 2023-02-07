@@ -30,6 +30,7 @@ fun TopBar(
     text: String,
     navController: NavController,
     viewModel: ViewModelSettings = viewModel(),
+    isContextInSettings: Boolean = false,
     content: @Composable () -> Unit,
 ) {
 
@@ -74,7 +75,7 @@ fun TopBar(
 
             MyText(text = text, color = Color.White, fontWeight = FontWeight.Bold)
 
-            if (!HelperAuth.getUserSubscriptionState()) { // if user is not subscribed
+            if (!HelperAuth.getUserSubscriptionState() && !isContextInSettings) { // if user is not subscribed
                 MyText(
                     modifier = Modifier
                         .fillMaxWidth()

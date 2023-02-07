@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.components.*
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -31,7 +32,7 @@ fun ScreenTweet(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_tweet), navController = navController
+        text = stringResource(id = R.string.write_a_tweet_top_bar), navController = navController
     ) {
 
         Column(
@@ -49,7 +50,7 @@ fun ScreenTweet(
 
             val output = input(
                 label = stringResource(id = R.string.tweet_input_label),
-                inputPrefix = stringResource(id = R.string.write_a_tweet),
+                inputPrefix = stringResource(id = R.string.write_a_tweet, HelperSharedPreference.getOutputLanguage()),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
                 listOfGeneratedTexts = listOfGenerations

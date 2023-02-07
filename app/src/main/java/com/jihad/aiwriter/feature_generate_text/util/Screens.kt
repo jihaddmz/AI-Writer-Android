@@ -21,4 +21,5 @@ sealed class Screens(val route: String){
     object ScreenYoutube: Screens("screen_youtube")
     object ScreenFacebook: Screens("screen_facebook")
     object ScreenSong: Screens("screen_song")
+    object ScreenSettings: Screens("screen_settings")
 }

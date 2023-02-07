@@ -5,10 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.DrawerValue
 import androidx.compose.material.ExperimentalMaterialApi
@@ -16,17 +13,15 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
-import com.jihad.aiwriter.components.DialogNbOfGenerationsExceeded
-import com.jihad.aiwriter.components.DrawerListItem
-import com.jihad.aiwriter.components.MyBackHandler
+import com.jihad.aiwriter.components.*
 import com.jihad.aiwriter.feature_generate_text.presentation.*
 import com.jihad.aiwriter.feature_generate_text.util.Screens
 import com.jihad.aiwriter.helpers.Constants
-import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.*
 import kotlinx.coroutines.launch
 import java.util.*
@@ -253,6 +248,11 @@ class MainActivity : ComponentActivity() {
                                 composable(route = Screens.ScreenSong.route) {
                                     MyBackHandler(context = this@MainActivity)
                                     ScreenSong(navController = navController)
+                                }
+
+                                composable(route = Screens.ScreenSettings.route) {
+                                    MyBackHandler(context = this@MainActivity)
+                                    ScreenSettings(navController = navController)
                                 }
                                 // endregion
                             }

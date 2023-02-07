@@ -13,6 +13,7 @@ import androidx.navigation.NavController
 import com.jihad.aiwriter.App
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.components.*
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -59,6 +60,7 @@ fun ScreenCV(
                 inputPrefix = "${
                     stringResource(
                         id = R.string.write_a_cv_of_type,
+                        HelperSharedPreference.getOutputLanguage(),
                         cvType
                     )
                 } for a $jobTitle",

@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.components.*
+import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable
@@ -31,7 +32,7 @@ fun ScreenFacebook(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_facebook_post), navController = navController
+        text = stringResource(id = R.string.write_a_facebook_post_top_bar), navController = navController
     ) {
 
         Column(
@@ -49,7 +50,7 @@ fun ScreenFacebook(
 
             val output = input(
                 label = stringResource(id = R.string.facebook_input_label),
-                inputPrefix = stringResource(id = R.string.write_a_facebook_post),
+                inputPrefix = stringResource(id = R.string.write_a_facebook_post, HelperSharedPreference.getOutputLanguage()),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
                 listOfGeneratedTexts = listOfGenerations

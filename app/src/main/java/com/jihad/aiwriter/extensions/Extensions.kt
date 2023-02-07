@@ -20,7 +20,6 @@ fun LazyGridScope.sectionsGridContent(
     columns: Int,
     state: LazyListState,
     navController: NavController,
-    showDialog: MutableState<Boolean>
 ) {
     items(map.size) { index ->
         val (delay, easing) = state.calculateDelayAndEasing(index, columns)
@@ -87,10 +86,6 @@ fun LazyGridScope.sectionsGridContent(
 
                 16 -> {
                     navController.navigate(Screens.ScreenCustom.route)
-                }
-
-                17 -> {
-                    showDialog.value = true
                 }
             }
 
