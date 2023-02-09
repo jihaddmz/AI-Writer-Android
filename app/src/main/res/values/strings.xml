@@ -24,7 +24,7 @@
     <string name="write_a_viral_tiktok_captions_top_bar">Write a viral Tiktok captions</string>
     <string name="write_a_viral_tiktok_captions">Write an %s viral Tiktok captions</string>
     <string name="write_an_instagram_caption">Write an %s Instagram caption</string>
-    <string name="write_an_instagram_caption_top_bar">Write an Instagram caption</string>
+    <string name="write_an_instagram_caption_top_bar">Write a Instagram caption</string>
     <string name="write_a_code">Write an Code</string>
     <string name="email_input_label">inorder to meet 10 a.m at my house</string>
     <string name="write_an_email_to">Write an %s email to %s</string>
@@ -75,7 +75,7 @@
     <string name="subscribe">Subscribe</string>
     <string name="add_your_option_label">Add your custom desired section</string>
     <string name="write_a_facebook_post">Write an %s facebook post</string>
-    <string name="write_a_facebook_post_top_bar">Write an facebook post</string>
+    <string name="write_a_facebook_post_top_bar">Write a facebook post</string>
     <string name="narrative">Narrative Essay</string>
     <string name="descriptive">Descriptive Essay</string>
     <string name="expository">Expository Essay</string>
@@ -115,4 +115,20 @@
     <string name="russian">Russian</string>
     <string name="turkish">Turkish</string>
     <string name="swedish">Swedish</string>
+    <string name="write_a_podcast_top_bar">Write a Podcast</string>
+    <string name="podcast_input_label">On how to start a business</string>
+    <string name="write_an_podcast_of_type">Write an %s %s</string>
+    <string name="conversational">Conversational Podcast</string>
+    <string name="educational">Educational Podcast</string>
+    <string name="solo">Solo Podcast</string>
+    <string name="storytelling">Storytelling Podcast</string>
+    <string name="podcast_theater">Podcast theater</string>
+    <string name="write_a_game_script_top_label">Write a Game Script</string>
+    <string name="playStation_5">PlayStation 5</string>
+    <string name="playStation_4">PlayStation 4</string>
+    <string name="desktop">Desktop</string>
+    <string name="xbox">Xbox</string>
+    <string name="mobile">Mobile</string>
+    <string name="nintendo">Nintendo</string>
+    <string name="write_an_game_script">Write an %s %s game script</string>
 </resources>

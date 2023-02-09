@@ -12,8 +12,8 @@ android {
         applicationId "com.jihad.aiwriter"
         minSdk 21
         targetSdk 32
-        versionCode 30
-        versionName "1.40"
+        versionCode 32
+        versionName "1.42"
 
         signingConfigs {
             config {
@@ -36,8 +36,8 @@ android {
         buildTypes {
             release {
                 minifyEnabled true
-//                debuggable true
-//                signingConfig signingConfigs.config
+                debuggable true
+                signingConfig signingConfigs.config
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             }
         }
@@ -98,7 +98,6 @@ dependencies {
 
     // below line is used for volley library
     implementation 'com.android.volley:volley:1.2.1'
-
 
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1'
 

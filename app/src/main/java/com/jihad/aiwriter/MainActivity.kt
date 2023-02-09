@@ -254,6 +254,16 @@ class MainActivity : ComponentActivity() {
                                     MyBackHandler(context = this@MainActivity)
                                     ScreenSettings(navController = navController)
                                 }
+
+                                composable(route = Screens.ScreenPodcast.route) {
+                                    MyBackHandler(context = this@MainActivity)
+                                    ScreenPodcast(navController = navController)
+                                }
+
+                                composable(route = Screens.ScreenGame.route) {
+                                    MyBackHandler(context = this@MainActivity)
+                                    ScreenGame(navController = navController)
+                                }
                                 // endregion
                             }
                         }

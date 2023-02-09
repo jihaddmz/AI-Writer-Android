@@ -37,7 +37,7 @@ fun sliderNbOfGenerations(
         modifier = modifier
             .fillMaxWidth()
             .animateContentSize(animationSpec = tween(durationMillis = 1000)),
-        horizontalArrangement = Arrangement.SpaceAround,
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
 

@@ -23,7 +23,7 @@ fun LazyGridScope.sectionsGridContent(
 ) {
     items(map.size) { index ->
         val (delay, easing) = state.calculateDelayAndEasing(index, columns)
-        val animation = tween<Float>(durationMillis = 500, delayMillis = delay, easing = easing)
+        val animation = tween<Float>(durationMillis = 300, delayMillis = delay, easing = easing)
         val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
         val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
         val text = map[index]?.get(0)
@@ -77,14 +77,20 @@ fun LazyGridScope.sectionsGridContent(
                 }
 
                 14 -> {
-                    navController.navigate(Screens.ScreenPersonalBio.route)
+                    navController.navigate(Screens.ScreenPodcast.route)
                 }
 
                 15 -> {
-                    navController.navigate(Screens.ScreenCode.route)
+                    navController.navigate(Screens.ScreenGame.route)
                 }
 
                 16 -> {
+                    navController.navigate(Screens.ScreenPersonalBio.route)
+                }
+                17 -> {
+                    navController.navigate(Screens.ScreenCode.route)
+                }
+                18 -> {
                     navController.navigate(Screens.ScreenCustom.route)
                 }
             }

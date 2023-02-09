@@ -73,7 +73,6 @@ fun DialogNbOfGenerationsExceeded(
                 SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value = false
 
                 // mark on subscribe button click
-
                 Purchases.sharedInstance.getOfferingsWith({ error ->
                     // An error occurred
                 }) { offerings ->

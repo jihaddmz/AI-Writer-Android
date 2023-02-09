@@ -4,9 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.languageid.LanguageIdentification
-import com.jihad.aiwriter.helpers.Constants
 import com.jihad.aiwriter.helpers.HelperAuth
-import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
@@ -90,11 +88,17 @@ class App : Application() {
                 R.drawable.icon_youtube
             ),
             14 to listOf(
+                getTextFromString(R.string.write_a_podcast_top_bar), R.drawable.icon_podcast
+            ),
+            15 to listOf(
+                getTextFromString(R.string.write_a_game_script_top_label), R.drawable.icon_video_game
+            ),
+            16 to listOf(
                 getTextFromString(R.string.write_a_personal_bio_top_bar),
                 R.drawable.social_bio
             ),
-            15 to listOf(getTextFromString(R.string.write_a_code), R.drawable.icon_code),
-            16 to listOf(getTextFromString(R.string.custom), R.drawable.icon_customize),
+            17 to listOf(getTextFromString(R.string.write_a_code), R.drawable.icon_code),
+            18 to listOf(getTextFromString(R.string.custom), R.drawable.icon_customize),
         )
 
         listOfCVTypes.add(getString(R.string.chronological))

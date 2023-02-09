@@ -7,7 +7,7 @@ import com.jihad.aiwriter.R
 object Constants {
 
     val TAG = "Jihad"
-    val MAX_GENERATION_LENGTH = 1000f
+    val MAX_GENERATION_LENGTH = 2000f
     val MAX_NB_OF_GENERATIONS = 10f
     val MONTHLY_PRICE = 2
     val ANIMATION_LENGTH = 1000
@@ -29,6 +29,27 @@ object Constants {
             App.getTextFromString(R.string.swedish),
         )
     }
+    val listOfGameConsoleTypes by lazy {
+        listOf(
+            App.getTextFromString(R.string.playStation_5),
+            App.getTextFromString(R.string.playStation_4),
+            App.getTextFromString(R.string.desktop),
+            App.getTextFromString(R.string.xbox),
+            App.getTextFromString(R.string.mobile),
+            App.getTextFromString(R.string.nintendo),
+        )
+    }
+
+    val listOfPodcastTypes by lazy {
+        listOf(
+            App.getTextFromString(R.string.conversational),
+            App.getTextFromString(R.string.educational),
+            App.getTextFromString(R.string.solo),
+            App.getTextFromString(R.string.storytelling),
+            App.getTextFromString(R.string.podcast_theater),
+        )
+    }
+
     val listOfProgrammingLanguages by lazy {
         listOf(
             "Java",

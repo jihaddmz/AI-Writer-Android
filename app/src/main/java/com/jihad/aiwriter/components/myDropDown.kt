@@ -93,6 +93,26 @@ fun myDropDown(
                     )
                 )
             }
+            Constants.listOfPodcastTypes -> {
+                mutableStateOf(
+                    HelperSharedPreference.getString(
+                        HelperSharedPreference.SP_SETTINGS,
+                        HelperSharedPreference.SP_SETTINGS_PODCAST_TYPE,
+                        App.getTextFromString(R.string.solo),
+                        context
+                    )
+                )
+            }
+            Constants.listOfGameConsoleTypes -> {
+                mutableStateOf(
+                    HelperSharedPreference.getString(
+                        HelperSharedPreference.SP_SETTINGS,
+                        HelperSharedPreference.SP_SETTINGS_GAME_CONSOLE_TYPE,
+                        App.getTextFromString(R.string.playStation_5),
+                        context
+                    )
+                )
+            }
             else -> {
                 mutableStateOf("")
             }
@@ -196,6 +216,22 @@ fun myDropDown(
                                     HelperSharedPreference.setString(
                                         HelperSharedPreference.SP_SETTINGS,
                                         HelperSharedPreference.SP_SETTINGS_OUTPUT_LANGUAGE,
+                                        it,
+                                        context
+                                    )
+                                }
+                                Constants.listOfPodcastTypes -> {
+                                    HelperSharedPreference.setString(
+                                        HelperSharedPreference.SP_SETTINGS,
+                                        HelperSharedPreference.SP_SETTINGS_PODCAST_TYPE,
+                                        it,
+                                        context
+                                    )
+                                }
+                                Constants.listOfGameConsoleTypes -> {
+                                    HelperSharedPreference.setString(
+                                        HelperSharedPreference.SP_SETTINGS,
+                                        HelperSharedPreference.SP_SETTINGS_GAME_CONSOLE_TYPE,
                                         it,
                                         context
                                     )

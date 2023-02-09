@@ -26,6 +26,8 @@ object HelperSharedPreference {
     const val SP_SETTINGS_PROGRAMMING_LANGUAGE = "programming_language"
     const val SP_SETTINGS_ESSAY_TYPE = "essay_type"
     const val SP_SETTINGS_OUTPUT_LANGUAGE = "output_language"
+    const val SP_SETTINGS_PODCAST_TYPE = "podcast_type"
+    const val SP_SETTINGS_GAME_CONSOLE_TYPE = "console_type"
 
     /**
      * keys for authentication shared preferences
