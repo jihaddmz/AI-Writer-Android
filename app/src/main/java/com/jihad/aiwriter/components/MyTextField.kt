@@ -20,6 +20,7 @@ fun MyTextField(
     value: String,
     fontWeight: FontWeight = FontWeight.Normal,
     placeholder: String = "",
+    trailingIcon: Int = 0,
     onValueChanged: (String) -> Unit
 ) {
 
@@ -34,6 +35,10 @@ fun MyTextField(
         value = value,
         onValueChange = {
             onValueChanged(it)
+        },
+        trailingIcon = {
+            if (trailingIcon != 0)
+                MyIcon(iconID = trailingIcon, contentDesc = "trailing icon")
         },
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = Color.Transparent,

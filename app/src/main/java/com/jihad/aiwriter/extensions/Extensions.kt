@@ -5,7 +5,6 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.LazyGridScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -21,82 +20,91 @@ fun LazyGridScope.sectionsGridContent(
     state: LazyListState,
     navController: NavController,
 ) {
-    items(map.size) { index ->
-        val (delay, easing) = state.calculateDelayAndEasing(index, columns)
-        val animation = tween<Float>(durationMillis = 300, delayMillis = delay, easing = easing)
-        val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
-        val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
-        val text = map[index]?.get(0)
-        val imageID = map[index]?.get(1)
-        WritingType(modifier = Modifier.graphicsLayer(alpha = alpha, scaleX = scale, scaleY = scale) , text = text.toString(), imageID = imageID as Int) {
-            when (index) {
-                0 -> {
-                    navController.navigate(Screens.ScreenEmail.route)
-                }
-                1 -> {
-                    navController.navigate(Screens.ScreenBlog.route)
-                }
-                2 -> {
-                    navController.navigate(Screens.ScreenEssay.route)
-                }
-                3 -> {
-                    navController.navigate(Screens.ScreenArticle.route)
-                }
-                4 -> {
-                    navController.navigate(Screens.ScreenLetter.route)
-                }
-                5 -> {
-                    navController.navigate(Screens.ScreenCV.route)
-                }
-                6 -> {
-                    navController.navigate(Screens.ScreenResume.route)
-                }
-                7 -> {
-                    navController.navigate(Screens.ScreenPoem.route)
-                }
-                8 -> {
-                    navController.navigate(Screens.ScreenSong.route)
-                }
-                9 -> {
-                    navController.navigate(Screens.ScreenTwitter.route)
-                }
-                10 -> {
-                    navController.navigate(Screens.ScreenTiktok.route)
-                }
+    if (map.isNotEmpty())
+        items(map.size) { index ->
+            val (delay, easing) = state.calculateDelayAndEasing(index, columns)
+            val animation = tween<Float>(durationMillis = 300, delayMillis = delay, easing = easing)
+            val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
+            val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
+            val text = map[index]?.get(0)
+            val imageID = map[index]?.get(1)
+            if (map[index] != null)
+                WritingType(
+                    modifier = Modifier.graphicsLayer(
+                        alpha = alpha,
+                        scaleX = scale,
+                        scaleY = scale
+                    ),
+                    text = text.toString(), imageID = imageID as Int
+                ) {
+                    when (index) {
+                        0 -> {
+                            navController.navigate(Screens.ScreenEmail.route)
+                        }
+                        1 -> {
+                            navController.navigate(Screens.ScreenBlog.route)
+                        }
+                        2 -> {
+                            navController.navigate(Screens.ScreenEssay.route)
+                        }
+                        3 -> {
+                            navController.navigate(Screens.ScreenArticle.route)
+                        }
+                        4 -> {
+                            navController.navigate(Screens.ScreenLetter.route)
+                        }
+                        5 -> {
+                            navController.navigate(Screens.ScreenCV.route)
+                        }
+                        6 -> {
+                            navController.navigate(Screens.ScreenResume.route)
+                        }
+                        7 -> {
+                            navController.navigate(Screens.ScreenPoem.route)
+                        }
+                        8 -> {
+                            navController.navigate(Screens.ScreenSong.route)
+                        }
+                        9 -> {
+                            navController.navigate(Screens.ScreenTwitter.route)
+                        }
+                        10 -> {
+                            navController.navigate(Screens.ScreenTiktok.route)
+                        }
 
-                11 -> {
-                    navController.navigate(Screens.ScreenInstagram.route)
-                }
+                        11 -> {
+                            navController.navigate(Screens.ScreenInstagram.route)
+                        }
 
-                12 -> {
-                    navController.navigate(Screens.ScreenFacebook.route)
-                }
+                        12 -> {
+                            navController.navigate(Screens.ScreenFacebook.route)
+                        }
 
-                13 -> {
-                    navController.navigate(Screens.ScreenYoutube.route)
-                }
+                        13 -> {
+                            navController.navigate(Screens.ScreenYoutube.route)
+                        }
 
-                14 -> {
-                    navController.navigate(Screens.ScreenPodcast.route)
-                }
+                        14 -> {
+                            navController.navigate(Screens.ScreenPodcast.route)
+                        }
 
-                15 -> {
-                    navController.navigate(Screens.ScreenGame.route)
-                }
+                        15 -> {
+                            navController.navigate(Screens.ScreenGame.route)
+                        }
 
-                16 -> {
-                    navController.navigate(Screens.ScreenPersonalBio.route)
-                }
-                17 -> {
-                    navController.navigate(Screens.ScreenCode.route)
-                }
-                18 -> {
-                    navController.navigate(Screens.ScreenCustom.route)
-                }
-            }
+                        16 -> {
+                            navController.navigate(Screens.ScreenPersonalBio.route)
+                        }
+                        17 -> {
+                            navController.navigate(Screens.ScreenCode.route)
+                        }
+                        18 -> {
+                            navController.navigate(Screens.ScreenCustom.route)
+                        }
+                    }
 
+                }
         }
-    }
 }
 
 @Composable
@@ -114,7 +122,8 @@ private fun LazyListState.calculateDelayAndEasing(index: Int, columnCount: Int):
     }
     val scrollDirectionMultiplier = if (scrollingToBottom || isFirstLoad) 1 else -1
     val columnDelay = column * 150 * scrollDirectionMultiplier
-    val easing = if (scrollingToBottom || isFirstLoad) LinearOutSlowInEasing else FastOutSlowInEasing
+    val easing =
+        if (scrollingToBottom || isFirstLoad) LinearOutSlowInEasing else FastOutSlowInEasing
     return rowDelay + columnDelay to easing
 }
 
@@ -132,7 +141,8 @@ fun scaleAndAlpha(
     args: ScaleAndAlphaArgs,
     animation: FiniteAnimationSpec<Float>
 ): Pair<Float, Float> {
-    val transitionState = remember { MutableTransitionState(State.PLACING).apply { targetState = State.PLACED } }
+    val transitionState =
+        remember { MutableTransitionState(State.PLACING).apply { targetState = State.PLACED } }
     val transition = updateTransition(transitionState, label = "")
     val alpha by transition.animateFloat(transitionSpec = { animation }, label = "") { state ->
         when (state) {

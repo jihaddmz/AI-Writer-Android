@@ -6,6 +6,8 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -22,8 +24,7 @@ import java.util.*
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScreenHome(
-    modifier: Modifier = Modifier,
-    navController: NavController
+    modifier: Modifier = Modifier, navController: NavController
 ) {
 
     val context = LocalContext.current
@@ -35,8 +36,7 @@ fun ScreenHome(
 
         MySpacer(type = "small")
 
-        LazyVerticalGrid(
-            modifier = modifier.fillMaxSize(),
+        LazyVerticalGrid(modifier = modifier.fillMaxSize(),
             state = state,
             cells = GridCells.Fixed(count = 2),
             horizontalArrangement = Arrangement.spacedBy(20.dp),
@@ -55,8 +55,9 @@ fun ScreenHome(
 @Composable
 fun MainAppBar(
     modifier: Modifier = Modifier,
-    navController: NavController
+    navController: NavController,
 ) {
+
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
         MyIconOutlinedButton(
             imageID = R.drawable.icon_settings, contentDesc = stringResource(
