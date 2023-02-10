@@ -1,9 +1,13 @@
 package com.jihad.aiwriter
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +17,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -22,11 +25,33 @@ import com.jihad.aiwriter.components.*
 import com.jihad.aiwriter.feature_generate_text.presentation.*
 import com.jihad.aiwriter.feature_generate_text.util.Screens
 import com.jihad.aiwriter.helpers.Constants
+import com.jihad.aiwriter.helpers.HelperPermissions
 import com.jihad.aiwriter.ui.theme.*
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.concurrent.timerTask
 
 class MainActivity : ComponentActivity() {
+
+    override fun onStart() {
+        super.onStart()
+
+        // Declare the launcher at the top of your Activity/Fragment:
+        val requestPermissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                // FCM SDK (and your app) can post notifications.
+            } else {
+                // TODO: Inform user that that your app will not show notifications.
+            }
+        }
+
+        Timer().schedule(timerTask {
+            askNotificationPermission(requestPermissionLauncher)
+        }, 2000)
+
+    }
 
     @SuppressLint("UnrememberedMutableState")
     @OptIn(ExperimentalMaterialApi::class)
@@ -270,6 +295,30 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private fun askNotificationPermission(requestPermissionLauncher: ActivityResultLauncher<String>) {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            HelperPermissions.requestPermission(
+                Manifest.permission.POST_NOTIFICATIONS,
+                requestPermissionLauncher
+            )
+//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+//                PackageManager.PERMISSION_GRANTED
+//            ) {
+//                // FCM SDK (and your app) can post notifications.
+//            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
+//                // TODO: display an educational UI explaining to the user the features that will be enabled
+//                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
+//                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
+//                //       If the user selects "No thanks," allow the user to continue without notifications.
+//            } else {
+//                // Directly ask for the permission
+//                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+//            }
+//        }
         }
     }
 }

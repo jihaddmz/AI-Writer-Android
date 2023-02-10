@@ -133,4 +133,5 @@
     <string name="write_an_game_script">Write an %s %s game script</string>
     <string name="search">Search</string>
     <string name="game_input_label">About pubg</string>
+    <string name="default_notification_channel_id">default channel</string>
 </resources>

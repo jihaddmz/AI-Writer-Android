@@ -43,7 +43,7 @@ class App : Application() {
                     if (customerInfo.entitlements["premium"]?.isActive == true) { // if the user is subscribed
                         HelperAuth.makeUserSubscribed()
                     } else { // user has no access to the product
-                            HelperAuth.makeUserNotSubscribed()
+                        HelperAuth.makeUserNotSubscribed()
                     }
                 }
             })
@@ -61,11 +61,17 @@ class App : Application() {
             ),
             1 to listOf(getTextFromString(R.string.write_a_blog_top_bar), R.drawable.icon_blog),
             2 to listOf(getTextFromString(R.string.write_an_essay), R.drawable.icon_essay),
-            3 to listOf(getTextFromString(R.string.write_an_article_top_bar), R.drawable.icon_article),
+            3 to listOf(
+                getTextFromString(R.string.write_an_article_top_bar),
+                R.drawable.icon_article
+            ),
             4 to listOf(getTextFromString(R.string.write_a_letter), R.drawable.emoji_letter),
             5 to listOf(getTextFromString(R.string.write_a_cv), R.drawable.icon_cv),
             6 to listOf(getTextFromString(R.string.write_a_resume), R.drawable.icon_resume),
-            7 to listOf(getTextFromString(R.string.write_a_poem_top_bar), R.drawable.icon_poem_heart),
+            7 to listOf(
+                getTextFromString(R.string.write_a_poem_top_bar),
+                R.drawable.icon_poem_heart
+            ),
             8 to listOf(getTextFromString(R.string.write_a_song_top_bar), R.drawable.icon_song),
             9 to listOf(
                 getTextFromString(R.string.write_a_tweet_top_bar),
@@ -91,7 +97,8 @@ class App : Application() {
                 getTextFromString(R.string.write_a_podcast_top_bar), R.drawable.icon_podcast
             ),
             15 to listOf(
-                getTextFromString(R.string.write_a_game_script_top_label), R.drawable.icon_video_game
+                getTextFromString(R.string.write_a_game_script_top_label),
+                R.drawable.icon_video_game
             ),
             16 to listOf(
                 getTextFromString(R.string.write_a_personal_bio_top_bar),
