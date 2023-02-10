@@ -4,17 +4,23 @@ import androidx.compose.material.Slider
 import androidx.compose.material.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.jihad.aiwriter.helpers.Constants
 import com.jihad.aiwriter.ui.theme.Blue
 
 @Composable
 fun mySlider(
     modifier: Modifier = Modifier,
-    value: MutableState<Float>,
-    valueRange: ClosedFloatingPointRange<Float> = 7f..500f,
+    initialValue: Float,
+    valueRange: ClosedFloatingPointRange<Float> = 7f..Constants.MAX_GENERATION_LENGTH,
     onValueChangeListener: (Float) -> Unit
 ): Float {
 
+    val value = remember {
+        mutableStateOf(initialValue)
+    }
 
     Slider(
         modifier = modifier,

@@ -7,7 +7,7 @@ import com.jihad.aiwriter.R
 object Constants {
 
     val TAG = "Jihad"
-    val MAX_GENERATION_LENGTH = 2000f
+    val MAX_GENERATION_LENGTH = 1000f
     val MAX_NB_OF_GENERATIONS = 10f
     val MONTHLY_PRICE = 2
     val ANIMATION_LENGTH = 1000
@@ -57,7 +57,6 @@ object Constants {
             "C++",
             "C",
             "C#",
-            "Rust",
             "Swift",
             "Objective-c",
             "Python",

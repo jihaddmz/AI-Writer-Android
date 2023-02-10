@@ -11,6 +11,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.jihad.aiwriter.helpers.Constants
+import com.jihad.aiwriter.helpers.Helpers
 import com.jihad.aiwriter.helpers.WindowInfo
 import com.jihad.aiwriter.helpers.rememberWindowInfo
 
@@ -23,6 +24,7 @@ fun MyText(
     color: Color = Color.Black,
     fontWeight: FontWeight = FontWeight.Normal
 ) {
+
 
     val fontSize = when (rememberWindowInfo().screenWidthInfo){
         is WindowInfo.WindowType.Compact -> 15.sp

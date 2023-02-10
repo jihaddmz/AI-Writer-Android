@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.jihad.aiwriter.R
 import com.jihad.aiwriter.helpers.Constants
 import com.jihad.aiwriter.helpers.HelperSharedPreference
+import com.jihad.aiwriter.helpers.Helpers
 import com.jihad.aiwriter.ui.theme.Blue
 import kotlin.math.roundToInt
 
@@ -27,18 +28,6 @@ fun length(
 ): Int {
 
     val context = LocalContext.current
-
-    val initialValue = remember {
-        mutableStateOf(
-            HelperSharedPreference.getFloat(
-                HelperSharedPreference.SP_SETTINGS,
-                HelperSharedPreference.SP_SETTINGS_LENGTH,
-                100f,
-                context = context
-            ) as Float
-        )
-    }
-
     val value = remember {
         mutableStateOf(7)
     }
@@ -53,13 +42,25 @@ fun length(
 
         MyText(text = "$label:", color = Blue, fontWeight = FontWeight.Bold)
 
-        value.value =
-            mySlider(modifier.fillMaxWidth(0.6f), value = initialValue, valueRange = 7f..maxLength, onValueChangeListener = {
-                HelperSharedPreference.setFloat(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_LENGTH, it, context = context)
+        value.value = mySlider(
+            modifier.fillMaxWidth(0.6f),
+            initialValue = HelperSharedPreference.getFloat(
+                HelperSharedPreference.SP_SETTINGS,
+                HelperSharedPreference.SP_SETTINGS_LENGTH,
+                100f,
+                context = context
+            ),
+            valueRange = 7f..maxLength,
+            onValueChangeListener = {
+                HelperSharedPreference.setFloat(
+                    HelperSharedPreference.SP_SETTINGS,
+                    HelperSharedPreference.SP_SETTINGS_LENGTH,
+                    it,
+                    context = context
+                )
             }).roundToInt()
 
         MyText(text = value.value.toString())
-
     }
 
     return value.value

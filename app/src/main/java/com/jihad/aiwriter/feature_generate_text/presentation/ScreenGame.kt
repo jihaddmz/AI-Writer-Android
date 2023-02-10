@@ -55,7 +55,7 @@ fun ScreenGame(
             MySpacer(type = "small")
 
             val output = input(
-                label = stringResource(id = R.string.podcast_input_label),
+                label = stringResource(id = R.string.game_input_label),
                 inputPrefix = stringResource(id = R.string.write_an_game_script, HelperSharedPreference.getOutputLanguage(), type),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,

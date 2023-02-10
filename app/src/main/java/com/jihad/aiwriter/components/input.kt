@@ -233,7 +233,6 @@ private fun getResponse(
     jsonObject.put("frequency_penalty", 0.0)
     jsonObject.put("presence_penalty", 0.0)
     jsonObject.put("n", nbOfGenerations)
-    jsonObject.put("stop", "\\.")
 
     // on below line making json object request.
     val postRequest: JsonObjectRequest =

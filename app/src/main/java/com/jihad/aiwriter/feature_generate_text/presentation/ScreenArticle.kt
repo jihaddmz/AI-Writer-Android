@@ -16,6 +16,7 @@ import com.jihad.aiwriter.components.TopBar
 import com.jihad.aiwriter.components.input
 import com.jihad.aiwriter.components.length
 import com.jihad.aiwriter.helpers.HelperSharedPreference
+import com.jihad.aiwriter.helpers.Helpers
 import com.jihad.aiwriter.ui.theme.SpacersSize
 
 @Composable

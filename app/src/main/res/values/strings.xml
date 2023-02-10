@@ -12,7 +12,7 @@
     <string name="generate">Generate</string>
     <string name="write_a_blog_top_bar">Write a Blog</string>
     <string name="write_a_blog">Write an %s Blog</string>
-    <string name="write_an_article_top_bar">Write a Article</string>
+    <string name="write_an_article_top_bar">Write an Article</string>
     <string name="write_an_article">Write an %s Article</string>
     <string name="write_an_essay">Write an Essay</string>
     <string name="write_a_letter">Write a Letter</string>
@@ -26,17 +26,17 @@
     <string name="write_an_instagram_caption">Write an %s Instagram caption</string>
     <string name="write_an_instagram_caption_top_bar">Write an Instagram caption</string>
     <string name="write_a_code">Write an Code</string>
-    <string name="email_input_label">inorder to meet 10 a.m at my house</string>
+    <string name="email_input_label">inorder to meet at 10a.m in my house</string>
     <string name="write_an_email_to">Write an %s email to %s</string>
     <string name="blog_input_label">About the importance of food</string>
     <string name="enable_headlines">Enable Headlines</string>
-    <string name="tweet_input_label">about coding</string>
-    <string name="poem_input_label">on food</string>
-    <string name="letter_input_label">About how much I miss her</string>
-    <string name="article_input_label">About forgiveness</string>
-    <string name="essay_input_label">About the best moment of my life</string>
-    <string name="tiktok_input_label">on life</string>
-    <string name="instagram_input_label">the beauty of nature</string>
+    <string name="tweet_input_label">illustrating my passion watching bad boys movie</string>
+    <string name="poem_input_label">on growing older</string>
+    <string name="letter_input_label">About A moment of kindness I witnessed while people-watching</string>
+    <string name="article_input_label">About content marketing</string>
+    <string name="essay_input_label">About pollution and urbanization</string>
+    <string name="tiktok_input_label">Illustrating that all you need is a little love and TikTok.</string>
+    <string name="instagram_input_label">About the beauty of nature</string>
     <string name="code_input_label">that generates a random UUID</string>
     <string name="programming_language">Programming Language</string>
     <string name="write_a_cv">Write a CV</string>
@@ -51,7 +51,7 @@
     <string name="write_a_resume">Write a Resume</string>
     <string name="write_a_resume_of_type">Write an %s %s Resume</string>
     <string name="no_connection">You don\'t have network access, please connect and try again</string>
-    <string name="placeholder_email_name">person@gmail.com</string>
+    <string name="placeholder_email_name">person@example.com</string>
     <string name="cover_letter">Cover Letter</string>
     <string name="reference_letter">Reference Letter</string>
     <string name="resignation_letter">Resignation Letter</string>
@@ -96,9 +96,9 @@
     <string name="write_a_youtube_caption">Write an %s youtube caption</string>
     <string name="youtube_input_label">About the top 10 free games for pc and describe each</string>
     <string name="facebook_input_label">About nutrition</string>
-    <string name="write_a_song_top_bar">Write a song</string>
+    <string name="write_a_song_top_bar">Write a Song</string>
     <string name="write_a_song">Write an %s song</string>
-    <string name="song_input_label">Illustarting my passion in coding</string>
+    <string name="song_input_label">about my biggest hope in life.</string>
     <string name="nb_of_generations">Number of Generations</string>
     <string name="back_button_exit_text">Press back again to exit app</string>
     <string name="subscribed">Subscribed</string>
@@ -132,4 +132,5 @@
     <string name="nintendo">Nintendo</string>
     <string name="write_an_game_script">Write an %s %s game script</string>
     <string name="search">Search</string>
+    <string name="game_input_label">About pubg</string>
 </resources>

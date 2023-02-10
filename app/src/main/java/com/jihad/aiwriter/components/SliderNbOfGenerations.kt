@@ -43,7 +43,7 @@ fun sliderNbOfGenerations(
 
         MyText(text = "${stringResource(id = R.string.nb_of_generations)}:", color = Blue, fontWeight = FontWeight.Bold)
 
-        value.value = mySlider(modifier.fillMaxWidth(0.6f), value = initialValue, valueRange = 1f..Constants.MAX_NB_OF_GENERATIONS, onValueChangeListener = {
+        value.value = mySlider(modifier.fillMaxWidth(0.6f), initialValue = initialValue.value, valueRange = 1f..Constants.MAX_NB_OF_GENERATIONS, onValueChangeListener = {
             HelperSharedPreference.setFloat(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS, it, context = context)
         }).roundToInt()
 
