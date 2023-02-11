@@ -17,11 +17,9 @@ import com.jihad.aiwriter.R
 import com.jihad.aiwriter.SettingsNotifier
 import com.jihad.aiwriter.helpers.Constants
 import com.jihad.aiwriter.helpers.HelperAuth
-import com.jihad.aiwriter.helpers.HelperSharedPreference
 import com.jihad.aiwriter.helpers.HelperUI
 import com.jihad.aiwriter.ui.theme.Shapes
 import com.jihad.aiwriter.ui.theme.SpacersSize
-import com.jihad.aiwriter.viewModels.ViewModelSettings
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
@@ -33,7 +31,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun DialogNbOfGenerationsExceeded(
     modifier: Modifier = Modifier,
-    viewModel: ViewModelSettings = androidx.lifecycle.viewmodel.compose.viewModel()
 ) {
 
     val coroutineScope = rememberCoroutineScope()

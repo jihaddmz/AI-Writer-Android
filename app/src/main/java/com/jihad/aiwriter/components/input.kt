@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,7 +30,6 @@ import com.jihad.aiwriter.helpers.*
 import com.jihad.aiwriter.ui.theme.Blue
 import com.jihad.aiwriter.ui.theme.Shapes
 import com.jihad.aiwriter.ui.theme.SpacersSize
-import com.jihad.aiwriter.viewModels.ViewModelSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
@@ -48,7 +46,6 @@ fun input(
     listOfGeneratedTexts: MutableList<String> = mutableListOf(),
     length: Int = Constants.MAX_GENERATION_LENGTH.toInt(),
     showDialog: MutableState<Boolean> = mutableStateOf(false),
-    viewModel: ViewModelSettings = viewModel()
 ): String {
 
     val context = LocalContext.current
@@ -158,7 +155,7 @@ fun input(
             if (HelperSharedPreference.getInt(
                     HelperSharedPreference.SP_SETTINGS,
                     HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                    3,
+                    Constants.MAX_NB_OF_TRIES_ALLOWED,
                     context = context
                 ) == 0 && !HelperAuth.getUserSubscriptionState()
             ) { // if the nb of generations left is 0, make the user to subscribe

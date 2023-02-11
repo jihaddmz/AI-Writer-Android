@@ -11,10 +11,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.jihad.aiwriter.R
-import com.jihad.aiwriter.SettingsNotifier
 import com.jihad.aiwriter.SettingsNotifier.nbOfGenerationsLeft
 import com.jihad.aiwriter.feature_generate_text.util.Screens
 import com.jihad.aiwriter.helpers.HelperAuth
@@ -22,14 +20,12 @@ import com.jihad.aiwriter.helpers.WindowInfo
 import com.jihad.aiwriter.helpers.rememberWindowInfo
 import com.jihad.aiwriter.ui.theme.Blue
 import com.jihad.aiwriter.ui.theme.SpacersSize
-import com.jihad.aiwriter.viewModels.ViewModelSettings
 
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
     text: String,
     navController: NavController,
-    viewModel: ViewModelSettings = viewModel(),
     isContextInSettings: Boolean = false,
     content: @Composable () -> Unit,
 ) {
