@@ -2,9 +2,10 @@ package com.appsfourlife.draftogo
 
 import android.app.Application
 import android.content.Context
+import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.google.mlkit.common.model.RemoteModelManager
 import com.google.mlkit.nl.languageid.LanguageIdentification
-import com.appsfourlife.draftogo.helpers.HelperAuth
+import com.onesignal.OneSignal
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
@@ -14,6 +15,8 @@ import java.util.*
 import kotlin.concurrent.timerTask
 
 class App : Application() {
+
+    private val ONESIGNAL_APP_ID = "dbea2cd9-7f66-47c1-8941-a14fe77d1f45"
 
     companion object {
         lateinit var context: Context
@@ -32,6 +35,17 @@ class App : Application() {
         super.onCreate()
 
         context = this
+
+        // Enable verbose OneSignal logging to debug issues if needed.
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.VERBOSE, OneSignal.LOG_LEVEL.NONE);
+
+        // OneSignal Initialization
+        OneSignal.initWithContext(this);
+        OneSignal.setAppId(ONESIGNAL_APP_ID);
+
+        // promptForPushNotifications will show the native Android notification permission prompt.
+        // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 7)
+        OneSignal.promptForPushNotifications();
 
         // mark checking purchase state
         Timer().scheduleAtFixedRate(timerTask {
