@@ -55,24 +55,9 @@ fun ScreenLaunch(
 
         Image(
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop,
-            painter = painterResource(id = R.drawable.launchbgimg),
-            contentDescription = "launch screen background image"
-        )
-
-        val fontSize = when (rememberWindowInfo().screenWidthInfo) {
-            is WindowInfo.WindowType.Compact -> 30.sp
-            is WindowInfo.WindowType.Medium -> 40.sp
-            else -> 50.sp
-        }
-
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            fontSize = fontSize,
-            text = stringResource(id = R.string.app_name),
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
+            contentScale = ContentScale.FillBounds,
+            painter = painterResource(id = R.drawable.logo),
+            contentDescription = "splash screen"
         )
 
         Timer().schedule(timerTask {

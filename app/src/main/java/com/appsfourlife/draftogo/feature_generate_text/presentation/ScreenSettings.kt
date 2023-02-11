@@ -43,14 +43,14 @@ fun ScreenSettings(
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                     AppLogo(
-                        modifier = Modifier.fillMaxWidth(),
-                        imageID = R.drawable.icon_email,
+                        modifier = Modifier,
+                        imageID = R.drawable.logo,
                         contentDesc = stringResource(id = R.string.logo)
                     )
 
                     MySpacer(type = "small")
 
-                    MyText(text = "AI Writer", fontWeight = FontWeight.Bold)
+                    MyText(text = stringResource(id = R.string.app_name), fontWeight = FontWeight.Bold)
                 }
 
                 myDropDown(list = Constants.OUTPUT_LANGUAGES, label = stringResource(id = R.string.output_language))
