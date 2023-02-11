@@ -6,15 +6,15 @@ plugins {
 }
 
 android {
-    namespace 'com.jihad.aiwriter'
+    namespace 'com.appsfourlife.draftogo'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.jihad.aiwriter"
+        applicationId 'com.appsfourlife.draftogo'
         minSdk 21
         targetSdk 32
-        versionCode 32
-        versionName "1.42"
+        versionCode 1
+        versionName "1.0.0"
 
         signingConfigs {
             config {

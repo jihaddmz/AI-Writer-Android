@@ -1,0 +1,53 @@
+
+package com.appsfourlife.draftogo.components
+
+import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.appsfourlife.draftogo.helpers.WindowInfo
+import com.appsfourlife.draftogo.helpers.rememberWindowInfo
+import com.appsfourlife.draftogo.ui.theme.Blue
+import com.appsfourlife.draftogo.ui.theme.Gray
+
+@Composable
+fun MyTextField(
+    modifier: Modifier = Modifier,
+    value: String,
+    fontWeight: FontWeight = FontWeight.Normal,
+    placeholder: String = "",
+    trailingIcon: Int = 0,
+    onValueChanged: (String) -> Unit
+) {
+
+    val fontSize = when (rememberWindowInfo().screenWidthInfo){
+        is WindowInfo.WindowType.Compact -> 15.sp
+        is WindowInfo.WindowType.Medium -> 20.sp
+        else -> 24.sp
+    }
+
+    TextField(
+        modifier = modifier,
+        value = value,
+        onValueChange = {
+            onValueChanged(it)
+        },
+        trailingIcon = {
+            if (trailingIcon != 0)
+                MyIcon(iconID = trailingIcon, contentDesc = "trailing icon")
+        },
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            cursorColor = Blue,
+        ),
+        textStyle = TextStyle(fontWeight = fontWeight, fontSize = fontSize),
+        placeholder = { MyText(text = placeholder, color = Gray) }
+    )
+
+}

@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1057573893043:android:8a2837715e13595d7ad1c6",
+        "mobilesdk_app_id": "1:1057573893043:android:324b63a6011213d87ad1c6",
         "android_client_info": {
-          "package_name": "com.jihad.aiwriter"
+          "package_name": "com.appsfourlife.draftogo"
         }
       },
       "oauth_client": [
