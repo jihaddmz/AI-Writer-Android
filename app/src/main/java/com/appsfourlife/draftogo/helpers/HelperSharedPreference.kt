@@ -33,6 +33,8 @@ object HelperSharedPreference {
      * keys for authentication shared preferences
      **/
     const val SP_AUTHENTICATION_IS_SUBSCRIBED = "is_subscribed"
+    const val SP_AUTHENTICATION_EXPIRATION_DATE = "expiration_date"
+    const val SP_AUTHENTICATION_WILL_RENEW = "will_renew"
 
     /**
      * most common shared preferences keys
@@ -45,7 +47,7 @@ object HelperSharedPreference {
     /**
      * getters and setters for shared preferences keys as per type
      **/
-    fun setString(name: String, key: String, value: String, context: Context) {
+    fun setString(name: String, key: String, value: String, context: Context = App.context) {
         val sp = context.getSharedPreferences(name, Context.MODE_PRIVATE)
         sp.edit {
             putString(key, value)
@@ -83,7 +85,7 @@ object HelperSharedPreference {
         name: String,
         key: String,
         value: Boolean,
-        context: Context
+        context: Context = App.context
     ) {
         val sp = context.getSharedPreferences(name, Context.MODE_PRIVATE)
         sp.edit {

@@ -24,7 +24,6 @@ fun MyText(
     fontWeight: FontWeight = FontWeight.Normal
 ) {
 
-
     val fontSize = when (rememberWindowInfo().screenWidthInfo){
         is WindowInfo.WindowType.Compact -> 15.sp
         is WindowInfo.WindowType.Medium -> 20.sp

@@ -34,7 +34,7 @@ fun ScreenHome(
 
         MySpacer(type = "small")
 
-        LazyVerticalGrid(modifier = modifier.fillMaxSize(),
+        LazyVerticalGrid(modifier = modifier.fillMaxSize().padding(horizontal = 5.dp),
             state = state,
             cells = GridCells.Fixed(count = 2),
             horizontalArrangement = Arrangement.spacedBy(20.dp),

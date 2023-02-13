@@ -1,5 +1,7 @@
 package com.appsfourlife.draftogo.feature_generate_text.presentation
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -8,6 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
@@ -15,6 +19,7 @@ import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperAuth
+import com.appsfourlife.draftogo.helpers.HelperIntent
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 
 @Composable
@@ -34,7 +39,8 @@ fun ScreenSettings(
             modifier = modifier
                 .fillMaxSize()
                 .verticalScroll(verticalScroll)
-                .padding(horizontal = SpacersSize.medium),
+                .padding(horizontal = SpacersSize.medium)
+                .animateContentSize(animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
@@ -73,26 +79,53 @@ fun ScreenSettings(
             ) {
 
                 val isSubscribed = HelperAuth.getUserSubscriptionState()
-                if (isSubscribed)
-                    MyLabelText(
-                        label = "${stringResource(id = R.string.subscription_status)}:",
-                        text = stringResource(
-                            id = R.string.active
+                if (isSubscribed) { // if the user is subscribed
+                    MyAnnotatedText(
+                        textAlign = TextAlign.Center,
+                        text = AnnotatedString(
+                            text = "${stringResource(id = R.string.subscription_status)}: ",
+                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                        ).plus(
+                            AnnotatedString(
+                                text = stringResource(
+                                    id = R.string.action
+                                ), spanStyle = SpanStyle(color = Color.Green)
+                            )
                         ),
-                        textColor = Color.Green,
-                        labelColor = Color.Black
                     )
-                else
-                    MyLabelText(
-                        label = "${stringResource(id = R.string.subscription_status)}:",
-                        text = stringResource(
-                            id = R.string.inactive
+                } else // if the user is not subscribed
+                    MyAnnotatedText(
+                        textAlign = TextAlign.Center,
+                        text = AnnotatedString(
+                            text = "${stringResource(id = R.string.subscription_status)}: ",
+                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                        ).plus(
+                            AnnotatedString(
+                                text = stringResource(
+                                    id = R.string.inactive
+                                ), spanStyle = SpanStyle(color = Color.Red)
+                            )
                         ),
-                        textColor = Color.Red,
-                        labelColor = Color.Black
                     )
 
-                MySpacer(type = "medium")
+                MySpacer(type = "small")
+
+                if (HelperAuth.willRenew()) { // if the subscription will be renewed
+                    MyAnnotatedText(
+                        textAlign = TextAlign.Center,
+                        text = AnnotatedString(
+                            text = "${stringResource(id = R.string.expiration_date)}: ",
+                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                        ).plus(AnnotatedString(text = HelperAuth.getExpirationDate())),
+                    )
+                    MySpacer(type = "small")
+                }
+
+                MyOutlinedButton(text = stringResource(id = R.string.manage_subscription)) {
+                    HelperIntent.navigateToPlayStoreSubscription()
+                }
+
+                MySpacer(type = "small")
 
                 MyText(
                     modifier = Modifier

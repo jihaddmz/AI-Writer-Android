@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.appsfourlife.draftogo.helpers.HelperAuth
+import com.appsfourlife.draftogo.helpers.HelperSharedPreference
+import com.appsfourlife.draftogo.helpers.Helpers
 import com.onesignal.OneSignal
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
@@ -53,6 +55,18 @@ class App : Application() {
                 }
 
                 override fun onReceived(customerInfo: CustomerInfo) {
+                    HelperSharedPreference.setString(
+                        HelperSharedPreference.SP_AUTHENTICATION,
+                        HelperSharedPreference.SP_AUTHENTICATION_EXPIRATION_DATE,
+                        customerInfo.entitlements["premium"]?.expirationDate.toString()
+                    )
+                    customerInfo.entitlements["premium"]?.willRenew?.let {
+                        HelperSharedPreference.setBool(
+                            HelperSharedPreference.SP_AUTHENTICATION,
+                            HelperSharedPreference.SP_AUTHENTICATION_WILL_RENEW,
+                            it
+                        )
+                    }
                     if (customerInfo.entitlements["premium"]?.isActive == true) { // if the user is subscribed
                         HelperAuth.makeUserSubscribed()
                     } else { // user has no access to the product

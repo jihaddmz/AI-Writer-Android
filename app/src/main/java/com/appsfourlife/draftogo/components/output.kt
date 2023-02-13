@@ -31,16 +31,6 @@ fun Output(
 ) {
 
     val context = LocalContext.current
-    val showDialog = remember {
-        mutableStateOf(false)
-    }
-    val verticalScroll = rememberScrollState()
-    val translatedText = remember {
-        mutableStateOf("")
-    }
-    val showLinearProgressIndicator = remember {
-        mutableStateOf(true)
-    }
 
     Card(
         modifier = modifier.fillMaxSize(), shape = Shapes.medium, backgroundColor = Color.White
@@ -53,7 +43,7 @@ fun Output(
 
             MyTextField(
                 modifier = Modifier.defaultMinSize(minHeight = 250.dp),
-                value = outputText.value,
+                value = outputText.value.trim(),
                 onValueChanged = {
                     outputText.value = it
                 },

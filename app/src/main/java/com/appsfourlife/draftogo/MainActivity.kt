@@ -165,7 +165,7 @@ class MainActivity : ComponentActivity() {
                     // endregion
                 ) {
                     androidx.compose.material.Surface(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize().padding(it)
                     ) {
                         Column(
                             modifier = Modifier
