@@ -25,6 +25,7 @@ import com.android.volley.toolbox.Volley
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.SettingsNotifier
+import com.appsfourlife.draftogo.SettingsNotifier.output
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -33,6 +34,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import java.util.*
+import javax.net.ssl.SSLException
 import kotlin.concurrent.timerTask
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -42,20 +44,16 @@ fun input(
     label: String,
     inputPrefix: String = "",
     nbOfGenerations: Int = 1,
-    listOfGeneratedTexts: MutableList<String> = mutableListOf(),
     length: Int = Constants.MAX_GENERATION_LENGTH.toInt(),
     showDialog: MutableState<Boolean> = mutableStateOf(false),
-): String {
+) {
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    var input by remember {
-        mutableStateOf(TextFieldValue(text = ""))
-    }
-    val output = remember {
-        mutableStateOf("")
+    val isGenerateBtnEnabled = remember {
+        mutableStateOf(true)
     }
 
     val connectionError = stringResource(id = R.string.no_connection)
@@ -71,10 +69,10 @@ fun input(
                         .fillMaxWidth()
                         .defaultMinSize(minHeight = 100.dp),
                     onValueChanged = {
-                        input = TextFieldValue(text = it)
+                        SettingsNotifier.input.value = TextFieldValue(text = it)
                     },
                     placeholder = label,
-                    value = input.text
+                    value = SettingsNotifier.input.value.text
                 )
 
                 /**
@@ -88,7 +86,7 @@ fun input(
                 ) {
 
                     IconButton(onClick = {
-                        input = TextFieldValue(text = "")
+                        SettingsNotifier.input.value = TextFieldValue(text = "")
                     }) {
                         MyIcon(
                             iconID = R.drawable.clear,
@@ -110,7 +108,7 @@ fun input(
                     }
 
                     IconButton(onClick = {
-                        input = Helpers.pasteFromClipBoard(mutableStateOf(input), context)
+                        SettingsNotifier.input.value = Helpers.pasteFromClipBoard(mutableStateOf(SettingsNotifier.input.value), context)
                     }) {
                         MyIcon(
                             iconID = R.drawable.icon_paste,
@@ -137,6 +135,7 @@ fun input(
                 .fillMaxWidth()
                 .animateContentSize(),
             text = generateText.value,
+            isEnabled = isGenerateBtnEnabled.value,
             content = {
                 MyAnimatedVisibility(visible = generateText.value == App.getTextFromString(R.string.generated)) {
                     Row {
@@ -162,16 +161,22 @@ fun input(
             } else {
                 keyboardController?.hide()
                 Helpers.checkForConnection(ifConnected = {
+                    isGenerateBtnEnabled.value = false
                     showDialog.value = true
                     generateText.value = App.getTextFromString(R.string.generating)
 
                     getResponse(
-                        inputPrefix + " " + input.text.trim(),
+                        inputPrefix + " " + SettingsNotifier.input.value.text.trim(),
                         context,
                         length,
                         nbOfGenerations,
-                        listOfGeneratedTexts,
-                        output
+                        isGenerateBtnEnabled,
+                        onErrorAction = {
+                            showDialog.value = false
+                            isGenerateBtnEnabled.value = true
+                            generateText.value = App.getTextFromString(R.string.generate)
+
+                        }
                     ) { // on fetching response action done
                         showDialog.value = false
                         generateText.value = App.getTextFromString(R.string.generated)
@@ -201,8 +206,6 @@ fun input(
             }
         }
     }
-
-    return output.value
 }
 
 private fun getResponse(
@@ -210,8 +213,8 @@ private fun getResponse(
     context: Context,
     length: Int,
     nbOfGenerations: Int = 1,
-    listOfGeneratedTexts: MutableList<String> = mutableListOf(),
-    output: MutableState<String>,
+    isGenerateBtnEnabled: MutableState<Boolean>,
+    onErrorAction: () -> Unit,
     onDoneAction: () -> Unit
 ) {
     val url = "https://api.openai.com/v1/completions"
@@ -237,22 +240,28 @@ private fun getResponse(
             Response.Listener { response ->
                 // on below line getting response message and setting it to text view.
                 if (nbOfGenerations > 1) {
-                    listOfGeneratedTexts.clear() // this to not make the list append entries each time
+                    SettingsNotifier.outputList.clear() // this to not make the list append entries each time
                     for (i in 0 until response.getJSONArray("choices").length()) {
-                        listOfGeneratedTexts.add(
+                        SettingsNotifier.outputList.add(
                             response.getJSONArray("choices").getJSONObject(i).getString("text")
                         )
                     }
                 } else {
                     val responseMsg: String =
                         response.getJSONArray("choices").getJSONObject(0).getString("text")
-                    output.value = responseMsg
+                    SettingsNotifier.output.value = responseMsg
                 }
+                isGenerateBtnEnabled.value = true
                 onDoneAction()
             },
             // adding on error listener
             Response.ErrorListener { error ->
-                Log.e("TAGAPI", "Error is : " + error.message + "\n" + error)
+                onErrorAction()
+                if (error.cause is SSLException){
+                    HelperUI.showToast(msg = App.getTextFromString(textID = R.string.no_connection))
+                }else
+                    HelperUI.showToast(msg = App.getTextFromString(textID = R.string.something_went_wrong))
+
             }) {
             override fun getHeaders(): MutableMap<String, String> {
                 val params: MutableMap<String, String> = HashMap()

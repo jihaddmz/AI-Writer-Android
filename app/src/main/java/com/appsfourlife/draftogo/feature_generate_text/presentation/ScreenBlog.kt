@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.SettingsNotifier
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
@@ -23,9 +24,6 @@ fun ScreenBlog(
 ) {
 
     val verticalScroll = rememberScrollState()
-    val generatedText = remember {
-        mutableStateOf("")
-    }
     val showDialog = remember {
         mutableStateOf(false)
     }
@@ -65,18 +63,16 @@ fun ScreenBlog(
                 "${stringResource(id = R.string.write_a_blog, HelperSharedPreference.getOutputLanguage())} "
             }
 
-            val output = input(
+            input(
                 label = stringResource(id = R.string.blog_input_label),
                 inputPrefix = inputPrefix,
                 length = length,
                 showDialog = showDialog
             )
 
-            generatedText.value = output
-
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            Output(outputText = generatedText)
+            Output(outputText = SettingsNotifier.output)
         }
     }
 }

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.SettingsNotifier
 import com.appsfourlife.draftogo.components.Output
 import com.appsfourlife.draftogo.components.TopBar
 import com.appsfourlife.draftogo.components.input
@@ -23,9 +24,6 @@ fun ScreenSong(
     navController: NavController
 ) {
 
-    val generatedText = remember {
-        mutableStateOf("")
-    }
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
         mutableStateOf(false)
@@ -46,7 +44,7 @@ fun ScreenSong(
 
             val length = length()
 
-            val output = input(
+            input(
                 label = stringResource(id = R.string.song_input_label),
                 inputPrefix = stringResource(id = R.string.write_a_song, HelperSharedPreference.getOutputLanguage()),
                 showDialog = showDialog,
@@ -55,9 +53,7 @@ fun ScreenSong(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            generatedText.value = output
-
-            Output(outputText = generatedText)
+            Output(outputText = SettingsNotifier.output)
 
         }
     }

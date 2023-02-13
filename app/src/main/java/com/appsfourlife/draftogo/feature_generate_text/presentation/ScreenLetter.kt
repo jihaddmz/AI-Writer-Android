@@ -13,6 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.SettingsNotifier
+import com.appsfourlife.draftogo.SettingsNotifier.jobTitle
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
@@ -22,9 +24,6 @@ fun ScreenLetter(
     navController: NavController
 ) {
 
-    val generatedText = remember {
-        mutableStateOf("")
-    }
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
         mutableStateOf(false)
@@ -48,13 +47,12 @@ fun ScreenLetter(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            var jobTitle = ""
             val makeJobTitleVisible =
                 type == stringResource(id = R.string.cover_letter) || type == stringResource(id = R.string.resignation_letter) || type == stringResource(
                     id = R.string.reference_letter
                 )
             AnimatedVisibility(visible = makeJobTitleVisible) {
-                jobTitle = myEditTextLabel(
+                myEditTextLabel(
                     label = stringResource(id = R.string.job_title), placeHolder = stringResource(
                         id = R.string.web_developer
                     )
@@ -63,7 +61,7 @@ fun ScreenLetter(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            val name = myEditTextLabel()
+            myEditTextLabel()
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
@@ -71,14 +69,14 @@ fun ScreenLetter(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            val inputPrefix = if (jobTitle.isNotEmpty()) {
+            val inputPrefix = if (SettingsNotifier.jobTitle.value.isNotEmpty()) {
                 "${
                     stringResource(
                         id = R.string.write_a_letter_of_type,
                         HelperSharedPreference.getOutputLanguage(),
                         type
                     )
-                } for a job position of $jobTitle to $name "
+                } for a job position of $SettingsNotifier.jobTitle.value to ${SettingsNotifier.name.value} "
             } else {
                 "${
                     stringResource(
@@ -86,10 +84,10 @@ fun ScreenLetter(
                         HelperSharedPreference.getOutputLanguage(),
                         type
                     )
-                } to $name "
+                } to ${SettingsNotifier.name.value} "
             }
 
-            val output = input(
+            input(
                 label = stringResource(id = R.string.letter_input_label),
                 inputPrefix = inputPrefix,
                 length = length,
@@ -98,9 +96,7 @@ fun ScreenLetter(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            generatedText.value = output
-
-            Output(outputText = generatedText)
+            Output(outputText = SettingsNotifier.output)
 
         }
     }

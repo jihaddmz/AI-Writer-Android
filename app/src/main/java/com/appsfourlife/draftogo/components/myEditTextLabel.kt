@@ -9,17 +9,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.SettingsNotifier
 import com.appsfourlife.draftogo.ui.theme.Blue
-import java.util.*
 
 @Composable
 fun myEditTextLabel(
     modifier: Modifier = Modifier,
     placeHolder: String = stringResource(id = R.string.Name),
     label: String = stringResource(id = R.string.to),
-): String {
-
-    var result = ""
+) {
 
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -29,8 +27,10 @@ fun myEditTextLabel(
 
         MyText(text = "$label:", color = Blue, fontWeight = FontWeight.Bold)
 
-      result = myOutlinedTextField(placeHolder = placeHolder)
+        if (label == stringResource(id = R.string.to))
+            myOutlinedTextField(placeHolder = placeHolder, value = SettingsNotifier.name)
+        else if (label == stringResource(id = R.string.job_title))
+            myOutlinedTextField(placeHolder = placeHolder, value = SettingsNotifier.jobTitle)
     }
 
-    return result.capitalize(Locale.getDefault())
 }

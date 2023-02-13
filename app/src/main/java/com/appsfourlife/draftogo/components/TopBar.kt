@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.SettingsNotifier
 import com.appsfourlife.draftogo.SettingsNotifier.nbOfGenerationsLeft
 import com.appsfourlife.draftogo.feature_generate_text.util.Screens
 import com.appsfourlife.draftogo.helpers.HelperAuth
@@ -50,6 +51,7 @@ fun TopBar(
         ) {
 
             IconButton(onClick = {
+                SettingsNotifier.resetValues()
                 navController.navigate(Screens.ScreenHome.route)
             }) {
 

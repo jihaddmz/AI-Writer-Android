@@ -12,6 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.SettingsNotifier
+import com.appsfourlife.draftogo.SettingsNotifier.jobTitle
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
@@ -21,9 +23,6 @@ fun ScreenResume(
     navController: NavController
 ) {
 
-    val generatedText = remember {
-        mutableStateOf("")
-    }
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
         mutableStateOf(false)
@@ -46,7 +45,7 @@ fun ScreenResume(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            val jobTitle = myEditTextLabel(
+            myEditTextLabel(
                 label = stringResource(id = R.string.job_title), placeHolder = stringResource(
                     id = R.string.web_developer
                 )
@@ -54,7 +53,7 @@ fun ScreenResume(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            val output = input(
+            input(
                 label = stringResource(id = R.string.cv_input_label),
                 inputPrefix = "${
                     stringResource(
@@ -62,15 +61,13 @@ fun ScreenResume(
                         HelperSharedPreference.getOutputLanguage(),
                         resumeType
                     )
-                } for a $jobTitle",
+                } for a ${SettingsNotifier.jobTitle.value}",
                 showDialog = showDialog
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            generatedText.value = output
-
-            Output(outputText = generatedText)
+            Output(outputText = SettingsNotifier.output)
 
         }
     }

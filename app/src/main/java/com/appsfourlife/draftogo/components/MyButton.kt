@@ -17,11 +17,13 @@ fun MyButton(
     modifier: Modifier = Modifier,
     text: String = "",
     content: @Composable () -> Unit = {},
+    isEnabled: Boolean = true,
     onClick: () -> Unit
 ) {
 
     Button(
         modifier = modifier,
+        enabled = isEnabled,
         shape = Shapes.medium,
         colors = ButtonDefaults.buttonColors(backgroundColor = Blue),
         onClick = {

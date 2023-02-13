@@ -5,8 +5,7 @@ import androidx.compose.material.Card
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -23,12 +22,9 @@ fun myOutlinedTextField(
     modifier: Modifier = Modifier,
     onValueChange: (String) -> Unit = {},
     placeHolder: String,
+    value: MutableState<String>,
     borderStroke: BorderStroke = BorderStroke(2.dp, color = Blue)
-): String {
-
-    val value = remember {
-        mutableStateOf("")
-    }
+) {
 
     val fontSize = when (rememberWindowInfo().screenWidthInfo){
         is WindowInfo.WindowType.Compact -> 15.sp
@@ -55,5 +51,4 @@ fun myOutlinedTextField(
             textStyle = TextStyle(fontSize = fontSize)
         )
     }
-    return value.value
 }

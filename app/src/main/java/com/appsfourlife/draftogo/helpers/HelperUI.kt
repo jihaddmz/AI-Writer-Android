@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.SoftwareKeyboardController
+import com.appsfourlife.draftogo.App
 
 object HelperUI {
 
@@ -14,7 +15,7 @@ object HelperUI {
         keyboardController.show()
     }
 
-    fun showToast(context: Context, msg: String){
+    fun showToast(context: Context = App.context, msg: String){
         Toast.makeText(context, msg, Constants.Toast_Lenght).show()
     }
 }

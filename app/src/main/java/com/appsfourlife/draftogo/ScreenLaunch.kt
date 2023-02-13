@@ -56,7 +56,7 @@ fun ScreenLaunch(
         Image(
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.FillBounds,
-            painter = painterResource(id = R.drawable.logo),
+            painter = painterResource(id = R.drawable.launch_screen),
             contentDescription = "splash screen"
         )
 

@@ -85,6 +85,7 @@ class MainActivity : ComponentActivity() {
                                     iconID = iconID,
                                     text = text
                                 ) {
+                                    SettingsNotifier.resetValues() // clearing values
                                     when (index) {
                                         0 -> {
                                             navController.navigate(Screens.ScreenEmail.route)
@@ -133,14 +134,20 @@ class MainActivity : ComponentActivity() {
                                         }
 
                                         14 -> {
-                                            navController.navigate(Screens.ScreenPersonalBio.route)
+                                            navController.navigate(Screens.ScreenPodcast.route)
                                         }
 
                                         15 -> {
-                                            navController.navigate(Screens.ScreenCode.route)
+                                            navController.navigate(Screens.ScreenGame.route)
                                         }
 
                                         16 -> {
+                                            navController.navigate(Screens.ScreenPersonalBio.route)
+                                        }
+                                        17 -> {
+                                            navController.navigate(Screens.ScreenCode.route)
+                                        }
+                                        18 -> {
                                             navController.navigate(Screens.ScreenCustom.route)
                                         }
                                     }

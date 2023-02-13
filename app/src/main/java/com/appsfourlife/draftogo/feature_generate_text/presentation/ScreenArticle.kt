@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.SettingsNotifier
 import com.appsfourlife.draftogo.components.Output
 import com.appsfourlife.draftogo.components.TopBar
 import com.appsfourlife.draftogo.components.input
@@ -23,9 +24,6 @@ fun ScreenArticle(
     navController: NavController
 ) {
 
-    val generatedText = remember {
-        mutableStateOf("")
-    }
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
         mutableStateOf(false)
@@ -49,7 +47,7 @@ fun ScreenArticle(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            val output = input(
+            input(
                 label = stringResource(id = R.string.article_input_label),
                 inputPrefix = stringResource(id = R.string.write_an_article, HelperSharedPreference.getOutputLanguage()),
                 length = length,
@@ -58,9 +56,7 @@ fun ScreenArticle(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            generatedText.value = output
-
-            Output(outputText = generatedText)
+            Output(outputText = SettingsNotifier.output)
 
         }
     }

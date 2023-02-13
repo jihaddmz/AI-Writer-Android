@@ -4,8 +4,6 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.appsfourlife.draftogo.helpers.HelperAuth
-import com.google.mlkit.common.model.RemoteModelManager
-import com.google.mlkit.nl.languageid.LanguageIdentification
 import com.onesignal.OneSignal
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
@@ -23,8 +21,6 @@ class App : Application() {
         lateinit var context: Context
         val listOfCVTypes by lazy { mutableListOf<String>() }
         val listOfLetterTypes by lazy { mutableListOf<String>() }
-        val modelManager by lazy { RemoteModelManager.getInstance() }
-        val languageIdentifier by lazy { LanguageIdentification.getClient() }
         val listOfEssays by lazy { mutableListOf<String>() }
         lateinit var mapOfScreens: HashMap<Int, List<Any>>
         fun getTextFromString(textID: Int): String {

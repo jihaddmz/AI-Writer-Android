@@ -12,6 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.SettingsNotifier
+import com.appsfourlife.draftogo.SettingsNotifier.output
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
@@ -21,9 +23,6 @@ fun ScreenEssay(
     navController: NavController
 ) {
 
-    val generatedText = remember {
-        mutableStateOf("")
-    }
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
         mutableStateOf(false)
@@ -52,7 +51,7 @@ fun ScreenEssay(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            val output = input(
+            input(
                 label = stringResource(id = R.string.essay_input_label),
                 inputPrefix = stringResource(
                     id = R.string.write_an_essay_of_type,
@@ -65,9 +64,7 @@ fun ScreenEssay(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            generatedText.value = output
-
-            Output(outputText = generatedText)
+            Output(outputText = SettingsNotifier.output)
 
         }
     }

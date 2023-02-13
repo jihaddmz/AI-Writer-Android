@@ -134,4 +134,8 @@
     <string name="search">Search</string>
     <string name="game_input_label">About pubg</string>
     <string name="default_notification_channel_id">default channel</string>
+    <string name="something_went_wrong">Something went wrong, please try again later</string>
+    <string name="subscription_status">Subscription Status</string>
+    <string name="active">Active</string>
+    <string name="inactive">InActive</string>
 </resources>

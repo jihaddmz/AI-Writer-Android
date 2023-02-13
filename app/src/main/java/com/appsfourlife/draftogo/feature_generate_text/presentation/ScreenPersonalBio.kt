@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.SettingsNotifier
 import com.appsfourlife.draftogo.components.Output
 import com.appsfourlife.draftogo.components.TopBar
 import com.appsfourlife.draftogo.components.input
@@ -22,9 +23,6 @@ fun ScreenPersonalBio(
     navController: NavController
 ) {
 
-    val generatedText = remember {
-        mutableStateOf("")
-    }
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
         mutableStateOf(false)
@@ -45,7 +43,7 @@ fun ScreenPersonalBio(
 
             val inputPrefix = stringResource(id = R.string.write_a_personal_bio, HelperSharedPreference.getOutputLanguage())
 
-            val output = input(
+            input(
                 label = stringResource(id = R.string.that_captures_attention),
                 inputPrefix = inputPrefix,
                 showDialog = showDialog
@@ -53,9 +51,7 @@ fun ScreenPersonalBio(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            generatedText.value = output
-
-            Output(outputText = generatedText)
+            Output(outputText = SettingsNotifier.output)
 
         }
     }

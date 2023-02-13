@@ -60,7 +60,7 @@ object Helpers {
     }
 
     fun checkForConnection(
-        coroutineScope: CoroutineScope, ifConnected: suspend () -> Unit, notConnected: () -> Unit
+        coroutineScope: CoroutineScope, ifConnected: () -> Unit, notConnected: () -> Unit
     ) {
         val command = "ping -c 1 google.com"
         coroutineScope.launch(Dispatchers.IO) {
