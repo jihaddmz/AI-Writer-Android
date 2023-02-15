@@ -54,10 +54,10 @@ fun ScreenTweet(
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
             if (nbOfGenerations == 1 || SettingsNotifier.outputList.isEmpty()) {
-                Output(outputText = SettingsNotifier.output)
+                Output(outputText = SettingsNotifier.output, fromScreen = "twitter")
             } else if (nbOfGenerations > 0) {
                 SettingsNotifier.outputList.forEach {
-                    Output(outputText = mutableStateOf(it))
+                    Output(outputText = mutableStateOf(it), fromScreen = "twitter")
 
                     MySpacer(type = "small")
                 }

@@ -61,7 +61,11 @@ fun ScreenEmail(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            Output(outputText = SettingsNotifier.output, emailName = SettingsNotifier.name.value)
+            Output(
+                outputText = SettingsNotifier.output,
+                emailName = SettingsNotifier.name.value,
+                fromScreen = "email"
+            )
         }
     }
 }

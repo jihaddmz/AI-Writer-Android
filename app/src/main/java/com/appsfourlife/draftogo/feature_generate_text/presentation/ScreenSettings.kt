@@ -88,7 +88,7 @@ fun ScreenSettings(
                         ).plus(
                             AnnotatedString(
                                 text = stringResource(
-                                    id = R.string.action
+                                    id = R.string.active
                                 ), spanStyle = SpanStyle(color = Color.Green)
                             )
                         ),
@@ -118,14 +118,15 @@ fun ScreenSettings(
                             spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                         ).plus(AnnotatedString(text = HelperAuth.getExpirationDate())),
                     )
+
+                    MySpacer(type = "small")
+
+                    MyOutlinedButton(text = stringResource(id = R.string.manage_subscription)) {
+                        HelperIntent.navigateToPlayStoreSubscription()
+                    }
+
                     MySpacer(type = "small")
                 }
-
-                MyOutlinedButton(text = stringResource(id = R.string.manage_subscription)) {
-                    HelperIntent.navigateToPlayStoreSubscription()
-                }
-
-                MySpacer(type = "small")
 
                 MyText(
                     modifier = Modifier

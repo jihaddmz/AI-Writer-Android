@@ -88,7 +88,7 @@ fun DialogNbOfGenerationsExceeded(
                                     error: PurchasesError,
                                     userCancelled: Boolean
                                 ) {
-                                    HelperUI.showToast(context, error.message)
+//                                    HelperUI.showToast(context, error.message)
                                 }
 
                             })

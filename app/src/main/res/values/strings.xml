@@ -142,4 +142,6 @@
     <string name="purchase_restored_successfully">Purchased restored successfully</string>
     <string name="expiration_date">Expiration Date</string>
     <string name="manage_subscription">Manage Subscription</string>
+    <string name="share_using">Share using</string>
+    <string name="text_copied_facebook">Text copied, you can paste it in facebook</string>
 </resources>

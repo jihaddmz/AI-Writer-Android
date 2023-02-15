@@ -53,10 +53,10 @@ fun ScreenFacebook(
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
             if (nbOfGenerations == 1 || SettingsNotifier.outputList.isEmpty()) {
-                Output(outputText = SettingsNotifier.output)
+                Output(outputText = SettingsNotifier.output, fromScreen = "facebook")
             } else if (nbOfGenerations > 0) {
                 SettingsNotifier.outputList.forEach {
-                    Output(outputText = mutableStateOf(it))
+                    Output(outputText = mutableStateOf(it), fromScreen = "facebook")
 
                     MySpacer(type = "small")
                 }

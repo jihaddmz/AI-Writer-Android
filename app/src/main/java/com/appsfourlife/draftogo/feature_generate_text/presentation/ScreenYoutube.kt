@@ -53,10 +53,10 @@ fun ScreenYoutube(
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
             if (nbOfGenerations == 1 || SettingsNotifier.outputList.isEmpty()) {
-                Output(outputText = SettingsNotifier.output)
+                Output(outputText = SettingsNotifier.output, fromScreen = "youtube")
             } else if (nbOfGenerations > 0) {
                 SettingsNotifier.outputList.forEach {
-                    Output(outputText = mutableStateOf(it))
+                    Output(outputText = mutableStateOf(it), fromScreen = "youtube")
 
                     MySpacer(type = "small")
                 }

@@ -3,13 +3,10 @@ package com.appsfourlife.draftogo.components
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Card
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,6 +25,7 @@ fun Output(
     modifier: Modifier = Modifier,
     emailName: String = "",
     outputText: MutableState<String>,
+    fromScreen: String = ""
 ) {
 
     val context = LocalContext.current
@@ -58,16 +56,28 @@ fun Output(
                 verticalAlignment = Alignment.Bottom
             ) {
 
-                IconButton(modifier = Modifier, onClick = {
-                    if (emailName.isNotEmpty()) {
-                        Helpers.shareEmailOutput(outputText.value, emailName, context)
-                    } else Helpers.shareOutput(text = outputText.value, context)
-                }) {
-                    MyIcon(
-                        iconID = com.appsfourlife.draftogo.R.drawable.icon_alternate_share, contentDesc = stringResource(
-                            id = com.appsfourlife.draftogo.R.string.share
-                        ), tint = Blue
-                    )
+                if (fromScreen != "instagram" && fromScreen != "youtube")
+                MyAnimatedVisibility(visible = outputText.value.isNotEmpty()) {
+                    IconButton(modifier = Modifier, onClick = {
+                        if (fromScreen.lowercase() == "email") {
+                            Helpers.shareEmailOutput(outputText.value, emailName, context)
+                        } else if (fromScreen.lowercase() == "facebook") {
+                            HelperUI.showToast(msg = App.getTextFromString(com.appsfourlife.draftogo.R.string.text_copied_facebook))
+                            Helpers.copyToClipBoard(text = outputText.value)
+                            Helpers.shareOutputToFacebook(context, "Hello there")
+                        } else if (fromScreen.lowercase() == "twitter") {
+                            Helpers.shareOutputToTwitter(context, outputText.value)
+                        } else
+                            Helpers.shareOutput(text = outputText.value, context)
+                    }) {
+                        MyIcon(
+                            iconID = com.appsfourlife.draftogo.R.drawable.icon_alternate_share,
+                            contentDesc = stringResource(
+                                id = com.appsfourlife.draftogo.R.string.share
+                            ),
+                            tint = Blue
+                        )
+                    }
                 }
 
                 when (rememberWindowInfo().screenWidthInfo) {
@@ -92,12 +102,17 @@ fun Output(
 
                 IconButton(onClick = {
                     Helpers.copyToClipBoard(context = context, text = outputText.value)
-                    HelperUI.showToast(context, App.getTextFromString(com.appsfourlife.draftogo.R.string.text_copied))
+                    HelperUI.showToast(
+                        context,
+                        App.getTextFromString(com.appsfourlife.draftogo.R.string.text_copied)
+                    )
                 }) {
                     MyIcon(
-                        iconID = com.appsfourlife.draftogo.R.drawable.copy, contentDesc = stringResource(
+                        iconID = com.appsfourlife.draftogo.R.drawable.copy,
+                        contentDesc = stringResource(
                             id = com.appsfourlife.draftogo.R.string.copy
-                        ), tint = Blue
+                        ),
+                        tint = Blue
                     )
                 }
             }
