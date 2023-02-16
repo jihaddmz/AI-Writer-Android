@@ -15,7 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.appsfourlife.draftogo.App
-import com.appsfourlife.draftogo.helpers.*
+import com.appsfourlife.draftogo.helpers.HelperUI
+import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
@@ -48,74 +49,55 @@ fun Output(
                 fontWeight = FontWeight.Bold,
             )
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(SpacersSize.small),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.Bottom
-            ) {
-
-                if (fromScreen != "instagram" && fromScreen != "youtube")
+            if (fromScreen != "instagram" && fromScreen != "youtube")
                 MyAnimatedVisibility(visible = outputText.value.isNotEmpty()) {
-                    IconButton(modifier = Modifier, onClick = {
-                        if (fromScreen.lowercase() == "email") {
-                            Helpers.shareEmailOutput(outputText.value, emailName, context)
-                        } else if (fromScreen.lowercase() == "facebook") {
-                            HelperUI.showToast(msg = App.getTextFromString(com.appsfourlife.draftogo.R.string.text_copied_facebook))
-                            Helpers.copyToClipBoard(text = outputText.value)
-                            Helpers.shareOutputToFacebook(context, "Hello there")
-                        } else if (fromScreen.lowercase() == "twitter") {
-                            Helpers.shareOutputToTwitter(context, outputText.value)
-                        } else
-                            Helpers.shareOutput(text = outputText.value, context)
-                    }) {
-                        MyIcon(
-                            iconID = com.appsfourlife.draftogo.R.drawable.icon_alternate_share,
-                            contentDesc = stringResource(
-                                id = com.appsfourlife.draftogo.R.string.share
-                            ),
-                            tint = Blue
-                        )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(SpacersSize.small),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        IconButton(modifier = Modifier, onClick = {
+                            if (fromScreen.lowercase() == "email") {
+                                Helpers.shareEmailOutput(outputText.value, emailName, context)
+                            } else if (fromScreen.lowercase() == "facebook") {
+                                HelperUI.showToast(msg = App.getTextFromString(com.appsfourlife.draftogo.R.string.text_copied_facebook))
+                                Helpers.copyToClipBoard(text = outputText.value)
+                                Helpers.shareOutputToFacebook(context, "Hello there")
+                            } else if (fromScreen.lowercase() == "twitter") {
+                                Helpers.shareOutputToTwitter(context, outputText.value)
+                            } else
+                                Helpers.shareOutput(text = outputText.value, context)
+                        }) {
+                            MyIcon(
+                                iconID = com.appsfourlife.draftogo.R.drawable.icon_alternate_share,
+                                contentDesc = stringResource(
+                                    id = com.appsfourlife.draftogo.R.string.share
+                                ),
+                                tint = Blue
+                            )
+                        }
+
+                        MySpacer(type = "small", widthOrHeight = "width")
+
+                        IconButton(onClick = {
+                            Helpers.copyToClipBoard(context = context, text = outputText.value)
+                            HelperUI.showToast(
+                                context,
+                                App.getTextFromString(com.appsfourlife.draftogo.R.string.text_copied)
+                            )
+                        }) {
+                            MyIcon(
+                                iconID = com.appsfourlife.draftogo.R.drawable.copy,
+                                contentDesc = stringResource(
+                                    id = com.appsfourlife.draftogo.R.string.copy
+                                ),
+                                tint = Blue
+                            )
+                        }
                     }
                 }
-
-                when (rememberWindowInfo().screenWidthInfo) {
-                    is WindowInfo.WindowType.Compact -> Spacer(modifier = Modifier.width(0.dp))
-                    is WindowInfo.WindowType.Medium -> Spacer(
-                        modifier = Modifier.width(
-                            SpacersSize.small
-                        )
-                    )
-                    else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
-                }
-
-                when (rememberWindowInfo().screenWidthInfo) {
-                    is WindowInfo.WindowType.Compact -> Spacer(modifier = Modifier.width(0.dp))
-                    is WindowInfo.WindowType.Medium -> Spacer(
-                        modifier = Modifier.width(
-                            SpacersSize.small
-                        )
-                    )
-                    else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
-                }
-
-                IconButton(onClick = {
-                    Helpers.copyToClipBoard(context = context, text = outputText.value)
-                    HelperUI.showToast(
-                        context,
-                        App.getTextFromString(com.appsfourlife.draftogo.R.string.text_copied)
-                    )
-                }) {
-                    MyIcon(
-                        iconID = com.appsfourlife.draftogo.R.drawable.copy,
-                        contentDesc = stringResource(
-                            id = com.appsfourlife.draftogo.R.string.copy
-                        ),
-                        tint = Blue
-                    )
-                }
-            }
         }
     }
 }
