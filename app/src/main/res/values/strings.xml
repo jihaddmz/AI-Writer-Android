@@ -21,11 +21,11 @@
     <string name="write_a_poem">Write an %s Poem</string>
     <string name="write_a_tweet_top_bar">Write a Tweet</string>
     <string name="write_a_tweet">Write a %s Tweet</string>
-    <string name="write_a_viral_tiktok_captions_top_bar">Write a viral Tiktok captions</string>
-    <string name="write_a_viral_tiktok_captions">Write an %s viral Tiktok captions</string>
+    <string name="write_a_viral_tiktok_captions_top_bar">Write a Viral Tiktok Caption</string>
+    <string name="write_a_viral_tiktok_captions">Write an %s viral Tiktok caption</string>
     <string name="write_an_instagram_caption">Write an %s Instagram caption</string>
-    <string name="write_an_instagram_caption_top_bar">Write an Instagram caption</string>
-    <string name="write_a_code">Write an Code</string>
+    <string name="write_an_instagram_caption_top_bar">Write an Instagram Caption</string>
+    <string name="write_a_code">Write a Code</string>
     <string name="email_input_label">inorder to meet at 10a.m in my house</string>
     <string name="write_an_email_to">Write an %s email to %s</string>
     <string name="blog_input_label">About the importance of food</string>
@@ -75,7 +75,7 @@
     <string name="subscribe">Subscribe</string>
     <string name="add_your_option_label">Add your custom desired section</string>
     <string name="write_a_facebook_post">Write an %s facebook post</string>
-    <string name="write_a_facebook_post_top_bar">Write a Facebook post</string>
+    <string name="write_a_facebook_post_top_bar">Write a Facebook Post</string>
     <string name="narrative">Narrative Essay</string>
     <string name="descriptive">Descriptive Essay</string>
     <string name="expository">Expository Essay</string>
@@ -92,7 +92,7 @@
     <string name="done">Done</string>
     <string name="no_text_to_translate">There is no text to translate</string>
     <string name="fr">fr</string>
-    <string name="write_a_youtube_caption_top_bar">Write a Youtube caption</string>
+    <string name="write_a_youtube_caption_top_bar">Write a Youtube Caption</string>
     <string name="write_a_youtube_caption">Write an %s youtube caption</string>
     <string name="youtube_input_label">About the top 10 free games for pc and describe each</string>
     <string name="facebook_input_label">About nutrition</string>
