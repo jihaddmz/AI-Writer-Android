@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.components
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*

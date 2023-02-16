@@ -20,11 +20,9 @@ import com.appsfourlife.draftogo.ui.theme.Blue
 import kotlin.math.roundToInt
 
 @Composable
-fun length(
-    modifier: Modifier = Modifier,
-    label: String = stringResource(id = R.string.length),
-    maxLength: Float = Constants.MAX_GENERATION_LENGTH
-): Int {
+fun TypeWriterLength(
+    modifier: Modifier = Modifier
+) {
 
     val context = LocalContext.current
     val value = remember {
@@ -39,22 +37,21 @@ fun length(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        MyText(text = "$label:", color = Blue, fontWeight = FontWeight.Bold)
+        MyText(text = "${stringResource(id = R.string.typewriter_length)}:", color = Blue, fontWeight = FontWeight.Bold)
 
         value.value = mySlider(
             modifier.fillMaxWidth(0.6f),
             initialValue = HelperSharedPreference.getFloat(
                 HelperSharedPreference.SP_SETTINGS,
-                HelperSharedPreference.SP_SETTINGS_LENGTH,
-                100f,
+                HelperSharedPreference.SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH,
+                50f,
                 context = context
             ),
-            valueRange = 7f..maxLength,
-            label = label,
+            valueRange = 0f..Constants.MAX_TYPEWRITER_LENGTH,
             onValueChangeListener = {
                 HelperSharedPreference.setFloat(
                     HelperSharedPreference.SP_SETTINGS,
-                    HelperSharedPreference.SP_SETTINGS_LENGTH,
+                    HelperSharedPreference.SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH,
                     it,
                     context = context
                 )
@@ -62,6 +59,4 @@ fun length(
 
         MyText(text = value.value.toString())
     }
-
-    return value.value
 }

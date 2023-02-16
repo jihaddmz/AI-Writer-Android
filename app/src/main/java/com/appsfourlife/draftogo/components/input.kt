@@ -1,7 +1,6 @@
 package com.appsfourlife.draftogo.components
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
@@ -25,13 +24,11 @@ import com.android.volley.toolbox.Volley
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.SettingsNotifier
-import com.appsfourlife.draftogo.SettingsNotifier.output
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.util.*
 import javax.net.ssl.SSLException
@@ -97,18 +94,13 @@ fun input(
                         )
                     }
 
-                    when (rememberWindowInfo().screenWidthInfo) {
-                        is WindowInfo.WindowType.Compact -> Spacer(modifier = Modifier.width(0.dp))
-                        is WindowInfo.WindowType.Medium -> Spacer(
-                            modifier = Modifier.width(
-                                SpacersSize.small
-                            )
-                        )
-                        else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
-                    }
+                    MySpacer(type = "small", widthOrHeight = "width")
 
                     IconButton(onClick = {
-                        SettingsNotifier.input.value = Helpers.pasteFromClipBoard(mutableStateOf(SettingsNotifier.input.value), context)
+                        SettingsNotifier.input.value = Helpers.pasteFromClipBoard(
+                            mutableStateOf(SettingsNotifier.input.value),
+                            context
+                        )
                     }) {
                         MyIcon(
                             iconID = R.drawable.icon_paste,
@@ -171,6 +163,7 @@ fun input(
                         length,
                         nbOfGenerations,
                         isGenerateBtnEnabled,
+                        coroutineScope = coroutineScope,
                         onErrorAction = {
                             showDialog.value = false
                             isGenerateBtnEnabled.value = true
@@ -214,6 +207,7 @@ private fun getResponse(
     length: Int,
     nbOfGenerations: Int = 1,
     isGenerateBtnEnabled: MutableState<Boolean>,
+    coroutineScope: CoroutineScope,
     onErrorAction: () -> Unit,
     onDoneAction: () -> Unit
 ) {
@@ -249,7 +243,18 @@ private fun getResponse(
                 } else {
                     val responseMsg: String =
                         response.getJSONArray("choices").getJSONObject(0).getString("text")
-                    SettingsNotifier.output.value = responseMsg
+                    coroutineScope.launch(Dispatchers.IO) {
+                        SettingsNotifier.stopTyping.value = false
+                        responseMsg.forEachIndexed { index, c ->
+                            if (SettingsNotifier.stopTyping.value) {
+                                return@forEachIndexed
+                            }
+                            SettingsNotifier.output.value =
+                                responseMsg.substring(startIndex = 0, endIndex = index + 1)
+                            delay(HelperSharedPreference.getFloat(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH, 50f).toLong())
+                        }
+                    }
+//                    SettingsNotifier.output.value = responseMsg
                 }
                 isGenerateBtnEnabled.value = true
                 onDoneAction()
@@ -257,9 +262,9 @@ private fun getResponse(
             // adding on error listener
             Response.ErrorListener { error ->
                 onErrorAction()
-                if (error.cause is SSLException){
+                if (error.cause is SSLException) {
                     HelperUI.showToast(msg = App.getTextFromString(textID = R.string.no_connection))
-                }else
+                } else
                     HelperUI.showToast(msg = App.getTextFromString(textID = R.string.something_went_wrong))
 
             }) {

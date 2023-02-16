@@ -28,6 +28,7 @@ object HelperSharedPreference {
     const val SP_SETTINGS_OUTPUT_LANGUAGE = "output_language"
     const val SP_SETTINGS_PODCAST_TYPE = "podcast_type"
     const val SP_SETTINGS_GAME_CONSOLE_TYPE = "console_type"
+    const val SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH = "output_typewriter_length"
 
     /**
      * keys for authentication shared preferences
@@ -72,7 +73,7 @@ object HelperSharedPreference {
         name: String,
         key: String,
         value: Float,
-        context: Context
+        context: Context = App.context
     ) {
         val sp = context.getSharedPreferences(name, Context.MODE_PRIVATE)
         sp.edit {

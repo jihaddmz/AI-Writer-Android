@@ -51,8 +51,8 @@ fun TopBar(
         ) {
 
             IconButton(onClick = {
-                SettingsNotifier.resetValues()
                 navController.navigate(Screens.ScreenHome.route)
+                SettingsNotifier.resetValues()
             }) {
 
                 MyIcon(

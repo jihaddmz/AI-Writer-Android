@@ -17,8 +17,10 @@ object SettingsNotifier {
     val input = mutableStateOf(TextFieldValue(text = ""))
     val name = mutableStateOf("")
     val jobTitle = mutableStateOf("")
+    val stopTyping = mutableStateOf(false)
 
     fun resetValues(){
+        stopTyping.value = true
         input.value = TextFieldValue(text = "")
         name.value = ""
         jobTitle.value = ""

@@ -10,6 +10,7 @@ object Constants {
     val MAX_GENERATION_LENGTH = 1000f
     val MAX_NB_OF_GENERATIONS = 10f
     val MONTHLY_PRICE = 2
+    val MAX_TYPEWRITER_LENGTH = 100f
     val ANIMATION_LENGTH = 1000
     val MAX_NB_OF_TRIES_ALLOWED = 3
     val SUBSCRIPTION_MONTHLY_ID = "generations_monthly_fee"

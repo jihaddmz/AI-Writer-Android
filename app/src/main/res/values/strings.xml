@@ -99,7 +99,7 @@
     <string name="write_a_song_top_bar">Write a Song</string>
     <string name="write_a_song">Write an %s song</string>
     <string name="song_input_label">about my biggest hope in life.</string>
-    <string name="nb_of_generations">Number of Generations</string>
+    <string name="nb_of_generations">Nb of Generations</string>
     <string name="back_button_exit_text">Press back again to exit app</string>
     <string name="subscribed">Subscribed</string>
     <string name="settings">Settings</string>
@@ -144,4 +144,5 @@
     <string name="manage_subscription">Manage Subscription</string>
     <string name="share_using">Share using</string>
     <string name="text_copied_facebook">Text copied, you can paste it in facebook</string>
+    <string name="typewriter_length">TypeWriter Length</string>
 </resources>

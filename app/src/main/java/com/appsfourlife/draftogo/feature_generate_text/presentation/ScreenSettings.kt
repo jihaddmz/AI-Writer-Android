@@ -20,6 +20,7 @@ import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.helpers.HelperIntent
+import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 
 @Composable
@@ -71,6 +72,8 @@ fun ScreenSettings(
                 list = Constants.OUTPUT_LANGUAGES,
                 label = stringResource(id = R.string.output_language)
             )
+
+            TypeWriterLength()
 
             Column(
                 modifier = Modifier

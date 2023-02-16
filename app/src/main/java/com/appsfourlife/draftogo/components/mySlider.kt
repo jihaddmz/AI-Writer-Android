@@ -14,6 +14,7 @@ fun mySlider(
     modifier: Modifier = Modifier,
     initialValue: Float,
     valueRange: ClosedFloatingPointRange<Float> = 7f..Constants.MAX_GENERATION_LENGTH,
+    label: String = "",
     onValueChangeListener: (Float) -> Unit
 ): Float {
 
