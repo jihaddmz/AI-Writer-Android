@@ -65,7 +65,6 @@ fun ScreenSettings(
                     text = stringResource(id = R.string.app_name),
                     fontWeight = FontWeight.Bold
                 )
-
             }
 
             myDropDown(
@@ -96,6 +95,7 @@ fun ScreenSettings(
                             )
                         ),
                     )
+
                 } else // if the user is not subscribed
                     MyAnnotatedText(
                         textAlign = TextAlign.Center,
@@ -113,7 +113,7 @@ fun ScreenSettings(
 
                 MySpacer(type = "small")
 
-                if (HelperAuth.willRenew()) { // if the subscription will be renewed
+                if (HelperAuth.willRenew()) {
                     MyAnnotatedText(
                         textAlign = TextAlign.Center,
                         text = AnnotatedString(
@@ -121,8 +121,6 @@ fun ScreenSettings(
                             spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                         ).plus(AnnotatedString(text = HelperAuth.getExpirationDate())),
                     )
-
-                    MySpacer(type = "small")
 
                     MyOutlinedButton(text = stringResource(id = R.string.manage_subscription)) {
                         HelperIntent.navigateToPlayStoreSubscription()

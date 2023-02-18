@@ -37,7 +37,7 @@ fun TypeWriterLength(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        MyText(text = "${stringResource(id = R.string.typewriter_length)}:", color = Blue, fontWeight = FontWeight.Bold)
+        MyText(text = "${stringResource(id = R.string.typewriter_length)}:(ms)", color = Blue, fontWeight = FontWeight.Bold)
 
         value.value = mySlider(
             modifier.fillMaxWidth(0.6f),

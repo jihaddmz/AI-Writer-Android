@@ -56,7 +56,8 @@ fun ScreenEmail(
                 inputPrefix = stringResource(
                     id = R.string.write_an_email_to, HelperSharedPreference.getOutputLanguage(), SettingsNotifier.name.value
                 ),
-                showDialog = showDialog
+                showDialog = showDialog,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

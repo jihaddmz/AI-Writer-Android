@@ -50,7 +50,8 @@ fun ScreenCode(
             input(
                 label = stringResource(id = R.string.code_input_label),
                 inputPrefix = "${stringResource(id = R.string.write_a_code)} in $programmingLanguage",
-                showDialog = showDialog
+                showDialog = showDialog,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

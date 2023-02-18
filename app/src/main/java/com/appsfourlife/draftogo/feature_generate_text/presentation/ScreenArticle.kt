@@ -51,7 +51,8 @@ fun ScreenArticle(
                 label = stringResource(id = R.string.article_input_label),
                 inputPrefix = stringResource(id = R.string.write_an_article, HelperSharedPreference.getOutputLanguage()),
                 length = length,
-                showDialog = showDialog
+                showDialog = showDialog,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

@@ -55,6 +55,7 @@ fun ScreenPodcast(
                 inputPrefix = stringResource(id = R.string.write_an_podcast_of_type, HelperSharedPreference.getOutputLanguage(), type),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

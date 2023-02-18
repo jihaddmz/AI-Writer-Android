@@ -48,7 +48,8 @@ fun ScreenSong(
                 label = stringResource(id = R.string.song_input_label),
                 inputPrefix = stringResource(id = R.string.write_a_song, HelperSharedPreference.getOutputLanguage()),
                 showDialog = showDialog,
-                length = length
+                length = length,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

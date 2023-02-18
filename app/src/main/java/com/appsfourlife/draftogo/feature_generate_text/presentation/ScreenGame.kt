@@ -54,6 +54,7 @@ fun ScreenGame(
                 inputPrefix = stringResource(id = R.string.write_an_game_script, HelperSharedPreference.getOutputLanguage(), type),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

@@ -49,6 +49,7 @@ fun ScreenTiktok(
                 inputPrefix = stringResource(id = R.string.write_a_viral_tiktok_captions, HelperSharedPreference.getOutputLanguage()),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

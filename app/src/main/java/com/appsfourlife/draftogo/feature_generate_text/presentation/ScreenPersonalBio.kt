@@ -46,7 +46,8 @@ fun ScreenPersonalBio(
             input(
                 label = stringResource(id = R.string.that_captures_attention),
                 inputPrefix = inputPrefix,
-                showDialog = showDialog
+                showDialog = showDialog,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

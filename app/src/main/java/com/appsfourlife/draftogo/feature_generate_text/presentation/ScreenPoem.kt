@@ -51,7 +51,8 @@ fun ScreenPoem(
                 label = stringResource(id = R.string.poem_input_label),
                 inputPrefix = stringResource(id = R.string.write_a_poem, HelperSharedPreference.getOutputLanguage()),
                 length = length,
-                showDialog = showDialog
+                showDialog = showDialog,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

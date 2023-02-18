@@ -59,7 +59,8 @@ fun ScreenEssay(
                     essayType
                 ),
                 length = length,
-                showDialog = showDialog
+                showDialog = showDialog,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

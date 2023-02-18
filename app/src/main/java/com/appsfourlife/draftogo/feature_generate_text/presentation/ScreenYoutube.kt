@@ -48,6 +48,7 @@ fun ScreenYoutube(
                 inputPrefix = stringResource(id = R.string.write_a_youtube_caption, HelperSharedPreference.getOutputLanguage()),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

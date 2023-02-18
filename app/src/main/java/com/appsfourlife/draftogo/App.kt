@@ -96,41 +96,41 @@ class App : Application() {
             5 to listOf(getTextFromString(R.string.write_a_cv), R.drawable.icon_cv),
             6 to listOf(getTextFromString(R.string.write_a_resume), R.drawable.icon_resume),
             7 to listOf(
-                getTextFromString(R.string.write_a_poem_top_bar),
-                R.drawable.icon_poem_heart
-            ),
-            8 to listOf(getTextFromString(R.string.write_a_song_top_bar), R.drawable.icon_song),
-            9 to listOf(
-                getTextFromString(R.string.write_a_tweet_top_bar),
-                R.drawable.icon_logo_twitter
-            ),
-            10 to listOf(
-                getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar),
-                R.drawable.icon_tiktok
-            ),
-            11 to listOf(
-                getTextFromString(R.string.write_an_instagram_caption_top_bar),
-                R.drawable.icon_instagram
-            ),
-            12 to listOf(
-                getTextFromString(R.string.write_a_facebook_post_top_bar),
-                R.drawable.icon_facebook
-            ),
-            13 to listOf(
-                getTextFromString(R.string.write_a_youtube_caption_top_bar),
-                R.drawable.icon_youtube
-            ),
-            14 to listOf(
-                getTextFromString(R.string.write_a_podcast_top_bar), R.drawable.icon_podcast
-            ),
-            15 to listOf(
-                getTextFromString(R.string.write_a_game_script_top_label),
-                R.drawable.icon_video_game
-            ),
-            16 to listOf(
                 getTextFromString(R.string.write_a_personal_bio_top_bar),
                 R.drawable.social_bio
             ),
+            8 to listOf(
+                getTextFromString(R.string.write_a_tweet_top_bar),
+                R.drawable.icon_logo_twitter
+            ),
+            9 to listOf(
+                getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar),
+                R.drawable.icon_tiktok
+            ),
+            10 to listOf(
+                getTextFromString(R.string.write_an_instagram_caption_top_bar),
+                R.drawable.icon_instagram
+            ),
+            11 to listOf(
+                getTextFromString(R.string.write_a_facebook_post_top_bar),
+                R.drawable.icon_facebook
+            ),
+            12 to listOf(
+                getTextFromString(R.string.write_a_youtube_caption_top_bar),
+                R.drawable.icon_youtube
+            ),
+            13 to listOf(
+                getTextFromString(R.string.write_a_podcast_top_bar), R.drawable.icon_podcast
+            ),
+            14 to listOf(
+                getTextFromString(R.string.write_a_game_script_top_label),
+                R.drawable.icon_video_game
+            ),
+            15 to listOf(
+                getTextFromString(R.string.write_a_poem_top_bar),
+                R.drawable.icon_poem_heart
+            ),
+            16 to listOf(getTextFromString(R.string.write_a_song_top_bar), R.drawable.icon_song),
             17 to listOf(getTextFromString(R.string.write_a_code), R.drawable.icon_code),
             18 to listOf(getTextFromString(R.string.custom), R.drawable.icon_customize),
         )

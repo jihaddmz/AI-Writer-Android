@@ -62,7 +62,8 @@ fun ScreenResume(
                         resumeType
                     )
                 } for a ${SettingsNotifier.jobTitle.value}",
-                showDialog = showDialog
+                showDialog = showDialog,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

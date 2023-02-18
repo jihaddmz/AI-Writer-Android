@@ -85,69 +85,71 @@ class MainActivity : ComponentActivity() {
                                     iconID = iconID,
                                     text = text
                                 ) {
+
                                     SettingsNotifier.resetValues() // clearing values
-                                    when (index) {
-                                        0 -> {
+
+                                    when (text) {
+                                        App.getTextFromString(R.string.write_an_email) -> {
                                             navController.navigate(Screens.ScreenEmail.route)
                                         }
-                                        1 -> {
+                                        App.getTextFromString(R.string.write_a_blog_top_bar) -> {
                                             navController.navigate(Screens.ScreenBlog.route)
                                         }
-                                        2 -> {
+                                        App.getTextFromString(R.string.write_an_essay) -> {
                                             navController.navigate(Screens.ScreenEssay.route)
                                         }
-                                        3 -> {
+                                        App.getTextFromString(R.string.write_an_article_top_bar) -> {
                                             navController.navigate(Screens.ScreenArticle.route)
                                         }
-                                        4 -> {
+                                        App.getTextFromString(R.string.write_a_letter) -> {
                                             navController.navigate(Screens.ScreenLetter.route)
                                         }
-                                        5 -> {
+                                        App.getTextFromString(R.string.write_a_cv) -> {
                                             navController.navigate(Screens.ScreenCV.route)
                                         }
-                                        6 -> {
+                                        App.getTextFromString(R.string.write_a_resume) -> {
                                             navController.navigate(Screens.ScreenResume.route)
                                         }
-                                        7 -> {
-                                            navController.navigate(Screens.ScreenPoem.route)
+                                        App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
+                                            navController.navigate(Screens.ScreenPersonalBio.route)
                                         }
-                                        8 -> {
-                                            navController.navigate(Screens.ScreenSong.route)
-                                        }
-                                        9 -> {
+                                        App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
                                             navController.navigate(Screens.ScreenTwitter.route)
                                         }
-                                        10 -> {
+                                        App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
                                             navController.navigate(Screens.ScreenTiktok.route)
                                         }
-
-                                        11 -> {
+                                        App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
                                             navController.navigate(Screens.ScreenInstagram.route)
                                         }
 
-                                        12 -> {
+                                        App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
                                             navController.navigate(Screens.ScreenFacebook.route)
                                         }
 
-                                        13 -> {
+                                        App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
                                             navController.navigate(Screens.ScreenYoutube.route)
                                         }
 
-                                        14 -> {
+                                        App.getTextFromString(R.string.write_a_podcast_top_bar) -> {
                                             navController.navigate(Screens.ScreenPodcast.route)
                                         }
 
-                                        15 -> {
+                                        App.getTextFromString(R.string.write_a_game_script_top_label) -> {
                                             navController.navigate(Screens.ScreenGame.route)
                                         }
 
-                                        16 -> {
-                                            navController.navigate(Screens.ScreenPersonalBio.route)
+                                        App.getTextFromString(R.string.write_a_poem_top_bar) -> {
+                                            navController.navigate(Screens.ScreenPoem.route)
                                         }
-                                        17 -> {
+
+                                        App.getTextFromString(R.string.write_a_song_top_bar) -> {
+                                            navController.navigate(Screens.ScreenSong.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_code) -> {
                                             navController.navigate(Screens.ScreenCode.route)
                                         }
-                                        18 -> {
+                                        App.getTextFromString(R.string.custom) -> {
                                             navController.navigate(Screens.ScreenCustom.route)
                                         }
                                     }

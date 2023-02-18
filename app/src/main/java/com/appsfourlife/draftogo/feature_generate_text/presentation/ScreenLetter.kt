@@ -91,7 +91,8 @@ fun ScreenLetter(
                 label = stringResource(id = R.string.letter_input_label),
                 inputPrefix = inputPrefix,
                 length = length,
-                showDialog = showDialog
+                showDialog = showDialog,
+                verticalScrollState = verticalScroll
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))

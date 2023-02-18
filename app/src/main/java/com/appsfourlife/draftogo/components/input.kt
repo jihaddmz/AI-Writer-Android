@@ -1,9 +1,13 @@
 package com.appsfourlife.draftogo.components
 
 import android.content.Context
+import android.text.TextUtils.substring
 import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.Card
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
@@ -24,6 +28,7 @@ import com.android.volley.toolbox.Volley
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.SettingsNotifier
+import com.appsfourlife.draftogo.SettingsNotifier.output
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -41,6 +46,7 @@ fun input(
     label: String,
     inputPrefix: String = "",
     nbOfGenerations: Int = 1,
+    verticalScrollState: ScrollState = rememberScrollState(),
     length: Int = Constants.MAX_GENERATION_LENGTH.toInt(),
     showDialog: MutableState<Boolean> = mutableStateOf(false),
 ) {
@@ -86,9 +92,7 @@ fun input(
                         SettingsNotifier.input.value = TextFieldValue(text = "")
                     }) {
                         MyIcon(
-                            iconID = R.drawable.clear,
-                            tint = Blue,
-                            contentDesc = stringResource(
+                            iconID = R.drawable.clear, tint = Blue, contentDesc = stringResource(
                                 id = R.string.clear
                             )
                         )
@@ -98,8 +102,7 @@ fun input(
 
                     IconButton(onClick = {
                         SettingsNotifier.input.value = Helpers.pasteFromClipBoard(
-                            mutableStateOf(SettingsNotifier.input.value),
-                            context
+                            mutableStateOf(SettingsNotifier.input.value), context
                         )
                     }) {
                         MyIcon(
@@ -122,10 +125,9 @@ fun input(
         val generateText = remember {
             mutableStateOf(App.getTextFromString(R.string.generate))
         }
-        MyButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .animateContentSize(),
+        MyButton(modifier = Modifier
+            .fillMaxWidth()
+            .animateContentSize(),
             text = generateText.value,
             isEnabled = isGenerateBtnEnabled.value,
             content = {
@@ -139,8 +141,7 @@ fun input(
                         )
                     }
                 }
-            }
-        ) {
+            }) {
 
             if (HelperSharedPreference.getInt(
                     HelperSharedPreference.SP_SETTINGS,
@@ -169,7 +170,7 @@ fun input(
                             isGenerateBtnEnabled.value = true
                             generateText.value = App.getTextFromString(R.string.generate)
 
-                        }
+                        }, verticalScrollState = verticalScrollState
                     ) { // on fetching response action done
                         showDialog.value = false
                         generateText.value = App.getTextFromString(R.string.generated)
@@ -208,6 +209,7 @@ private fun getResponse(
     nbOfGenerations: Int = 1,
     isGenerateBtnEnabled: MutableState<Boolean>,
     coroutineScope: CoroutineScope,
+    verticalScrollState: ScrollState,
     onErrorAction: () -> Unit,
     onDoneAction: () -> Unit
 ) {
@@ -226,46 +228,62 @@ private fun getResponse(
     jsonObject.put("frequency_penalty", 0.0)
     jsonObject.put("presence_penalty", 0.0)
     jsonObject.put("n", nbOfGenerations)
+    jsonObject.put("stream", false)
+    jsonObject.put("logprobs", null)
+//    jsonObject.put("stop", "\n")
 
     // on below line making json object request.
     val postRequest: JsonObjectRequest =
         // on below line making json object request.
-        object : JsonObjectRequest(Method.POST, url, jsonObject,
-            Response.Listener { response ->
-                // on below line getting response message and setting it to text view.
-                if (nbOfGenerations > 1) {
-                    SettingsNotifier.outputList.clear() // this to not make the list append entries each time
-                    for (i in 0 until response.getJSONArray("choices").length()) {
-                        SettingsNotifier.outputList.add(
-                            response.getJSONArray("choices").getJSONObject(i).getString("text")
+        object : JsonObjectRequest(Method.POST, url, jsonObject, Response.Listener { response ->
+            // on below line getting response message and setting it to text view.
+            if (nbOfGenerations > 1) { // many output to generate
+                SettingsNotifier.outputList.clear() // this to not make the list append entries each time
+                for (i in 0 until response.getJSONArray("choices").length()) {
+                    val output =
+                        response.getJSONArray("choices").getJSONObject(i).getString("text")
+                    SettingsNotifier.outputList.add(
+                        output
+                    )
+                }
+            } else { // 1 output to generate
+                val responseMsg: String =
+                    response.getJSONArray("choices").getJSONObject(0).getString("text")
+                coroutineScope.launch(Dispatchers.IO) {
+                    SettingsNotifier.stopTyping.value = false
+                    responseMsg.forEachIndexed { index, c ->
+                        if (SettingsNotifier.stopTyping.value) {
+                            return@forEachIndexed
+                        }
+                        SettingsNotifier.output.value =
+                            responseMsg.substring(startIndex = 0, endIndex = index + 1)
+
+                        delay(
+                            HelperSharedPreference.getFloat(
+                                HelperSharedPreference.SP_SETTINGS,
+                                HelperSharedPreference.SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH,
+                                50f
+                            ).toLong()
                         )
-                    }
-                } else {
-                    val responseMsg: String =
-                        response.getJSONArray("choices").getJSONObject(0).getString("text")
-                    coroutineScope.launch(Dispatchers.IO) {
-                        SettingsNotifier.stopTyping.value = false
-                        responseMsg.forEachIndexed { index, c ->
-                            if (SettingsNotifier.stopTyping.value) {
-                                return@forEachIndexed
-                            }
-                            SettingsNotifier.output.value =
-                                responseMsg.substring(startIndex = 0, endIndex = index + 1)
-                            delay(HelperSharedPreference.getFloat(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH, 50f).toLong())
+
+                        // scrolling the textfield output so the user don't need to scroll it manually
+                        coroutineScope.launch(Dispatchers.IO) {
+                            verticalScrollState.scrollTo(
+                                SettingsNotifier.output.value.length,
+                            )
                         }
                     }
-//                    SettingsNotifier.output.value = responseMsg
                 }
-                isGenerateBtnEnabled.value = true
-                onDoneAction()
-            },
+            }
+            isGenerateBtnEnabled.value = true
+            onDoneAction()
+        },
             // adding on error listener
             Response.ErrorListener { error ->
                 onErrorAction()
                 if (error.cause is SSLException) {
                     HelperUI.showToast(msg = App.getTextFromString(textID = R.string.no_connection))
-                } else
-                    HelperUI.showToast(msg = App.getTextFromString(textID = R.string.something_went_wrong))
+                } else HelperUI.showToast(msg = App.getTextFromString(textID = R.string.something_went_wrong))
 
             }) {
             override fun getHeaders(): MutableMap<String, String> {
