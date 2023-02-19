@@ -246,6 +246,7 @@ private fun getResponse(
                         output
                     )
                 }
+                isGenerateBtnEnabled.value = true
             } else { // 1 output to generate
                 val responseMsg: String =
                     response.getJSONArray("choices").getJSONObject(0).getString("text")
@@ -273,9 +274,9 @@ private fun getResponse(
                             )
                         }
                     }
+                    isGenerateBtnEnabled.value = true
                 }
             }
-            isGenerateBtnEnabled.value = true
             onDoneAction()
         },
             // adding on error listener
