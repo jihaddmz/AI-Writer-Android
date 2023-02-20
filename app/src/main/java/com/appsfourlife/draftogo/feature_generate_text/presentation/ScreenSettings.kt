@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -17,10 +18,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperAuth
-import com.appsfourlife.draftogo.helpers.HelperIntent
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
+import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 
 @Composable
@@ -96,6 +94,12 @@ fun ScreenSettings(
                         ),
                     )
 
+                    MySpacer(type = "small")
+
+                    MyOutlinedButton(text = stringResource(id = R.string.manage_subscription)) {
+                        HelperIntent.navigateToPlayStoreSubscription()
+                    }
+
                 } else // if the user is not subscribed
                     MyAnnotatedText(
                         textAlign = TextAlign.Center,
@@ -117,14 +121,10 @@ fun ScreenSettings(
                     MyAnnotatedText(
                         textAlign = TextAlign.Center,
                         text = AnnotatedString(
-                            text = "${stringResource(id = R.string.expiration_date)}: ",
+                            text = "${stringResource(id = R.string.renewal_date)}: ",
                             spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                         ).plus(AnnotatedString(text = HelperAuth.getExpirationDate())),
                     )
-
-                    MyOutlinedButton(text = stringResource(id = R.string.manage_subscription)) {
-                        HelperIntent.navigateToPlayStoreSubscription()
-                    }
 
                     MySpacer(type = "small")
                 }
@@ -133,7 +133,13 @@ fun ScreenSettings(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = SpacersSize.large),
-                    text = stringResource(id = R.string.app_version),
+                    text = stringResource(
+                        id = R.string.app_version,
+                        LocalContext.current.packageManager.getPackageInfo(
+                            LocalContext.current.packageName,
+                            0
+                        ).versionName
+                    ),
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
