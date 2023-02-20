@@ -1,6 +1,7 @@
 package com.appsfourlife.draftogo.components
 
 import android.content.Context
+import android.os.Handler
 import android.text.TextUtils.substring
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
@@ -240,17 +241,19 @@ private fun getResponse(
             if (nbOfGenerations > 1) { // many output to generate
                 SettingsNotifier.outputList.clear() // this to not make the list append entries each time
                 for (i in 0 until response.getJSONArray("choices").length()) {
-                    val output =
+                    val text =
                         response.getJSONArray("choices").getJSONObject(i).getString("text")
+
                     SettingsNotifier.outputList.add(
-                        output
+                        text
                     )
                 }
                 isGenerateBtnEnabled.value = true
             } else { // 1 output to generate
                 val responseMsg: String =
                     response.getJSONArray("choices").getJSONObject(0).getString("text")
-                coroutineScope.launch(Dispatchers.IO) {
+                coroutineScope.launch(Dispatchers.IO)
+                {
                     SettingsNotifier.stopTyping.value = false
                     responseMsg.forEachIndexed { index, c ->
                         if (SettingsNotifier.stopTyping.value) {

@@ -155,14 +155,5 @@ class App : Application() {
         listOfEssays.add(getTextFromString(R.string.copy_writing))
         listOfEssays.add(getTextFromString(R.string.travel_writing))
 
-        setDefaultValuesInSP()
-    }
-
-    /**
-     * setting default values in shared preference
-     **/
-    private fun setDefaultValuesInSP(){
-        HelperSharedPreference.setFloat(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH, 20f)
-        HelperSharedPreference.setInt(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT, 3)
     }
 }
