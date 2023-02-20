@@ -3,6 +3,8 @@ package com.appsfourlife.draftogo
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
+import com.airbnb.lottie.utils.Utils
+import com.android.billingclient.api.Purchase
 import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.Helpers
@@ -48,6 +50,11 @@ class App : Application() {
         // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 7)
         OneSignal.promptForPushNotifications();
 
+        Purchases.debugLogsEnabled = true
+        Purchases.configure(
+            PurchasesConfiguration.Builder(this, "goog_NECfLQxMlFFmYmWUVNINyyiEEmb").build()
+        )
+
         // mark checking purchase state
         Timer().scheduleAtFixedRate(timerTask {
             Purchases.sharedInstance.getCustomerInfo(object : ReceiveCustomerInfoCallback {
@@ -61,6 +68,7 @@ class App : Application() {
                         customerInfo.entitlements["premium"]?.expirationDate.toString()
                     )
                     customerInfo.entitlements["premium"]?.willRenew?.let {
+                        SettingsNotifier.isRenewable.value = it
                         HelperSharedPreference.setBool(
                             HelperSharedPreference.SP_AUTHENTICATION,
                             HelperSharedPreference.SP_AUTHENTICATION_WILL_RENEW,
@@ -75,11 +83,6 @@ class App : Application() {
                 }
             })
         }, 5000, 10000)
-
-        Purchases.debugLogsEnabled = true
-        Purchases.configure(
-            PurchasesConfiguration.Builder(this, "goog_NECfLQxMlFFmYmWUVNINyyiEEmb").build()
-        )
 
         mapOfScreens = hashMapOf(
             0 to listOf(

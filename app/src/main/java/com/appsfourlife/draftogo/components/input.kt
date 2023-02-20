@@ -273,7 +273,7 @@ private fun getResponse(
                         // scrolling the textfield output so the user don't need to scroll it manually
                         coroutineScope.launch(Dispatchers.IO) {
                             verticalScrollState.scrollTo(
-                                SettingsNotifier.output.value.length,
+                                SettingsNotifier.output.value.length + 100,
                             )
                         }
                     }

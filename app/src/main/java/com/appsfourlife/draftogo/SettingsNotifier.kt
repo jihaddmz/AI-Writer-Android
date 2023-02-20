@@ -12,6 +12,7 @@ object SettingsNotifier {
     val showDialogNbOfGenerationsLeftExceeded : MutableState<Boolean> = mutableStateOf(false)
     val nbOfGenerationsLeft = mutableStateOf(HelperSharedPreference.getInt(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT, Constants.MAX_NB_OF_TRIES_ALLOWED))
     val isSubscribed = mutableStateOf(false)
+    val isRenewable = mutableStateOf(false)
     val output = mutableStateOf("")
     val outputList = mutableStateListOf<String>()
     val input = mutableStateOf(TextFieldValue(text = ""))

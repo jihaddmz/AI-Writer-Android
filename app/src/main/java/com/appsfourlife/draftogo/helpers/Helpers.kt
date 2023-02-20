@@ -59,14 +59,6 @@ object Helpers {
         context.startActivity(Intent.createChooser(intent, App.getTextFromString(R.string.share_using)))
     }
 
-    fun shareOutputToInstagram(context: Context, text: String){
-        val intent = Intent(Intent.ACTION_SEND)
-        intent.type = "text/plain"
-        intent.`package` = "com.instagram.android"
-        intent.putExtra(Intent.EXTRA_TEXT, text)
-        context.startActivity(Intent.createChooser(intent, App.getTextFromString(R.string.share_using)))
-    }
-
     fun shareEmailOutput(text: String, email: String, context: Context) {
         var body = ""
         val parts = text.lines()

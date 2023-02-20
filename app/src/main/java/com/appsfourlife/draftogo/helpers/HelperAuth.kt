@@ -20,7 +20,7 @@ object HelperAuth {
     }
 
     fun willRenew(): Boolean {
-        return HelperSharedPreference.getBool(HelperSharedPreference.SP_AUTHENTICATION, HelperSharedPreference.SP_AUTHENTICATION_WILL_RENEW, false, App.context)
+        return SettingsNotifier.isRenewable.value || HelperSharedPreference.getBool(HelperSharedPreference.SP_AUTHENTICATION, HelperSharedPreference.SP_AUTHENTICATION_WILL_RENEW, false, App.context)
     }
 
     fun getExpirationDate(): String {

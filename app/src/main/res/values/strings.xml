@@ -145,4 +145,5 @@
     <string name="text_copied_facebook">Text copied, you can paste it in facebook</string>
     <string name="typewriter_length">TypeWriter Length</string>
     <string name="app_version">Version: %s</string>
+    <string name="not_renewable">Not Renewable</string>
 </resources>

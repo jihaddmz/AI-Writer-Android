@@ -125,9 +125,22 @@ fun ScreenSettings(
                             spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                         ).plus(AnnotatedString(text = HelperAuth.getExpirationDate())),
                     )
-
-                    MySpacer(type = "small")
+                } else {
+                    MyAnnotatedText(
+                        textAlign = TextAlign.Center,
+                        text = AnnotatedString(
+                            text = "${stringResource(id = R.string.renewal_date)}: ",
+                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                        ).plus(
+                            AnnotatedString(
+                                text = stringResource(id = R.string.not_renewable),
+                                spanStyle = SpanStyle(color = Color.Red)
+                            )
+                        ),
+                    )
                 }
+
+                MySpacer(type = "small")
 
                 MyText(
                     modifier = Modifier
