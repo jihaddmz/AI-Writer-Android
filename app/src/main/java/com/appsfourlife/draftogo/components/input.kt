@@ -145,8 +145,16 @@ fun input(
                 }
             }) {
 
+            if (!SettingsNotifier.isConnected.value) {
+                HelperUI.showToast(
+                    context,
+                    connectionError,
+                )
+                return@MyButton
+            }
+
             if (checkIfInputIsEmpty) // so if the user coming from custom screen, so there is no input prefix
-                // then the model will generate gibberish content
+            // then the model will generate gibberish content
                 if (SettingsNotifier.input.value.text.trim().isEmpty()) {
                     HelperUI.showToast(msg = App.getTextFromString(R.string.no_input_entered))
                     return@MyButton
@@ -162,50 +170,41 @@ fun input(
                 SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value = true
             } else {
                 keyboardController?.hide()
-                Helpers.checkForConnection(ifConnected = {
-                    isGenerateBtnEnabled.value = false
-                    showDialog.value = true
-                    generateText.value = App.getTextFromString(R.string.generating)
+                isGenerateBtnEnabled.value = false
+                showDialog.value = true
+                generateText.value = App.getTextFromString(R.string.generating)
 
-                    getResponse(
-                        inputPrefix + " " + SettingsNotifier.input.value.text.trim(),
-                        context,
-                        length,
-                        nbOfGenerations,
-                        isGenerateBtnEnabled,
-                        coroutineScope = coroutineScope,
-                        onErrorAction = {
-                            showDialog.value = false
-                            isGenerateBtnEnabled.value = true
-                            generateText.value = App.getTextFromString(R.string.generate)
-
-                        }, verticalScrollState = verticalScrollState
-                    ) { // on fetching response action done
+                getResponse(
+                    inputPrefix + " " + SettingsNotifier.input.value.text.trim(),
+                    context,
+                    length,
+                    nbOfGenerations,
+                    isGenerateBtnEnabled,
+                    coroutineScope = coroutineScope,
+                    onErrorAction = {
                         showDialog.value = false
-                        generateText.value = App.getTextFromString(R.string.generated)
+                        isGenerateBtnEnabled.value = true
+                        generateText.value = App.getTextFromString(R.string.generate)
 
-                        if (!HelperAuth.getUserSubscriptionState()) { // if the user is not yet subscribed, decrement the nb of generations left
-                            SettingsNotifier.nbOfGenerationsLeft.value -= 1
-                            HelperSharedPreference.setInt(
-                                HelperSharedPreference.SP_SETTINGS,
-                                HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                                SettingsNotifier.nbOfGenerationsLeft.value,
-                                context
-                            )
-                        }
+                    }, verticalScrollState = verticalScrollState
+                ) { // on fetching response action done
+                    showDialog.value = false
+                    generateText.value = App.getTextFromString(R.string.generated)
 
-                        Timer().schedule(timerTask {
-                            generateText.value = App.getTextFromString(R.string.generate)
-                        }, 1500)
-                    }
-                }, notConnected = {
-                    runBlocking(Dispatchers.Main) {
-                        HelperUI.showToast(
-                            context,
-                            connectionError,
+                    if (!HelperAuth.getUserSubscriptionState()) { // if the user is not yet subscribed, decrement the nb of generations left
+                        SettingsNotifier.nbOfGenerationsLeft.value -= 1
+                        HelperSharedPreference.setInt(
+                            HelperSharedPreference.SP_SETTINGS,
+                            HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
+                            SettingsNotifier.nbOfGenerationsLeft.value,
+                            context
                         )
                     }
-                }, coroutineScope = coroutineScope)
+
+                    Timer().schedule(timerTask {
+                        generateText.value = App.getTextFromString(R.string.generate)
+                    }, 1500)
+                }
             }
         }
     }

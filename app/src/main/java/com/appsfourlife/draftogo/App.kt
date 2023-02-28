@@ -14,7 +14,11 @@ import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.concurrent.thread
 import kotlin.concurrent.timerTask
 
 class App : Application() {
@@ -54,6 +58,12 @@ class App : Application() {
         Purchases.configure(
             PurchasesConfiguration.Builder(this, "goog_NECfLQxMlFFmYmWUVNINyyiEEmb").build()
         )
+
+        Timer().scheduleAtFixedRate(timerTask {
+            GlobalScope.launch(Dispatchers.IO) {
+                SettingsNotifier.isConnected.value = Helpers.isConnected()
+            }
+        }, 0, 2000)
 
         // mark checking purchase state
         Timer().scheduleAtFixedRate(timerTask {

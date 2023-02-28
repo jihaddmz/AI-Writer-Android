@@ -91,6 +91,11 @@ object Helpers {
         }
     }
 
+    fun isConnected(): Boolean {
+        val command = "ping -c 1 google.com"
+        return Runtime.getRuntime().exec(command).waitFor() == 0
+    }
+
     fun logD(msg: String) {
         Log.d(TAG, "logD: ${msg}")
     }
