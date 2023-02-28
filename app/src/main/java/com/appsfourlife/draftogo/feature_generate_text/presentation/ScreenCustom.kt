@@ -66,9 +66,9 @@ fun ScreenCustom(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            if (nbOfGenerations == 1 && SettingsNotifier.outputList.isEmpty()) {
+            if (SettingsNotifier.outputList.isEmpty()) {
                 Output(outputText = SettingsNotifier.output)
-            } else if (nbOfGenerations > 0) {
+            } else if (SettingsNotifier.outputList.isNotEmpty()) {
                 SettingsNotifier.outputList.forEach {
                     Output(outputText = mutableStateOf(it))
                     MySpacer(type = "small")

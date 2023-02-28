@@ -29,7 +29,8 @@ fun ScreenGame(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_game_script_top_label), navController = navController
+        text = stringResource(id = R.string.write_a_game_script_top_label),
+        navController = navController
     ) {
 
         Column(
@@ -43,7 +44,10 @@ fun ScreenGame(
 
             MySpacer(type = "small")
 
-            val type = myDropDown(list = Constants.listOfGameConsoleTypes, label = stringResource(id = R.string.type))
+            val type = myDropDown(
+                list = Constants.listOfGameConsoleTypes,
+                label = stringResource(id = R.string.type)
+            )
 
             val nbOfGenerations = sliderNbOfGenerations()
 
@@ -51,7 +55,11 @@ fun ScreenGame(
 
             input(
                 label = stringResource(id = R.string.game_input_label),
-                inputPrefix = stringResource(id = R.string.write_an_game_script, HelperSharedPreference.getOutputLanguage(), type),
+                inputPrefix = stringResource(
+                    id = R.string.write_an_game_script,
+                    HelperSharedPreference.getOutputLanguage(),
+                    type
+                ),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
                 verticalScrollState = verticalScroll
@@ -59,16 +67,14 @@ fun ScreenGame(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            if (nbOfGenerations == 1 || SettingsNotifier.outputList.isEmpty()) {
+            if (SettingsNotifier.outputList.isEmpty()) {
                 Output(outputText = SettingsNotifier.output)
-            } else if (nbOfGenerations > 0) {
+            } else if (SettingsNotifier.outputList.isNotEmpty()) {
                 SettingsNotifier.outputList.forEach {
                     Output(outputText = mutableStateOf(it))
-
                     MySpacer(type = "small")
                 }
             }
-
         }
     }
 

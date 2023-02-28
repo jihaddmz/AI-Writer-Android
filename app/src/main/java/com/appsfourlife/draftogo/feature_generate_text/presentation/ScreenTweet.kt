@@ -46,7 +46,10 @@ fun ScreenTweet(
 
             input(
                 label = stringResource(id = R.string.tweet_input_label),
-                inputPrefix = stringResource(id = R.string.write_a_tweet, HelperSharedPreference.getOutputLanguage()),
+                inputPrefix = stringResource(
+                    id = R.string.write_a_tweet,
+                    HelperSharedPreference.getOutputLanguage()
+                ),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
                 verticalScrollState = verticalScroll
@@ -54,12 +57,11 @@ fun ScreenTweet(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            if (nbOfGenerations == 1 || SettingsNotifier.outputList.isEmpty()) {
-                Output(outputText = SettingsNotifier.output, fromScreen = "twitter")
-            } else if (nbOfGenerations > 0) {
+            if (SettingsNotifier.outputList.isEmpty()) {
+                Output(outputText = SettingsNotifier.output)
+            } else if (SettingsNotifier.outputList.isNotEmpty()) {
                 SettingsNotifier.outputList.forEach {
-                    Output(outputText = mutableStateOf(it), fromScreen = "twitter")
-
+                    Output(outputText = mutableStateOf(it))
                     MySpacer(type = "small")
                 }
             }

@@ -28,7 +28,8 @@ fun ScreenTiktok(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_viral_tiktok_captions_top_bar), navController = navController
+        text = stringResource(id = R.string.write_a_viral_tiktok_captions_top_bar),
+        navController = navController
     ) {
 
         Column(
@@ -46,7 +47,10 @@ fun ScreenTiktok(
 
             input(
                 label = stringResource(id = R.string.tiktok_input_label),
-                inputPrefix = stringResource(id = R.string.write_a_viral_tiktok_captions, HelperSharedPreference.getOutputLanguage()),
+                inputPrefix = stringResource(
+                    id = R.string.write_a_viral_tiktok_captions,
+                    HelperSharedPreference.getOutputLanguage()
+                ),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
                 verticalScrollState = verticalScroll
@@ -54,12 +58,11 @@ fun ScreenTiktok(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            if (nbOfGenerations == 1 || SettingsNotifier.outputList.isEmpty()) {
+            if (SettingsNotifier.outputList.isEmpty()) {
                 Output(outputText = SettingsNotifier.output)
-            } else if (nbOfGenerations > 0) {
+            } else if (SettingsNotifier.outputList.isNotEmpty()) {
                 SettingsNotifier.outputList.forEach {
                     Output(outputText = mutableStateOf(it))
-
                     MySpacer(type = "small")
                 }
             }

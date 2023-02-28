@@ -263,6 +263,7 @@ private fun getResponse(
                 coroutineScope.launch(Dispatchers.IO)
                 {
                     SettingsNotifier.stopTyping.value = false
+                    SettingsNotifier.outputList.clear() // this to not make the list append entries each time
                     responseMsg.forEachIndexed { index, c ->
                         if (SettingsNotifier.stopTyping.value) {
                             return@forEachIndexed

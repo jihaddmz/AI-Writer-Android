@@ -27,7 +27,8 @@ fun ScreenFacebook(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_facebook_post_top_bar), navController = navController
+        text = stringResource(id = R.string.write_a_facebook_post_top_bar),
+        navController = navController
     ) {
 
         Column(
@@ -45,7 +46,10 @@ fun ScreenFacebook(
 
             input(
                 label = stringResource(id = R.string.facebook_input_label),
-                inputPrefix = stringResource(id = R.string.write_a_facebook_post, HelperSharedPreference.getOutputLanguage()),
+                inputPrefix = stringResource(
+                    id = R.string.write_a_facebook_post,
+                    HelperSharedPreference.getOutputLanguage()
+                ),
                 showDialog = showDialog,
                 nbOfGenerations = nbOfGenerations,
                 verticalScrollState = verticalScroll
@@ -53,12 +57,11 @@ fun ScreenFacebook(
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            if (nbOfGenerations == 1 || SettingsNotifier.outputList.isEmpty()) {
-                Output(outputText = SettingsNotifier.output, fromScreen = "facebook")
-            } else if (nbOfGenerations > 0) {
+            if (SettingsNotifier.outputList.isEmpty()) {
+                Output(outputText = SettingsNotifier.output)
+            } else if (SettingsNotifier.outputList.isNotEmpty()) {
                 SettingsNotifier.outputList.forEach {
-                    Output(outputText = mutableStateOf(it), fromScreen = "facebook")
-
+                    Output(outputText = mutableStateOf(it))
                     MySpacer(type = "small")
                 }
             }
