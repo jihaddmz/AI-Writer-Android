@@ -50,6 +50,7 @@ fun input(
     verticalScrollState: ScrollState = rememberScrollState(),
     length: Int = Constants.MAX_GENERATION_LENGTH.toInt(),
     showDialog: MutableState<Boolean> = mutableStateOf(false),
+    checkIfInputIsEmpty: Boolean = false
 ) {
 
     val context = LocalContext.current
@@ -143,6 +144,13 @@ fun input(
                     }
                 }
             }) {
+
+            if (checkIfInputIsEmpty) // so if the user coming from custom screen, so there is no input prefix
+                // then the model will generate gibberish content
+                if (SettingsNotifier.input.value.text.trim().isEmpty()) {
+                    HelperUI.showToast(msg = App.getTextFromString(R.string.no_input_entered))
+                    return@MyButton
+                }
 
             if (HelperSharedPreference.getInt(
                     HelperSharedPreference.SP_SETTINGS,

@@ -146,4 +146,5 @@
     <string name="typewriter_length">TypeWriter Length</string>
     <string name="app_version">Version: %s</string>
     <string name="not_renewable">Not Renewable</string>
+    <string name="no_input_entered">No input entered</string>
 </resources>

@@ -60,7 +60,8 @@ fun ScreenCustom(
                 showDialog = showDialog,
                 length = length,
                 nbOfGenerations = nbOfGenerations,
-                verticalScrollState = verticalScroll
+                verticalScrollState = verticalScroll,
+                checkIfInputIsEmpty = true
             )
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
