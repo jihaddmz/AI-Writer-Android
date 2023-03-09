@@ -303,7 +303,7 @@ private fun getResponse(
                 // adding headers on below line.
                 params["Content-Type"] = "application/json"
                 params["Authorization"] =
-                    "Bearer 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"
+                    "Bearer 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"
                 return params;
             }
         }

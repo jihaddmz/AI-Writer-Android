@@ -12,7 +12,7 @@ object Constants {
     val MONTHLY_PRICE = 2
     val MAX_TYPEWRITER_LENGTH = 100f
     val ANIMATION_LENGTH = 1000
-    val MAX_NB_OF_TRIES_ALLOWED = 3
+    val MAX_NB_OF_TRIES_ALLOWED = 2
     val SUBSCRIPTION_MONTHLY_ID = "generations_monthly_fee"
     val EXIT_TIME_BETWEEN = 3000L
     val Toast_Lenght = 6000
