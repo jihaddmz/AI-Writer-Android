@@ -28,6 +28,7 @@ object Constants {
             App.getTextFromString(R.string.russian),
             App.getTextFromString(R.string.turkish),
             App.getTextFromString(R.string.swedish),
+            App.getTextFromString(R.string.dutch),
         )
     }
     val listOfGameConsoleTypes by lazy {
