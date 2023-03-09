@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1057573893043",
+    "project_id": "ai-writer-9832b",
+    "storage_bucket": "ai-writer-9832b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057573893043:android:324b63a6011213d87ad1c6",
+        "android_client_info": {
+          "package_name": "com.appsfourlife.draftogo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057573893043-u13i7vdj8vgcjjrgj7ba33ekd4l94os7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxADdtuUjRg9R7KXFGUwPu2X7DmM-pQiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057573893043-u13i7vdj8vgcjjrgj7ba33ekd4l94os7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1057573893043-2obv9ohl8dcc5k2lup1ver44mkfgv2ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appsfourlife.aiwriter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
