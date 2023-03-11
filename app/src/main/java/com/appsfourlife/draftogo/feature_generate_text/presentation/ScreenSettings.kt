@@ -1,11 +1,13 @@
 package com.appsfourlife.draftogo.feature_generate_text.presentation
 
+import android.app.Activity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,10 +18,14 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
+import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.SettingsNotifier
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.ktx.Firebase
 
 @Composable
 fun ScreenSettings(
@@ -27,6 +33,7 @@ fun ScreenSettings(
     modifier: Modifier = Modifier
 ) {
     val verticalScroll = rememberScrollState()
+    val currentActivity = LocalContext.current as Activity
 
     TopBar(
         text = stringResource(id = R.string.settings),
@@ -63,6 +70,30 @@ fun ScreenSettings(
                     text = stringResource(id = R.string.app_name),
                     fontWeight = FontWeight.Bold
                 )
+
+                MySpacer(type = "small")
+
+                MyAnimatedVisibility(visible = !SettingsNotifier.isSignedIn.value && HelperSharedPreference.getUsername() == "") {
+
+                    MyOutlinedButton(text = stringResource(id = R.string.sign_in)) {
+                        HelperAuth.signIn(context = currentActivity)
+                    }
+                }
+                MyAnimatedVisibility(visible = SettingsNotifier.isSignedIn.value || HelperSharedPreference.getUsername() != "") {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        MyOutlinedButton(text = stringResource(id = R.string.sign_out)) {
+                            HelperAuth.signOut()
+                            HelperUI.showToast(msg = App.getTextFromString(R.string.signed_out_successfully))
+                        }
+
+                        MyText(text = HelperSharedPreference.getUsername())
+                    }
+                }
             }
 
             myDropDown(

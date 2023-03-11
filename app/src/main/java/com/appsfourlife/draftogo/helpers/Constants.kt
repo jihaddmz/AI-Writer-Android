@@ -14,6 +14,7 @@ object Constants {
     val ANIMATION_LENGTH = 1000
     val MAX_NB_OF_TRIES_ALLOWED = 2
     val SUBSCRIPTION_MONTHLY_ID = "generations_monthly_fee"
+    val WEB_CLIENT_ID = "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com"
     val EXIT_TIME_BETWEEN = 3000L
     val Toast_Lenght = 6000
     val OUTPUT_LANGUAGES by lazy {

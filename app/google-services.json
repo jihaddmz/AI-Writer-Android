@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1057573893043",
+    "firebase_url": "https://ai-writer-9832b-default-rtdb.firebaseio.com",
     "project_id": "ai-writer-9832b",
     "storage_bucket": "ai-writer-9832b.appspot.com"
   },
@@ -14,7 +15,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "1057573893043-u13i7vdj8vgcjjrgj7ba33ekd4l94os7.apps.googleusercontent.com",
+          "client_id": "1057573893043-hfhoi043l7pt9mdbhgbnd0vbphe6321m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appsfourlife.draftogo",
+            "certificate_hash": "d5a1c564b078b0ac81c38b38abf22c84ebd3d231"
+          }
+        },
+        {
+          "client_id": "1057573893043-vcjmfvm3qquue55e1u8akdqhght14b36.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +36,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1057573893043-u13i7vdj8vgcjjrgj7ba33ekd4l94os7.apps.googleusercontent.com",
+              "client_id": "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com",
               "client_type": 3
             },
             {

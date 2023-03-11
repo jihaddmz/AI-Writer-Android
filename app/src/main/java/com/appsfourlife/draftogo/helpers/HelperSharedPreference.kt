@@ -29,10 +29,13 @@ object HelperSharedPreference {
     const val SP_SETTINGS_PODCAST_TYPE = "podcast_type"
     const val SP_SETTINGS_GAME_CONSOLE_TYPE = "console_type"
     const val SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH = "output_typewriter_length"
+    const val SP_SETTINGS_OUTPUT_SHOW_DIALOG_SIGNIN = "show_dialog_signin"
+
 
     /**
      * keys for authentication shared preferences
      **/
+    const val SP_AUTHENTICATION_USERNAME = "username"
     const val SP_AUTHENTICATION_IS_SUBSCRIBED = "is_subscribed"
     const val SP_AUTHENTICATION_EXPIRATION_DATE = "expiration_date"
     const val SP_AUTHENTICATION_WILL_RENEW = "will_renew"
@@ -43,6 +46,15 @@ object HelperSharedPreference {
     fun getOutputLanguage(): String{
         val sp = App.context.getSharedPreferences(SP_SETTINGS, Context.MODE_PRIVATE)
         return sp.getString(SP_SETTINGS_OUTPUT_LANGUAGE, App.getTextFromString(R.string.english))!!
+    }
+
+    fun getUsername(): String {
+        val sp = App.context.getSharedPreferences(SP_AUTHENTICATION, Context.MODE_PRIVATE)
+        return sp.getString(SP_AUTHENTICATION_USERNAME, "")!!
+    }
+
+    fun setUsername(value: String) {
+        setString(SP_AUTHENTICATION, SP_AUTHENTICATION_USERNAME, value)
     }
 
     /**

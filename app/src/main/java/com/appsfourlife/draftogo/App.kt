@@ -8,6 +8,7 @@ import com.android.billingclient.api.Purchase
 import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.Helpers
+import com.google.firebase.FirebaseApp
 import com.onesignal.OneSignal
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases

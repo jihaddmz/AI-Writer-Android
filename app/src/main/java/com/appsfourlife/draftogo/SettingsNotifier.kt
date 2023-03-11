@@ -20,6 +20,8 @@ object SettingsNotifier {
     val name = mutableStateOf("")
     val jobTitle = mutableStateOf("")
     val stopTyping = mutableStateOf(false)
+    val showDialogSignIn = mutableStateOf(false)
+    val isSignedIn = mutableStateOf(false)
 
     fun resetValues(){
         stopTyping.value = true

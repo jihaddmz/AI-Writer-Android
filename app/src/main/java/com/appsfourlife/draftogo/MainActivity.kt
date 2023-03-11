@@ -2,8 +2,10 @@ package com.appsfourlife.draftogo
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
@@ -25,8 +27,20 @@ import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.feature_generate_text.util.Screens
 import com.appsfourlife.draftogo.helpers.Constants
+import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.helpers.HelperPermissions
+import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.*
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.ktx.initialize
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
@@ -57,8 +71,13 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
 
         setContent {
+//            LaunchedEffect(key1 = SettingsNotifier.isSignedIn, block = {
+//                println("email ${FirebaseAuth.getInstance().currentUser?.email}")
+//
+//            })
 
             val navController = rememberNavController()
             val scaffoldState = rememberScaffoldState()
@@ -167,7 +186,9 @@ class MainActivity : ComponentActivity() {
                     // endregion
                 ) {
                     androidx.compose.material.Surface(
-                        modifier = Modifier.fillMaxSize().padding(it)
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(it)
                     ) {
                         Column(
                             modifier = Modifier
@@ -303,6 +324,33 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 12) { // it is a sign in request
+            try {
+                val task: Task<GoogleSignInAccount> =
+                    GoogleSignIn.getSignedInAccountFromIntent(data)
+                val account: GoogleSignInAccount? = task.getResult(ApiException::class.java)
+                account?.let {
+                    val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+                    HelperAuth.auth.signInWithCredential(credential).addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            SettingsNotifier.isSignedIn.value = true
+                            println("Entered1")
+                            HelperSharedPreference.setUsername(account.email!!)
+                            SettingsNotifier.showDialogSignIn.value = false
+                        } else {
+                            println("Entered2")
+                        }
+                    }
+                }
+            } catch (e: ApiException) {
+                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -148,4 +148,11 @@
     <string name="not_renewable">Not Renewable</string>
     <string name="no_input_entered">No input entered</string>
     <string name="dutch">Dutch</string>
+    <string name="sign_in_title">There is new features that required you to sign in order to use them, so are you in?</string>
+    <string name="sign_in">Sign In</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="learn_more">Learn More</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="signed_out_successfully">Signed out Successfully</string>
 </resources>
