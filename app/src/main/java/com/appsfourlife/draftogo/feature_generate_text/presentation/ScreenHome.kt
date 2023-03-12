@@ -14,10 +14,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.SettingsNotifier
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
-import com.appsfourlife.draftogo.feature_generate_text.util.Screens
+import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
+import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import java.util.*
 import kotlin.concurrent.timerTask
@@ -29,28 +30,8 @@ fun ScreenHome(
     modifier: Modifier = Modifier, navController: NavController
 ) {
 
-    /**
-     * checking if user is signed in, if not show dialog sign in
-     **/
-    if (HelperSharedPreference.getBool(
-            HelperSharedPreference.SP_SETTINGS,
-            HelperSharedPreference.SP_SETTINGS_OUTPUT_SHOW_DIALOG_SIGNIN, true
-        )
-    ) {
-        LaunchedEffect(key1 = true, block = {
-            Timer().schedule(timerTask {
-                if (HelperSharedPreference.getUsername() == "") {
-                    SettingsNotifier.showDialogSignIn.value = true
-                }
-            }, 1000)
-        })
-    }
-
     val context = LocalContext.current
     val state = rememberLazyListState()
-
-    if (SettingsNotifier.showDialogSignIn.value) // if dialog should be showed
-        DialogSignIn()
 
     Column(modifier = modifier.fillMaxSize()) {
 

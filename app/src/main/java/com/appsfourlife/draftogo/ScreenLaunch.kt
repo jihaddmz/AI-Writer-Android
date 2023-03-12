@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.appsfourlife.draftogo.feature_generate_text.util.Screens
+import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.WindowInfo
 import com.appsfourlife.draftogo.helpers.rememberWindowInfo
@@ -47,10 +47,16 @@ fun ScreenLaunch(
             contentDescription = "splash screen"
         )
 
+        val startScreenRoute = if (HelperSharedPreference.getUsername() == "") {
+            Screens.ScreenSignIn.route
+        } else {
+            Screens.ScreenHome.route
+        }
+
         Timer().schedule(timerTask {
             coroutineScope.launch(Dispatchers.Main) {
                 HelperSharedPreference.setBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_LAUNCHED, false, context)
-                navController.navigate(Screens.ScreenHome.route)
+                navController.navigate(startScreenRoute)
             }
         }, 800)
     }

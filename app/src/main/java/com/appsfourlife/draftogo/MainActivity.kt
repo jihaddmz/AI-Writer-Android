@@ -19,33 +19,31 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
-import com.appsfourlife.draftogo.feature_generate_text.util.Screens
-import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperAuth
-import com.appsfourlife.draftogo.helpers.HelperPermissions
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
+import com.appsfourlife.draftogo.util.Screens
+import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.*
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.initialize
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
 
 class MainActivity : ComponentActivity() {
+
+    private lateinit var navController: NavHostController
 
     override fun onStart() {
         super.onStart()
@@ -79,7 +77,7 @@ class MainActivity : ComponentActivity() {
 //
 //            })
 
-            val navController = rememberNavController()
+            navController = rememberNavController()
             val scaffoldState = rememberScaffoldState()
             val coroutineScope = rememberCoroutineScope()
 
@@ -212,6 +210,12 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
 
+                                composable(route = Screens.ScreenSignIn.route) {
+                                    HomeBackHandler(context = this@MainActivity)
+                                    ScreenSignIn(
+                                    )
+                                }
+
                                 composable(route = Screens.ScreenHome.route) {
                                     HomeBackHandler(context = this@MainActivity)
                                     ScreenHome(
@@ -340,12 +344,8 @@ class MainActivity : ComponentActivity() {
                     val credential = GoogleAuthProvider.getCredential(account.idToken, null)
                     HelperAuth.auth.signInWithCredential(credential).addOnCompleteListener {
                         if (it.isSuccessful) {
-                            SettingsNotifier.isSignedIn.value = true
-                            println("Entered1")
                             HelperSharedPreference.setUsername(account.email!!)
-                            SettingsNotifier.showDialogSignIn.value = false
-                        } else {
-                            println("Entered2")
+                            navController.navigate(Screens.ScreenHome.route) // from login screen to home screen
                         }
                     }
                 }

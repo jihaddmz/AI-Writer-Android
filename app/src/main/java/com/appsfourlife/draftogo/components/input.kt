@@ -1,10 +1,7 @@
 package com.appsfourlife.draftogo.components
 
 import android.content.Context
-import android.os.Handler
-import android.text.TextUtils.substring
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
@@ -28,8 +25,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.SettingsNotifier
-import com.appsfourlife.draftogo.SettingsNotifier.output
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -261,6 +257,11 @@ private fun getResponse(
                     response.getJSONArray("choices").getJSONObject(0).getString("text")
                 coroutineScope.launch(Dispatchers.IO)
                 {
+                    HelperFirebaseDatabase.writeHistoryEntry(
+                        type = SettingsNotifier.templateType,
+                        input = SettingsNotifier.input.value.text.trim(),
+                        responseMsg
+                    )
                     SettingsNotifier.stopTyping.value = false
                     SettingsNotifier.outputList.clear() // this to not make the list append entries each time
                     responseMsg.forEachIndexed { index, c ->

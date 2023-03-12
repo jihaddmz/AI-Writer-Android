@@ -1,13 +1,10 @@
 package com.appsfourlife.draftogo.helpers
 
 import android.app.Activity
-import android.content.Context
 import com.appsfourlife.draftogo.App
-import com.appsfourlife.draftogo.MainActivity
-import com.appsfourlife.draftogo.SettingsNotifier
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -78,6 +75,5 @@ object HelperAuth {
     fun signOut() {
         auth.signOut()
         HelperSharedPreference.setUsername("")
-        SettingsNotifier.isSignedIn.value = false
     }
 }

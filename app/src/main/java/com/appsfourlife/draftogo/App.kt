@@ -3,12 +3,10 @@ package com.appsfourlife.draftogo
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.airbnb.lottie.utils.Utils
-import com.android.billingclient.api.Purchase
 import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.Helpers
-import com.google.firebase.FirebaseApp
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.onesignal.OneSignal
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
@@ -19,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.concurrent.thread
 import kotlin.concurrent.timerTask
 
 class App : Application() {

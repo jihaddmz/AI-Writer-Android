@@ -1,4 +1,4 @@
-package com.appsfourlife.draftogo
+package com.appsfourlife.draftogo.util
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
@@ -20,9 +20,7 @@ object SettingsNotifier {
     val name = mutableStateOf("")
     val jobTitle = mutableStateOf("")
     val stopTyping = mutableStateOf(false)
-    val showDialogSignIn = mutableStateOf(false)
-    val isSignedIn = mutableStateOf(false)
-
+    var templateType = ""
     fun resetValues(){
         stopTyping.value = true
         input.value = TextFieldValue(text = "")

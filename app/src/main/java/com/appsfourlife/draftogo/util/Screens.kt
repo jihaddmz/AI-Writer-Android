@@ -1,4 +1,4 @@
-package com.appsfourlife.draftogo.feature_generate_text.util
+package com.appsfourlife.draftogo.util
 
 sealed class Screens(val route: String){
 
@@ -24,4 +24,5 @@ sealed class Screens(val route: String){
     object ScreenSettings: Screens("screen_settings")
     object ScreenPodcast: Screens("screen_podcast")
     object ScreenGame: Screens("screen_game")
+    object ScreenSignIn: Screens("screen_sign_in")
 }

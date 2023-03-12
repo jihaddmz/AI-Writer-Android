@@ -13,10 +13,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.Dialog
 import com.appsfourlife.draftogo.MainActivity
-import com.appsfourlife.draftogo.SettingsNotifier
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperAuth
-import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.revenuecat.purchases.CustomerInfo

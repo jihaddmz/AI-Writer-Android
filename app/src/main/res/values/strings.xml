@@ -155,4 +155,6 @@
     <string name="learn_more">Learn More</string>
     <string name="sign_out">Sign Out</string>
     <string name="signed_out_successfully">Signed out Successfully</string>
+    <string name="login">Login</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
 </resources>

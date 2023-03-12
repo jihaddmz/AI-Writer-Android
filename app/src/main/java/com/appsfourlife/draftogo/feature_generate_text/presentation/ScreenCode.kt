@@ -11,8 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.SettingsNotifier
-import com.appsfourlife.draftogo.SettingsNotifier.output
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.components.Output
 import com.appsfourlife.draftogo.components.TopBar
 import com.appsfourlife.draftogo.components.input
@@ -23,6 +22,9 @@ import com.appsfourlife.draftogo.ui.theme.SpacersSize
 fun ScreenCode(
     navController: NavController
 ) {
+
+    SettingsNotifier.templateType = "Code"
+
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
         mutableStateOf(false)

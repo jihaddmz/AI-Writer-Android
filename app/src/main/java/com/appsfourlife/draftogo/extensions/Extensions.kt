@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.WritingType
-import com.appsfourlife.draftogo.feature_generate_text.util.Screens
+import com.appsfourlife.draftogo.util.Screens
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyGridScope.sectionsGridContent(

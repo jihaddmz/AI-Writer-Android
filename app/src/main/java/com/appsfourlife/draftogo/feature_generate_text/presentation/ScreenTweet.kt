@@ -11,8 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.SettingsNotifier
-import com.appsfourlife.draftogo.SettingsNotifier.output
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
@@ -21,6 +20,8 @@ import com.appsfourlife.draftogo.ui.theme.SpacersSize
 fun ScreenTweet(
     navController: NavController
 ) {
+
+    SettingsNotifier.templateType = "Tweet"
 
     val verticalScroll = rememberScrollState()
     val showDialog = remember {

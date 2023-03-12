@@ -13,9 +13,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.SettingsNotifier
-import com.appsfourlife.draftogo.SettingsNotifier.nbOfGenerationsLeft
-import com.appsfourlife.draftogo.feature_generate_text.util.Screens
+import com.appsfourlife.draftogo.util.SettingsNotifier
+import com.appsfourlife.draftogo.util.SettingsNotifier.nbOfGenerationsLeft
+import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.helpers.WindowInfo
 import com.appsfourlife.draftogo.helpers.rememberWindowInfo

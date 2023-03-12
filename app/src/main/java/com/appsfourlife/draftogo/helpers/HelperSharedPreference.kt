@@ -29,7 +29,6 @@ object HelperSharedPreference {
     const val SP_SETTINGS_PODCAST_TYPE = "podcast_type"
     const val SP_SETTINGS_GAME_CONSOLE_TYPE = "console_type"
     const val SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH = "output_typewriter_length"
-    const val SP_SETTINGS_OUTPUT_SHOW_DIALOG_SIGNIN = "show_dialog_signin"
 
 
     /**
@@ -55,6 +54,19 @@ object HelperSharedPreference {
 
     fun setUsername(value: String) {
         setString(SP_AUTHENTICATION, SP_AUTHENTICATION_USERNAME, value)
+    }
+
+    fun getNbOfGenerationsLeft(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_OF_GENERATIONS_LEFT, 2)
+    }
+
+    fun incrementNbOfGenerationsLeft() {
+        val nbOfGenerationsLeft = getInt(SP_SETTINGS, SP_SETTINGS_NB_OF_GENERATIONS_LEFT, 2)
+        val sp = App.context.getSharedPreferences(SP_SETTINGS, Context.MODE_PRIVATE)
+        sp.edit {
+            putInt(SP_SETTINGS_NB_OF_GENERATIONS_LEFT, nbOfGenerationsLeft + 1)
+            apply()
+        }
     }
 
     /**

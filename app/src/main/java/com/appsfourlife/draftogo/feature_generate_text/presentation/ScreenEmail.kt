@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.SettingsNotifier
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.components.Output
 import com.appsfourlife.draftogo.components.TopBar
 import com.appsfourlife.draftogo.components.input
@@ -24,6 +24,8 @@ fun ScreenEmail(
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
+
+    SettingsNotifier.templateType = "Email"
 
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
