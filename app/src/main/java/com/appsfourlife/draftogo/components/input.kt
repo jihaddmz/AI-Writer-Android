@@ -156,13 +156,19 @@ fun input(
                     return@MyButton
                 }
 
-            if (HelperSharedPreference.getInt(
+            if (
+                (HelperSharedPreference.getInt(
                     HelperSharedPreference.SP_SETTINGS,
                     HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
                     Constants.MAX_NB_OF_TRIES_ALLOWED,
                     context = context
-                ) == 0 && !HelperAuth.getUserSubscriptionState()
-            ) { // if the nb of generations left is 0, make the user to subscribe
+                ) == 0 || HelperSharedPreference.getInt(
+                    HelperSharedPreference.SP_SETTINGS,
+                    HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
+                    Constants.MAX_NB_OF_TRIES_ALLOWED,
+                    context = context
+                ) >= 2) && !HelperAuth.getUserSubscriptionState()
+            ) { // if the nb of generations left is 0 or the nbOfGenerationsConsumed is >= 2, make the user to subscribe
                 SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value = true
             } else {
                 keyboardController?.hide()

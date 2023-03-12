@@ -33,11 +33,11 @@ object HelperFirebaseDatabase {
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
             .get().addOnCompleteListener {
-                val result = it.result.get("nbOfGenerationsConsumed") as Int?
+                val result = it.result.get("nbOfGenerationsConsumed") as Long?
                 if (result == null) { // no field nbOfGenerationsConsumed yet
                     HelperSharedPreference.setInt(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED, 0)
                 }else {
-                    HelperSharedPreference.setInt(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED, result)
+                    HelperSharedPreference.setInt(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED, result.toInt())
                 }
             }
     }
