@@ -17,6 +17,7 @@ object HelperSharedPreference {
      * keys for settings shared preferences
      **/
     const val SP_SETTINGS_NB_OF_GENERATIONS_LEFT = "nb_of_generations_left"
+    const val SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED = "nb_of_generations_consumed"
     const val SP_SETTINGS_NB_OF_GENERATIONS = "nb_of_generations"
     const val SP_SETTINGS_IS_FIRST_TIME_LAUNCHED = "is_first_time_launched"
     const val SP_SETTINGS_ENABLE_HEADLINES = "enable_headlines"
@@ -56,15 +57,15 @@ object HelperSharedPreference {
         setString(SP_AUTHENTICATION, SP_AUTHENTICATION_USERNAME, value)
     }
 
-    fun getNbOfGenerationsLeft(): Int {
-        return getInt(SP_SETTINGS, SP_SETTINGS_NB_OF_GENERATIONS_LEFT, 2)
+    fun getNbOfGenerationsConsumed(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED, 0)
     }
 
-    fun incrementNbOfGenerationsLeft() {
-        val nbOfGenerationsLeft = getInt(SP_SETTINGS, SP_SETTINGS_NB_OF_GENERATIONS_LEFT, 2)
+    fun incrementNbOfGenerationsConsumed() {
+        val nbOfGenerationsConsumed = getInt(SP_SETTINGS, SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED, 0)
         val sp = App.context.getSharedPreferences(SP_SETTINGS, Context.MODE_PRIVATE)
         sp.edit {
-            putInt(SP_SETTINGS_NB_OF_GENERATIONS_LEFT, nbOfGenerationsLeft + 1)
+            putInt(SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED, nbOfGenerationsConsumed + 1)
             apply()
         }
     }

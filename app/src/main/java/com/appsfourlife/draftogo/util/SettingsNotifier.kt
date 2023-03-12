@@ -1,11 +1,9 @@
 package com.appsfourlife.draftogo.util
 
-import android.graphics.ColorSpace.Model
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
-import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 

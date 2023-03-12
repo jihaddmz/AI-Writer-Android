@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -15,19 +14,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
 import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
 import com.appsfourlife.draftogo.util.Screens
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.helpers.Helpers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.concurrent.timerTask
 
 
 @OptIn(ExperimentalFoundationApi::class)

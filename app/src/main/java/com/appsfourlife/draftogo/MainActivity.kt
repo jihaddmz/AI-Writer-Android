@@ -71,6 +71,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
 
+        HelperFirebaseDatabase.fetchNbOfGenerationsConsumed()
+
         setContent {
 //            LaunchedEffect(key1 = SettingsNotifier.isSignedIn, block = {
 //                println("email ${FirebaseAuth.getInstance().currentUser?.email}")

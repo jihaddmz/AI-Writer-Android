@@ -257,6 +257,7 @@ private fun getResponse(
                     response.getJSONArray("choices").getJSONObject(0).getString("text")
                 coroutineScope.launch(Dispatchers.IO)
                 {
+                    HelperSharedPreference.incrementNbOfGenerationsConsumed()
                     HelperFirebaseDatabase.writeHistoryEntry(
                         type = SettingsNotifier.templateType,
                         input = SettingsNotifier.input.value.text.trim(),

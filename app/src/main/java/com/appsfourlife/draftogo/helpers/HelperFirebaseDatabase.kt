@@ -1,10 +1,7 @@
 package com.appsfourlife.draftogo.helpers
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
-import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -21,7 +18,7 @@ object HelperFirebaseDatabase {
 
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
-            .set(hashMapOf("nbOfGenerationsLeft" to HelperSharedPreference.getNbOfGenerationsLeft()))
+            .set(hashMapOf("nbOfGenerationsConsumed" to HelperSharedPreference.getNbOfGenerationsConsumed()))
 
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
@@ -32,11 +29,16 @@ object HelperFirebaseDatabase {
             }
     }
 
-    fun fetchNbOfGenerationsLeft() {
+    fun fetchNbOfGenerationsConsumed() {
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
             .get().addOnCompleteListener {
-                Helpers.logD("${it.result.get("nbOfGenerationsLeft")}")
+                val result = it.result.get("nbOfGenerationsConsumed") as Int?
+                if (result == null) { // no field nbOfGenerationsConsumed yet
+                    HelperSharedPreference.setInt(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED, 0)
+                }else {
+                    HelperSharedPreference.setInt(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED, result)
+                }
             }
     }
 
