@@ -35,6 +35,7 @@ import org.json.JSONObject
 import java.util.*
 import javax.net.ssl.SSLException
 import kotlin.concurrent.timerTask
+import kotlin.math.roundToInt
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -156,19 +157,19 @@ fun input(
                     return@MyButton
                 }
 
+            if (HelperSharedPreference.getSubscriptionType() == "base" && HelperSharedPreference.getNbOfWordsGenerated() == 52500) {
+                SettingsNotifier.basePlanMaxNbOfWordsExceeded.value = true
+                return@MyButton
+            }
+
             if (
                 (HelperSharedPreference.getInt(
                     HelperSharedPreference.SP_SETTINGS,
                     HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
                     Constants.MAX_NB_OF_TRIES_ALLOWED,
                     context = context
-                ) == 0 || HelperSharedPreference.getInt(
-                    HelperSharedPreference.SP_SETTINGS,
-                    HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                    Constants.MAX_NB_OF_TRIES_ALLOWED,
-                    context = context
-                ) >= 2) && !HelperAuth.getUserSubscriptionState()
-            ) { // if the nb of generations left is 0 or the nbOfGenerationsConsumed is >= 2, make the user to subscribe
+                ) == 0 || HelperSharedPreference.getNbOfGenerationsConsumed() >= 2) && !HelperAuth.getUserSubscriptionState()
+            ) { // if the nb of generations left is 0 or the nbOfGenerationsConsumed is >= 2, force the user to subscribe
                 SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value = true
             } else {
                 keyboardController?.hide()
@@ -240,7 +241,6 @@ private fun getResponse(
     jsonObject.put("n", nbOfGenerations)
     jsonObject.put("stream", false)
     jsonObject.put("logprobs", null)
-//    jsonObject.put("stop", "\n")
 
     // on below line making json object request.
     val postRequest: JsonObjectRequest =
@@ -259,10 +259,12 @@ private fun getResponse(
                 }
                 isGenerateBtnEnabled.value = true
             } else { // 1 output to generate
+                val totalNbOfToken: Int = response.getJSONObject("usage").getInt("completion_tokens")
                 val responseMsg: String =
                     response.getJSONArray("choices").getJSONObject(0).getString("text")
                 coroutineScope.launch(Dispatchers.IO)
                 {
+                    HelperSharedPreference.addToNbOfWordsGenerated((totalNbOfToken * 0.75).roundToInt())
                     HelperSharedPreference.incrementNbOfGenerationsConsumed()
                     HelperFirebaseDatabase.writeHistoryEntry(
                         type = SettingsNotifier.templateType,

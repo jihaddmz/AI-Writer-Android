@@ -36,6 +36,8 @@ fun ScreenHome(
     val state = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
+    HelperFirebaseDatabase.fetchNbOfGenerationsConsumed()
+
     Column(modifier = modifier.fillMaxSize()) {
 
         MainAppBar(navController = navController, coroutineScope = coroutineScope)

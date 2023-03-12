@@ -75,16 +75,28 @@ class App : Application() {
                         HelperSharedPreference.SP_AUTHENTICATION_EXPIRATION_DATE,
                         customerInfo.entitlements["premium"]?.expirationDate.toString()
                     )
-                    customerInfo.entitlements["premium"]?.willRenew?.let {
-                        SettingsNotifier.isRenewable.value = it
-                        HelperSharedPreference.setBool(
-                            HelperSharedPreference.SP_AUTHENTICATION,
-                            HelperSharedPreference.SP_AUTHENTICATION_WILL_RENEW,
-                            it
-                        )
-                    }
                     if (customerInfo.entitlements["premium"]?.isActive == true) { // if the user is subscribed
                         HelperAuth.makeUserSubscribed()
+                        HelperSharedPreference.setSubscriptionType("base")
+                        customerInfo.entitlements["premium"]?.willRenew?.let {
+                            SettingsNotifier.isRenewable.value = it
+                            HelperSharedPreference.setBool(
+                                HelperSharedPreference.SP_AUTHENTICATION,
+                                HelperSharedPreference.SP_AUTHENTICATION_WILL_RENEW,
+                                it
+                            )
+                        }
+                    } else if (customerInfo.entitlements["plus"]?.isActive == true) {
+                        HelperAuth.makeUserSubscribed()
+                        HelperSharedPreference.setSubscriptionType("plus")
+                        customerInfo.entitlements["plus"]?.willRenew?.let {
+                            SettingsNotifier.isRenewable.value = it
+                            HelperSharedPreference.setBool(
+                                HelperSharedPreference.SP_AUTHENTICATION,
+                                HelperSharedPreference.SP_AUTHENTICATION_WILL_RENEW,
+                                it
+                            )
+                        }
                     } else { // user has no access to the product
                         HelperAuth.makeUserNotSubscribed()
                     }

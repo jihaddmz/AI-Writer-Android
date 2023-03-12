@@ -13,6 +13,7 @@ object Constants {
     val MAX_TYPEWRITER_LENGTH = 100f
     val ANIMATION_LENGTH = 1000
     val MAX_NB_OF_TRIES_ALLOWED = 2
+    val BASE_PLAN_MAX_NB_OF_WORDS = 52500
     val SUBSCRIPTION_MONTHLY_ID = "generations_monthly_fee"
     val WEB_CLIENT_ID = "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com"
     val EXIT_TIME_BETWEEN = 3000L

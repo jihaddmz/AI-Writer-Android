@@ -18,7 +18,12 @@ object HelperFirebaseDatabase {
 
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
-            .set(hashMapOf("nbOfGenerationsConsumed" to HelperSharedPreference.getNbOfGenerationsConsumed()))
+            .set(
+                hashMapOf(
+                    "nbOfGenerationsConsumed" to HelperSharedPreference.getNbOfGenerationsConsumed(),
+                    "nbOfWordsGenerated" to HelperSharedPreference.getNbOfWordsGenerated()
+                )
+            )
 
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
@@ -33,11 +38,33 @@ object HelperFirebaseDatabase {
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
             .get().addOnCompleteListener {
-                val result = it.result.get("nbOfGenerationsConsumed") as Long?
-                if (result == null) { // no field nbOfGenerationsConsumed yet
-                    HelperSharedPreference.setInt(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED, 0)
-                }else {
-                    HelperSharedPreference.setInt(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED, result.toInt())
+                val nbOfGenerationsConsumed = it.result.get("nbOfGenerationsConsumed") as Long?
+                val nbOfWordsGenerated = it.result.get("nbOfWordsGenerated") as Long?
+                if (nbOfGenerationsConsumed == null) { // no field nbOfGenerationsConsumed yet
+                    HelperSharedPreference.setInt(
+                        HelperSharedPreference.SP_SETTINGS,
+                        HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED,
+                        0
+                    )
+                } else {
+                    HelperSharedPreference.setInt(
+                        HelperSharedPreference.SP_SETTINGS,
+                        HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED,
+                        nbOfGenerationsConsumed.toInt()
+                    )
+                }
+                if (nbOfWordsGenerated == null) { // no field nbOfGenerationsConsumed yet
+                    HelperSharedPreference.setInt(
+                        HelperSharedPreference.SP_SETTINGS,
+                        HelperSharedPreference.SP_SETTINGS_NB_OF_WORDS_GENERATED,
+                        0
+                    )
+                } else {
+                    HelperSharedPreference.setInt(
+                        HelperSharedPreference.SP_SETTINGS,
+                        HelperSharedPreference.SP_SETTINGS_NB_OF_WORDS_GENERATED,
+                        nbOfWordsGenerated.toInt()
+                    )
                 }
             }
     }

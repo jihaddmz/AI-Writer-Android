@@ -20,6 +20,7 @@ object SettingsNotifier {
     val name = mutableStateOf("")
     val jobTitle = mutableStateOf("")
     val stopTyping = mutableStateOf(false)
+    val basePlanMaxNbOfWordsExceeded = mutableStateOf(false)
     var templateType = ""
 
     fun resetValues(){

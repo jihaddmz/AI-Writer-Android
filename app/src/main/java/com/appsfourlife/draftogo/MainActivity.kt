@@ -71,13 +71,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
 
-        HelperFirebaseDatabase.fetchNbOfGenerationsConsumed()
-
         setContent {
-//            LaunchedEffect(key1 = SettingsNotifier.isSignedIn, block = {
-//                println("email ${FirebaseAuth.getInstance().currentUser?.email}")
-//
-//            })
 
             navController = rememberNavController()
             val scaffoldState = rememberScaffoldState()
@@ -195,8 +189,12 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                         ) {
 
+                            if (SettingsNotifier.basePlanMaxNbOfWordsExceeded.value) {
+                                // todo show base plan monthly max nb of words generations exceeded
+                            }
+
                             if (SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value)
-                                DialogNbOfGenerationsExceeded()
+                                DialogSubscription(SettingsNotifier.showDialogNbOfGenerationsLeftExceeded)
 
                             NavHost(
                                 navController = navController,
