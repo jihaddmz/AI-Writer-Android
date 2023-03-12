@@ -157,4 +157,9 @@
     <string name="signed_out_successfully">Signed out Successfully</string>
     <string name="login">Login</string>
     <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="history">History</string>
+    <string name="delete">Delete</string>
+    <string name="wrong">Wrong</string>
+    <string name="check">Check</string>
+    <string name="deletion_confirmation">Are you sure you want to delete all history?</string>
 </resources>

@@ -19,11 +19,12 @@ import kotlinx.coroutines.launch
 
 object Helpers {
 
-    fun copyToClipBoard(text: String, context: Context = App.context) {
+    fun copyToClipBoard(text: String, msgID: Int, context: Context = App.context) {
         val clipboardManager =
             context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("Copied text", text)
         clipboardManager.setPrimaryClip(clipData)
+        HelperUI.showToast(msg = App.getTextFromString(msgID))
     }
 
     fun pasteFromClipBoard(text: MutableState<TextFieldValue>, context: Context): TextFieldValue {

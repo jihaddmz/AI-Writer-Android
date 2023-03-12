@@ -210,6 +210,14 @@ class MainActivity : ComponentActivity() {
                                     )
                                 }
 
+                                composable(route = Screens.ScreenHistory.route) {
+                                    MyBackHandler(navController = navController)
+                                    ScreenHistory(
+                                        modifier = Modifier,
+                                        navController = navController
+                                    )
+                                }
+
                                 composable(route = Screens.ScreenSignIn.route) {
                                     HomeBackHandler(context = this@MainActivity)
                                     ScreenSignIn(

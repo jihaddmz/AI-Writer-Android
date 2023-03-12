@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -20,6 +21,11 @@ import com.appsfourlife.draftogo.extensions.sectionsGridContent
 import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
+import com.appsfourlife.draftogo.helpers.HelperUI
+import com.appsfourlife.draftogo.helpers.Helpers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -32,10 +38,11 @@ fun ScreenHome(
 
     val context = LocalContext.current
     val state = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = modifier.fillMaxSize()) {
 
-        MainAppBar(navController = navController)
+        MainAppBar(navController = navController, coroutineScope = coroutineScope)
 
         MySpacer(type = "small")
 
@@ -61,9 +68,27 @@ fun ScreenHome(
 fun MainAppBar(
     modifier: Modifier = Modifier,
     navController: NavController,
+    coroutineScope: CoroutineScope
 ) {
 
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        MyIconOutlinedButton(
+            imageID = R.drawable.icon_history, contentDesc = stringResource(
+                id = R.string.history
+            )
+        ) {
+            // if there is network access, navigate to history
+            Helpers.checkForConnection(coroutineScope, ifConnected = {
+                coroutineScope.launch(Dispatchers.Main) {
+                    navController.navigate(Screens.ScreenHistory.route)
+                }
+            }, notConnected = {
+                coroutineScope.launch(Dispatchers.Main) {
+                    HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
+                }
+            })
+        }
+
         MyIconOutlinedButton(
             imageID = R.drawable.icon_settings, contentDesc = stringResource(
                 id = R.string.settings

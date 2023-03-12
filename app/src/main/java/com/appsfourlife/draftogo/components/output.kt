@@ -63,8 +63,7 @@ fun Output(
                             if (fromScreen.lowercase() == "email") {
                                 Helpers.shareEmailOutput(outputText.value, emailName, context)
                             } else if (fromScreen.lowercase() == "facebook") {
-                                HelperUI.showToast(msg = App.getTextFromString(com.appsfourlife.draftogo.R.string.text_copied_facebook))
-                                Helpers.copyToClipBoard(text = outputText.value)
+                                Helpers.copyToClipBoard(text = outputText.value, msgID = com.appsfourlife.draftogo.R.string.text_copied_facebook)
                                 Helpers.shareOutputToFacebook(context, "Hello there")
                             } else if (fromScreen.lowercase() == "twitter") {
                                 Helpers.shareOutputToTwitter(context, outputText.value)
@@ -83,11 +82,7 @@ fun Output(
                         MySpacer(type = "small", widthOrHeight = "width")
 
                         IconButton(onClick = {
-                            Helpers.copyToClipBoard(context = context, text = outputText.value)
-                            HelperUI.showToast(
-                                context,
-                                App.getTextFromString(com.appsfourlife.draftogo.R.string.text_copied)
-                            )
+                            Helpers.copyToClipBoard(context = context, text = outputText.value, msgID = com.appsfourlife.draftogo.R.string.text_copied)
                         }) {
                             MyIcon(
                                 iconID = com.appsfourlife.draftogo.R.drawable.copy,
