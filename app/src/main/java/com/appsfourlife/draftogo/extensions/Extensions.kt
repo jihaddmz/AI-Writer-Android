@@ -17,27 +17,25 @@ import com.appsfourlife.draftogo.util.Screens
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyGridScope.sectionsGridContent(
-    map: HashMap<Int, List<Any>>,
+    list: List<String>,
     columns: Int,
     state: LazyListState,
     navController: NavController,
 ) {
-    if (map.isNotEmpty())
-        items(map.size) { index ->
+    if (list.isNotEmpty())
+        items(list.size) { index ->
             val (delay, easing) = state.calculateDelayAndEasing(index, columns)
             val animation = tween<Float>(durationMillis = 300, delayMillis = delay, easing = easing)
             val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
             val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
-            val text = map[index]?.get(0)
-            val imageID = map[index]?.get(1)
-            if (map[index] != null)
+            val text = list[index]
                 WritingType(
                     modifier = Modifier.graphicsLayer(
                         alpha = alpha,
                         scaleX = scale,
                         scaleY = scale
                     ),
-                    text = text.toString(), imageID = imageID as Int
+                    text = text
                 ) {
                     when (text) {
                         App.getTextFromString(R.string.write_an_email) -> {

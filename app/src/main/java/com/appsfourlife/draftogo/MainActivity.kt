@@ -89,13 +89,11 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
-                            items(App.mapOfScreens.size, key = { it }) { index ->
-                                val text = App.mapOfScreens[index]!![0] as String
-                                val iconID = App.mapOfScreens[index]!![1] as Int
+                            items(Constants.PREDEFINED_TEMPLATES.value.size, key = { it }) { index ->
+                                val text = Constants.PREDEFINED_TEMPLATES.value[index]
 
                                 DrawerListItem(
                                     modifier = Modifier.padding(SpacersSize.medium),
-                                    iconID = iconID,
                                     text = text
                                 ) {
 

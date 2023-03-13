@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.helpers
 
+import androidx.compose.runtime.mutableStateOf
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 
@@ -18,6 +19,27 @@ object Constants {
     val WEB_CLIENT_ID = "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com"
     val EXIT_TIME_BETWEEN = 3000L
     val Toast_Lenght = 6000
+    val PREDEFINED_TEMPLATES = mutableStateOf(listOf(
+        App.getTextFromString(R.string.write_an_email),
+        App.getTextFromString(R.string.write_a_blog_top_bar),
+        App.getTextFromString(R.string.write_an_essay),
+        App.getTextFromString(R.string.write_an_article_top_bar),
+        App.getTextFromString(R.string.write_a_letter),
+        App.getTextFromString(R.string.write_a_cv),
+        App.getTextFromString(R.string.write_a_resume),
+        App.getTextFromString(R.string.write_a_personal_bio_top_bar),
+        App.getTextFromString(R.string.write_a_tweet_top_bar),
+        App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar),
+        App.getTextFromString(R.string.write_an_instagram_caption_top_bar),
+        App.getTextFromString(R.string.write_a_facebook_post_top_bar),
+        App.getTextFromString(R.string.write_a_youtube_caption_top_bar),
+        App.getTextFromString(R.string.write_a_podcast_top_bar),
+        App.getTextFromString(R.string.write_a_game_script_top_label),
+        App.getTextFromString(R.string.write_a_poem_top_bar),
+        App.getTextFromString(R.string.write_a_song_top_bar),
+        App.getTextFromString(R.string.write_a_code),
+        App.getTextFromString(R.string.custom)
+        ))
     val OUTPUT_LANGUAGES by lazy {
         listOf(
             App.getTextFromString(R.string.english),

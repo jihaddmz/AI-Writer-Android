@@ -18,10 +18,12 @@ import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
+import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.helpers.Helpers
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,6 +41,9 @@ fun ScreenHome(
     val coroutineScope = rememberCoroutineScope()
     val isAppOutDated = remember {
         mutableStateOf(false)
+    }
+    val listOfPredefinedTemplates = remember {
+        Constants.PREDEFINED_TEMPLATES
     }
 
     LaunchedEffect(key1 = true, block = {
@@ -65,7 +70,11 @@ fun ScreenHome(
                 )
             )
 
-        MainAppBar(navController = navController, coroutineScope = coroutineScope)
+        MainAppBar(
+            navController = navController,
+            coroutineScope = coroutineScope,
+            listOfPredefinedTemplates = listOfPredefinedTemplates
+        )
 
         MySpacer(type = "small")
 
@@ -78,7 +87,7 @@ fun ScreenHome(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             content = {
                 sectionsGridContent(
-                    map = App.mapOfScreens,
+                    list = listOfPredefinedTemplates.value,
                     2,
                     state,
                     navController,
@@ -91,11 +100,13 @@ fun ScreenHome(
 fun MainAppBar(
     modifier: Modifier = Modifier,
     navController: NavController,
-    coroutineScope: CoroutineScope
+    coroutineScope: CoroutineScope,
+    listOfPredefinedTemplates: MutableState<List<String>>
 ) {
 
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         MyIconOutlinedButton(
+            modifier = Modifier.weight(0.5f),
             imageID = R.drawable.icon_history, contentDesc = stringResource(
                 id = R.string.history
             )
@@ -112,7 +123,38 @@ fun MainAppBar(
             })
         }
 
+        val searchText = remember {
+            mutableStateOf("")
+        }
+        MyTextField(
+            modifier = Modifier.weight(1f),
+            value = searchText.value,
+            placeholder = stringResource(id = R.string.search),
+            onValueChanged = { itr ->
+                searchText.value = itr
+                listOfPredefinedTemplates.value = if (searchText.value.isEmpty()) {
+                    Constants.PREDEFINED_TEMPLATES.value
+                } else {
+                    val resultList = mutableListOf<String>()
+                    Constants.PREDEFINED_TEMPLATES.value.forEach {
+                        if (itr.contains(it))
+                            resultList.add(it)
+                    }
+                    resultList
+                }
+//                if (searchText.value == "")
+//                    listOfPredefinedTemplates.value = Constants.PREDEFINED_TEMPLATES.value
+//
+//                listOfPredefinedTemplates.value =
+//                    Constants.PREDEFINED_TEMPLATES.value.forEach {
+//
+//                    }
+
+            }
+        )
+
         MyIconOutlinedButton(
+            modifier = Modifier.weight(0.5f),
             imageID = R.drawable.icon_settings, contentDesc = stringResource(
                 id = R.string.settings
             )
