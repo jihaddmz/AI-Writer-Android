@@ -162,4 +162,5 @@
     <string name="wrong">Wrong</string>
     <string name="check">Check</string>
     <string name="deletion_confirmation">Are you sure you want to delete all history?</string>
+    <string name="app_is_outdated">A new release is available, please update it and relaunch the app</string>
 </resources>

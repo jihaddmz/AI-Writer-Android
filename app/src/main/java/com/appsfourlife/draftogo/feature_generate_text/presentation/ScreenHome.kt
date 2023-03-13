@@ -1,18 +1,20 @@
 package com.appsfourlife.draftogo.feature_generate_text.presentation
 
+import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
+import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
@@ -35,10 +37,33 @@ fun ScreenHome(
     val context = LocalContext.current
     val state = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
+    val isAppOutDated = remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = true, block = {
+        coroutineScope.launch(Dispatchers.IO) {
+            HelperFirebaseDatabase.fetchAppVersion {
+                isAppOutDated.value = it != BuildConfig.VERSION_NAME
+            }
+        }
+    })
 
     HelperFirebaseDatabase.fetchNbOfGenerationsConsumed()
 
     Column(modifier = modifier.fillMaxSize()) {
+
+        if (isAppOutDated.value) // if the app is outdated show the alert dialog to update
+            MyDialog(
+                modifier = Modifier,
+                showDialog = isAppOutDated,
+                text = stringResource(id = R.string.app_is_outdated),
+                title = stringResource(id = R.string.attention),
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false
+                )
+            )
 
         MainAppBar(navController = navController, coroutineScope = coroutineScope)
 

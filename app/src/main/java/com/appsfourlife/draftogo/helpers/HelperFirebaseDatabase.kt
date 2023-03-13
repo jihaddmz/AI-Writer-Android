@@ -4,6 +4,9 @@ import androidx.compose.runtime.MutableState
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 object HelperFirebaseDatabase {
     private val firestore by lazy { Firebase.firestore }
@@ -97,6 +100,12 @@ object HelperFirebaseDatabase {
                 list.value = result
                 showCircularIndicator.value = false
             }
+    }
+
+    fun fetchAppVersion(onResultFetched: (String) -> Unit) {
+        firestore.collection("app").document("settings").get().addOnCompleteListener {
+            onResultFetched(it.result.get("appVersion").toString())
+        }
     }
 
     fun deleteAllHistory() {
