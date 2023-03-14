@@ -2,12 +2,15 @@ package com.appsfourlife.draftogo.feature_generate_text.presentation
 
 import android.os.Build
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -23,6 +26,8 @@ import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.helpers.Helpers
+import com.appsfourlife.draftogo.ui.theme.Blue
+import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,7 +48,7 @@ fun ScreenHome(
         mutableStateOf(false)
     }
     val listOfPredefinedTemplates = remember {
-        Constants.PREDEFINED_TEMPLATES
+        mutableStateOf(Constants.PREDEFINED_TEMPLATES)
     }
 
     LaunchedEffect(key1 = true, block = {
@@ -65,8 +70,7 @@ fun ScreenHome(
                 text = stringResource(id = R.string.app_is_outdated),
                 title = stringResource(id = R.string.attention),
                 properties = DialogProperties(
-                    dismissOnBackPress = false,
-                    dismissOnClickOutside = false
+                    dismissOnBackPress = false, dismissOnClickOutside = false
                 )
             )
 
@@ -107,7 +111,8 @@ fun MainAppBar(
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         MyIconOutlinedButton(
             modifier = Modifier.weight(0.5f),
-            imageID = R.drawable.icon_history, contentDesc = stringResource(
+            imageID = R.drawable.icon_history,
+            contentDesc = stringResource(
                 id = R.string.history
             )
         ) {
@@ -123,39 +128,53 @@ fun MainAppBar(
             })
         }
 
+        val showSearch = remember {
+            mutableStateOf(false)
+        }
         val searchText = remember {
             mutableStateOf("")
         }
-        MyTextField(
-            modifier = Modifier.weight(1f),
-            value = searchText.value,
-            placeholder = stringResource(id = R.string.search),
-            onValueChanged = { itr ->
-                searchText.value = itr
-                listOfPredefinedTemplates.value = if (searchText.value.isEmpty()) {
-                    Constants.PREDEFINED_TEMPLATES.value
-                } else {
-                    val resultList = mutableListOf<String>()
-                    Constants.PREDEFINED_TEMPLATES.value.forEach {
-                        if (itr.contains(it))
-                            resultList.add(it)
-                    }
-                    resultList
-                }
-//                if (searchText.value == "")
-//                    listOfPredefinedTemplates.value = Constants.PREDEFINED_TEMPLATES.value
-//
-//                listOfPredefinedTemplates.value =
-//                    Constants.PREDEFINED_TEMPLATES.value.forEach {
-//
-//                    }
 
+        MyAnimatedVisibility(visible = !showSearch.value) {
+            IconButton(onClick = {
+                showSearch.value = true
+            }) {
+                MyIcon(
+                    iconID = R.drawable.icon_search,
+                    contentDesc = stringResource(id = R.string.search)
+                )
             }
-        )
+
+        }
+
+        MyAnimatedVisibility(visible = showSearch.value) {
+
+            MyTextField(modifier = Modifier
+                .weight(1f)
+                .background(color = Blue, shape = Shapes.medium),
+                value = searchText.value,
+                textColor = Color.White,
+                cursorColor = Color.White,
+                placeholder = stringResource(id = R.string.search),
+                trailingIcon = R.drawable.icon_wrong,
+                onTrailingIconClick = {
+                    searchText.value = ""
+                    showSearch.value = false
+                    listOfPredefinedTemplates.value = Constants.PREDEFINED_TEMPLATES
+                },
+                onValueChanged = { itr ->
+                    searchText.value = itr
+                    if (searchText.value.isEmpty()) {
+                        listOfPredefinedTemplates.value = Constants.PREDEFINED_TEMPLATES
+                    } else listOfPredefinedTemplates.value =
+                        Constants.PREDEFINED_TEMPLATES.filter { it.contains(searchText.value) }
+                })
+        }
 
         MyIconOutlinedButton(
             modifier = Modifier.weight(0.5f),
-            imageID = R.drawable.icon_settings, contentDesc = stringResource(
+            imageID = R.drawable.icon_settings,
+            contentDesc = stringResource(
                 id = R.string.settings
             )
         ) {

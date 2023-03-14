@@ -89,8 +89,8 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
-                            items(Constants.PREDEFINED_TEMPLATES.value.size, key = { it }) { index ->
-                                val text = Constants.PREDEFINED_TEMPLATES.value[index]
+                            items(Constants.PREDEFINED_TEMPLATES.size, key = { it }) { index ->
+                                val text = Constants.PREDEFINED_TEMPLATES[index]
 
                                 DrawerListItem(
                                     modifier = Modifier.padding(SpacersSize.medium),

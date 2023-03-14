@@ -19,7 +19,7 @@ object Constants {
     val WEB_CLIENT_ID = "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com"
     val EXIT_TIME_BETWEEN = 3000L
     val Toast_Lenght = 6000
-    val PREDEFINED_TEMPLATES = mutableStateOf(listOf(
+    val PREDEFINED_TEMPLATES = listOf(
         App.getTextFromString(R.string.write_an_email),
         App.getTextFromString(R.string.write_a_blog_top_bar),
         App.getTextFromString(R.string.write_an_essay),
@@ -39,7 +39,7 @@ object Constants {
         App.getTextFromString(R.string.write_a_song_top_bar),
         App.getTextFromString(R.string.write_a_code),
         App.getTextFromString(R.string.custom)
-        ))
+        )
     val OUTPUT_LANGUAGES by lazy {
         listOf(
             App.getTextFromString(R.string.english),

@@ -259,7 +259,8 @@ private fun getResponse(
                 }
                 isGenerateBtnEnabled.value = true
             } else { // 1 output to generate
-                val totalNbOfToken: Int = response.getJSONObject("usage").getInt("completion_tokens")
+                val totalNbOfToken: Int =
+                    response.getJSONObject("usage").getInt("completion_tokens")
                 val responseMsg: String =
                     response.getJSONArray("choices").getJSONObject(0).getString("text")
                 coroutineScope.launch(Dispatchers.IO)
