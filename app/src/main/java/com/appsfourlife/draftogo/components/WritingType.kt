@@ -47,6 +47,7 @@ fun WritingType(
                 stringResource(id = R.string.write_a_viral_tiktok_captions_top_bar) -> R.drawable.icon_tiktok
                 stringResource(id = R.string.write_an_instagram_caption_top_bar) -> R.drawable.icon_instagram
                 stringResource(id = R.string.write_a_facebook_post_top_bar) -> R.drawable.icon_facebook
+                stringResource(id = R.string.write_a_linkedin_post_top_bar) -> R.drawable.icon_linkedin
                 stringResource(id = R.string.write_a_youtube_caption_top_bar) -> R.drawable.icon_youtube
                 stringResource(id = R.string.write_a_podcast_top_bar) -> R.drawable.icon_podcast
                 stringResource(id = R.string.write_a_game_script_top_label) -> R.drawable.icon_video_game

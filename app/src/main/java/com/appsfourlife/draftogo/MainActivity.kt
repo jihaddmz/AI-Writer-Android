@@ -138,6 +138,10 @@ class MainActivity : ComponentActivity() {
                                             navController.navigate(Screens.ScreenFacebook.route)
                                         }
 
+                                        App.getTextFromString(R.string.write_a_linkedin_post_top_bar) -> {
+                                            navController.navigate(Screens.ScreenLinkedIn.route)
+                                        }
+
                                         App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
                                             navController.navigate(Screens.ScreenYoutube.route)
                                         }
@@ -308,6 +312,11 @@ class MainActivity : ComponentActivity() {
                                 composable(route = Screens.ScreenFacebook.route) {
                                     MyBackHandler(navController = navController)
                                     ScreenFacebook(navController = navController)
+                                }
+
+                                composable(route = Screens.ScreenLinkedIn.route) {
+                                    MyBackHandler(navController = navController)
+                                    ScreenLinkedIn(navController = navController)
                                 }
 
                                 composable(route = Screens.ScreenSong.route) {

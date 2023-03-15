@@ -9,6 +9,7 @@ object Constants {
 
     val TAG = "Jihad"
     val MAX_GENERATION_LENGTH = 1000f
+    val DEFAULT_POSTING_GENERATION_LENGTH = 400f
     val MAX_NB_OF_GENERATIONS = 10f
     val MONTHLY_PRICE = 2
     val MAX_TYPEWRITER_LENGTH = 100f
@@ -32,6 +33,7 @@ object Constants {
         App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar),
         App.getTextFromString(R.string.write_an_instagram_caption_top_bar),
         App.getTextFromString(R.string.write_a_facebook_post_top_bar),
+        App.getTextFromString(R.string.write_a_linkedin_post_top_bar),
         App.getTextFromString(R.string.write_a_youtube_caption_top_bar),
         App.getTextFromString(R.string.write_a_podcast_top_bar),
         App.getTextFromString(R.string.write_a_game_script_top_label),

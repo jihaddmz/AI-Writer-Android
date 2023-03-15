@@ -29,81 +29,85 @@ fun LazyGridScope.sectionsGridContent(
             val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
             val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
             val text = list[index]
-                WritingType(
-                    modifier = Modifier.graphicsLayer(
-                        alpha = alpha,
-                        scaleX = scale,
-                        scaleY = scale
-                    ),
-                    text = text
-                ) {
-                    when (text) {
-                        App.getTextFromString(R.string.write_an_email) -> {
-                            navController.navigate(Screens.ScreenEmail.route)
-                        }
-                        App.getTextFromString(R.string.write_a_blog_top_bar) -> {
-                            navController.navigate(Screens.ScreenBlog.route)
-                        }
-                        App.getTextFromString(R.string.write_an_essay) -> {
-                            navController.navigate(Screens.ScreenEssay.route)
-                        }
-                        App.getTextFromString(R.string.write_an_article_top_bar) -> {
-                            navController.navigate(Screens.ScreenArticle.route)
-                        }
-                        App.getTextFromString(R.string.write_a_letter) -> {
-                            navController.navigate(Screens.ScreenLetter.route)
-                        }
-                        App.getTextFromString(R.string.write_a_cv) -> {
-                            navController.navigate(Screens.ScreenCV.route)
-                        }
-                        App.getTextFromString(R.string.write_a_resume) -> {
-                            navController.navigate(Screens.ScreenResume.route)
-                        }
-                        App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
-                            navController.navigate(Screens.ScreenPersonalBio.route)
-                        }
-                        App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
-                            navController.navigate(Screens.ScreenTwitter.route)
-                        }
-                        App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
-                            navController.navigate(Screens.ScreenTiktok.route)
-                        }
-                        App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
-                            navController.navigate(Screens.ScreenInstagram.route)
-                        }
-
-                        App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
-                            navController.navigate(Screens.ScreenFacebook.route)
-                        }
-
-                        App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
-                            navController.navigate(Screens.ScreenYoutube.route)
-                        }
-
-                        App.getTextFromString(R.string.write_a_podcast_top_bar) -> {
-                            navController.navigate(Screens.ScreenPodcast.route)
-                        }
-
-                        App.getTextFromString(R.string.write_a_game_script_top_label) -> {
-                            navController.navigate(Screens.ScreenGame.route)
-                        }
-
-                        App.getTextFromString(R.string.write_a_poem_top_bar) -> {
-                            navController.navigate(Screens.ScreenPoem.route)
-                        }
-
-                        App.getTextFromString(R.string.write_a_song_top_bar) -> {
-                            navController.navigate(Screens.ScreenSong.route)
-                        }
-                        App.getTextFromString(R.string.write_a_code) -> {
-                            navController.navigate(Screens.ScreenCode.route)
-                        }
-                        App.getTextFromString(R.string.custom) -> {
-                            navController.navigate(Screens.ScreenCustom.route)
-                        }
+            WritingType(
+                modifier = Modifier.graphicsLayer(
+                    alpha = alpha,
+                    scaleX = scale,
+                    scaleY = scale
+                ),
+                text = text
+            ) {
+                when (text) {
+                    App.getTextFromString(R.string.write_an_email) -> {
+                        navController.navigate(Screens.ScreenEmail.route)
+                    }
+                    App.getTextFromString(R.string.write_a_blog_top_bar) -> {
+                        navController.navigate(Screens.ScreenBlog.route)
+                    }
+                    App.getTextFromString(R.string.write_an_essay) -> {
+                        navController.navigate(Screens.ScreenEssay.route)
+                    }
+                    App.getTextFromString(R.string.write_an_article_top_bar) -> {
+                        navController.navigate(Screens.ScreenArticle.route)
+                    }
+                    App.getTextFromString(R.string.write_a_letter) -> {
+                        navController.navigate(Screens.ScreenLetter.route)
+                    }
+                    App.getTextFromString(R.string.write_a_cv) -> {
+                        navController.navigate(Screens.ScreenCV.route)
+                    }
+                    App.getTextFromString(R.string.write_a_resume) -> {
+                        navController.navigate(Screens.ScreenResume.route)
+                    }
+                    App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
+                        navController.navigate(Screens.ScreenPersonalBio.route)
+                    }
+                    App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
+                        navController.navigate(Screens.ScreenTwitter.route)
+                    }
+                    App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
+                        navController.navigate(Screens.ScreenTiktok.route)
+                    }
+                    App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
+                        navController.navigate(Screens.ScreenInstagram.route)
                     }
 
+                    App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
+                        navController.navigate(Screens.ScreenFacebook.route)
+                    }
+
+                    App.getTextFromString(R.string.write_a_linkedin_post_top_bar) -> {
+                        navController.navigate(Screens.ScreenLinkedIn.route)
+                    }
+
+                    App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
+                        navController.navigate(Screens.ScreenYoutube.route)
+                    }
+
+                    App.getTextFromString(R.string.write_a_podcast_top_bar) -> {
+                        navController.navigate(Screens.ScreenPodcast.route)
+                    }
+
+                    App.getTextFromString(R.string.write_a_game_script_top_label) -> {
+                        navController.navigate(Screens.ScreenGame.route)
+                    }
+
+                    App.getTextFromString(R.string.write_a_poem_top_bar) -> {
+                        navController.navigate(Screens.ScreenPoem.route)
+                    }
+
+                    App.getTextFromString(R.string.write_a_song_top_bar) -> {
+                        navController.navigate(Screens.ScreenSong.route)
+                    }
+                    App.getTextFromString(R.string.write_a_code) -> {
+                        navController.navigate(Screens.ScreenCode.route)
+                    }
+                    App.getTextFromString(R.string.custom) -> {
+                        navController.navigate(Screens.ScreenCustom.route)
+                    }
                 }
+
+            }
         }
 }
 

@@ -75,6 +75,7 @@
     <string name="subscribe">Subscribe</string>
     <string name="add_your_option_label">Add your custom desired section</string>
     <string name="write_a_facebook_post">Write an %s facebook post</string>
+    <string name="write_a_linkedin_post">Write an %s linkedin post</string>
     <string name="write_a_facebook_post_top_bar">Write a Facebook Post</string>
     <string name="narrative">Narrative Essay</string>
     <string name="descriptive">Descriptive Essay</string>
@@ -163,4 +164,6 @@
     <string name="check">Check</string>
     <string name="deletion_confirmation">Are you sure you want to delete all history?</string>
     <string name="app_is_outdated">A new release is available, please update it and relaunch the app</string>
+    <string name="write_a_linkedin_post_top_bar">Write a LinkedIn post</string>
+    <string name="linkedin_input_label">about my present role</string>
 </resources>
