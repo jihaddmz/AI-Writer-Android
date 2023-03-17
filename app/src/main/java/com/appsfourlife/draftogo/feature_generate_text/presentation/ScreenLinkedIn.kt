@@ -62,10 +62,10 @@ fun ScreenLinkedIn(
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
             if (SettingsNotifier.outputList.isEmpty()) {
-                Output(outputText = SettingsNotifier.output)
+                Output(outputText = SettingsNotifier.output, fromScreen = "linkedin")
             } else if (SettingsNotifier.outputList.isNotEmpty()) {
                 SettingsNotifier.outputList.forEach {
-                    Output(outputText = mutableStateOf(it))
+                    Output(outputText = mutableStateOf(it), fromScreen = "linkedin")
                     MySpacer(type = "small")
                 }
             }

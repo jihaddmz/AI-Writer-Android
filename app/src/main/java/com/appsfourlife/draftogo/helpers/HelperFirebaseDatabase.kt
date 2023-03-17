@@ -4,9 +4,6 @@ import androidx.compose.runtime.MutableState
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 object HelperFirebaseDatabase {
     private val firestore by lazy { Firebase.firestore }
@@ -16,7 +13,7 @@ object HelperFirebaseDatabase {
             "type" to type,
             "input" to input,
             "output" to output,
-            "date" to HelperDate.getCurrentDate()
+            "date" to HelperDate.getCurrentDateWithSec()
         )
 
         firestore.collection("users")
@@ -24,7 +21,8 @@ object HelperFirebaseDatabase {
             .set(
                 hashMapOf(
                     "nbOfGenerationsConsumed" to HelperSharedPreference.getNbOfGenerationsConsumed(),
-                    "nbOfWordsGenerated" to HelperSharedPreference.getNbOfWordsGenerated()
+                    "nbOfWordsGenerated" to HelperSharedPreference.getNbOfWordsGenerated(),
+                    "renewalDate" to HelperAuth.getExpirationDate()
                 )
             )
 
@@ -115,5 +113,33 @@ object HelperFirebaseDatabase {
                     documentSnapshot.reference.delete()
                 }
             }
+    }
+
+    fun resetNbOfGenerationsConsumedAndNbOfWordsGenerated() {
+        firestore.collection("users")
+            .document(HelperAuth.auth.currentUser?.email!!)
+            .set(
+                hashMapOf(
+                    "nbOfGenerationsConsumed" to 0,
+                    "nbOfWordsGenerated" to 0,
+                    "renewalDate" to HelperAuth.getExpirationDate()
+                )
+            )
+    }
+
+    fun getRenewalDate(onQueryComplete: (String) -> Unit) {
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+            .get().addOnCompleteListener {
+                onQueryComplete(it.result.get("renewalDate").toString())
+            }
+    }
+
+    fun setRenewalDate() {
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+            .set(
+                hashMapOf(
+                    "renewalDate" to HelperAuth.getExpirationDate()
+                )
+            )
     }
 }

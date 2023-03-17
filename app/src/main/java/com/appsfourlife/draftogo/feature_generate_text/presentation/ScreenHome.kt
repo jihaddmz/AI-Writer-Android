@@ -1,7 +1,5 @@
 package com.appsfourlife.draftogo.feature_generate_text.presentation
 
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -16,23 +14,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
-import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
-import com.appsfourlife.draftogo.helpers.HelperUI
-import com.appsfourlife.draftogo.helpers.Helpers
+import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.util.Screens
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import java.util.*
 
 
@@ -57,6 +53,30 @@ fun ScreenHome(
             HelperFirebaseDatabase.fetchAppVersion {
                 isAppOutDated.value = it != BuildConfig.VERSION_NAME
             }
+
+            // if the user is on base plan subscription, check if he
+                HelperFirebaseDatabase.getRenewalDate {
+                    if (it != "null" && it != "")
+                        if (it == HelperDate.getCurrentDateInString()) {
+                            HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                            HelperFirebaseDatabase.setRenewalDate()
+                        } else {
+                            val dateInFirebase =
+                                HelperDate.parseStringToDate(it, Constants.DAY_MONTH_YEAR_FORMAT)
+                            val dateNow = HelperDate.parseStringToDate(
+                                HelperDate.parseDateToString(
+                                    Date(),
+                                    Constants.DAY_MONTH_YEAR_FORMAT
+                                ), Constants.DAY_MONTH_YEAR_FORMAT
+                            )
+                            dateNow?.let { dateNow ->
+                                if (dateNow.after(dateInFirebase)) {
+                                    HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                                    HelperFirebaseDatabase.setRenewalDate()
+                                }
+                            }
+                        }
+                }
         }
     })
 
@@ -118,15 +138,11 @@ fun MainAppBar(
             )
         ) {
             // if there is network access, navigate to history
-            Helpers.checkForConnection(coroutineScope, ifConnected = {
-                coroutineScope.launch(Dispatchers.Main) {
-                    navController.navigate(Screens.ScreenHistory.route)
-                }
-            }, notConnected = {
-                coroutineScope.launch(Dispatchers.Main) {
-                    HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
-                }
-            })
+            if (SettingsNotifier.isConnected.value) {
+                navController.navigate(Screens.ScreenHistory.route)
+            } else {
+                HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
+            }
         }
 
         val showSearch = remember {

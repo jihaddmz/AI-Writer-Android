@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.appsfourlife.draftogo.helpers.HelperAuth
+import com.appsfourlife.draftogo.helpers.HelperDate
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.util.SettingsNotifier
@@ -69,11 +70,15 @@ class App : Application() {
                 }
 
                 override fun onReceived(customerInfo: CustomerInfo) {
-                    HelperSharedPreference.setString(
-                        HelperSharedPreference.SP_AUTHENTICATION,
-                        HelperSharedPreference.SP_AUTHENTICATION_EXPIRATION_DATE,
-                        customerInfo.entitlements["premium"]?.expirationDate.toString()
-                    )
+                    customerInfo.entitlements["premium"]?.expirationDate?.let {
+                        val date = HelperDate.parseDateToString(it, "dd/mm/yyyy HH:mm")
+                        HelperSharedPreference.setString(
+                            HelperSharedPreference.SP_AUTHENTICATION,
+                            HelperSharedPreference.SP_AUTHENTICATION_EXPIRATION_DATE,
+                            date
+                        )
+                    }
+
                     if (customerInfo.entitlements["premium"]?.isActive == true) { // if the user is subscribed
                         HelperAuth.makeUserSubscribed()
                         HelperSharedPreference.setSubscriptionType("base")
@@ -101,7 +106,7 @@ class App : Application() {
                     }
                 }
             })
-        }, 5000, 10000)
+        }, 5000, 5000)
 
         listOfCVTypes.add(getString(R.string.chronological))
         listOfCVTypes.add(getString(R.string.functional))

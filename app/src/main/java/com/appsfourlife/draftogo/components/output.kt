@@ -67,6 +67,8 @@ fun Output(
                                 Helpers.shareOutputToFacebook(context, "Hello there")
                             } else if (fromScreen.lowercase() == "twitter") {
                                 Helpers.shareOutputToTwitter(context, outputText.value)
+                            } else if (fromScreen.lowercase() == "linkedin") {
+                                Helpers.shareOutputToLinkedIn(context, outputText.value)
                             } else
                                 Helpers.shareOutput(text = outputText.value, context)
                         }) {

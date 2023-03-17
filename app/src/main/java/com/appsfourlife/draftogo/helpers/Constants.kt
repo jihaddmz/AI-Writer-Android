@@ -1,6 +1,5 @@
 package com.appsfourlife.draftogo.helpers
 
-import androidx.compose.runtime.mutableStateOf
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 
@@ -10,7 +9,7 @@ object Constants {
     val TAG = "Jihad"
     val MAX_GENERATION_LENGTH = 1000f
     val DEFAULT_POSTING_GENERATION_LENGTH = 400f
-    val MAX_NB_OF_GENERATIONS = 10f
+    val MAX_NB_OF_GENERATIONS = 5f
     val MONTHLY_PRICE = 2
     val MAX_TYPEWRITER_LENGTH = 100f
     val ANIMATION_LENGTH = 1000
@@ -18,6 +17,7 @@ object Constants {
     val BASE_PLAN_MAX_NB_OF_WORDS = 52500
     val SUBSCRIPTION_MONTHLY_ID = "generations_monthly_fee"
     val WEB_CLIENT_ID = "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com"
+    val DAY_MONTH_YEAR_FORMAT = "dd/mm/yyyy"
     val EXIT_TIME_BETWEEN = 3000L
     val Toast_Lenght = 6000
     val PREDEFINED_TEMPLATES = listOf(
