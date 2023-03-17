@@ -198,9 +198,25 @@ class MainActivity : ComponentActivity() {
                             if (SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value)
                                 DialogSubscription(SettingsNotifier.showDialogNbOfGenerationsLeftExceeded)
 
+                            /**
+                             * if the android version is equal or greater than 12, remove the custom splash screen
+                             * and check if the user should be navigated directly to the sign in or home screen
+                             **/
+                            val startScreenRoute = if (Build.VERSION.SDK_INT >= 31) {
+                                setSpacersSize()
+                                if (HelperSharedPreference.getUsername() == "") {
+                                    Screens.ScreenSignIn.route
+                                } else {
+                                    Screens.ScreenHome.route
+                                }
+
+                            } else {
+                                Screens.ScreenLaunch.route
+                            }
+
                             NavHost(
                                 navController = navController,
-                                startDestination = Screens.ScreenLaunch.route
+                                startDestination = startScreenRoute
                             ) {
 
                                 // region composables
