@@ -166,14 +166,8 @@ fun input(
                 return@MyButton
             }
 
-            if (
-                (HelperSharedPreference.getInt(
-                    HelperSharedPreference.SP_SETTINGS,
-                    HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                    Constants.MAX_NB_OF_TRIES_ALLOWED,
-                    context = context
-                ) == 0 || HelperSharedPreference.getNbOfGenerationsConsumed() >= 2) && !HelperAuth.getUserSubscriptionState()
-            ) { // if the nb of generations left is 0 or the nbOfGenerationsConsumed is >= 2, force the user to subscribe
+            if (HelperSharedPreference.getNbOfGenerationsConsumed() >= 2 && !HelperAuth.getUserSubscriptionState()) { // if nbOfGenerationsConsumed is >= 2
+                // and the user is not subscribed, force the user to subscribe
                 SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value = true
             } else {
                 keyboardController?.hide()
@@ -199,13 +193,13 @@ fun input(
                     generateText.value = App.getTextFromString(R.string.generated)
 
                     if (!HelperAuth.getUserSubscriptionState()) { // if the user is not yet subscribed, decrement the nb of generations left
-                        SettingsNotifier.nbOfGenerationsLeft.value -= 1
-                        HelperSharedPreference.setInt(
-                            HelperSharedPreference.SP_SETTINGS,
-                            HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-                            SettingsNotifier.nbOfGenerationsLeft.value,
-                            context
-                        )
+                        SettingsNotifier.nbOfGenerationsConsumed.value += 1
+//                        HelperSharedPreference.setInt(
+//                            HelperSharedPreference.SP_SETTINGS,
+//                            HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
+//                            SettingsNotifier.nbOfGenerationsLeft.value,
+//                            context
+//                        )
                     }
 
                     Timer().schedule(timerTask {
@@ -250,6 +244,10 @@ private fun getResponse(
     val postRequest: JsonObjectRequest =
         // on below line making json object request.
         object : JsonObjectRequest(Method.POST, url, jsonObject, Response.Listener { response ->
+            val totalNbOfToken: Int =
+                response.getJSONObject("usage").getInt("total_tokens")
+            HelperSharedPreference.incrementNbOfGenerationsConsumed()
+            HelperSharedPreference.addToNbOfWordsGenerated((totalNbOfToken * 0.75).roundToInt())
             // on below line getting response message and setting it to text view.
             if (nbOfGenerations > 1) { // many output to generate
                 SettingsNotifier.outputList.clear() // this to not make the list append entries each time
@@ -260,17 +258,19 @@ private fun getResponse(
                     SettingsNotifier.outputList.add(
                         text
                     )
+
+                    HelperFirebaseDatabase.writeHistoryEntry(
+                        type = SettingsNotifier.templateType,
+                        input = SettingsNotifier.input.value.text.trim(),
+                        text
+                    )
                 }
                 isGenerateBtnEnabled.value = true
             } else { // 1 output to generate
-                val totalNbOfToken: Int =
-                    response.getJSONObject("usage").getInt("completion_tokens")
                 val responseMsg: String =
                     response.getJSONArray("choices").getJSONObject(0).getString("text")
                 coroutineScope.launch(Dispatchers.IO)
                 {
-                    HelperSharedPreference.addToNbOfWordsGenerated((totalNbOfToken * 0.75).roundToInt())
-                    HelperSharedPreference.incrementNbOfGenerationsConsumed()
                     HelperFirebaseDatabase.writeHistoryEntry(
                         type = SettingsNotifier.templateType,
                         input = SettingsNotifier.input.value.text.trim(),

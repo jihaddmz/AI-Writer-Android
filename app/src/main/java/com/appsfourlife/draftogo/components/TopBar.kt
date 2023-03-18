@@ -13,6 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.util.SettingsNotifier.nbOfGenerationsLeft
 import com.appsfourlife.draftogo.util.Screens
@@ -73,14 +74,31 @@ fun TopBar(
             MyText(text = text, color = Color.White, fontWeight = FontWeight.Bold)
 
             if (!HelperAuth.getUserSubscriptionState() && !isContextInSettings) { // if user is not subscribed
-                MyText(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = SpacersSize.small),
-                    color = Color.White,
-                    text = stringResource(id = R.string.left, nbOfGenerationsLeft.value),
-                    textAlign = TextAlign.End
-                )
+                val nbOfGenerationsLeft = 2 - SettingsNotifier.nbOfGenerationsConsumed.value;
+                if (nbOfGenerationsLeft <= 0) {
+                    MyText(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = SpacersSize.small),
+                        color = Color.White,
+                        text = stringResource(
+                            id = R.string.left,
+                            0
+                        ),
+                        textAlign = TextAlign.End
+                    )
+                } else
+                    MyText(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(end = SpacersSize.small),
+                        color = Color.White,
+                        text = stringResource(
+                            id = R.string.left,
+                            2 - SettingsNotifier.nbOfGenerationsConsumed.value
+                        ),
+                        textAlign = TextAlign.End
+                    )
             }
         }
 

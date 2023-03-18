@@ -70,16 +70,17 @@ class App : Application() {
                 }
 
                 override fun onReceived(customerInfo: CustomerInfo) {
-                    customerInfo.entitlements["premium"]?.expirationDate?.let {
-                        val date = HelperDate.parseDateToString(it, "dd/mm/yyyy HH:mm")
-                        HelperSharedPreference.setString(
-                            HelperSharedPreference.SP_AUTHENTICATION,
-                            HelperSharedPreference.SP_AUTHENTICATION_EXPIRATION_DATE,
-                            date
-                        )
-                    }
-
                     if (customerInfo.entitlements["premium"]?.isActive == true) { // if the user is subscribed
+
+                        customerInfo.entitlements["premium"]?.expirationDate?.let {
+                            val date = HelperDate.parseDateToString(it, "dd/mm/yyyy HH:mm")
+                            HelperSharedPreference.setString(
+                                HelperSharedPreference.SP_AUTHENTICATION,
+                                HelperSharedPreference.SP_AUTHENTICATION_EXPIRATION_DATE,
+                                date
+                            )
+                        }
+
                         HelperAuth.makeUserSubscribed()
                         HelperSharedPreference.setSubscriptionType("base")
                         customerInfo.entitlements["premium"]?.willRenew?.let {
@@ -91,6 +92,16 @@ class App : Application() {
                             )
                         }
                     } else if (customerInfo.entitlements["plus"]?.isActive == true) {
+
+                        customerInfo.entitlements["plus"]?.expirationDate?.let {
+                            val date = HelperDate.parseDateToString(it, "dd/mm/yyyy HH:mm")
+                            HelperSharedPreference.setString(
+                                HelperSharedPreference.SP_AUTHENTICATION,
+                                HelperSharedPreference.SP_AUTHENTICATION_EXPIRATION_DATE,
+                                date
+                            )
+                        }
+
                         HelperAuth.makeUserSubscribed()
                         HelperSharedPreference.setSubscriptionType("plus")
                         customerInfo.entitlements["plus"]?.willRenew?.let {

@@ -6,7 +6,7 @@ import java.util.*
 object HelperDate {
 
     fun getCurrentDateWithSec(): String {
-        val simpleFormatter = SimpleDateFormat("yyyy-mm-dd hh:mm:ss", Locale.getDefault())
+        val simpleFormatter = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault())
         return simpleFormatter.format(Date())
     }
 
@@ -19,7 +19,7 @@ object HelperDate {
     }
 
     fun getCurrentDateInString(): String {
-        val simpleFormatter = SimpleDateFormat("yyyy-mm-dd", Locale.getDefault())
+        val simpleFormatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return simpleFormatter.format(Date())
     }
 }

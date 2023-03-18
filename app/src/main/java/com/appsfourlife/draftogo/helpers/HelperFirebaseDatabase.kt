@@ -2,6 +2,7 @@ package com.appsfourlife.draftogo.helpers
 
 import androidx.compose.runtime.MutableState
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -47,14 +48,16 @@ object HelperFirebaseDatabase {
                         HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED,
                         0
                     )
+                    SettingsNotifier.nbOfGenerationsConsumed.value = 0
                 } else {
                     HelperSharedPreference.setInt(
                         HelperSharedPreference.SP_SETTINGS,
                         HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED,
                         nbOfGenerationsConsumed.toInt()
                     )
+                    SettingsNotifier.nbOfGenerationsConsumed.value = nbOfGenerationsConsumed.toInt()
                 }
-                if (nbOfWordsGenerated == null) { // no field nbOfGenerationsConsumed yet
+                if (nbOfWordsGenerated == null) { // no field nbOfWordsGenerated yet
                     HelperSharedPreference.setInt(
                         HelperSharedPreference.SP_SETTINGS,
                         HelperSharedPreference.SP_SETTINGS_NB_OF_WORDS_GENERATED,

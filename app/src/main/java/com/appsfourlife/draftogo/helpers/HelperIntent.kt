@@ -9,4 +9,9 @@ object HelperIntent {
         val intent = Intent(Intent.parseUri("https://play.google.com/store/account/subscriptions?sku=${Constants.SUBSCRIPTION_MONTHLY_ID}&package=com.appsfourlife.draftogo", 0))
         App.context.startActivity(intent)
     }
+
+    fun navigateToPlayStorePlusSubscription(){
+        val intent = Intent(Intent.parseUri("https://play.google.com/store/account/subscriptions?sku=${Constants.SUBSCRIPTION_MONTHLY_PLUS_ID}&package=com.appsfourlife.draftogo", 0))
+        App.context.startActivity(intent)
+    }
 }

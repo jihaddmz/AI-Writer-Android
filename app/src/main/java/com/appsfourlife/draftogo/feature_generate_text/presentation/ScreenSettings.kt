@@ -118,7 +118,10 @@ fun ScreenSettings(
                     MySpacer(type = "small")
 
                     MyOutlinedButton(text = stringResource(id = R.string.manage_subscription)) {
-                        HelperIntent.navigateToPlayStoreSubscription()
+                        if (HelperSharedPreference.getSubscriptionType() == "plus") {
+                            HelperIntent.navigateToPlayStorePlusSubscription()
+                        } else
+                            HelperIntent.navigateToPlayStoreSubscription()
                     }
 
                 } else // if the user is not subscribed

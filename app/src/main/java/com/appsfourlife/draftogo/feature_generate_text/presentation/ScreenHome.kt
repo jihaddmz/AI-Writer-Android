@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -28,7 +30,6 @@ import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import java.util.*
 
 
@@ -53,6 +54,8 @@ fun ScreenHome(
             HelperFirebaseDatabase.fetchAppVersion {
                 isAppOutDated.value = it != BuildConfig.VERSION_NAME
             }
+
+            HelperFirebaseDatabase.fetchNbOfGenerationsConsumed()
 
             // if the user is on base plan subscription, check if he
                 HelperFirebaseDatabase.getRenewalDate {
@@ -80,8 +83,6 @@ fun ScreenHome(
         }
     })
 
-    HelperFirebaseDatabase.fetchNbOfGenerationsConsumed()
-
     Column(modifier = modifier.fillMaxSize()) {
 
         if (isAppOutDated.value) // if the app is outdated show the alert dialog to update
@@ -91,7 +92,8 @@ fun ScreenHome(
                 text = stringResource(id = R.string.app_is_outdated),
                 title = stringResource(id = R.string.attention),
                 properties = DialogProperties(
-                    dismissOnBackPress = false, dismissOnClickOutside = false
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
                 )
             )
 
@@ -166,8 +168,15 @@ fun MainAppBar(
 
         MyAnimatedVisibility(visible = showSearch.value) {
 
+            val focusRequester = FocusRequester()
+
+            LaunchedEffect(key1 = true, block = {
+                focusRequester.requestFocus()
+            })
+
             MyTextField(modifier = Modifier
                 .weight(1f)
+                .focusRequester(focusRequester)
                 .background(color = Blue, shape = Shapes.medium),
                 value = searchText.value,
                 textColor = Color.White,
@@ -184,7 +193,7 @@ fun MainAppBar(
                     if (searchText.value.isEmpty()) {
                         listOfPredefinedTemplates.value = Constants.PREDEFINED_TEMPLATES
                     } else listOfPredefinedTemplates.value =
-                        Constants.PREDEFINED_TEMPLATES.filter { it.contains(searchText.value) }
+                        Constants.PREDEFINED_TEMPLATES.filter { it.lowercase().contains(searchText.value) }
                 })
         }
 
