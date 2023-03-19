@@ -28,24 +28,22 @@ import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
-import com.google.android.gms.ads.OnUserEarnedRewardListener
-import com.revenuecat.purchases.CustomerInfo
-import com.revenuecat.purchases.Purchases
-import com.revenuecat.purchases.PurchasesError
-import com.revenuecat.purchases.getOfferingsWith
+import com.revenuecat.purchases.*
 import com.revenuecat.purchases.interfaces.PurchaseCallback
+import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
+import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DialogSubscription(
-    showDialog: MutableState<Boolean>
+    showDialog: MutableState<Boolean>,
 ) {
 
     val currentActivity = LocalContext.current as Activity
     val state = rememberLazyListState()
     val listOfPackages = remember {
-        mutableStateOf(listOf<com.revenuecat.purchases.Package>())
+        mutableStateOf(listOf<Package>())
     }
 
     Purchases.sharedInstance.getOfferingsWith({ error ->
@@ -86,6 +84,7 @@ fun DialogSubscription(
                             description = purchasePackage.product.description,
                             price = purchasePackage.product.price
                         ) {
+
                             Purchases.sharedInstance.purchaseProduct(
                                 currentActivity,
                                 purchasePackage.product,
@@ -94,14 +93,20 @@ fun DialogSubscription(
                                         storeTransaction: StoreTransaction,
                                         customerInfo: CustomerInfo
                                     ) {
-                                        HelperAuth.makeUserSubscribed()
+                                        if (customerInfo.entitlements["premium"]?.isActive == true) {
+                                            HelperAuth.makeUserSubscribed()
+                                            HelperSharedPreference.setSubscriptionType(Constants.SUBSCRIPTION_TYPE_BASE)
+                                        } else if (customerInfo.entitlements[Constants.SUBSCRIPTION_TYPE_PLUS]?.isActive == true) {
+                                            HelperAuth.makeUserSubscribed()
+                                            HelperSharedPreference.setSubscriptionType(Constants.SUBSCRIPTION_TYPE_PLUS)
+                                        }
                                     }
 
                                     override fun onError(
                                         error: PurchasesError,
                                         userCancelled: Boolean
                                     ) {
-//                                    HelperUI.showToast(context, error.message)
+                                        HelperUI.showToast(currentActivity, error.message)
                                     }
 
                                 })
@@ -121,7 +126,6 @@ fun DialogSubscription(
                             SettingsNotifier.showLoadingDialog.value = true
                             HelperAds.loadAds {
                                 HelperAds.showAds(currentActivity) { amount ->
-                                    // todo change the amount to decrement to amount
                                     SettingsNotifier.nbOfGenerationsConsumed.value -= 1
                                     HelperSharedPreference.setInt(
                                         HelperSharedPreference.SP_SETTINGS,
@@ -129,6 +133,7 @@ fun DialogSubscription(
                                         SettingsNotifier.nbOfGenerationsConsumed.value
                                     )
                                     HelperFirebaseDatabase.decrementNbOfConsumed()
+                                    showDialog.value = false
                                 }
                             }
                         } else {
@@ -145,6 +150,109 @@ fun DialogSubscription(
 }
 
 @Composable
+fun DialogSubscriptionNbOfWordsExceeded(
+    showDialog: MutableState<Boolean>
+) {
+
+    val plusProduct = remember {
+        mutableStateOf<StoreProduct?>(null)
+    }
+    val currentActivity = LocalContext.current as Activity
+
+    Dialog(onDismissRequest = {
+        showDialog.value = false
+    }) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = Color.White,
+                    shape = Shapes.medium
+                )
+                .padding(horizontal = 5.dp, vertical = SpacersSize.medium),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            MyText(
+                text = stringResource(id = R.string.you_have_reached_max_nb_of_words_generated),
+                textAlign = TextAlign.Center
+            )
+
+            MySpacer(type = "medium")
+
+            Purchases.sharedInstance.getOfferings(object : ReceiveOfferingsCallback {
+                override fun onError(error: PurchasesError) {
+                }
+
+                override fun onReceived(offerings: Offerings) {
+                    plusProduct.value =
+                        offerings.current?.get(Constants.SUBSCRIPTION_TYPE_PLUS)?.product
+                }
+
+            })
+
+            MyAnimatedVisibility(
+                modifier = Modifier.fillMaxWidth(),
+                visible = plusProduct.value != null
+            ) {
+                val product = plusProduct.value!!
+                SubscriptionItem(
+                    title = product.title.split("(")[0].trim(),
+                    description = product.description,
+                    price = product.price
+                ) {
+                    Purchases.sharedInstance.purchaseProductWith(
+                        currentActivity,
+                        product,
+                        upgradeInfo = UpgradeInfo(oldSku = Constants.SUBSCRIPTION_PRODUCT_MONTHLY_ID),
+                        onError = { error, userCancelled ->
+                            HelperUI.showToast(msg = error.message)
+                        },
+                        onSuccess = { purchase: StoreTransaction?, customerInfo: CustomerInfo ->
+                            if (customerInfo.entitlements[Constants.SUBSCRIPTION_TYPE_PLUS]?.isActive == true) {
+                                HelperAuth.makeUserSubscribed()
+                                HelperSharedPreference.setSubscriptionType(Constants.SUBSCRIPTION_TYPE_PLUS)
+                                showDialog.value = false
+                            }
+                        }
+                    )
+                }
+            }
+
+            MyText(
+                text = stringResource(id = R.string.watch_an_ad),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        if (SettingsNotifier.isConnected.value) {
+                            SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value = false
+                            SettingsNotifier.showLoadingDialog.value = true
+                            HelperAds.loadAds {
+                                HelperAds.showAds(currentActivity) { amount ->
+                                    HelperFirebaseDatabase.decrementNbOfWords(500)
+                                    val nbOfWords = HelperSharedPreference.getNbOfWordsGenerated()
+                                    HelperSharedPreference.setInt(
+                                        HelperSharedPreference.SP_SETTINGS,
+                                        HelperSharedPreference.SP_SETTINGS_NB_OF_WORDS_GENERATED,
+                                        nbOfWords - 500
+                                    )
+                                    showDialog.value = false
+                                }
+                            }
+                        } else {
+                            HelperUI.showToast(msg = App.getTextFromString(textID = R.string.no_connection))
+                        }
+
+                    }, color = Blue,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+@Composable
 fun SubscriptionItem(
     title: String,
     description: String,
@@ -154,8 +262,7 @@ fun SubscriptionItem(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         MyTextTitle(

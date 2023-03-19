@@ -32,7 +32,7 @@ object HelperAuth {
         )
     }
 
-    fun getUserSubscriptionState(): Boolean {
+    fun isSubscribed(): Boolean {
         return SettingsNotifier.isSubscribed.value || HelperSharedPreference.getBool(
             HelperSharedPreference.SP_AUTHENTICATION,
             HelperSharedPreference.SP_AUTHENTICATION_IS_SUBSCRIBED,

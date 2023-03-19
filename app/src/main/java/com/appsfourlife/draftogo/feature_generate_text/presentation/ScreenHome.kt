@@ -57,7 +57,9 @@ fun ScreenHome(
 
             HelperFirebaseDatabase.fetchNbOfGenerationsConsumed()
 
-            // if the user is on base plan subscription, check if he
+            // if the user is on base plan subscription, check if we are currently on the same renewal date, if so
+            // reset all values on firebase and set the new renewal date, if no, check if currently we are after the
+            // renewal date on firebase, if so reset the value on firebase and set the new renewal date
                 HelperFirebaseDatabase.getRenewalDate {
                     if (it != "null" && it != "")
                         if (it == HelperDate.getCurrentDateInString()) {

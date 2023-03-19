@@ -166,6 +166,8 @@
     <string name="app_is_outdated">A new release is available, please update it and relaunch the app</string>
     <string name="write_a_linkedin_post_top_bar">Write a LinkedIn post</string>
     <string name="linkedin_input_label">about my present role</string>
-    <string name="watch_an_ad">Watch an Ad</string>
+    <string name="watch_an_ad">Watch an Ad -></string>
     <string name="loading_ad">Loading Ad</string>
+    <string name="nb_words_left">%d words left</string>
+    <string name="you_have_reached_max_nb_of_words_generated">"You have reached the max number of words you can generate on this plan, upgrade to the plus plan to enjoy unlimited number of generations "</string>
 </resources>

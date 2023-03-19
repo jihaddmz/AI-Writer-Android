@@ -16,7 +16,6 @@ object HelperSharedPreference {
     /**
      * keys for settings shared preferences
      **/
-    const val SP_SETTINGS_NB_OF_GENERATIONS_LEFT = "nb_of_generations_left"
     const val SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED = "nb_of_generations_consumed"
     const val SP_SETTINGS_NB_OF_WORDS_GENERATED = "nb_of_words_generated"
     const val SP_SETTINGS_NB_OF_GENERATIONS = "nb_of_generations"

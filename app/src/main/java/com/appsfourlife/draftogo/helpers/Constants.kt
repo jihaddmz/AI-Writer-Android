@@ -6,17 +6,18 @@ import com.appsfourlife.draftogo.R
 
 object Constants {
 
+    val SUBSCRIPTION_PRODUCT_MONTHLY_ID = "generations_monthly_fee"
+    val SUBSCRIPTION_PRODUCT_MONTHLY_PLUS_ID = "generations_monthly_fee_plus"
+    val SUBSCRIPTION_TYPE_BASE = "base"
+    val SUBSCRIPTION_TYPE_PLUS = "plus"
+
     val TAG = "Jihad"
     val MAX_GENERATION_LENGTH = 1000f
     val DEFAULT_POSTING_GENERATION_LENGTH = 400f
     val MAX_NB_OF_GENERATIONS = 5f
-    val MONTHLY_PRICE = 2
     val MAX_TYPEWRITER_LENGTH = 100f
     val ANIMATION_LENGTH = 1000
-    val MAX_NB_OF_TRIES_ALLOWED = 2
     val BASE_PLAN_MAX_NB_OF_WORDS = 45000
-    val SUBSCRIPTION_MONTHLY_ID = "generations_monthly_fee"
-    val SUBSCRIPTION_MONTHLY_PLUS_ID = "generations_monthly_fee_plus"
     val WEB_CLIENT_ID = "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com"
     val AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917" // todo change ad unit
     val DAY_MONTH_YEAR_FORMAT = "dd/MM/yyyy"

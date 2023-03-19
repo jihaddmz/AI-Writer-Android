@@ -3,10 +3,7 @@ package com.appsfourlife.draftogo
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.appsfourlife.draftogo.helpers.HelperAuth
-import com.appsfourlife.draftogo.helpers.HelperDate
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
-import com.appsfourlife.draftogo.helpers.Helpers
+import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.onesignal.OneSignal
 import com.revenuecat.purchases.CustomerInfo
@@ -82,7 +79,7 @@ class App : Application() {
                         }
 
                         HelperAuth.makeUserSubscribed()
-                        HelperSharedPreference.setSubscriptionType("base")
+                        HelperSharedPreference.setSubscriptionType(Constants.SUBSCRIPTION_TYPE_BASE)
                         customerInfo.entitlements["premium"]?.willRenew?.let {
                             SettingsNotifier.isRenewable.value = it
                             HelperSharedPreference.setBool(
@@ -91,9 +88,9 @@ class App : Application() {
                                 it
                             )
                         }
-                    } else if (customerInfo.entitlements["plus"]?.isActive == true) {
+                    } else if (customerInfo.entitlements[Constants.SUBSCRIPTION_TYPE_PLUS]?.isActive == true) {
 
-                        customerInfo.entitlements["plus"]?.expirationDate?.let {
+                        customerInfo.entitlements[Constants.SUBSCRIPTION_TYPE_PLUS]?.expirationDate?.let {
                             val date = HelperDate.parseDateToString(it, "dd/MM/yyyy")
                             HelperSharedPreference.setString(
                                 HelperSharedPreference.SP_AUTHENTICATION,
@@ -103,8 +100,8 @@ class App : Application() {
                         }
 
                         HelperAuth.makeUserSubscribed()
-                        HelperSharedPreference.setSubscriptionType("plus")
-                        customerInfo.entitlements["plus"]?.willRenew?.let {
+                        HelperSharedPreference.setSubscriptionType(Constants.SUBSCRIPTION_TYPE_PLUS)
+                        customerInfo.entitlements[Constants.SUBSCRIPTION_TYPE_PLUS]?.willRenew?.let {
                             SettingsNotifier.isRenewable.value = it
                             HelperSharedPreference.setBool(
                                 HelperSharedPreference.SP_AUTHENTICATION,
@@ -114,6 +111,7 @@ class App : Application() {
                         }
                     } else { // user has no access to the product
                         HelperAuth.makeUserNotSubscribed()
+                        HelperSharedPreference.setSubscriptionType("not subscribed")
                     }
                 }
             })

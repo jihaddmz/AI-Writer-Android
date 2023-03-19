@@ -25,11 +25,11 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.util.*
@@ -161,12 +161,13 @@ fun input(
              * if user is on base plan subscription and nb of words generated is at the max, prevent him from
              * generating extra prompts
              **/
-            if (HelperSharedPreference.getSubscriptionType() == "base" && HelperSharedPreference.getNbOfWordsGenerated() >= Constants.BASE_PLAN_MAX_NB_OF_WORDS) {
-                SettingsNotifier.basePlanMaxNbOfWordsExceeded.value = true
-                return@MyButton
-            }
+            if (HelperAuth.isSubscribed())
+                if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE && HelperSharedPreference.getNbOfWordsGenerated() >= Constants.BASE_PLAN_MAX_NB_OF_WORDS) {
+                    SettingsNotifier.basePlanMaxNbOfWordsExceeded.value = true
+                    return@MyButton
+                }
 
-            if (HelperSharedPreference.getNbOfGenerationsConsumed() >= 2 && !HelperAuth.getUserSubscriptionState()) { // if nbOfGenerationsConsumed is >= 2
+            if (HelperSharedPreference.getNbOfGenerationsConsumed() >= 2 && !HelperAuth.isSubscribed()) { // if nbOfGenerationsConsumed is >= 2
                 // and the user is not subscribed, force the user to subscribe
                 SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value = true
             } else {
@@ -192,14 +193,8 @@ fun input(
                     showDialog.value = false
                     generateText.value = App.getTextFromString(R.string.generated)
 
-                    if (!HelperAuth.getUserSubscriptionState()) { // if the user is not yet subscribed, decrement the nb of generations left
+                    if (!HelperAuth.isSubscribed()) { // if the user is not yet subscribed, decrement the nb of generations left
                         SettingsNotifier.nbOfGenerationsConsumed.value += 1
-//                        HelperSharedPreference.setInt(
-//                            HelperSharedPreference.SP_SETTINGS,
-//                            HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_LEFT,
-//                            SettingsNotifier.nbOfGenerationsLeft.value,
-//                            context
-//                        )
                     }
 
                     Timer().schedule(timerTask {
