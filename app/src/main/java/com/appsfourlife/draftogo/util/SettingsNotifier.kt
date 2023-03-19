@@ -23,6 +23,7 @@ object SettingsNotifier {
     val basePlanMaxNbOfWordsExceeded = mutableStateOf(false)
     val showLoadingDialog = mutableStateOf(false)
     var mRewardedAds: RewardedAd? = null
+    var disableDrawerContent = mutableStateOf(false)
     var templateType = ""
 
     fun resetValues(){

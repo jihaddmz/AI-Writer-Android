@@ -49,6 +49,8 @@ fun ScreenHome(
         mutableStateOf(Constants.PREDEFINED_TEMPLATES)
     }
 
+    SettingsNotifier.disableDrawerContent.value = false
+
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
             HelperFirebaseDatabase.fetchAppVersion {

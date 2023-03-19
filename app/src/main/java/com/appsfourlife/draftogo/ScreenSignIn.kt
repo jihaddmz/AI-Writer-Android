@@ -12,15 +12,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.NavController
-import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.components.MyButton
+import com.appsfourlife.draftogo.components.MyTextTitle
+import com.appsfourlife.draftogo.components.MyVideo
 import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @Composable
 fun ScreenSignIn(
 ) {
     val currentActivity = LocalContext.current as Activity
+
+    SettingsNotifier.disableDrawerContent.value = true
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
