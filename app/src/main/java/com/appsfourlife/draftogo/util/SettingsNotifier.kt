@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
+import com.google.android.gms.ads.rewarded.RewardedAd
 
 object SettingsNotifier {
 
@@ -22,6 +23,8 @@ object SettingsNotifier {
     val jobTitle = mutableStateOf("")
     val stopTyping = mutableStateOf(false)
     val basePlanMaxNbOfWordsExceeded = mutableStateOf(false)
+    val showLoadingDialog = mutableStateOf(false)
+    var mRewardedAds: RewardedAd? = null
     var templateType = ""
 
     fun resetValues(){

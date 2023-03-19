@@ -145,4 +145,11 @@ object HelperFirebaseDatabase {
                 )
             )
     }
+
+    fun decrementNbOfConsumed() {
+        val nbOfConsumed = HelperSharedPreference.getNbOfGenerationsConsumed()
+
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+            .update("nbOfGenerationsConsumed", nbOfConsumed)
+    }
 }

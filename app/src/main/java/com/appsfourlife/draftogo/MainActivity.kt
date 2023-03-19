@@ -11,14 +11,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.DrawerValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,6 +32,9 @@ import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.*
 import com.appsfourlife.draftogo.util.SettingsNotifier
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
@@ -44,6 +48,7 @@ import kotlin.concurrent.timerTask
 class MainActivity : ComponentActivity() {
 
     private lateinit var navController: NavHostController
+//    private var rewardedAd: RewardedAd? = null
 
     override fun onStart() {
         super.onStart()
@@ -70,14 +75,17 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
+        App.context = this
+
+        MobileAds.initialize(this) {
+
+        }
 
         setContent {
 
             navController = rememberNavController()
             val scaffoldState = rememberScaffoldState()
             val coroutineScope = rememberCoroutineScope()
-
-            App.context = this
 
             AIWriterTheme {
                 Scaffold(
@@ -214,147 +222,155 @@ class MainActivity : ComponentActivity() {
                                 Screens.ScreenLaunch.route
                             }
 
-                            NavHost(
-                                navController = navController,
-                                startDestination = startScreenRoute
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center
                             ) {
+                                NavHost(
+                                    navController = navController,
+                                    startDestination = startScreenRoute
+                                ) {
+                                    // region composables
+                                    composable(route = Screens.ScreenLaunch.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenLaunch(
+                                            modifier = Modifier,
+                                            navController = navController
+                                        )
+                                    }
 
-                                // region composables
-                                composable(route = Screens.ScreenLaunch.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenLaunch(
-                                        modifier = Modifier,
-                                        navController = navController
-                                    )
+                                    composable(route = Screens.ScreenHistory.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenHistory(
+                                            modifier = Modifier,
+                                            navController = navController
+                                        )
+                                    }
+
+                                    composable(route = Screens.ScreenSignIn.route) {
+                                        HomeBackHandler(context = this@MainActivity)
+                                        ScreenSignIn(
+                                        )
+                                    }
+
+                                    composable(route = Screens.ScreenHome.route) {
+                                        HomeBackHandler(context = this@MainActivity)
+                                        ScreenHome(
+                                            modifier = Modifier,
+                                            navController = navController
+                                        )
+                                    }
+
+                                    composable(route = Screens.ScreenArticle.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenArticle(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenBlog.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenBlog(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenCode.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenCode(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenCV.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenCV(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenResume.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenResume(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenEmail.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenEmail(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenEssay.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenEssay(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenInstagram.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenInstagram(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenLetter.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenLetter(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenPoem.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenPoem(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenTiktok.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenTiktok(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenTwitter.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenTweet(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenPersonalBio.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenPersonalBio(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenCustom.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenCustom(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenYoutube.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenYoutube(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenFacebook.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenFacebook(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenLinkedIn.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenLinkedIn(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenSong.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenSong(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenSettings.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenSettings(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenPodcast.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenPodcast(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenGame.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenGame(navController = navController)
+                                    }
+                                    // endregion
                                 }
 
-                                composable(route = Screens.ScreenHistory.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenHistory(
-                                        modifier = Modifier,
-                                        navController = navController
-                                    )
+                                if (SettingsNotifier.showLoadingDialog.value) {
+                                    DialogLoading(title = stringResource(id = R.string.loading_ad))
                                 }
-
-                                composable(route = Screens.ScreenSignIn.route) {
-                                    HomeBackHandler(context = this@MainActivity)
-                                    ScreenSignIn(
-                                    )
-                                }
-
-                                composable(route = Screens.ScreenHome.route) {
-                                    HomeBackHandler(context = this@MainActivity)
-                                    ScreenHome(
-                                        modifier = Modifier,
-                                        navController = navController
-                                    )
-                                }
-
-                                composable(route = Screens.ScreenArticle.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenArticle(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenBlog.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenBlog(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenCode.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenCode(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenCV.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenCV(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenResume.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenResume(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenEmail.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenEmail(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenEssay.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenEssay(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenInstagram.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenInstagram(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenLetter.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenLetter(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenPoem.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenPoem(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenTiktok.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenTiktok(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenTwitter.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenTweet(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenPersonalBio.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenPersonalBio(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenCustom.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenCustom(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenYoutube.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenYoutube(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenFacebook.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenFacebook(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenLinkedIn.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenLinkedIn(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenSong.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenSong(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenSettings.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenSettings(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenPodcast.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenPodcast(navController = navController)
-                                }
-
-                                composable(route = Screens.ScreenGame.route) {
-                                    MyBackHandler(navController = navController)
-                                    ScreenGame(navController = navController)
-                                }
-                                // endregion
                             }
                         }
                     }

@@ -3,6 +3,7 @@ package com.appsfourlife.draftogo.components
 import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -16,14 +17,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.helpers.HelperAuth
+import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
+import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesError
@@ -57,44 +62,84 @@ fun DialogSubscription(
         showDialog.value = false
     }) {
 
-        LazyVerticalGrid(modifier = Modifier
-            .fillMaxWidth()
-            .background(color = Color.White, shape = Shapes.medium)
-            .padding(horizontal = 5.dp, vertical = SpacersSize.medium),
-            state = state,
-            cells = GridCells.Fixed(count = 2),
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-            content = {
-                items(listOfPackages.value.size) { index ->
-                    val purchasePackage = listOfPackages.value[index]
-                    SubscriptionItem(
-                        title = purchasePackage.product.title.split("(")[0].trim(),
-                        description = purchasePackage.product.description,
-                        price = purchasePackage.product.price
-                    ) {
-                        Purchases.sharedInstance.purchaseProduct(
-                            currentActivity,
-                            purchasePackage.product,
-                            object : PurchaseCallback {
-                                override fun onCompleted(
-                                    storeTransaction: StoreTransaction,
-                                    customerInfo: CustomerInfo
-                                ) {
-                                    HelperAuth.makeUserSubscribed()
-                                }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(
+                    color = Color.White,
+                    shape = Shapes.medium
+                )
+                .padding(horizontal = 5.dp, vertical = SpacersSize.medium),
+        ) {
 
-                                override fun onError(
-                                    error: PurchasesError,
-                                    userCancelled: Boolean
-                                ) {
+            LazyVerticalGrid(modifier = Modifier
+                .fillMaxWidth(),
+                state = state,
+                cells = GridCells.Fixed(count = 2),
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                content = {
+                    items(listOfPackages.value.size) { index ->
+                        val purchasePackage = listOfPackages.value[index]
+                        SubscriptionItem(
+                            title = purchasePackage.product.title.split("(")[0].trim(),
+                            description = purchasePackage.product.description,
+                            price = purchasePackage.product.price
+                        ) {
+                            Purchases.sharedInstance.purchaseProduct(
+                                currentActivity,
+                                purchasePackage.product,
+                                object : PurchaseCallback {
+                                    override fun onCompleted(
+                                        storeTransaction: StoreTransaction,
+                                        customerInfo: CustomerInfo
+                                    ) {
+                                        HelperAuth.makeUserSubscribed()
+                                    }
+
+                                    override fun onError(
+                                        error: PurchasesError,
+                                        userCancelled: Boolean
+                                    ) {
 //                                    HelperUI.showToast(context, error.message)
-                                }
+                                    }
 
-                            })
+                                })
+                        }
                     }
-                }
-            })
+                })
+
+            MySpacer(type = "small")
+
+            MyText(
+                text = stringResource(id = R.string.watch_an_ad),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        if (SettingsNotifier.isConnected.value) {
+                            SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value = false
+                            SettingsNotifier.showLoadingDialog.value = true
+                            HelperAds.loadAds {
+                                HelperAds.showAds(currentActivity) { amount ->
+                                    // todo change the amount to decrement to amount
+                                    SettingsNotifier.nbOfGenerationsConsumed.value -= 1
+                                    HelperSharedPreference.setInt(
+                                        HelperSharedPreference.SP_SETTINGS,
+                                        HelperSharedPreference.SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED,
+                                        SettingsNotifier.nbOfGenerationsConsumed.value
+                                    )
+                                    HelperFirebaseDatabase.decrementNbOfConsumed()
+                                }
+                            }
+                        } else {
+                            HelperUI.showToast(msg = App.getTextFromString(textID = R.string.no_connection))
+                        }
+
+                    }, color = Blue,
+                fontWeight = FontWeight.Bold,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 
 }

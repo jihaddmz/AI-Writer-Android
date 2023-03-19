@@ -161,7 +161,7 @@ fun input(
              * if user is on base plan subscription and nb of words generated is at the max, prevent him from
              * generating extra prompts
              **/
-            if (HelperSharedPreference.getSubscriptionType() == "base" && HelperSharedPreference.getNbOfWordsGenerated() == Constants.BASE_PLAN_MAX_NB_OF_WORDS) {
+            if (HelperSharedPreference.getSubscriptionType() == "base" && HelperSharedPreference.getNbOfWordsGenerated() >= Constants.BASE_PLAN_MAX_NB_OF_WORDS) {
                 SettingsNotifier.basePlanMaxNbOfWordsExceeded.value = true
                 return@MyButton
             }

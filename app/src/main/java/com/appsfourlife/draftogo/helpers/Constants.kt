@@ -18,7 +18,8 @@ object Constants {
     val SUBSCRIPTION_MONTHLY_ID = "generations_monthly_fee"
     val SUBSCRIPTION_MONTHLY_PLUS_ID = "generations_monthly_fee_plus"
     val WEB_CLIENT_ID = "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com"
-    val DAY_MONTH_YEAR_FORMAT = "dd/mm/yyyy"
+    val AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917" // todo change ad unit
+    val DAY_MONTH_YEAR_FORMAT = "dd/MM/yyyy"
     val EXIT_TIME_BETWEEN = 3000L
     val Toast_Lenght = 6000
     val PREDEFINED_TEMPLATES = listOf(

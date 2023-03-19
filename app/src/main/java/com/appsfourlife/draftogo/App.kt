@@ -73,7 +73,7 @@ class App : Application() {
                     if (customerInfo.entitlements["premium"]?.isActive == true) { // if the user is subscribed
 
                         customerInfo.entitlements["premium"]?.expirationDate?.let {
-                            val date = HelperDate.parseDateToString(it, "dd/mm/yyyy HH:mm")
+                            val date = HelperDate.parseDateToString(it, "dd/MM/yyyy")
                             HelperSharedPreference.setString(
                                 HelperSharedPreference.SP_AUTHENTICATION,
                                 HelperSharedPreference.SP_AUTHENTICATION_EXPIRATION_DATE,
@@ -94,7 +94,7 @@ class App : Application() {
                     } else if (customerInfo.entitlements["plus"]?.isActive == true) {
 
                         customerInfo.entitlements["plus"]?.expirationDate?.let {
-                            val date = HelperDate.parseDateToString(it, "dd/mm/yyyy HH:mm")
+                            val date = HelperDate.parseDateToString(it, "dd/MM/yyyy")
                             HelperSharedPreference.setString(
                                 HelperSharedPreference.SP_AUTHENTICATION,
                                 HelperSharedPreference.SP_AUTHENTICATION_EXPIRATION_DATE,

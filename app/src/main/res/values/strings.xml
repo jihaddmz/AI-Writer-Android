@@ -166,4 +166,6 @@
     <string name="app_is_outdated">A new release is available, please update it and relaunch the app</string>
     <string name="write_a_linkedin_post_top_bar">Write a LinkedIn post</string>
     <string name="linkedin_input_label">about my present role</string>
+    <string name="watch_an_ad">Watch an Ad</string>
+    <string name="loading_ad">Loading Ad</string>
 </resources>
