@@ -197,7 +197,7 @@ fun MainAppBar(
                     if (searchText.value.isEmpty()) {
                         listOfPredefinedTemplates.value = Constants.PREDEFINED_TEMPLATES
                     } else listOfPredefinedTemplates.value =
-                        Constants.PREDEFINED_TEMPLATES.filter { it.lowercase().contains(searchText.value) }
+                        Constants.PREDEFINED_TEMPLATES.filter { it.lowercase().contains(searchText.value.lowercase()) }
                 })
         }
 
