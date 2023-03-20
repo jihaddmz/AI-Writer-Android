@@ -22,6 +22,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.extensions.animateScaling
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
@@ -96,7 +97,7 @@ fun ScreenHistory(
                 items(count = result.value.size) { index ->
                     val history = result.value[index]
                     Card(
-                        modifier = Modifier.fillMaxHeight(0.2f),
+                        modifier = Modifier.fillMaxHeight(0.2f).animateScaling(),
                         backgroundColor = Blue,
                         shape = Shapes.medium
                     ) {
@@ -135,7 +136,8 @@ fun DialogHistoryEntry(
         Column(
             modifier = Modifier
                 .background(color = Color.White, shape = Shapes.medium)
-                .padding(SpacersSize.medium),
+                .padding(SpacersSize.medium)
+                .animateScaling(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Row(

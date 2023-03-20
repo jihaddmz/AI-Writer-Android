@@ -21,6 +21,7 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.extensions.animateOffsetY
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
@@ -62,28 +63,28 @@ fun ScreenHome(
             // if the user is on base plan subscription, check if we are currently on the same renewal date, if so
             // reset all values on firebase and set the new renewal date, if no, check if currently we are after the
             // renewal date on firebase, if so reset the value on firebase and set the new renewal date
-                HelperFirebaseDatabase.getRenewalDate {
-                    if (it != "null" && it != "")
-                        if (it == HelperDate.getCurrentDateInString()) {
-                            HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
-                            HelperFirebaseDatabase.setRenewalDate()
-                        } else {
-                            val dateInFirebase =
-                                HelperDate.parseStringToDate(it, Constants.DAY_MONTH_YEAR_FORMAT)
-                            val dateNow = HelperDate.parseStringToDate(
-                                HelperDate.parseDateToString(
-                                    Date(),
-                                    Constants.DAY_MONTH_YEAR_FORMAT
-                                ), Constants.DAY_MONTH_YEAR_FORMAT
-                            )
-                            dateNow?.let { dateNow ->
-                                if (dateNow.after(dateInFirebase)) {
-                                    HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
-                                    HelperFirebaseDatabase.setRenewalDate()
-                                }
+            HelperFirebaseDatabase.getRenewalDate {
+                if (it != "null" && it != "")
+                    if (it == HelperDate.getCurrentDateInString()) {
+                        HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                        HelperFirebaseDatabase.setRenewalDate()
+                    } else {
+                        val dateInFirebase =
+                            HelperDate.parseStringToDate(it, Constants.DAY_MONTH_YEAR_FORMAT)
+                        val dateNow = HelperDate.parseStringToDate(
+                            HelperDate.parseDateToString(
+                                Date(),
+                                Constants.DAY_MONTH_YEAR_FORMAT
+                            ), Constants.DAY_MONTH_YEAR_FORMAT
+                        )
+                        dateNow?.let { dateNow ->
+                            if (dateNow.after(dateInFirebase)) {
+                                HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                                HelperFirebaseDatabase.setRenewalDate()
                             }
                         }
-                }
+                    }
+            }
         }
     })
 
@@ -136,8 +137,12 @@ fun MainAppBar(
 ) {
 
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+
         MyIconOutlinedButton(
-            modifier = Modifier.weight(0.5f),
+            modifier = Modifier
+                .weight(0.5f)
+                .animateOffsetY(initialOffsetY = (-100).dp)
+            ,
             imageID = R.drawable.icon_history,
             contentDesc = stringResource(
                 id = R.string.history
@@ -161,7 +166,7 @@ fun MainAppBar(
         MyAnimatedVisibility(visible = !showSearch.value) {
             IconButton(onClick = {
                 showSearch.value = true
-            }) {
+            }, modifier = Modifier.animateOffsetY(initialOffsetY = (-100).dp, delay = 100)) {
                 MyIcon(
                     iconID = R.drawable.icon_search,
                     contentDesc = stringResource(id = R.string.search)
@@ -197,12 +202,14 @@ fun MainAppBar(
                     if (searchText.value.isEmpty()) {
                         listOfPredefinedTemplates.value = Constants.PREDEFINED_TEMPLATES
                     } else listOfPredefinedTemplates.value =
-                        Constants.PREDEFINED_TEMPLATES.filter { it.lowercase().contains(searchText.value.lowercase()) }
+                        Constants.PREDEFINED_TEMPLATES.filter {
+                            it.lowercase().contains(searchText.value.lowercase())
+                        }
                 })
         }
 
         MyIconOutlinedButton(
-            modifier = Modifier.weight(0.5f),
+            modifier = Modifier.weight(0.5f).animateOffsetY(initialOffsetY = (-100).dp, delay = 150),
             imageID = R.drawable.icon_settings,
             contentDesc = stringResource(
                 id = R.string.settings

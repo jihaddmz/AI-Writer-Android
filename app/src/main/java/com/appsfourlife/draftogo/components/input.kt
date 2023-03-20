@@ -25,6 +25,7 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.extensions.animateOffsetX
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -55,7 +56,7 @@ fun input(
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val isGenerateBtnEnabled = remember {
-        mutableStateOf(true)
+        mutableStateOf(false)
     }
 
     val connectionError = stringResource(id = R.string.no_connection)
@@ -72,6 +73,7 @@ fun input(
                         .defaultMinSize(minHeight = 100.dp),
                     onValueChanged = {
                         SettingsNotifier.input.value = TextFieldValue(text = it)
+                        isGenerateBtnEnabled.value = it.isNotEmpty()
                     },
                     placeholder = label,
                     value = SettingsNotifier.input.value.text
@@ -89,7 +91,7 @@ fun input(
 
                     IconButton(onClick = {
                         SettingsNotifier.input.value = TextFieldValue(text = "")
-                    }) {
+                    }, modifier = Modifier.animateOffsetX(initialOffsetX = 100.dp)) {
                         MyIcon(
                             iconID = R.drawable.clear, tint = Blue, contentDesc = stringResource(
                                 id = R.string.clear
@@ -103,7 +105,7 @@ fun input(
                         SettingsNotifier.input.value = Helpers.pasteFromClipBoard(
                             mutableStateOf(SettingsNotifier.input.value), context
                         )
-                    }) {
+                    }, modifier = Modifier.animateOffsetX(initialOffsetX = 100.dp)) {
                         MyIcon(
                             iconID = R.drawable.icon_paste,
                             tint = Blue,
