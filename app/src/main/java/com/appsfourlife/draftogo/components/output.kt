@@ -1,6 +1,5 @@
 package com.appsfourlife.draftogo.components
 
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
@@ -15,8 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.appsfourlife.draftogo.App
-import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -63,7 +60,10 @@ fun Output(
                             if (fromScreen.lowercase() == "email") {
                                 Helpers.shareEmailOutput(outputText.value, emailName, context)
                             } else if (fromScreen.lowercase() == "facebook") {
-                                Helpers.copyToClipBoard(text = outputText.value, msgID = com.appsfourlife.draftogo.R.string.text_copied_facebook)
+                                Helpers.copyToClipBoard(
+                                    text = outputText.value,
+                                    msgID = com.appsfourlife.draftogo.R.string.text_copied_facebook
+                                )
                                 Helpers.shareOutputToFacebook(context, "Hello there")
                             } else if (fromScreen.lowercase() == "twitter") {
                                 Helpers.shareOutputToTwitter(context, outputText.value)
@@ -84,7 +84,11 @@ fun Output(
                         MySpacer(type = "small", widthOrHeight = "width")
 
                         IconButton(onClick = {
-                            Helpers.copyToClipBoard(context = context, text = outputText.value, msgID = com.appsfourlife.draftogo.R.string.text_copied)
+                            Helpers.copyToClipBoard(
+                                context = context,
+                                text = outputText.value,
+                                msgID = com.appsfourlife.draftogo.R.string.text_copied
+                            )
                         }) {
                             MyIcon(
                                 iconID = com.appsfourlife.draftogo.R.drawable.copy,

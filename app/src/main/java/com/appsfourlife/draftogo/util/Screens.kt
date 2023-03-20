@@ -27,4 +27,5 @@ sealed class Screens(val route: String){
     object ScreenGame: Screens("screen_game")
     object ScreenSignIn: Screens("screen_sign_in")
     object ScreenHistory: Screens("screen_history")
+    object ScreenUserAddedTemplate: Screens("screen_user_added_template")
 }

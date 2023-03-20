@@ -24,6 +24,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.*
@@ -36,6 +37,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
@@ -90,99 +92,110 @@ class MainActivity : ComponentActivity() {
                     // region drawer content
                     drawerContent = {
 
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
-                                items(Constants.PREDEFINED_TEMPLATES.size, key = { it }) { index ->
-                                    val text = Constants.PREDEFINED_TEMPLATES[index]
+                        val listOfPredefinedTemplates = remember {
+                            mutableStateOf(listOf<ModelTemplate>())
+                        }
 
-                                    DrawerListItem(
-                                        modifier = Modifier.padding(SpacersSize.medium),
-                                        text = text
-                                    ) {
+                        LaunchedEffect(key1 = true, block = {
+                            coroutineScope.launch(Dispatchers.IO) {
+                                listOfPredefinedTemplates.value = App.dbGenerateText.daoTemplates.getAllTemplates()
+                            }
+                        })
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            items(
+                                listOfPredefinedTemplates.value.size,
+                                key = { it }) { index ->
+                                val text = listOfPredefinedTemplates.value[index].query
 
-                                        SettingsNotifier.resetValues() // clearing values
+                                DrawerListItem(
+                                    modifier = Modifier.padding(SpacersSize.medium),
+                                    text = text
+                                ) {
 
-                                        when (text) {
-                                            App.getTextFromString(R.string.write_an_email) -> {
-                                                navController.navigate(Screens.ScreenEmail.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_blog_top_bar) -> {
-                                                navController.navigate(Screens.ScreenBlog.route)
-                                            }
-                                            App.getTextFromString(R.string.write_an_essay) -> {
-                                                navController.navigate(Screens.ScreenEssay.route)
-                                            }
-                                            App.getTextFromString(R.string.write_an_article_top_bar) -> {
-                                                navController.navigate(Screens.ScreenArticle.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_letter) -> {
-                                                navController.navigate(Screens.ScreenLetter.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_cv) -> {
-                                                navController.navigate(Screens.ScreenCV.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_resume) -> {
-                                                navController.navigate(Screens.ScreenResume.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
-                                                navController.navigate(Screens.ScreenPersonalBio.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
-                                                navController.navigate(Screens.ScreenTwitter.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
-                                                navController.navigate(Screens.ScreenTiktok.route)
-                                            }
-                                            App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
-                                                navController.navigate(Screens.ScreenInstagram.route)
-                                            }
+                                    SettingsNotifier.resetValues() // clearing values
 
-                                            App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
-                                                navController.navigate(Screens.ScreenFacebook.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_linkedin_post_top_bar) -> {
-                                                navController.navigate(Screens.ScreenLinkedIn.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
-                                                navController.navigate(Screens.ScreenYoutube.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_podcast_top_bar) -> {
-                                                navController.navigate(Screens.ScreenPodcast.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_game_script_top_label) -> {
-                                                navController.navigate(Screens.ScreenGame.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_poem_top_bar) -> {
-                                                navController.navigate(Screens.ScreenPoem.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_song_top_bar) -> {
-                                                navController.navigate(Screens.ScreenSong.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_code) -> {
-                                                navController.navigate(Screens.ScreenCode.route)
-                                            }
-                                            App.getTextFromString(R.string.custom) -> {
-                                                navController.navigate(Screens.ScreenCustom.route)
-                                            }
+                                    when (text) {
+                                        App.getTextFromString(R.string.write_an_email) -> {
+                                            navController.navigate(Screens.ScreenEmail.route)
                                         }
-                                        coroutineScope.launch {
-                                            scaffoldState.drawerState.animateTo(
-                                                DrawerValue.Closed,
-                                                anim = tween(durationMillis = Constants.ANIMATION_LENGTH)
-                                            )
+                                        App.getTextFromString(R.string.write_a_blog_top_bar) -> {
+                                            navController.navigate(Screens.ScreenBlog.route)
+                                        }
+                                        App.getTextFromString(R.string.write_an_essay) -> {
+                                            navController.navigate(Screens.ScreenEssay.route)
+                                        }
+                                        App.getTextFromString(R.string.write_an_article_top_bar) -> {
+                                            navController.navigate(Screens.ScreenArticle.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_letter) -> {
+                                            navController.navigate(Screens.ScreenLetter.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_cv) -> {
+                                            navController.navigate(Screens.ScreenCV.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_resume) -> {
+                                            navController.navigate(Screens.ScreenResume.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
+                                            navController.navigate(Screens.ScreenPersonalBio.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
+                                            navController.navigate(Screens.ScreenTwitter.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
+                                            navController.navigate(Screens.ScreenTiktok.route)
+                                        }
+                                        App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
+                                            navController.navigate(Screens.ScreenInstagram.route)
                                         }
 
+                                        App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
+                                            navController.navigate(Screens.ScreenFacebook.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_linkedin_post_top_bar) -> {
+                                            navController.navigate(Screens.ScreenLinkedIn.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
+                                            navController.navigate(Screens.ScreenYoutube.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_podcast_top_bar) -> {
+                                            navController.navigate(Screens.ScreenPodcast.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_game_script_top_label) -> {
+                                            navController.navigate(Screens.ScreenGame.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_poem_top_bar) -> {
+                                            navController.navigate(Screens.ScreenPoem.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_song_top_bar) -> {
+                                            navController.navigate(Screens.ScreenSong.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_code) -> {
+                                            navController.navigate(Screens.ScreenCode.route)
+                                        }
+                                        App.getTextFromString(R.string.custom) -> {
+                                            navController.navigate(Screens.ScreenCustom.route)
+                                        }
                                     }
+                                    coroutineScope.launch {
+                                        scaffoldState.drawerState.animateTo(
+                                            DrawerValue.Closed,
+                                            anim = tween(durationMillis = Constants.ANIMATION_LENGTH)
+                                        )
+                                    }
+
                                 }
                             }
+                        }
                     }
                     // endregion
                 ) {
@@ -261,6 +274,11 @@ class MainActivity : ComponentActivity() {
                                     composable(route = Screens.ScreenArticle.route) {
                                         MyBackHandler(navController = navController)
                                         ScreenArticle(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenUserAddedTemplate.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenUserAddedTemplate(navController = navController)
                                     }
 
                                     composable(route = Screens.ScreenBlog.route) {

@@ -4,6 +4,8 @@ import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -15,16 +17,39 @@ import androidx.compose.ui.text.font.FontWeight
 import com.appsfourlife.draftogo.components.MyButton
 import com.appsfourlife.draftogo.components.MyTextTitle
 import com.appsfourlife.draftogo.components.MyVideo
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
+import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun ScreenSignIn(
 ) {
     val currentActivity = LocalContext.current as Activity
+    val coroutineScope = rememberCoroutineScope()
 
     SettingsNotifier.disableDrawerContent.value = true
+
+    LaunchedEffect(key1 = true, block = {
+        coroutineScope.launch(Dispatchers.IO) {
+            Constants.PREDEFINED_TEMPLATES.forEach { template ->
+                if (App.dbGenerateText.daoTemplates.getTemplateByQuery(
+                        template
+                    ) == null
+                )
+                    App.dbGenerateText.daoTemplates.insertTemplate(
+                        ModelTemplate(template, "")
+                    )
+                else
+                    return@forEach
+            }
+            SettingsNotifier.predefinedTemplates =
+                App.dbGenerateText.daoTemplates.getAllTemplates()
+        }
+    })
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
@@ -44,7 +69,9 @@ fun ScreenSignIn(
         ) {
             MyTextTitle(text = stringResource(id = R.string.login), fontWeight = FontWeight.Bold, color = Color.White)
 
-            MyVideo(modifier = Modifier.fillMaxWidth().fillMaxHeight(0.5f), videoUri = "https://user-images.githubusercontent.com/124468932/224495423-a39f624f-836f-4526-8e0a-2e51c814e960.mp4")
+            MyVideo(modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.5f), videoUri = "https://user-images.githubusercontent.com/124468932/224495423-a39f624f-836f-4526-8e0a-2e51c814e960.mp4")
             
             MyButton(
                 modifier = Modifier.fillMaxWidth(),

@@ -4,15 +4,16 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.appsfourlife.draftogo.helpers.WindowInfo
 import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 
 @Composable
-fun MyImage(
+fun MyUrlImage(
     modifier: Modifier = Modifier,
-    imageID: Int, contentDesc: String
+    imageUrl: String,
+    contentDesc: String
 ) {
 
     val imageSize =
@@ -24,7 +25,7 @@ fun MyImage(
 
     Image(
         modifier = modifier.size(imageSize),
-        painter = painterResource(id = imageID),
+        painter = rememberAsyncImagePainter(model = imageUrl),
         contentDescription = contentDesc
     )
 }

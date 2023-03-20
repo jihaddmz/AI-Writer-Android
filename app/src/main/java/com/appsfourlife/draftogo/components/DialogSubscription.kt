@@ -230,12 +230,11 @@ fun DialogSubscriptionNbOfWordsExceeded(
                             SettingsNotifier.showLoadingDialog.value = true
                             HelperAds.loadAds {
                                 HelperAds.showAds(currentActivity) { amount ->
-                                    HelperFirebaseDatabase.decrementNbOfWords(500)
-                                    val nbOfWords = HelperSharedPreference.getNbOfWordsGenerated()
+                                    HelperFirebaseDatabase.updateNbOfWords()
                                     HelperSharedPreference.setInt(
                                         HelperSharedPreference.SP_SETTINGS,
                                         HelperSharedPreference.SP_SETTINGS_NB_OF_WORDS_GENERATED,
-                                        nbOfWords - 500
+                                        Constants.BASE_PLAN_MAX_NB_OF_WORDS - 500
                                     )
                                     showDialog.value = false
                                 }

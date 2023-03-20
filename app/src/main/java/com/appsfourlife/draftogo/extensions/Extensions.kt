@@ -13,11 +13,14 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.WritingType
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
+import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.util.Screens
+import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyGridScope.sectionsGridContent(
-    list: List<String>,
+    list: List<ModelTemplate>,
     columns: Int,
     state: LazyListState,
     navController: NavController,
@@ -28,14 +31,20 @@ fun LazyGridScope.sectionsGridContent(
             val animation = tween<Float>(durationMillis = 300, delayMillis = delay, easing = easing)
             val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
             val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
-            val text = list[index]
+            val text = list[index].query
+            val imageUrl = list[index].imageUrl
             WritingType(
                 modifier = Modifier.graphicsLayer(
                     alpha = alpha,
                     scaleX = scale,
                     scaleY = scale
                 ),
-                text = text
+                text = text,
+                onLongClick = {
+                    Helpers.logD("Entered e")
+                    SettingsNotifier.showDeleteTemplateDialog.value = true
+                    SettingsNotifier.templateToDelete = ModelTemplate(query = text, imageUrl)
+                }
             ) {
                 when (text) {
                     App.getTextFromString(R.string.write_an_email) -> {
@@ -104,6 +113,10 @@ fun LazyGridScope.sectionsGridContent(
                     }
                     App.getTextFromString(R.string.custom) -> {
                         navController.navigate(Screens.ScreenCustom.route)
+                    }
+                    else -> {
+                        SettingsNotifier.currentQuerySection = text
+                        navController.navigate(Screens.ScreenUserAddedTemplate.route)
                     }
                 }
 

@@ -153,10 +153,8 @@ object HelperFirebaseDatabase {
             .update("nbOfGenerationsConsumed", nbOfConsumed)
     }
 
-    fun decrementNbOfWords(value: Int) {
-        val nbOfWords = HelperSharedPreference.getNbOfWordsGenerated()
-
+    fun updateNbOfWords() {
         firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
-            .update("nbOfWordsGenerated", nbOfWords - value)
+            .update("nbOfWordsGenerated", Constants.BASE_PLAN_MAX_NB_OF_WORDS - 500)
     }
 }

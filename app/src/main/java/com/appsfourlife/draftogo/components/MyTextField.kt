@@ -2,6 +2,7 @@ package com.appsfourlife.draftogo.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,6 +24,12 @@ fun MyTextField(
     trailingIcon: Int = 0,
     trailingIconTint: Color = Color.White,
     cursorColor: Color = Blue,
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(
+        backgroundColor = Color.Transparent,
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+        cursorColor = cursorColor,
+    ),
     onTrailingIconClick: () -> Unit = {},
     textColor: Color = Color.Black,
     onValueChanged: (String) -> Unit
@@ -46,12 +53,7 @@ fun MyTextField(
                     onTrailingIconClick()
                 }, iconID = trailingIcon, contentDesc = "trailing icon", tint = trailingIconTint)
         },
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            cursorColor = cursorColor,
-        ),
+        colors = colors,
         textStyle = TextStyle(fontWeight = fontWeight, fontSize = fontSize, color = textColor),
         placeholder = { MyText(text = placeholder, color = Gray) }
     )
