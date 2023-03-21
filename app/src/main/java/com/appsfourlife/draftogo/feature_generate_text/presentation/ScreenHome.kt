@@ -54,8 +54,10 @@ fun ScreenHome(
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
 
-            SettingsNotifier.predefinedTemplates.value = App.dbGenerateText.daoTemplates.getAllTemplates()
-            SettingsNotifier.predefinedTemplates.value = SettingsNotifier.predefinedTemplates.value.sortedBy { it.userAdded }
+            SettingsNotifier.predefinedTemplates.value =
+                App.dbGenerateText.daoTemplates.getAllTemplates()
+            SettingsNotifier.predefinedTemplates.value =
+                SettingsNotifier.predefinedTemplates.value.sortedBy { it.userAdded }
 
             HelperFirebaseDatabase.fetchAppVersion {
                 isAppOutDated.value = it != BuildConfig.VERSION_NAME
@@ -99,7 +101,8 @@ fun ScreenHome(
                 onTemplateAdded = {
                     coroutineScope.launch(Dispatchers.IO) {
                         SettingsNotifier.predefinedTemplates.value =
-                            App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
+                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                                .sortedBy { it.userAdded }
                     }
                 })
 
@@ -114,7 +117,8 @@ fun ScreenHome(
                         App.dbGenerateText.daoTemplates.deleteTemplate(modelTemplate)
                         delay(1000)
                         SettingsNotifier.predefinedTemplates.value =
-                            App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
+                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                                .sortedBy { it.userAdded }
                     }
                 }
             }
@@ -221,7 +225,8 @@ fun MainAppBar(
             LaunchedEffect(key1 = true, block = {
                 focusRequester.requestFocus()
 
-                initialList = App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
+                initialList =
+                    App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
             })
 
             MyTextField(modifier = Modifier

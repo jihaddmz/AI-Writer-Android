@@ -31,7 +31,6 @@ import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.revenuecat.purchases.*
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.interfaces.ReceiveOfferingsCallback
-import com.revenuecat.purchases.models.StoreProduct
 import com.revenuecat.purchases.models.StoreTransaction
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -106,7 +105,6 @@ fun DialogSubscription(
                                         error: PurchasesError,
                                         userCancelled: Boolean
                                     ) {
-                                        HelperUI.showToast(currentActivity, error.message)
                                     }
 
                                 })
@@ -154,8 +152,8 @@ fun DialogSubscriptionNbOfWordsExceeded(
     showDialog: MutableState<Boolean>
 ) {
 
-    val plusProduct = remember {
-        mutableStateOf<StoreProduct?>(null)
+    val plusPackage = remember {
+        mutableStateOf<Package?>(null)
     }
     val currentActivity = LocalContext.current as Activity
 
@@ -186,28 +184,26 @@ fun DialogSubscriptionNbOfWordsExceeded(
                 }
 
                 override fun onReceived(offerings: Offerings) {
-                    plusProduct.value =
-                        offerings.current?.get(Constants.SUBSCRIPTION_TYPE_PLUS)?.product
+                    plusPackage.value =
+                        offerings.current?.get("plus")
                 }
 
             })
 
             MyAnimatedVisibility(
                 modifier = Modifier.fillMaxWidth(),
-                visible = plusProduct.value != null
+                visible = plusPackage.value != null
             ) {
-                val product = plusProduct.value!!
                 SubscriptionItem(
-                    title = product.title.split("(")[0].trim(),
-                    description = product.description,
-                    price = product.price
+                    title = plusPackage.value!!.product.title.split("(")[0].trim(),
+                    description = plusPackage.value!!.product.description,
+                    price = plusPackage.value!!.product.price
                 ) {
                     Purchases.sharedInstance.purchaseProductWith(
                         currentActivity,
-                        product,
+                        plusPackage.value!!.product,
                         upgradeInfo = UpgradeInfo(oldSku = Constants.SUBSCRIPTION_PRODUCT_MONTHLY_ID),
                         onError = { error, userCancelled ->
-                            HelperUI.showToast(msg = error.message)
                         },
                         onSuccess = { purchase: StoreTransaction?, customerInfo: CustomerInfo ->
                             if (customerInfo.entitlements[Constants.SUBSCRIPTION_TYPE_PLUS]?.isActive == true) {
@@ -271,7 +267,7 @@ fun SubscriptionItem(
                 .background(color = Blue, shape = Shapes.small)
                 .padding(SpacersSize.small)
         )
-        MyText(text = price)
+        MyText(text = "$price/month")
 
         MySpacer(type = "medium")
 

@@ -148,13 +148,10 @@
     <string name="not_renewable">Not Renewable</string>
     <string name="no_input_entered">No input entered</string>
     <string name="dutch">Dutch</string>
-    <string name="sign_in_title">There is new features that required you to sign in order to use them, so are you in?</string>
     <string name="sign_in">Sign In</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="learn_more">Learn More</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="signed_out_successfully">Signed out Successfully</string>
     <string name="login">Login</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="history">History</string>
@@ -168,11 +165,12 @@
     <string name="watch_an_ad">Watch an Ad -></string>
     <string name="loading_ad">Loading Ad</string>
     <string name="nb_words_left">%d words left</string>
-    <string name="you_have_reached_max_nb_of_words_generated">"You have reached the max number of words you can generate on this plan, upgrade to the plus plan to enjoy unlimited number of generations "</string>
+    <string name="you_have_reached_max_nb_of_words_generated">You have reached the max number of words (45000) per month you can generate on this plan, please upgrade to the plus plan to enjoy unlimited number of generations</string>
     <string name="query">Query</string>
     <string name="add_template_example">Write a LinkedIn message</string>
     <string name="delete_template_confirmation">Are you sure you want to delete this template</string>
-    <string name="about">About...</string>
+    <string name="about">About…</string>
     <string name="no_query_defined">Please consider defining a query</string>
     <string name="choose_image">Choose Image</string>
+    <string name="plus_feature">This is a Plus feature, subscribe to the Plus plan to start adding your own templates</string>
 </resources>

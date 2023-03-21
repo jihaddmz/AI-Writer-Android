@@ -15,10 +15,13 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelTemplateIcon
+import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
+import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -80,6 +83,11 @@ fun DialogAddTemplate(
                 MySpacer(type = "medium", widthOrHeight = "width")
                 MyUrlImage(
                     modifier = Modifier.clickable {
+                        if (!SettingsNotifier.isConnected.value) {
+                            HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
+                            return@clickable
+                        }
+
                         showIconChooserDialog.value = true
                     },
                     imageUrl = clickedImageUrl.value,
@@ -90,6 +98,12 @@ fun DialogAddTemplate(
             MySpacer(type = "small")
 
             MyButton(text = stringResource(id = R.string.add), modifier = Modifier.fillMaxWidth()) {
+
+                if (HelperSharedPreference.getSubscriptionType() != Constants.SUBSCRIPTION_TYPE_PLUS){
+                    HelperUI.showToast(msg = App.getTextFromString(R.string.plus_feature))
+                    return@MyButton
+                }
+
                 if (input.isEmpty()) {
                     HelperUI.showToast(msg = App.getTextFromString(R.string.no_query_defined))
                     return@MyButton
