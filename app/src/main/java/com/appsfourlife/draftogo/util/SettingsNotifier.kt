@@ -29,7 +29,7 @@ object SettingsNotifier {
     var mRewardedAds: RewardedAd? = null
     var disableDrawerContent = mutableStateOf(false)
     var templateType = ""
-    var predefinedTemplates = listOf<ModelTemplate>()
+    var predefinedTemplates = mutableStateOf(listOf<ModelTemplate>())
     var templateToDelete: ModelTemplate? = null
     var currentQuerySection: String? = null
 

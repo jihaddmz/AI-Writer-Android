@@ -48,17 +48,14 @@ fun ScreenHome(
     val isAppOutDated = remember {
         mutableStateOf(false)
     }
-    val listOfPredefinedTemplates = remember {
-        mutableStateOf(SettingsNotifier.predefinedTemplates)
-    }
 
     SettingsNotifier.disableDrawerContent.value = false
 
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
 
-            SettingsNotifier.predefinedTemplates = App.dbGenerateText.daoTemplates.getAllTemplates()
-            listOfPredefinedTemplates.value = SettingsNotifier.predefinedTemplates.sortedBy { it.userAdded }
+            SettingsNotifier.predefinedTemplates.value = App.dbGenerateText.daoTemplates.getAllTemplates()
+            SettingsNotifier.predefinedTemplates.value = SettingsNotifier.predefinedTemplates.value.sortedBy { it.userAdded }
 
             HelperFirebaseDatabase.fetchAppVersion {
                 isAppOutDated.value = it != BuildConfig.VERSION_NAME
@@ -101,9 +98,8 @@ fun ScreenHome(
                 showDialog = SettingsNotifier.showAddTemplateDialog,
                 onTemplateAdded = {
                     coroutineScope.launch(Dispatchers.IO) {
-                        listOfPredefinedTemplates.value =
+                        SettingsNotifier.predefinedTemplates.value =
                             App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
-                        SettingsNotifier.predefinedTemplates = listOfPredefinedTemplates.value
                     }
                 })
 
@@ -114,12 +110,11 @@ fun ScreenHome(
                 )
             ) {
                 coroutineScope.launch(Dispatchers.IO) {
-                    SettingsNotifier.templateToDelete?.let {
-                        App.dbGenerateText.daoTemplates.deleteTemplate(it)
+                    SettingsNotifier.templateToDelete?.let { modelTemplate ->
+                        App.dbGenerateText.daoTemplates.deleteTemplate(modelTemplate)
                         delay(1000)
-                        listOfPredefinedTemplates.value =
-                            App.dbGenerateText.daoTemplates.getAllTemplates()
-                        SettingsNotifier.predefinedTemplates = listOfPredefinedTemplates.value
+                        SettingsNotifier.predefinedTemplates.value =
+                            App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
                     }
                 }
             }
@@ -139,7 +134,6 @@ fun ScreenHome(
         MainAppBar(
             navController = navController,
             coroutineScope = coroutineScope,
-            listOfPredefinedTemplates = listOfPredefinedTemplates
         )
 
         MySpacer(type = "small")
@@ -153,7 +147,7 @@ fun ScreenHome(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             content = {
                 sectionsGridContent(
-                    list = listOfPredefinedTemplates.value,
+                    list = SettingsNotifier.predefinedTemplates.value,
                     2,
                     state,
                     navController,
@@ -167,9 +161,7 @@ fun MainAppBar(
     modifier: Modifier = Modifier,
     navController: NavController,
     coroutineScope: CoroutineScope,
-    listOfPredefinedTemplates: MutableState<List<ModelTemplate>>
 ) {
-
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround
@@ -222,12 +214,14 @@ fun MainAppBar(
 
         }
 
+        var initialList = listOf<ModelTemplate>()
         MyAnimatedVisibility(visible = showSearch.value) {
-
             val focusRequester = FocusRequester()
 
             LaunchedEffect(key1 = true, block = {
                 focusRequester.requestFocus()
+
+                initialList = App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
             })
 
             MyTextField(modifier = Modifier
@@ -242,14 +236,14 @@ fun MainAppBar(
                 onTrailingIconClick = {
                     searchText.value = ""
                     showSearch.value = false
-                    listOfPredefinedTemplates.value = SettingsNotifier.predefinedTemplates
+                    SettingsNotifier.predefinedTemplates.value = initialList
                 },
                 onValueChanged = { itr ->
                     searchText.value = itr
                     if (searchText.value.isEmpty()) {
-                        listOfPredefinedTemplates.value = SettingsNotifier.predefinedTemplates
-                    } else listOfPredefinedTemplates.value =
-                        SettingsNotifier.predefinedTemplates.filter {
+                        SettingsNotifier.predefinedTemplates.value = initialList
+                    } else SettingsNotifier.predefinedTemplates.value =
+                        initialList.filter {
                             it.query.lowercase().contains(searchText.value.lowercase())
                         }
                 })

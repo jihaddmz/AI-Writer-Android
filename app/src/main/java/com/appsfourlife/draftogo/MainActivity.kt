@@ -24,7 +24,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.*
@@ -37,7 +36,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
@@ -92,24 +90,14 @@ class MainActivity : ComponentActivity() {
                     // region drawer content
                     drawerContent = {
 
-                        val listOfPredefinedTemplates = remember {
-                            mutableStateOf(listOf<ModelTemplate>())
-                        }
-
-                        LaunchedEffect(key1 = true, block = {
-                            coroutineScope.launch(Dispatchers.IO) {
-                                listOfPredefinedTemplates.value =
-                                    App.dbGenerateText.daoTemplates.getAllTemplates()
-                            }
-                        })
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxWidth()
                         ) {
                             items(
-                                listOfPredefinedTemplates.value.size,
+                                SettingsNotifier.predefinedTemplates.value.size,
                                 key = { it }) { index ->
-                                val text = listOfPredefinedTemplates.value[index].query
+                                val text = SettingsNotifier.predefinedTemplates.value[index].query
 
                                 DrawerListItem(
                                     modifier = Modifier.padding(SpacersSize.medium),

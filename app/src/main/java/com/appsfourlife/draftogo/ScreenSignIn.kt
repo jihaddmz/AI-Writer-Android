@@ -46,8 +46,8 @@ fun ScreenSignIn(
                 else
                     return@forEach
             }
-            SettingsNotifier.predefinedTemplates =
-                App.dbGenerateText.daoTemplates.getAllTemplates()
+            SettingsNotifier.predefinedTemplates.value =
+                App.dbGenerateText.daoTemplates.getAllTemplates() as MutableList<ModelTemplate>
         }
     })
 
