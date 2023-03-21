@@ -20,17 +20,20 @@ import com.appsfourlife.draftogo.ui.theme.SpacersSize
 fun WritingType(
     modifier: Modifier = Modifier,
     text: String,
+    imageUrl: String,
     onLongClick: () -> Unit,
     onClick: () -> Unit,
 ) {
 
-    Card(modifier = modifier
-        .defaultMinSize(minHeight = 100.dp)
-        .combinedClickable(onClick = {
-            onClick()
-        }, onLongClick = {
-            onLongClick()
-        }), shape = Shapes.medium, backgroundColor = Color.White) {
+    Card(
+        modifier = modifier
+            .defaultMinSize(minHeight = 100.dp)
+            .combinedClickable(onClick = {
+                onClick()
+            }, onLongClick = {
+                onLongClick()
+            }), shape = Shapes.medium, backgroundColor = Color.White
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -61,15 +64,21 @@ fun WritingType(
                 stringResource(id = R.string.write_a_code) -> R.drawable.icon_code
                 stringResource(id = R.string.custom) -> R.drawable.icon_customize
                 else -> {
-                    R.drawable.icon_customize
+                    if (imageUrl.isEmpty())
+                        R.drawable.icon_customize
+                    else
+                        0
                 }
             }
 
-            MyImage(
-                modifier = Modifier,
-                imageID = imageID,
-                contentDesc = text
-            )
+            if (imageID != 0)
+                MyImage(
+                    modifier = Modifier,
+                    imageID = imageID,
+                    contentDesc = text
+                )
+            else
+                MyUrlImage(imageUrl = imageUrl, contentDesc = text)
 
             Spacer(modifier = Modifier.height(SpacersSize.small))
 

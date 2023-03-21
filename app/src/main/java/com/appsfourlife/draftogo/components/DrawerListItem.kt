@@ -14,6 +14,7 @@ import com.appsfourlife.draftogo.R
 fun DrawerListItem(
     modifier: Modifier = Modifier,
     text: String,
+    imageUrl: String,
     onClick: () -> Unit
 ) {
     Row(
@@ -48,11 +49,17 @@ fun DrawerListItem(
             stringResource(id = R.string.write_a_code) -> R.drawable.icon_code
             stringResource(id = R.string.custom) -> R.drawable.icon_customize
             else -> {
-                R.drawable.icon_customize
+                if (imageUrl.isEmpty())
+                    R.drawable.icon_customize
+                else
+                    0
             }
         }
 
-        MyImage(imageID = iconID, contentDesc = text)
+        if (iconID != 0)
+            MyImage(imageID = iconID, contentDesc = text)
+        else
+            MyUrlImage(imageUrl = imageUrl, contentDesc = text)
 
         MyText(text = text)
     }

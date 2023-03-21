@@ -98,10 +98,12 @@ class MainActivity : ComponentActivity() {
                                 SettingsNotifier.predefinedTemplates.value.size,
                                 key = { it }) { index ->
                                 val text = SettingsNotifier.predefinedTemplates.value[index].query
+                                val imageUrl = SettingsNotifier.predefinedTemplates.value[index].imageUrl
 
                                 DrawerListItem(
                                     modifier = Modifier.padding(SpacersSize.medium),
-                                    text = text
+                                    text = text,
+                                    imageUrl = imageUrl
                                 ) {
 
                                     SettingsNotifier.resetValues() // clearing values

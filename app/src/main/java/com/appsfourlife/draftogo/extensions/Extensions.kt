@@ -40,6 +40,7 @@ fun LazyGridScope.sectionsGridContent(
                     scaleY = scale
                 ),
                 text = text,
+                imageUrl = imageUrl,
                 onLongClick = {
                     SettingsNotifier.showDeleteTemplateDialog.value = true
                     SettingsNotifier.templateToDelete = ModelTemplate(query = text, imageUrl, userAdded)

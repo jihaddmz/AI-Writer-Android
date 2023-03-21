@@ -4,8 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import coil.decode.SvgDecoder
+import coil.request.ImageRequest
 import com.appsfourlife.draftogo.helpers.WindowInfo
 import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 
@@ -25,7 +29,11 @@ fun MyUrlImage(
 
     Image(
         modifier = modifier.size(imageSize),
-        painter = rememberAsyncImagePainter(model = imageUrl),
-        contentDescription = contentDesc
+        painter = rememberAsyncImagePainter(model = ImageRequest.Builder(LocalContext.current)
+            .data(imageUrl)
+            .decoderFactory(SvgDecoder.Factory())
+            .build()),
+        contentDescription = contentDesc,
+        contentScale = ContentScale.Crop
     )
 }
