@@ -170,9 +170,9 @@
     <string name="nb_words_left">%d words left</string>
     <string name="you_have_reached_max_nb_of_words_generated">"You have reached the max number of words you can generate on this plan, upgrade to the plus plan to enjoy unlimited number of generations "</string>
     <string name="query">Query</string>
-    <string name="image_url">Image Url</string>
     <string name="add_template_example">Write a LinkedIn message</string>
     <string name="delete_template_confirmation">Are you sure you want to delete this template</string>
     <string name="about">About...</string>
     <string name="no_query_defined">Please consider defining a query</string>
+    <string name="choose_image">Choose Image</string>
 </resources>

@@ -24,6 +24,7 @@ fun MyTextField(
     trailingIcon: Int = 0,
     trailingIconTint: Color = Color.White,
     cursorColor: Color = Blue,
+    singleLine: Boolean = false,
     colors: TextFieldColors = TextFieldDefaults.textFieldColors(
         backgroundColor = Color.Transparent,
         focusedIndicatorColor = Color.Transparent,
@@ -47,6 +48,7 @@ fun MyTextField(
         onValueChange = {
             onValueChanged(it)
         },
+        singleLine = singleLine,
         trailingIcon = {
             if (trailingIcon != 0)
                 MyIcon(modifier = Modifier.clickable {

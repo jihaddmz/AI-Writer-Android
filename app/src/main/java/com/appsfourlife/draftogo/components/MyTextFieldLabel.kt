@@ -15,6 +15,7 @@ fun myTextFieldLabel(
     modifier: Modifier = Modifier,
     label: String,
     placeholder: String,
+    singleLine: Boolean = false,
     onValueChange: (String) -> Unit = {}
 ): String {
 
@@ -34,6 +35,7 @@ fun myTextFieldLabel(
                 input.value = it
                 onValueChange(it)
             },
+            singleLine = singleLine,
             placeholder = placeholder,
             colors = TextFieldDefaults.textFieldColors(
                 backgroundColor = Color.Transparent,
