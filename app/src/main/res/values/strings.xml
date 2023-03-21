@@ -172,5 +172,6 @@
     <string name="about">About…</string>
     <string name="no_query_defined">Please consider defining a query</string>
     <string name="choose_image">Choose Image</string>
-    <string name="plus_feature">This is a Plus feature, subscribe to the Plus plan to start adding your own templates</string>
+    <string name="speaker">Speaker</string>
+    <string name="plus_feature">This is a Plus feature, subscribe to the Plus plan to start using this feature</string>
 </resources>

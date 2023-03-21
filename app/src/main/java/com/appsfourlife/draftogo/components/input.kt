@@ -91,6 +91,7 @@ fun input(
 
                     IconButton(onClick = {
                         SettingsNotifier.input.value = TextFieldValue(text = "")
+                        isGenerateBtnEnabled.value = false
                     }, modifier = Modifier.animateOffsetX(initialOffsetX = 100.dp)) {
                         MyIcon(
                             iconID = R.drawable.clear, tint = Blue, contentDesc = stringResource(
@@ -250,7 +251,7 @@ private fun getResponse(
                 SettingsNotifier.outputList.clear() // this to not make the list append entries each time
                 for (i in 0 until response.getJSONArray("choices").length()) {
                     val text =
-                        response.getJSONArray("choices").getJSONObject(i).getString("text")
+                        response.getJSONArray("choices").getJSONObject(i).getString("text").trim()
 
                     SettingsNotifier.outputList.add(
                         text
@@ -265,7 +266,7 @@ private fun getResponse(
                 isGenerateBtnEnabled.value = true
             } else { // 1 output to generate
                 val responseMsg: String =
-                    response.getJSONArray("choices").getJSONObject(0).getString("text")
+                    response.getJSONArray("choices").getJSONObject(0).getString("text").trim()
                 coroutineScope.launch(Dispatchers.IO)
                 {
                     HelperFirebaseDatabase.writeHistoryEntry(
