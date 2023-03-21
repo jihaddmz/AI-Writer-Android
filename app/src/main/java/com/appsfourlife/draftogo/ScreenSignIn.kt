@@ -41,7 +41,7 @@ fun ScreenSignIn(
                     ) == null
                 )
                     App.dbGenerateText.daoTemplates.insertTemplate(
-                        ModelTemplate(template, "")
+                        ModelTemplate(template, "", 1)
                     )
                 else
                     return@forEach

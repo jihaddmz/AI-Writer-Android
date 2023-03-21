@@ -59,7 +59,7 @@ fun DialogAddTemplate(
 
             MyButton(text = stringResource(id = R.string.add), modifier = Modifier.fillMaxWidth()) {
                 coroutineScope.launch(Dispatchers.IO) {
-                    App.dbGenerateText.daoTemplates.insertTemplate(ModelTemplate(query = input, imageUrl = ""))
+                    App.dbGenerateText.daoTemplates.insertTemplate(ModelTemplate(query = input, imageUrl = "", 0))
                     showDialog.value = false
 
                     Timer().schedule(timerTask {

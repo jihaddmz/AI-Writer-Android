@@ -14,7 +14,6 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.WritingType
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
-import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -33,6 +32,7 @@ fun LazyGridScope.sectionsGridContent(
             val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
             val text = list[index].query
             val imageUrl = list[index].imageUrl
+            val userAdded = list[index].userAdded
             WritingType(
                 modifier = Modifier.graphicsLayer(
                     alpha = alpha,
@@ -41,9 +41,8 @@ fun LazyGridScope.sectionsGridContent(
                 ),
                 text = text,
                 onLongClick = {
-                    Helpers.logD("Entered e")
                     SettingsNotifier.showDeleteTemplateDialog.value = true
-                    SettingsNotifier.templateToDelete = ModelTemplate(query = text, imageUrl)
+                    SettingsNotifier.templateToDelete = ModelTemplate(query = text, imageUrl, userAdded)
                 }
             ) {
                 when (text) {

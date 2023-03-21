@@ -6,5 +6,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "table_template")
 data class ModelTemplate(
     @PrimaryKey val query: String,
-    val imageUrl: String
+    val imageUrl: String,
+    val userAdded: Int
 )

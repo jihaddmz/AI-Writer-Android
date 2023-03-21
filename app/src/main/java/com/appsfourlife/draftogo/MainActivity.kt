@@ -98,7 +98,8 @@ class MainActivity : ComponentActivity() {
 
                         LaunchedEffect(key1 = true, block = {
                             coroutineScope.launch(Dispatchers.IO) {
-                                listOfPredefinedTemplates.value = App.dbGenerateText.daoTemplates.getAllTemplates()
+                                listOfPredefinedTemplates.value =
+                                    App.dbGenerateText.daoTemplates.getAllTemplates()
                             }
                         })
                         LazyColumn(
@@ -184,6 +185,10 @@ class MainActivity : ComponentActivity() {
                                         }
                                         App.getTextFromString(R.string.custom) -> {
                                             navController.navigate(Screens.ScreenCustom.route)
+                                        }
+                                        else -> {
+                                            SettingsNotifier.currentQuerySection = text
+                                            navController.navigate(Screens.ScreenUserAddedTemplate.route)
                                         }
                                     }
                                     coroutineScope.launch {

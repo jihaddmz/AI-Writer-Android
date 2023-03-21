@@ -58,8 +58,7 @@ fun ScreenHome(
         coroutineScope.launch(Dispatchers.IO) {
 
             SettingsNotifier.predefinedTemplates = App.dbGenerateText.daoTemplates.getAllTemplates()
-            listOfPredefinedTemplates.value = SettingsNotifier.predefinedTemplates
-            Collections.reverse(listOfPredefinedTemplates.value)
+            listOfPredefinedTemplates.value = SettingsNotifier.predefinedTemplates.sortedBy { it.userAdded }
 
             HelperFirebaseDatabase.fetchAppVersion {
                 isAppOutDated.value = it != BuildConfig.VERSION_NAME
@@ -103,8 +102,7 @@ fun ScreenHome(
                 onTemplateAdded = {
                     coroutineScope.launch(Dispatchers.IO) {
                         listOfPredefinedTemplates.value =
-                            App.dbGenerateText.daoTemplates.getAllTemplates()
-                        Collections.reverse(listOfPredefinedTemplates.value)
+                            App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
                         SettingsNotifier.predefinedTemplates = listOfPredefinedTemplates.value
                     }
                 })
