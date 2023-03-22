@@ -22,6 +22,7 @@ import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateOffsetY
+import com.appsfourlife.draftogo.extensions.animateScaling
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.helpers.*
@@ -201,14 +202,18 @@ fun MainAppBar(
         }
 
         val showSearch = remember {
+            mutableStateOf(true)
+        }
+        val showSearchExpanded = remember {
             mutableStateOf(false)
         }
         val searchText = remember {
             mutableStateOf("")
         }
-        MyAnimatedVisibility(visible = !showSearch.value) {
+        if (showSearch.value) {
             IconButton(onClick = {
-                showSearch.value = true
+                showSearch.value = false
+                showSearchExpanded.value = true
             }, modifier = Modifier.animateOffsetY(initialOffsetY = (-100).dp, delay = 200)) {
                 MyIcon(
                     iconID = R.drawable.icon_search,
@@ -219,7 +224,7 @@ fun MainAppBar(
         }
 
         var initialList = listOf<ModelTemplate>()
-        MyAnimatedVisibility(visible = showSearch.value) {
+        if (showSearchExpanded.value) {
             val focusRequester = FocusRequester()
 
             LaunchedEffect(key1 = true, block = {
@@ -230,6 +235,7 @@ fun MainAppBar(
             })
 
             MyTextField(modifier = Modifier
+                .animateScaling()
                 .weight(1f)
                 .focusRequester(focusRequester)
                 .background(color = Blue, shape = Shapes.medium),
@@ -240,7 +246,8 @@ fun MainAppBar(
                 trailingIcon = R.drawable.icon_wrong,
                 onTrailingIconClick = {
                     searchText.value = ""
-                    showSearch.value = false
+                    showSearchExpanded.value = false
+                    showSearch.value = true
                     SettingsNotifier.predefinedTemplates.value = initialList
                 },
                 onValueChanged = { itr ->
