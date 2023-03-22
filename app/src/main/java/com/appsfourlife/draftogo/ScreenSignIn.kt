@@ -69,9 +69,13 @@ fun ScreenSignIn(
         ) {
             MyTextTitle(text = stringResource(id = R.string.login), fontWeight = FontWeight.Bold, color = Color.White)
 
+//            MyVideo(modifier = Modifier
+//                .fillMaxWidth()
+//                .fillMaxHeight(0.5f), videoUri = "https://user-images.githubusercontent.com/124468932/224495423-a39f624f-836f-4526-8e0a-2e51c814e960.mp4")
+
             MyVideo(modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.5f), videoUri = "https://user-images.githubusercontent.com/124468932/224495423-a39f624f-836f-4526-8e0a-2e51c814e960.mp4")
+                .weight(1f), videoUri = "https://firebasestorage.googleapis.com/v0/b/ai-writer-9832b.appspot.com/o/Draftogo%20promo%20video%20android_720p%20(1).mp4?alt=media&token=b7afc317-e712-48a1-980d-e8d7e858ab32")
             
             MyButton(
                 modifier = Modifier.fillMaxWidth(),
