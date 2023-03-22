@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.util
 
+import android.speech.tts.TextToSpeech
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -10,14 +11,15 @@ import com.google.android.gms.ads.rewarded.RewardedAd
 
 object SettingsNotifier {
 
-    val showDialogNbOfGenerationsLeftExceeded : MutableState<Boolean> = mutableStateOf(false)
+    val showDialogNbOfGenerationsLeftExceeded: MutableState<Boolean> = mutableStateOf(false)
     val showLoadingDialog = mutableStateOf(false)
     val basePlanMaxNbOfWordsExceeded = mutableStateOf(false)
     val showAddTemplateDialog = mutableStateOf(false)
     val showDeleteTemplateDialog = mutableStateOf(false)
 
-    val isConnected : MutableState<Boolean> = mutableStateOf(true)
-    val nbOfGenerationsConsumed = mutableStateOf(HelperSharedPreference.getNbOfGenerationsConsumed())
+    val isConnected: MutableState<Boolean> = mutableStateOf(true)
+    val nbOfGenerationsConsumed =
+        mutableStateOf(HelperSharedPreference.getNbOfGenerationsConsumed())
     val isSubscribed = mutableStateOf(false)
     val isRenewable = mutableStateOf(false)
     val output = mutableStateOf("")
@@ -32,13 +34,23 @@ object SettingsNotifier {
     var predefinedTemplates = mutableStateOf(listOf<ModelTemplate>())
     var templateToDelete: ModelTemplate? = null
     var currentQuerySection: String? = null
+    var tts: TextToSpeech? = null
 
-    fun resetValues(){
+    fun resetValues() {
+        stopTTS()
+        tts = null
         stopTyping.value = true
         input.value = TextFieldValue(text = "")
         name.value = ""
         jobTitle.value = ""
         output.value = ""
         outputList.clear()
+    }
+
+    fun stopTTS() {
+        tts?.let {
+            if (it.isSpeaking)
+                it.stop()
+        }
     }
 }

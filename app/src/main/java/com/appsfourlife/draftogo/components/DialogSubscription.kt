@@ -95,9 +95,11 @@ fun DialogSubscription(
                                         if (customerInfo.entitlements["premium"]?.isActive == true) {
                                             HelperAuth.makeUserSubscribed()
                                             HelperSharedPreference.setSubscriptionType(Constants.SUBSCRIPTION_TYPE_BASE)
+                                            showDialog.value = false
                                         } else if (customerInfo.entitlements[Constants.SUBSCRIPTION_TYPE_PLUS]?.isActive == true) {
                                             HelperAuth.makeUserSubscribed()
                                             HelperSharedPreference.setSubscriptionType(Constants.SUBSCRIPTION_TYPE_PLUS)
+                                            showDialog.value = false
                                         }
                                     }
 

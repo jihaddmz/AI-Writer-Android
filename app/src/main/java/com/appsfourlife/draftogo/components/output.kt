@@ -24,6 +24,7 @@ import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import java.util.*
 
 @Composable
@@ -96,8 +97,8 @@ fun Output(
                                 return@IconButton
                             }
 
-                            var tts: TextToSpeech? = null
-                            tts = TextToSpeech(
+                            SettingsNotifier.tts = null
+                            SettingsNotifier.tts = TextToSpeech(
                                 context
                             ) { status ->
                                 if (status == TextToSpeech.SUCCESS) {
@@ -116,12 +117,12 @@ fun Output(
                                             else -> "nl"
                                         }
                                     val result =
-                                        tts?.setLanguage(Locale.forLanguageTag(languageCode))
+                                        SettingsNotifier.tts?.setLanguage(Locale.forLanguageTag(languageCode))
 
                                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
 
                                     } else {
-                                        tts!!.speak(
+                                        SettingsNotifier.tts!!.speak(
                                             outputText.value,
                                             TextToSpeech.QUEUE_FLUSH,
                                             null,
@@ -132,7 +133,7 @@ fun Output(
                             }
                         }) {
                             MyIcon(
-                                iconID = com.appsfourlife.draftogo.R.drawable.icon_speaker,
+                                iconID = R.drawable.icon_speaker,
                                 contentDesc = stringResource(
                                     id = com.appsfourlife.draftogo.R.string.speaker
                                 ),
