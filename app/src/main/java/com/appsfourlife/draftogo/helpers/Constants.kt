@@ -19,7 +19,7 @@ object Constants {
     val ANIMATION_LENGTH = 1000
     val BASE_PLAN_MAX_NB_OF_WORDS = 45000
     val WEB_CLIENT_ID = "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com"
-    val AD_UNIT_ID = "ca-app-pub-3940256099942544/5224354917" // todo change ad unit
+    val AD_UNIT_ID = "ca-app-pub-6005833463272552/3492799476"
     val DAY_MONTH_YEAR_FORMAT = "dd/MM/yyyy"
     val EXIT_TIME_BETWEEN = 3000L
     val Toast_Lenght = 6000
