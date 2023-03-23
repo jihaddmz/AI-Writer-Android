@@ -11,7 +11,8 @@ import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 
 @Composable
 fun MyImage(
-    modifier: Modifier = Modifier, imageID: Int, contentDesc: String
+    modifier: Modifier = Modifier,
+    imageID: Int, contentDesc: String
 ) {
 
     val imageSize =

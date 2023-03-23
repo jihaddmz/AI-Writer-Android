@@ -2,6 +2,7 @@ package com.appsfourlife.draftogo.helpers
 
 import androidx.compose.runtime.MutableState
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
+import com.appsfourlife.draftogo.feature_generate_text.models.ModelTemplateIcon
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -153,10 +154,24 @@ object HelperFirebaseDatabase {
             .update("nbOfGenerationsConsumed", nbOfConsumed)
     }
 
-    fun decrementNbOfWords(value: Int) {
-        val nbOfWords = HelperSharedPreference.getNbOfWordsGenerated()
-
+    fun updateNbOfWords() {
         firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
-            .update("nbOfWordsGenerated", nbOfWords - value)
+            .update("nbOfWordsGenerated", Constants.BASE_PLAN_MAX_NB_OF_WORDS - 500)
+    }
+
+    fun getAllTemplateIcons(list: MutableState<List<ModelTemplateIcon>>) {
+        val result = mutableListOf<ModelTemplateIcon>()
+        firestore.collection("app").document("templates").collection("icons")
+            .get().addOnCompleteListener { task ->
+                task.result.documents.forEach {
+                    val name = it.getString("name")
+                    val url = it.getString("url")
+
+                    name?.let {
+                        result.add(ModelTemplateIcon(name = name, url = url!!))
+                    }
+                }
+                list.value = result
+            }
     }
 }

@@ -22,6 +22,7 @@ import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateOffsetY
+import com.appsfourlife.draftogo.extensions.animateScaling
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
@@ -30,6 +31,7 @@ import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -46,14 +48,17 @@ fun ScreenHome(
     val isAppOutDated = remember {
         mutableStateOf(false)
     }
-    val listOfPredefinedTemplates = remember {
-        mutableStateOf(Constants.PREDEFINED_TEMPLATES)
-    }
 
     SettingsNotifier.disableDrawerContent.value = false
 
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
+
+            SettingsNotifier.predefinedTemplates.value =
+                App.dbGenerateText.daoTemplates.getAllTemplates()
+            SettingsNotifier.predefinedTemplates.value =
+                SettingsNotifier.predefinedTemplates.value.sortedBy { it.userAdded }
+
             HelperFirebaseDatabase.fetchAppVersion {
                 isAppOutDated.value = it != BuildConfig.VERSION_NAME
             }
@@ -90,6 +95,34 @@ fun ScreenHome(
 
     Column(modifier = modifier.fillMaxSize()) {
 
+        if (SettingsNotifier.showAddTemplateDialog.value)
+            DialogAddTemplate(
+                showDialog = SettingsNotifier.showAddTemplateDialog,
+                onTemplateAdded = {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        SettingsNotifier.predefinedTemplates.value =
+                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                                .sortedBy { it.userAdded }
+                    }
+                })
+
+        if (SettingsNotifier.showDeleteTemplateDialog.value)
+            DialogConfirmation(
+                showDialog = SettingsNotifier.showDeleteTemplateDialog, title = stringResource(
+                    id = R.string.delete_template_confirmation
+                )
+            ) {
+                coroutineScope.launch(Dispatchers.IO) {
+                    SettingsNotifier.templateToDelete?.let { modelTemplate ->
+                        App.dbGenerateText.daoTemplates.deleteTemplate(modelTemplate)
+                        delay(1000)
+                        SettingsNotifier.predefinedTemplates.value =
+                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                                .sortedBy { it.userAdded }
+                    }
+                }
+            }
+
         if (isAppOutDated.value) // if the app is outdated show the alert dialog to update
             MyDialog(
                 modifier = Modifier,
@@ -105,7 +138,6 @@ fun ScreenHome(
         MainAppBar(
             navController = navController,
             coroutineScope = coroutineScope,
-            listOfPredefinedTemplates = listOfPredefinedTemplates
         )
 
         MySpacer(type = "small")
@@ -119,7 +151,7 @@ fun ScreenHome(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             content = {
                 sectionsGridContent(
-                    list = listOfPredefinedTemplates.value,
+                    list = SettingsNotifier.predefinedTemplates.value,
                     2,
                     state,
                     navController,
@@ -133,40 +165,55 @@ fun MainAppBar(
     modifier: Modifier = Modifier,
     navController: NavController,
     coroutineScope: CoroutineScope,
-    listOfPredefinedTemplates: MutableState<List<String>>
 ) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
 
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-
-        MyIconOutlinedButton(
-            modifier = Modifier
-                .weight(0.5f)
+        IconButton(
+            onClick = {
+                // if there is network access, navigate to history
+                if (SettingsNotifier.isConnected.value) {
+                    navController.navigate(Screens.ScreenHistory.route)
+                } else {
+                    HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
+                }
+            }, modifier = Modifier
                 .animateOffsetY(initialOffsetY = (-100).dp)
-            ,
-            imageID = R.drawable.icon_history,
-            contentDesc = stringResource(
-                id = R.string.history
-            )
         ) {
-            // if there is network access, navigate to history
-            if (SettingsNotifier.isConnected.value) {
-                navController.navigate(Screens.ScreenHistory.route)
-            } else {
-                HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
-            }
+            MyIcon(
+                iconID = R.drawable.icon_history,
+                contentDesc = stringResource(id = R.string.history)
+            )
+        }
+
+        IconButton(
+            onClick = {
+                SettingsNotifier.showAddTemplateDialog.value = true
+            }, modifier = Modifier
+                .animateOffsetY(initialOffsetY = (-100).dp, delay = 100)
+        ) {
+            MyIcon(
+                iconID = R.drawable.icon_add_new,
+                contentDesc = stringResource(id = R.string.add_your_template)
+            )
         }
 
         val showSearch = remember {
+            mutableStateOf(true)
+        }
+        val showSearchExpanded = remember {
             mutableStateOf(false)
         }
         val searchText = remember {
             mutableStateOf("")
         }
-
-        MyAnimatedVisibility(visible = !showSearch.value) {
+        if (showSearch.value) {
             IconButton(onClick = {
-                showSearch.value = true
-            }, modifier = Modifier.animateOffsetY(initialOffsetY = (-100).dp, delay = 100)) {
+                showSearch.value = false
+                showSearchExpanded.value = true
+            }, modifier = Modifier.animateOffsetY(initialOffsetY = (-100).dp, delay = 200)) {
                 MyIcon(
                     iconID = R.drawable.icon_search,
                     contentDesc = stringResource(id = R.string.search)
@@ -175,8 +222,7 @@ fun MainAppBar(
 
         }
 
-        MyAnimatedVisibility(visible = showSearch.value) {
-
+        if (showSearchExpanded.value) {
             val focusRequester = FocusRequester()
 
             LaunchedEffect(key1 = true, block = {
@@ -184,6 +230,7 @@ fun MainAppBar(
             })
 
             MyTextField(modifier = Modifier
+                .animateScaling()
                 .weight(1f)
                 .focusRequester(focusRequester)
                 .background(color = Blue, shape = Shapes.medium),
@@ -194,28 +241,41 @@ fun MainAppBar(
                 trailingIcon = R.drawable.icon_wrong,
                 onTrailingIconClick = {
                     searchText.value = ""
-                    showSearch.value = false
-                    listOfPredefinedTemplates.value = Constants.PREDEFINED_TEMPLATES
+                    showSearchExpanded.value = false
+                    showSearch.value = true
+                    coroutineScope.launch(Dispatchers.IO) {
+                        SettingsNotifier.predefinedTemplates.value =
+                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                    }
                 },
                 onValueChanged = { itr ->
                     searchText.value = itr
                     if (searchText.value.isEmpty()) {
-                        listOfPredefinedTemplates.value = Constants.PREDEFINED_TEMPLATES
-                    } else listOfPredefinedTemplates.value =
-                        Constants.PREDEFINED_TEMPLATES.filter {
-                            it.lowercase().contains(searchText.value.lowercase())
+                        coroutineScope.launch(Dispatchers.IO) {
+                            SettingsNotifier.predefinedTemplates.value =
+                                App.dbGenerateText.daoTemplates.getAllTemplates()
                         }
+                    } else {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            SettingsNotifier.predefinedTemplates.value =
+                                App.dbGenerateText.daoTemplates.getAllTemplates().filter {
+                                    it.query.lowercase().contains(searchText.value.lowercase())
+                                }
+                        }
+                    }
                 })
         }
 
-        MyIconOutlinedButton(
-            modifier = Modifier.weight(0.5f).animateOffsetY(initialOffsetY = (-100).dp, delay = 150),
-            imageID = R.drawable.icon_settings,
-            contentDesc = stringResource(
-                id = R.string.settings
-            )
+        IconButton(
+            onClick = {
+                navController.navigate(Screens.ScreenSettings.route)
+            }, modifier = Modifier
+                .animateOffsetY(initialOffsetY = (-100).dp, delay = 300)
         ) {
-            navController.navigate(Screens.ScreenSettings.route)
+            MyIcon(
+                iconID = R.drawable.icon_settings,
+                contentDesc = stringResource(id = R.string.settings)
+            )
         }
     }
 }

@@ -1,8 +1,6 @@
 package com.appsfourlife.draftogo.feature_generate_text.presentation
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -97,7 +95,9 @@ fun ScreenHistory(
                 items(count = result.value.size) { index ->
                     val history = result.value[index]
                     Card(
-                        modifier = Modifier.fillMaxHeight(0.2f).animateScaling(),
+                        modifier = Modifier
+                            .fillMaxHeight(0.2f)
+                            .animateScaling(),
                         backgroundColor = Blue,
                         shape = Shapes.medium
                     ) {
@@ -130,6 +130,8 @@ fun DialogHistoryEntry(
     modelHistory: ModelHistory
 ) {
 
+    val verticalScroll = rememberScrollState()
+
     Dialog(onDismissRequest = {
         showDialog.value = false
     }) {
@@ -137,6 +139,7 @@ fun DialogHistoryEntry(
             modifier = Modifier
                 .background(color = Color.White, shape = Shapes.medium)
                 .padding(SpacersSize.medium)
+                .verticalScroll(verticalScroll)
                 .animateScaling(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

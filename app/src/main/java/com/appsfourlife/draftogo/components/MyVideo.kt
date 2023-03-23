@@ -1,6 +1,5 @@
 package com.appsfourlife.draftogo.components
 
-import android.os.Looper
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
@@ -18,11 +17,11 @@ fun MyVideo(
 ) {
     val context = LocalContext.current
 
-    val exoPlayer = ExoPlayer.Builder(LocalContext.current)
+    val exoPlayer = ExoPlayer.Builder(context)
         .build()
         .also { exoPlayer ->
             val mediaItem = MediaItem.Builder()
-                .setUri(videoUri)
+                .setUri("android.resource://com.appsfourlife.draftogo/raw/video")
                 .build()
             exoPlayer.setMediaItem(mediaItem)
             exoPlayer.prepare()

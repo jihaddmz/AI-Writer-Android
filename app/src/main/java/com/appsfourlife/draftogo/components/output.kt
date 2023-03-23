@@ -1,6 +1,6 @@
 package com.appsfourlife.draftogo.components
 
-import androidx.compose.animation.ExperimentalAnimationApi
+import android.speech.tts.TextToSpeech
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
@@ -16,11 +16,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.appsfourlife.draftogo.App
+import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.helpers.Constants
+import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
+import java.util.*
 
 @Composable
 fun Output(
@@ -43,7 +48,7 @@ fun Output(
 
             MyTextField(
                 modifier = Modifier.defaultMinSize(minHeight = 250.dp),
-                value = outputText.value.trim(),
+                value = outputText.value,
                 onValueChanged = {
                     outputText.value = it
                 },
@@ -63,7 +68,10 @@ fun Output(
                             if (fromScreen.lowercase() == "email") {
                                 Helpers.shareEmailOutput(outputText.value, emailName, context)
                             } else if (fromScreen.lowercase() == "facebook") {
-                                Helpers.copyToClipBoard(text = outputText.value, msgID = com.appsfourlife.draftogo.R.string.text_copied_facebook)
+                                Helpers.copyToClipBoard(
+                                    text = outputText.value,
+                                    msgID = com.appsfourlife.draftogo.R.string.text_copied_facebook
+                                )
                                 Helpers.shareOutputToFacebook(context, "Hello there")
                             } else if (fromScreen.lowercase() == "twitter") {
                                 Helpers.shareOutputToTwitter(context, outputText.value)
@@ -73,7 +81,7 @@ fun Output(
                                 Helpers.shareOutput(text = outputText.value, context)
                         }) {
                             MyIcon(
-                                iconID = com.appsfourlife.draftogo.R.drawable.icon_alternate_share,
+                                iconID = R.drawable.icon_alternate_share,
                                 contentDesc = stringResource(
                                     id = com.appsfourlife.draftogo.R.string.share
                                 ),
@@ -84,7 +92,61 @@ fun Output(
                         MySpacer(type = "small", widthOrHeight = "width")
 
                         IconButton(onClick = {
-                            Helpers.copyToClipBoard(context = context, text = outputText.value, msgID = com.appsfourlife.draftogo.R.string.text_copied)
+                            if (HelperSharedPreference.getSubscriptionType() != Constants.SUBSCRIPTION_TYPE_PLUS) {
+                                HelperUI.showToast(msg = App.getTextFromString(R.string.plus_feature))
+                                return@IconButton
+                            }
+
+                            SettingsNotifier.tts = null
+                            SettingsNotifier.tts = TextToSpeech(
+                                context
+                            ) { status ->
+                                if (status == TextToSpeech.SUCCESS) {
+                                    val languageCode =
+                                        when (HelperSharedPreference.getOutputLanguage()) {
+                                            App.getTextFromString(R.string.english) -> "en"
+                                            App.getTextFromString(R.string.french) -> "fr"
+                                            App.getTextFromString(R.string.arabic) -> "ar"
+                                            App.getTextFromString(R.string.german) -> "de"
+                                            App.getTextFromString(R.string.hindi) -> "hi"
+                                            App.getTextFromString(R.string.italian) -> "it"
+                                            App.getTextFromString(R.string.purtaguese) -> "pt"
+                                            App.getTextFromString(R.string.russian) -> "ru"
+                                            App.getTextFromString(R.string.turkish) -> "tr"
+                                            App.getTextFromString(R.string.swedish) -> "se"
+                                            else -> "nl"
+                                        }
+                                    val result =
+                                        SettingsNotifier.tts?.setLanguage(Locale.forLanguageTag(languageCode))
+
+                                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
+
+                                    } else {
+                                        SettingsNotifier.tts!!.speak(
+                                            outputText.value,
+                                            TextToSpeech.QUEUE_FLUSH,
+                                            null,
+                                            ""
+                                        )
+                                    }
+                                }
+                            }
+                        }) {
+                            MyIcon(
+                                iconID = R.drawable.icon_speaker,
+                                contentDesc = stringResource(
+                                    id = com.appsfourlife.draftogo.R.string.speaker
+                                ),
+                                tint = Blue
+                            )
+                        }
+
+                        IconButton(onClick = {
+                            Helpers.copyToClipBoard(
+                                context = context,
+                                text = outputText.value,
+                                msgID = com.appsfourlife.draftogo.R.string.text_copied
+                            )
                         }) {
                             MyIcon(
                                 iconID = com.appsfourlife.draftogo.R.drawable.copy,

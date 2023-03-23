@@ -32,6 +32,23 @@ fun Modifier.animateScaling(): Modifier = composed {
     scale(scale = scaleState.value)
 }
 
+fun Modifier.animateScalingDecreasing(): Modifier = composed {
+
+    val scale = remember {
+        mutableStateOf(false)
+    }
+    val scaleState = animateFloatAsState(
+        targetValue = if (!scale.value) 1f else 0.1f,
+        animationSpec = tween(durationMillis = 1000)
+    )
+
+    LaunchedEffect(key1 = true, block = {
+        scale.value = true
+    })
+
+    scale(scale = scaleState.value)
+}
+
 fun Modifier.animateOffsetY(initialOffsetY: Dp, delay: Long = 0): Modifier = composed {
 
     val animate = remember {

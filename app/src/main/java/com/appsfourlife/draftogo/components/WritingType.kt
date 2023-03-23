@@ -1,6 +1,7 @@
 package com.appsfourlife.draftogo.components
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
@@ -10,22 +11,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
-import com.appsfourlife.draftogo.R
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun WritingType(
     modifier: Modifier = Modifier,
     text: String,
-    onClick: () -> Unit
+    imageUrl: String,
+    onLongClick: () -> Unit,
+    onClick: () -> Unit,
 ) {
 
-    Card(modifier = modifier
-        .defaultMinSize(minHeight = 100.dp)
-        .clickable {
-            onClick()
-        }, shape = Shapes.medium, backgroundColor = Color.White) {
+    Card(
+        modifier = modifier
+            .defaultMinSize(minHeight = 100.dp)
+            .combinedClickable(onClick = {
+                onClick()
+            }, onLongClick = {
+                onLongClick()
+            }), shape = Shapes.medium, backgroundColor = Color.White
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -56,15 +64,21 @@ fun WritingType(
                 stringResource(id = R.string.write_a_code) -> R.drawable.icon_code
                 stringResource(id = R.string.custom) -> R.drawable.icon_customize
                 else -> {
-                    R.drawable.icon_customize
+                    if (imageUrl.isEmpty())
+                        R.drawable.icon_customize
+                    else
+                        0
                 }
             }
 
-            MyImage(
-                modifier = Modifier,
-                imageID = imageID,
-                contentDesc = text
-            )
+            if (imageID != 0)
+                MyImage(
+                    modifier = Modifier,
+                    imageID = imageID,
+                    contentDesc = text
+                )
+            else
+                MyUrlImage(imageUrl = imageUrl, contentDesc = text)
 
             Spacer(modifier = Modifier.height(SpacersSize.small))
 
