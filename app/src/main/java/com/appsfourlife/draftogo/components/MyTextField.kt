@@ -1,7 +1,8 @@
-
 package com.appsfourlife.draftogo.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.TextField
+import androidx.compose.material.TextFieldColors
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,10 +22,21 @@ fun MyTextField(
     fontWeight: FontWeight = FontWeight.Normal,
     placeholder: String = "",
     trailingIcon: Int = 0,
+    trailingIconTint: Color = Color.White,
+    cursorColor: Color = Blue,
+    singleLine: Boolean = false,
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors(
+        backgroundColor = Color.Transparent,
+        focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+        cursorColor = cursorColor,
+    ),
+    onTrailingIconClick: () -> Unit = {},
+    textColor: Color = Color.Black,
     onValueChanged: (String) -> Unit
 ) {
 
-    val fontSize = when (rememberWindowInfo().screenWidthInfo){
+    val fontSize = when (rememberWindowInfo().screenWidthInfo) {
         is WindowInfo.WindowType.Compact -> 15.sp
         is WindowInfo.WindowType.Medium -> 20.sp
         else -> 24.sp
@@ -36,17 +48,15 @@ fun MyTextField(
         onValueChange = {
             onValueChanged(it)
         },
+        singleLine = singleLine,
         trailingIcon = {
             if (trailingIcon != 0)
-                MyIcon(iconID = trailingIcon, contentDesc = "trailing icon")
+                MyIcon(modifier = Modifier.clickable {
+                    onTrailingIconClick()
+                }, iconID = trailingIcon, contentDesc = "trailing icon", tint = trailingIconTint)
         },
-        colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            cursorColor = Blue,
-        ),
-        textStyle = TextStyle(fontWeight = fontWeight, fontSize = fontSize),
+        colors = colors,
+        textStyle = TextStyle(fontWeight = fontWeight, fontSize = fontSize, color = textColor),
         placeholder = { MyText(text = placeholder, color = Gray) }
     )
 

@@ -15,13 +15,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.appsfourlife.draftogo.feature_generate_text.util.Screens
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.WindowInfo
 import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 import com.appsfourlife.draftogo.ui.theme.DrawerShape
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.Screens
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -36,8 +36,23 @@ fun ScreenLaunch(
 
     setSpacersSize()
 
+//    LaunchedEffect(key1 = true, block = {
+//        coroutineScope.launch(Dispatchers.IO) {
+//            Constants.PREDEFINED_TEMPLATES.forEach {
+//                if (App.dbGenerateText.daoTemplates.getTemplateByQuery(it) == null)
+//                    App.dbGenerateText.daoTemplates.insertTemplate(ModelTemplate(it, ""))
+//                else
+//                    return@forEach
+//            }
+//            SettingsNotifier.predefinedTemplates =
+//                App.dbGenerateText.daoTemplates.getAllTemplates()
+//        }
+//    })
+
     Box(
-        modifier = modifier.fillMaxSize().background(color = Color.White), contentAlignment = Alignment.Center
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = Color.White), contentAlignment = Alignment.Center
     ) {
 
         Image(
@@ -47,10 +62,21 @@ fun ScreenLaunch(
             contentDescription = "splash screen"
         )
 
+        val startScreenRoute = if (HelperSharedPreference.getUsername() == "") {
+            Screens.ScreenSignIn.route
+        } else {
+            Screens.ScreenHome.route
+        }
+
         Timer().schedule(timerTask {
             coroutineScope.launch(Dispatchers.Main) {
-                HelperSharedPreference.setBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_LAUNCHED, false, context)
-                navController.navigate(Screens.ScreenHome.route)
+                HelperSharedPreference.setBool(
+                    HelperSharedPreference.SP_SETTINGS,
+                    HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_LAUNCHED,
+                    false,
+                    context
+                )
+                navController.navigate(startScreenRoute)
             }
         }, 800)
     }
@@ -96,9 +122,24 @@ fun setSpacersSize() {
     }
 
     DrawerShape = when (rememberWindowInfo().screenWidthInfo) {
-        is WindowInfo.WindowType.Compact -> RoundedCornerShape(topEnd = 15.dp, bottomEnd = 15.dp, topStart = 0.dp, bottomStart = 0.dp)
-        is WindowInfo.WindowType.Medium -> RoundedCornerShape(topEnd = 17.dp, bottomEnd = 17.dp, topStart = 0.dp, bottomStart = 0.dp)
-        else -> RoundedCornerShape(topEnd = 20.dp, bottomEnd = 20.dp, topStart = 0.dp, bottomStart = 0.dp)
+        is WindowInfo.WindowType.Compact -> RoundedCornerShape(
+            topEnd = 15.dp,
+            bottomEnd = 15.dp,
+            topStart = 0.dp,
+            bottomStart = 0.dp
+        )
+        is WindowInfo.WindowType.Medium -> RoundedCornerShape(
+            topEnd = 17.dp,
+            bottomEnd = 17.dp,
+            topStart = 0.dp,
+            bottomStart = 0.dp
+        )
+        else -> RoundedCornerShape(
+            topEnd = 20.dp,
+            bottomEnd = 20.dp,
+            topStart = 0.dp,
+            bottomStart = 0.dp
+        )
     }
 }
 // endregion

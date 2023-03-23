@@ -3,8 +3,8 @@ package com.appsfourlife.draftogo.components
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.appsfourlife.draftogo.SettingsNotifier
-import com.appsfourlife.draftogo.feature_generate_text.util.Screens
+import com.appsfourlife.draftogo.util.SettingsNotifier
+import com.appsfourlife.draftogo.util.Screens
 
 @Composable
 fun MyBackHandler(navController: NavController) {

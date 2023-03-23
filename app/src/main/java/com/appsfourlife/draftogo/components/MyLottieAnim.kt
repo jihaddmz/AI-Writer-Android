@@ -2,10 +2,7 @@ package com.appsfourlife.draftogo.components
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.animateLottieCompositionAsState
-import com.airbnb.lottie.compose.rememberLottieComposition
+import com.airbnb.lottie.compose.*
 
 @Composable
 fun MyLottieAnim(
@@ -26,7 +23,7 @@ fun MyLottieAnim(
     )
     val progress by animateLottieCompositionAsState(composition)
     if (progress == 1.0f){ // if the lottie animation is done animating, set the playing state of the anim to false
-        isLottieAnimationPlaying.value = false
+//        isLottieAnimationPlaying.value = false
     }
 
     // to control the lottie animation
@@ -34,7 +31,7 @@ fun MyLottieAnim(
         // pass the composition created above
         composition,
         // Iterates Forever
-        iterations = 1,
+        iterations = LottieConstants.IterateForever,
         // Lottie and pause/play
         isPlaying = isLottieAnimationPlaying.value,
         // Increasing the speed of change Lottie

@@ -6,7 +6,12 @@ import com.appsfourlife.draftogo.App
 object HelperIntent {
 
     fun navigateToPlayStoreSubscription(){
-        val intent = Intent(Intent.parseUri("https://play.google.com/store/account/subscriptions?sku=${Constants.SUBSCRIPTION_MONTHLY_ID}&package=com.appsfourlife.draftogo", 0))
+        val intent = Intent(Intent.parseUri("https://play.google.com/store/account/subscriptions?sku=${Constants.SUBSCRIPTION_PRODUCT_MONTHLY_ID}&package=com.appsfourlife.draftogo", 0))
+        App.context.startActivity(intent)
+    }
+
+    fun navigateToPlayStorePlusSubscription(){
+        val intent = Intent(Intent.parseUri("https://play.google.com/store/account/subscriptions?sku=${Constants.SUBSCRIPTION_PRODUCT_MONTHLY_PLUS_ID}&package=com.appsfourlife.draftogo", 0))
         App.context.startActivity(intent)
     }
 }

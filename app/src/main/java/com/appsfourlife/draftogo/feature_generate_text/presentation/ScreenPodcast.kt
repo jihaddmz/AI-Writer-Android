@@ -11,8 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.SettingsNotifier
-import com.appsfourlife.draftogo.SettingsNotifier.output
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
@@ -23,6 +22,8 @@ fun ScreenPodcast(
     modifier: Modifier = Modifier,
     navController: NavController
 ) {
+
+    SettingsNotifier.templateType = "Podcast"
 
     val verticalScroll = rememberScrollState()
     val showDialog = remember {

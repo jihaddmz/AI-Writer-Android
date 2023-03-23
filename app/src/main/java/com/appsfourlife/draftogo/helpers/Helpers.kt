@@ -16,14 +16,18 @@ import com.appsfourlife.draftogo.helpers.Constants.TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.InetSocketAddress
+import java.net.Socket
 
 object Helpers {
 
-    fun copyToClipBoard(text: String, context: Context = App.context) {
+    fun copyToClipBoard(text: String, msgID: Int, context: Context = App.context) {
         val clipboardManager =
             context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipData = ClipData.newPlainText("Copied text", text)
         clipboardManager.setPrimaryClip(clipData)
+        HelperUI.showToast(msg = App.getTextFromString(msgID))
     }
 
     fun pasteFromClipBoard(text: MutableState<TextFieldValue>, context: Context): TextFieldValue {
@@ -43,7 +47,7 @@ object Helpers {
         context.startActivity(Intent.createChooser(intent, "Share using"))
     }
 
-    fun shareOutputToFacebook(context: Context, text: String){
+    fun shareOutputToFacebook(context: Context, text: String) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.`package` = "com.facebook.katana"
@@ -51,12 +55,25 @@ object Helpers {
         context.startActivity(Intent.createChooser(intent, "Share with"))
     }
 
-    fun shareOutputToTwitter(context: Context, text: String){
+    fun shareOutputToLinkedIn(context: Context, text: String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.`package` = "com.linkedin.android"
+        intent.putExtra(Intent.EXTRA_TEXT, text)
+        context.startActivity(Intent.createChooser(intent, "Share with"))
+    }
+
+    fun shareOutputToTwitter(context: Context, text: String) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.type = "text/plain"
         intent.`package` = "com.twitter.android"
         intent.putExtra(Intent.EXTRA_TEXT, text)
-        context.startActivity(Intent.createChooser(intent, App.getTextFromString(R.string.share_using)))
+        context.startActivity(
+            Intent.createChooser(
+                intent,
+                App.getTextFromString(R.string.share_using)
+            )
+        )
     }
 
     fun shareEmailOutput(text: String, email: String, context: Context) {
@@ -74,26 +91,23 @@ object Helpers {
             }
         }
         intent.putExtra(Intent.EXTRA_TEXT, body.trim())
-        context.startActivity(Intent.createChooser(intent, App.getTextFromString(R.string.share_using)))
-    }
-
-    fun checkForConnection(
-        coroutineScope: CoroutineScope, ifConnected: () -> Unit, notConnected: () -> Unit
-    ) {
-        val command = "ping -c 1 google.com"
-        coroutineScope.launch(Dispatchers.IO) {
-
-            if (Runtime.getRuntime().exec(command).waitFor() == 0){
-                ifConnected()
-            }else {
-                notConnected()
-            }
-        }
+        context.startActivity(
+            Intent.createChooser(
+                intent,
+                App.getTextFromString(R.string.share_using)
+            )
+        )
     }
 
     fun isConnected(): Boolean {
-        val command = "ping -c 1 google.com"
-        return Runtime.getRuntime().exec(command).waitFor() == 0
+        return try {
+            val sock = Socket()
+            sock.connect(InetSocketAddress("8.8.8.8", 53), 1500)
+            sock.close()
+            true
+        } catch (e: IOException) {
+            false
+        }
     }
 
     fun logD(msg: String) {

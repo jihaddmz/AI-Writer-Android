@@ -11,10 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.SettingsNotifier
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.components.Output
 import com.appsfourlife.draftogo.components.TopBar
 import com.appsfourlife.draftogo.components.input
+import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 
@@ -22,6 +23,8 @@ import com.appsfourlife.draftogo.ui.theme.SpacersSize
 fun ScreenPersonalBio(
     navController: NavController
 ) {
+
+    SettingsNotifier.templateType = "PersonalBio"
 
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
@@ -47,6 +50,7 @@ fun ScreenPersonalBio(
                 label = stringResource(id = R.string.that_captures_attention),
                 inputPrefix = inputPrefix,
                 showDialog = showDialog,
+                length = Constants.DEFAULT_POSTING_GENERATION_LENGTH.toInt(),
                 verticalScrollState = verticalScroll
             )
 

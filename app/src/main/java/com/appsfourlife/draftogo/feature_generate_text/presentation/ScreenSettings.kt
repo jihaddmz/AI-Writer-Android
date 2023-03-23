@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.feature_generate_text.presentation
 
+import android.app.Activity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
@@ -18,8 +19,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.helpers.*
+import com.appsfourlife.draftogo.helpers.Constants
+import com.appsfourlife.draftogo.helpers.HelperAuth
+import com.appsfourlife.draftogo.helpers.HelperIntent
+import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import kotlin.math.abs
 
 @Composable
 fun ScreenSettings(
@@ -27,6 +32,7 @@ fun ScreenSettings(
     modifier: Modifier = Modifier
 ) {
     val verticalScroll = rememberScrollState()
+    val currentActivity = LocalContext.current as Activity
 
     TopBar(
         text = stringResource(id = R.string.settings),
@@ -63,6 +69,18 @@ fun ScreenSettings(
                     text = stringResource(id = R.string.app_name),
                     fontWeight = FontWeight.Bold
                 )
+
+                MySpacer(type = "small")
+
+                MyText(text = HelperSharedPreference.getUsername())
+
+                if (HelperAuth.isSubscribed() && HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
+                    MySpacer(type = "small")
+                    val nbOfWordsLeft =
+                        abs(Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated())
+                    MyText(text = stringResource(id = R.string.nb_words_left, nbOfWordsLeft))
+                }
+
             }
 
             myDropDown(
@@ -78,7 +96,7 @@ fun ScreenSettings(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                val isSubscribed = HelperAuth.getUserSubscriptionState()
+                val isSubscribed = HelperAuth.isSubscribed()
                 if (isSubscribed) { // if the user is subscribed
                     MyAnnotatedText(
                         textAlign = TextAlign.Center,
@@ -97,7 +115,10 @@ fun ScreenSettings(
                     MySpacer(type = "small")
 
                     MyOutlinedButton(text = stringResource(id = R.string.manage_subscription)) {
-                        HelperIntent.navigateToPlayStoreSubscription()
+                        if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_PLUS) {
+                            HelperIntent.navigateToPlayStorePlusSubscription()
+                        } else
+                            HelperIntent.navigateToPlayStoreSubscription()
                     }
 
                 } else // if the user is not subscribed
