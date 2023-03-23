@@ -24,7 +24,6 @@ import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateOffsetY
 import com.appsfourlife.draftogo.extensions.animateScaling
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -223,15 +222,11 @@ fun MainAppBar(
 
         }
 
-        var initialList = listOf<ModelTemplate>()
         if (showSearchExpanded.value) {
             val focusRequester = FocusRequester()
 
             LaunchedEffect(key1 = true, block = {
                 focusRequester.requestFocus()
-
-                initialList =
-                    App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
             })
 
             MyTextField(modifier = Modifier
@@ -248,16 +243,26 @@ fun MainAppBar(
                     searchText.value = ""
                     showSearchExpanded.value = false
                     showSearch.value = true
-                    SettingsNotifier.predefinedTemplates.value = initialList
+                    coroutineScope.launch(Dispatchers.IO) {
+                        SettingsNotifier.predefinedTemplates.value =
+                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                    }
                 },
                 onValueChanged = { itr ->
                     searchText.value = itr
                     if (searchText.value.isEmpty()) {
-                        SettingsNotifier.predefinedTemplates.value = initialList
-                    } else SettingsNotifier.predefinedTemplates.value =
-                        initialList.filter {
-                            it.query.lowercase().contains(searchText.value.lowercase())
+                        coroutineScope.launch(Dispatchers.IO) {
+                            SettingsNotifier.predefinedTemplates.value =
+                                App.dbGenerateText.daoTemplates.getAllTemplates()
                         }
+                    } else {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            SettingsNotifier.predefinedTemplates.value =
+                                App.dbGenerateText.daoTemplates.getAllTemplates().filter {
+                                    it.query.lowercase().contains(searchText.value.lowercase())
+                                }
+                        }
+                    }
                 })
         }
 

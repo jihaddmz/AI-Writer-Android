@@ -167,9 +167,9 @@
     <string name="nb_words_left">%d words left</string>
     <string name="you_have_reached_max_nb_of_words_generated">You have reached the max number of words (45000) per month you can generate on this plan, please upgrade to the plus plan to enjoy unlimited number of generations, or watch an Ad</string>
     <string name="query">Query</string>
-    <string name="add_template_example">Write a LinkedIn message</string>
+    <string name="add_template_example">Correct this to standard English</string>
     <string name="delete_template_confirmation">Are you sure you want to delete this template</string>
-    <string name="about">About…</string>
+    <string name="your_input">You\'re input</string>
     <string name="no_query_defined">Please consider defining a query</string>
     <string name="choose_image">Choose Image</string>
     <string name="speaker">Speaker</string>

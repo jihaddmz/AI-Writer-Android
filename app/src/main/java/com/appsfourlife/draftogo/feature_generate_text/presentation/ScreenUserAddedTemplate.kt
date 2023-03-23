@@ -11,11 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.components.MySpacer
-import com.appsfourlife.draftogo.components.Output
-import com.appsfourlife.draftogo.components.TopBar
-import com.appsfourlife.draftogo.components.input
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
+import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -46,9 +43,16 @@ fun ScreenUserAddedTemplate(
 
             MySpacer(type = "small")
 
+           val outputLanguage = myDropDown(
+                list = Constants.OUTPUT_LANGUAGES,
+                label = stringResource(id = R.string.output_language)
+            )
+
+            MySpacer(type = "small")
+
             input(
-                label = stringResource(id = R.string.about),
-                inputPrefix = "${SettingsNotifier.currentQuerySection!!} in ${HelperSharedPreference.getOutputLanguage()} language",
+                label = stringResource(id = R.string.your_input),
+                inputPrefix = "${SettingsNotifier.currentQuerySection!!} in $outputLanguage language",
                 showDialog = showDialog,
                 verticalScrollState = verticalScroll
             )

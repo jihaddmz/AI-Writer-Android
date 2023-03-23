@@ -40,7 +40,7 @@ fun DialogAddTemplate(
         mutableStateOf(false)
     }
     val clickedImageUrl = remember {
-        mutableStateOf("https://user-images.githubusercontent.com/124468932/226595213-a4ccc4ea-0783-4bee-87d0-b104bb5ae3ca.svg")
+        mutableStateOf("https://user-images.githubusercontent.com/124468932/226972135-c541e5a6-1d45-4376-bd10-6e832253059e.svg")
     }
 
     Dialog(onDismissRequest = {
