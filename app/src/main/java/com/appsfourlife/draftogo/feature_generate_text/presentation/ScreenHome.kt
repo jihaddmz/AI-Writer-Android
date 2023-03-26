@@ -245,7 +245,7 @@ fun MainAppBar(
                     showSearch.value = true
                     coroutineScope.launch(Dispatchers.IO) {
                         SettingsNotifier.predefinedTemplates.value =
-                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                            App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
                     }
                 },
                 onValueChanged = { itr ->
