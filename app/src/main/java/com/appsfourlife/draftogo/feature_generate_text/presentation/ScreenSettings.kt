@@ -24,6 +24,7 @@ import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.helpers.HelperIntent
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlin.math.abs
 
 @Composable
@@ -89,6 +90,19 @@ fun ScreenSettings(
             )
 
             TypeWriterLength()
+
+            mySwitch(
+                modifier = Modifier.padding(end = SpacersSize.small),
+                label = stringResource(id = R.string.enable_save_outputs),
+                initialValue = HelperSharedPreference.getIsCompareOutputsEnabled()
+            ) {
+                HelperSharedPreference.setBool(
+                    HelperSharedPreference.SP_SETTINGS,
+                    HelperSharedPreference.SP_SETTINGS_IS_COMPARE_OUTPUTS_ENABLED,
+                    it
+                )
+                SettingsNotifier.enableSheetContent.value = it
+            }
 
             Column(
                 modifier = Modifier

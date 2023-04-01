@@ -22,13 +22,16 @@ import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 import com.appsfourlife.draftogo.ui.theme.Blue
 
 @Composable
-fun headlines(
-    modifier: Modifier = Modifier
+fun mySwitch(
+    modifier: Modifier = Modifier,
+    label: String = stringResource(id = R.string.enable_headlines),
+    initialValue: Boolean = HelperSharedPreference.getBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_ENABLE_HEADLINES, false),
+    onCheckedChange: (Boolean) -> Unit
 ): Boolean {
 
     val context = LocalContext.current
     val checked = remember {
-        mutableStateOf(HelperSharedPreference.getBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_ENABLE_HEADLINES, false, context = context) as Boolean)
+        mutableStateOf(initialValue)
     }
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -36,7 +39,7 @@ fun headlines(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        MyText(text = stringResource(id = R.string.enable_headlines) + ":", color = Blue, fontWeight = FontWeight.Bold)
+        MyText(text = "$label:", color = Blue, fontWeight = FontWeight.Bold)
 
         val switchSize = when (rememberWindowInfo().screenWidthInfo){
             is WindowInfo.WindowType.Compact -> 25.dp
@@ -48,8 +51,8 @@ fun headlines(
             modifier = Modifier.requiredSize(switchSize),
             checked = checked.value,
             onCheckedChange = {
-                HelperSharedPreference.setBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_ENABLE_HEADLINES, it, context = context)
                 checked.value = it
+                onCheckedChange(it)
             },
             colors = SwitchDefaults.colors(checkedThumbColor = Blue)
         )

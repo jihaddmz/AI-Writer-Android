@@ -12,6 +12,7 @@ object Constants {
     val SUBSCRIPTION_TYPE_PLUS = "plus"
 
     val TAG = "Jihad"
+    val SPLASH_SCREEN_DURATION: Long = 800L
     val MAX_GENERATION_LENGTH = 1000f
     val DEFAULT_POSTING_GENERATION_LENGTH = 400f
     val MAX_NB_OF_GENERATIONS = 5f

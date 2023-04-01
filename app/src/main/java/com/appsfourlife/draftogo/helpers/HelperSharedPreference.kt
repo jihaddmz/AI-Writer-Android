@@ -31,6 +31,7 @@ object HelperSharedPreference {
     const val SP_SETTINGS_GAME_CONSOLE_TYPE = "console_type"
     const val SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH = "output_typewriter_length"
     const val SP_SETTINGS_SUBSCRIBE_TYPE = "subscribe_type"
+    const val SP_SETTINGS_IS_COMPARE_OUTPUTS_ENABLED = "is_compare_outputs_enabled"
 
 
     /**
@@ -44,6 +45,10 @@ object HelperSharedPreference {
     /**
      * most common shared preferences keys
      **/
+
+    fun getIsCompareOutputsEnabled(): Boolean{
+        return getBool(SP_SETTINGS, SP_SETTINGS_IS_COMPARE_OUTPUTS_ENABLED, false)
+    }
 
     fun getSubscriptionType(): String {
         return getString(SP_SETTINGS, SP_SETTINGS_SUBSCRIBE_TYPE, "base")

@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
 
 
 @Composable
@@ -46,7 +46,13 @@ fun ScreenBlog(
                 .padding(SpacersSize.medium)
         ) {
 
-            val isHeadlinesEnabled = headlines()
+            val isHeadlinesEnabled = mySwitch() {
+                HelperSharedPreference.setBool(
+                    HelperSharedPreference.SP_SETTINGS,
+                    HelperSharedPreference.SP_SETTINGS_ENABLE_HEADLINES,
+                    it,
+                )
+            }
 
             Spacer(modifier = Modifier.height(SpacersSize.medium))
 
@@ -62,7 +68,12 @@ fun ScreenBlog(
                     )
                 } with headlines "
             } else {
-                "${stringResource(id = R.string.write_a_blog, HelperSharedPreference.getOutputLanguage())} "
+                "${
+                    stringResource(
+                        id = R.string.write_a_blog,
+                        HelperSharedPreference.getOutputLanguage()
+                    )
+                } "
             }
 
             input(
