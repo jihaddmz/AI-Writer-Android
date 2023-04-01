@@ -40,9 +40,6 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.GoogleAuthProvider
-import com.microsoft.appcenter.AppCenter
-import com.microsoft.appcenter.analytics.Analytics
-import com.microsoft.appcenter.crashes.Crashes
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -52,7 +49,6 @@ import kotlin.concurrent.timerTask
 class MainActivity : ComponentActivity() {
 
     private lateinit var navController: NavHostController
-//    private var rewardedAd: RewardedAd? = null
 
     override fun onStart() {
         super.onStart()
@@ -81,11 +77,6 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
         App.context = this
 
-        AppCenter.start(
-            application, "e1c632de-8404-416f-8d5a-175d6d03581d",
-            Analytics::class.java, Crashes::class.java
-        )
-
         MobileAds.initialize(this) {
 
         }
@@ -108,7 +99,7 @@ class MainActivity : ComponentActivity() {
                 val changeTargetValue = remember{
                     mutableStateOf(false)
                 }
-                val dpSize = animateDpAsState(targetValue = if (changeTargetValue.value && (HelperSharedPreference.getIsCompareOutputsEnabled() || SettingsNotifier.enableSheetContent.value)
+                val dpSize = animateDpAsState(targetValue = if (changeTargetValue.value && (HelperSharedPreference.getIsSavedOutputsEnabled() || SettingsNotifier.enableSheetContent.value)
                     && (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
                             && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route
                             && navBackStackEntry?.destination?.route != Screens.ScreenSettings.route
