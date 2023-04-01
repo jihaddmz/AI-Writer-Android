@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.feature_generate_text.models.ModelComparedGenerationItem
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.HelperUI
@@ -64,6 +65,18 @@ fun Output(
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.Bottom
                     ) {
+
+                            IconButton(onClick = {
+                                SettingsNotifier.addComparisonGenerationEntry(
+                                    ModelComparedGenerationItem(
+                                        input = SettingsNotifier.input.value.text,
+                                        output = outputText.value
+                                    )
+                                )
+                            }) {
+                                MyIcon(iconID = R.drawable.icon_save, contentDesc = "save")
+                            }
+
                         IconButton(modifier = Modifier, onClick = {
                             if (fromScreen.lowercase() == "email") {
                                 Helpers.shareEmailOutput(outputText.value, emailName, context)
@@ -88,8 +101,6 @@ fun Output(
                                 tint = Blue
                             )
                         }
-
-                        MySpacer(type = "small", widthOrHeight = "width")
 
                         IconButton(onClick = {
                             if (HelperSharedPreference.getSubscriptionType() != Constants.SUBSCRIPTION_TYPE_PLUS) {
@@ -117,7 +128,11 @@ fun Output(
                                             else -> "nl"
                                         }
                                     val result =
-                                        SettingsNotifier.tts?.setLanguage(Locale.forLanguageTag(languageCode))
+                                        SettingsNotifier.tts?.setLanguage(
+                                            Locale.forLanguageTag(
+                                                languageCode
+                                            )
+                                        )
 
                                     if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
 

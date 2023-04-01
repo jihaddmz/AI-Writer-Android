@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
+import com.appsfourlife.draftogo.feature_generate_text.models.ModelComparedGenerationItem
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.google.android.gms.ads.rewarded.RewardedAd
 
@@ -29,12 +30,25 @@ object SettingsNotifier {
     val jobTitle = mutableStateOf("")
     val stopTyping = mutableStateOf(false)
     var mRewardedAds: RewardedAd? = null
-    var disableDrawerContent = mutableStateOf(false)
+    var disableDrawerContent = mutableStateOf(true)
+    var enableSheetContent = mutableStateOf(false)
     var templateType = ""
     var predefinedTemplates = mutableStateOf(listOf<ModelTemplate>())
+    var comparisonGenerationEntries = mutableStateOf(listOf<ModelComparedGenerationItem>())
     var templateToDelete: ModelTemplate? = null
     var currentQuerySection: String? = null
     var tts: TextToSpeech? = null
+
+    fun addComparisonGenerationEntry(modelComparedGenerationItem: ModelComparedGenerationItem) {
+        val previous = comparisonGenerationEntries.value.toMutableList()
+        previous.add(modelComparedGenerationItem)
+        comparisonGenerationEntries.value = previous
+    }
+    fun deleteComparisonGenerationEntry(index: Int) {
+        val previous = comparisonGenerationEntries.value.toMutableList()
+        previous.removeAt(index)
+        comparisonGenerationEntries.value = previous
+    }
 
     fun resetValues() {
         stopTTS()

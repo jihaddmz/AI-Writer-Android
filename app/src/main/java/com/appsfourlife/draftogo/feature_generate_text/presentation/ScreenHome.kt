@@ -50,6 +50,7 @@ fun ScreenHome(
     }
 
     SettingsNotifier.disableDrawerContent.value = false
+    SettingsNotifier.enableSheetContent.value = false
 
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {

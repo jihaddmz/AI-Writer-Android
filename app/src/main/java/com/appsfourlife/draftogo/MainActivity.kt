@@ -10,17 +10,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
@@ -36,9 +40,14 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.GoogleAuthProvider
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
+
 
 class MainActivity : ComponentActivity() {
 
@@ -72,6 +81,11 @@ class MainActivity : ComponentActivity() {
         FirebaseApp.initializeApp(this)
         App.context = this
 
+        AppCenter.start(
+            application, "e1c632de-8404-416f-8d5a-175d6d03581d",
+            Analytics::class.java, Crashes::class.java
+        )
+
         MobileAds.initialize(this) {
 
         }
@@ -81,11 +95,43 @@ class MainActivity : ComponentActivity() {
             navController = rememberNavController()
             val scaffoldState = rememberScaffoldState()
             val coroutineScope = rememberCoroutineScope()
+            val sheetScaffoldState = rememberBottomSheetScaffoldState(
+                bottomSheetState = BottomSheetState(
+                    initialValue = BottomSheetValue.Collapsed
+                )
+            )
+            val navBackStackEntry by navController.currentBackStackEntryAsState()
+
 
             AIWriterTheme {
-                Scaffold(
-                    scaffoldState = scaffoldState,
+
+                val changeTargetValue = remember {
+                    mutableStateOf(false)
+                }
+                val dpSize = animateDpAsState(targetValue = if (changeTargetValue.value && (HelperSharedPreference.getIsCompareOutputsEnabled() || SettingsNotifier.enableSheetContent.value)
+                    && (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
+                            && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route
+                            && navBackStackEntry?.destination?.route != Screens.ScreenSettings.route
+                            && navBackStackEntry?.destination?.route != Screens.ScreenHistory.route
+                            && navBackStackEntry?.destination?.route != Screens.ScreenHome.route)
+                ) 80.dp else 0.dp,
+                    animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)
+                )
+                LaunchedEffect(key1 = true, block = {
+                    delay(Constants.SPLASH_SCREEN_DURATION + 1200L)
+                    changeTargetValue.value = true
+                })
+                BottomSheetScaffold(
+                    scaffoldState = sheetScaffoldState,
+                    sheetContent = {
+                        BottomSheet()
+                    },
+                    sheetShape = SheetShape,
+                    sheetPeekHeight = dpSize.value,
+                    sheetBackgroundColor = Glass,
+                    backgroundColor = Glass,
                     drawerShape = DrawerShape,
+                    sheetGesturesEnabled = SettingsNotifier.enableSheetContent.value,
                     drawerGesturesEnabled = !SettingsNotifier.disableDrawerContent.value,
                     // region drawer content
                     drawerContent = {
@@ -97,8 +143,10 @@ class MainActivity : ComponentActivity() {
                             items(
                                 SettingsNotifier.predefinedTemplates.value.size,
                                 key = { it }) { index ->
-                                val text = SettingsNotifier.predefinedTemplates.value[index].query
-                                val imageUrl = SettingsNotifier.predefinedTemplates.value[index].imageUrl
+                                val text =
+                                    SettingsNotifier.predefinedTemplates.value[index].query
+                                val imageUrl =
+                                    SettingsNotifier.predefinedTemplates.value[index].imageUrl
 
                                 DrawerListItem(
                                     modifier = Modifier.padding(SpacersSize.medium),
@@ -193,11 +241,11 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     // endregion
-                ) {
-                    androidx.compose.material.Surface(
+                ) { paddingValues ->
+                    Surface(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(it)
+                            .padding(paddingValues)
                     ) {
                         Column(
                             modifier = Modifier
@@ -215,6 +263,10 @@ class MainActivity : ComponentActivity() {
                              * if the android version is equal or greater than 12, remove the custom splash screen
                              * and check if the user should be navigated directly to the sign in or home screen
                              **/
+                            /**
+                             * if the android version is equal or greater than 12, remove the custom splash screen
+                             * and check if the user should be navigated directly to the sign in or home screen
+                             **/
                             val startScreenRoute = if (Build.VERSION.SDK_INT >= 31) {
                                 setSpacersSize()
                                 if (HelperSharedPreference.getUsername() == "") {
@@ -228,7 +280,7 @@ class MainActivity : ComponentActivity() {
                             }
 
                             Box(
-                                modifier = Modifier.fillMaxSize(),
+                                modifier = Modifier,
                                 contentAlignment = Alignment.Center
                             ) {
                                 NavHost(
@@ -268,7 +320,10 @@ class MainActivity : ComponentActivity() {
 
                                     composable(route = Screens.ScreenArticle.route) {
                                         MyBackHandler(navController = navController)
-                                        ScreenArticle(navController = navController)
+                                        ScreenArticle(
+                                            navController = navController,
+                                            modifier = Modifier,
+                                        )
                                     }
 
                                     composable(route = Screens.ScreenUserAddedTemplate.route) {
@@ -433,6 +488,66 @@ class MainActivity : ComponentActivity() {
 //                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
 //            }
 //        }
+        }
+    }
+
+    @Composable
+    fun BottomSheet() {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.9f)
+                .padding(32.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+
+            item {
+                Text(
+                    text = stringResource(id = R.string.save_outputs),
+                    style = MaterialTheme.typography.h6
+                )
+            }
+
+            if (SettingsNotifier.comparisonGenerationEntries.value.isEmpty()) {
+                item {
+                    MyText(text = stringResource(id = R.string.label_no_saved_items_added))
+
+                    MySpacer(type = "medium")
+
+                    MyLottieAnim(
+                        lottieID = R.raw.empty_box,
+                        isLottieAnimationPlaying = mutableStateOf(true)
+                    )
+                }
+            }
+
+            items(SettingsNotifier.comparisonGenerationEntries.value.size) { index ->
+                MySpacer(type = "medium")
+                val modelComparedGenerationItem =
+                    SettingsNotifier.comparisonGenerationEntries.value[index]
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    MyLabelText(
+                        label = "${stringResource(id = R.string.input)}:",
+                        text = "\n${modelComparedGenerationItem.input}"
+                    )
+                    MySpacer(type = "small")
+                    SelectionContainer {
+                        MyLabelText(
+                            label = "${stringResource(id = R.string.output)}:",
+                            text = "\n${modelComparedGenerationItem.output}"
+                        )
+                    }
+
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd) {
+                        MyOutlinedButton(text = stringResource(id = R.string.delete)) {
+                            SettingsNotifier.deleteComparisonGenerationEntry(index)
+                        }
+                    }
+                    Divider(color = Blue, thickness = 2.dp)
+                }
+            }
         }
     }
 
