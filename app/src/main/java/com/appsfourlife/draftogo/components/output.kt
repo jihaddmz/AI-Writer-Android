@@ -18,10 +18,7 @@ import androidx.compose.ui.unit.dp
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelComparedGenerationItem
-import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
-import com.appsfourlife.draftogo.helpers.HelperUI
-import com.appsfourlife.draftogo.helpers.Helpers
+import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
@@ -66,7 +63,9 @@ fun Output(
                         verticalAlignment = Alignment.Bottom
                     ) {
 
+                        if (HelperSharedPreference.getIsSavedOutputsEnabled())
                             IconButton(onClick = {
+                                HelperAnalytics.sendEvent("saved_output")
                                 SettingsNotifier.addComparisonGenerationEntry(
                                     ModelComparedGenerationItem(
                                         input = SettingsNotifier.input.value.text,
@@ -103,6 +102,8 @@ fun Output(
                         }
 
                         IconButton(onClick = {
+                            HelperAnalytics.sendEvent("read_output_load")
+
                             if (HelperSharedPreference.getSubscriptionType() != Constants.SUBSCRIPTION_TYPE_PLUS) {
                                 HelperUI.showToast(msg = App.getTextFromString(R.string.plus_feature))
                                 return@IconButton

@@ -15,10 +15,7 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelTemplateIcon
-import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
-import com.appsfourlife.draftogo.helpers.HelperUI
+import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
@@ -98,6 +95,8 @@ fun DialogAddTemplate(
             MySpacer(type = "small")
 
             MyButton(text = stringResource(id = R.string.add), modifier = Modifier.fillMaxWidth()) {
+
+                HelperAnalytics.sendEvent("add_template")
 
                 if (HelperSharedPreference.getSubscriptionType() != Constants.SUBSCRIPTION_TYPE_PLUS){
                     HelperUI.showToast(msg = App.getTextFromString(R.string.plus_feature))

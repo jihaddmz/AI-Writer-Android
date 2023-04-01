@@ -174,6 +174,7 @@ fun MainAppBar(
 
         IconButton(
             onClick = {
+                HelperAnalytics.sendEvent("history")
                 // if there is network access, navigate to history
                 if (SettingsNotifier.isConnected.value) {
                     navController.navigate(Screens.ScreenHistory.route)
@@ -212,6 +213,8 @@ fun MainAppBar(
         }
         if (showSearch.value) {
             IconButton(onClick = {
+                HelperAnalytics.sendEvent("search_templates")
+
                 showSearch.value = false
                 showSearchExpanded.value = true
             }, modifier = Modifier.animateOffsetY(initialOffsetY = (-100).dp, delay = 200)) {
