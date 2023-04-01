@@ -82,7 +82,7 @@ class MainActivity : ComponentActivity() {
         App.context = this
 
         AppCenter.start(
-            application, "94d7d140-86d3-4484-aeff-380880603f64",
+            application, "e1c632de-8404-416f-8d5a-175d6d03581d",
             Analytics::class.java, Crashes::class.java
         )
 
