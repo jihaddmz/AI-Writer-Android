@@ -105,7 +105,7 @@ class MainActivity : ComponentActivity() {
 
             AIWriterTheme {
 
-                val changeTargetValue = remember {
+                val changeTargetValue = remember{
                     mutableStateOf(false)
                 }
                 val dpSize = animateDpAsState(targetValue = if (changeTargetValue.value && (HelperSharedPreference.getIsCompareOutputsEnabled() || SettingsNotifier.enableSheetContent.value)
