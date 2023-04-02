@@ -29,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.extensions.animateOffsetY
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.*
@@ -98,67 +99,25 @@ class MainActivity : ComponentActivity() {
 
             AIWriterTheme {
 
-                val changeTargetValue = remember {
-                    mutableStateOf(false)
-                }
-                val dpSize = animateDpAsState(
-                    targetValue = if (changeTargetValue.value && (HelperSharedPreference.getIsSavedOutputsEnabled() || SettingsNotifier.enableSheetContent.value)
-                        && (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
-                                && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route
-                                && navBackStackEntry?.destination?.route != BottomNavScreens.Settings.route
-                                && navBackStackEntry?.destination?.route != BottomNavScreens.History.route
-                                && navBackStackEntry?.destination?.route != BottomNavScreens.Home.route)
-                    ) 80.dp else 0.dp,
-                    animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)
-                )
-                LaunchedEffect(key1 = true, block = {
-                    delay(Constants.SPLASH_SCREEN_DURATION + 1200L)
-                    changeTargetValue.value = true
-                })
-                Scaffold(
-                    bottomBar = {
-                        val listOfBottomNavScreens =
-                            listOf(BottomNavScreens.Home, BottomNavScreens.History, BottomNavScreens.Settings)
-                        BottomNavigation(backgroundColor = Glass) {
-                            val currentRoute = navBackStackEntry?.destination?.route
-
-                            listOfBottomNavScreens.forEach { screen ->
-                                BottomNavigationItem(
-                                    selected = currentRoute == screen.route,
-                                    onClick = {
-                                        SettingsNotifier.resetValues()
-
-                                        if (currentRoute != screen.route) {
-                                            if (screen.route == BottomNavScreens.History.route) {
-                                                HelperAnalytics.sendEvent("history")
-                                                // if there is network access, navigate to history
-                                                if (SettingsNotifier.isConnected.value) {
-                                                    navController.navigate(BottomNavScreens.History.route)
-                                                } else {
-                                                    HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
-                                                }
-                                            }else
-                                                navController.navigate(screen.route)
-                                        }
-                                    },
-                                    icon = {
-                                        MyIcon(
-                                            iconID = screen.iconID, contentDesc = stringResource(
-                                                id = screen.labelID
-                                            )
-                                        )
-                                    },
-                                    label = { Text(text = stringResource(id = screen.labelID)) },
-                                    selectedContentColor = Blue,
-                                    unselectedContentColor = Color.Black
-                                )
-                            }
-                        }
+                    val changeTargetValue = remember {
+                        mutableStateOf(false)
                     }
-                ) {
-
+                    val dpSize = animateDpAsState(
+                        targetValue = if (changeTargetValue.value && (HelperSharedPreference.getIsSavedOutputsEnabled() || SettingsNotifier.enableSheetContent.value)
+                            && (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
+                                    && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route
+                                    && navBackStackEntry?.destination?.route != BottomNavScreens.Settings.route
+                                    && navBackStackEntry?.destination?.route != BottomNavScreens.History.route
+                                    && navBackStackEntry?.destination?.route != BottomNavScreens.Home.route)
+                        ) 80.dp else 0.dp,
+                        animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)
+                    )
+                    LaunchedEffect(key1 = true, block = {
+                        delay(Constants.SPLASH_SCREEN_DURATION + 1200L)
+                        changeTargetValue.value = true
+                    })
                     BottomSheetScaffold(
-                        modifier = Modifier.padding(it),
+                        modifier = Modifier,
                         scaffoldState = sheetScaffoldState,
                         sheetContent = {
                             BottomSheet()
@@ -279,6 +238,67 @@ class MainActivity : ComponentActivity() {
                         }
                         // endregion
                     ) { paddingValues ->
+                        Scaffold(
+                            scaffoldState = scaffoldState,
+                            backgroundColor = Glass,
+                            bottomBar = {
+                                if (navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route
+                                    && navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
+                                ) {
+                                    val listOfBottomNavScreens =
+                                        listOf(
+                                            BottomNavScreens.Home,
+                                            BottomNavScreens.History,
+                                            BottomNavScreens.Settings
+                                        )
+                                    BottomNavigation(
+                                        modifier = Modifier.animateOffsetY(
+                                            initialOffsetY = 100.dp,
+                                            delay = Constants.SPLASH_SCREEN_DURATION + 500L
+                                        ), backgroundColor = Glass
+                                    ) {
+                                        val currentRoute = navBackStackEntry?.destination?.route
+
+                                        listOfBottomNavScreens.forEach { screen ->
+                                            BottomNavigationItem(
+                                                selected = currentRoute == screen.route,
+                                                onClick = {
+                                                    SettingsNotifier.resetValues()
+
+                                                    if (currentRoute != screen.route) {
+                                                        if (screen.route == BottomNavScreens.History.route) {
+                                                            HelperAnalytics.sendEvent("history")
+                                                            // if there is network access, navigate to history
+                                                            if (SettingsNotifier.isConnected.value) {
+                                                                navController.navigate(BottomNavScreens.History.route)
+                                                            } else {
+                                                                HelperUI.showToast(
+                                                                    msg = App.getTextFromString(
+                                                                        R.string.no_connection
+                                                                    )
+                                                                )
+                                                            }
+                                                        } else
+                                                            navController.navigate(screen.route)
+                                                    }
+                                                },
+                                                icon = {
+                                                    MyIcon(
+                                                        iconID = screen.iconID,
+                                                        contentDesc = stringResource(
+                                                            id = screen.labelID
+                                                        )
+                                                    )
+                                                },
+                                                label = { Text(text = stringResource(id = screen.labelID)) },
+                                                selectedContentColor = Blue,
+                                                unselectedContentColor = Color.Black
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        ) {
                         Surface(
                             modifier = Modifier
                                 .fillMaxSize()
