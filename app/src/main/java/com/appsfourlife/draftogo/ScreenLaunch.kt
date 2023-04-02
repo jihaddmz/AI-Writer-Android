@@ -22,6 +22,7 @@ import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 import com.appsfourlife.draftogo.ui.theme.DrawerShape
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.Screens
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,7 +54,7 @@ fun ScreenLaunch(
         val startScreenRoute = if (HelperSharedPreference.getUsername() == "") {
             Screens.ScreenSignIn.route
         } else {
-            Screens.ScreenHome.route
+            BottomNavScreens.Home.route
         }
 
         Timer().schedule(timerTask {

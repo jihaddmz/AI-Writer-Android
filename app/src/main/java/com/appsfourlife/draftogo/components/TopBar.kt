@@ -18,7 +18,7 @@ import com.appsfourlife.draftogo.helpers.WindowInfo
 import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
-import com.appsfourlife.draftogo.util.Screens
+import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @Composable
@@ -50,7 +50,7 @@ fun TopBar(
         ) {
 
             IconButton(onClick = {
-                navController.navigate(Screens.ScreenHome.route)
+                navController.navigate(BottomNavScreens.Home.route)
                 SettingsNotifier.resetValues()
             }) {
 
