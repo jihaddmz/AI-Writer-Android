@@ -176,7 +176,7 @@
     <string name="plus_feature">This is a Plus feature, subscribe to the Plus plan to start using this feature</string>
     <string name="input">Input</string>
     <string name="output">Output</string>
-    <string name="save_outputs">Save Outputs</string>
+    <string name="save_outputs">Saved Outputs</string>
     <string name="label_no_saved_items_added">No Saved Outputs added, use the save icon in the output to add them here</string>
     <string name="enable_save_outputs">Enable Save Outputs</string>
     <string name="relaunch_app_to_enable_this_feature">Please relaunch the app to enable this feature</string>
