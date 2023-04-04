@@ -11,11 +11,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
@@ -35,40 +36,43 @@ fun ScreenCustom(
         text = stringResource(id = R.string.custom), navController = navController
     ) {
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(SpacersSize.medium)
-                .verticalScroll(verticalScroll)
-        ) {
+        BottomSheetSaveOutputs(navController = navController) {
 
-            if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = SpacersSize.medium, end = SpacersSize.medium, bottom = 80.dp)
+                    .verticalScroll(verticalScroll)
+            ) {
 
-            val nbOfGenerations = sliderNbOfGenerations()
+                if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-            MySpacer(type = "small")
+                val nbOfGenerations = sliderNbOfGenerations()
 
-            val length = length()
+                MySpacer(type = "small")
 
-            MySpacer(type = "small")
+                val length = length()
 
-            input(
-                label = stringResource(id = R.string.write_a_custom_text),
-                showDialog = showDialog,
-                length = length,
-                nbOfGenerations = nbOfGenerations,
-                verticalScrollState = verticalScroll,
-                checkIfInputIsEmpty = true
-            )
+                MySpacer(type = "small")
 
-            Spacer(modifier = Modifier.height(SpacersSize.medium))
+                input(
+                    label = stringResource(id = R.string.write_a_custom_text),
+                    showDialog = showDialog,
+                    length = length,
+                    nbOfGenerations = nbOfGenerations,
+                    verticalScrollState = verticalScroll,
+                    checkIfInputIsEmpty = true
+                )
 
-            if (SettingsNotifier.outputList.isEmpty()) {
-                Output(outputText = SettingsNotifier.output)
-            } else if (SettingsNotifier.outputList.isNotEmpty()) {
-                SettingsNotifier.outputList.forEach {
-                    Output(outputText = mutableStateOf(it))
-                    MySpacer(type = "small")
+                Spacer(modifier = Modifier.height(SpacersSize.medium))
+
+                if (SettingsNotifier.outputList.isEmpty()) {
+                    Output(outputText = SettingsNotifier.output)
+                } else if (SettingsNotifier.outputList.isNotEmpty()) {
+                    SettingsNotifier.outputList.forEach {
+                        Output(outputText = mutableStateOf(it))
+                        MySpacer(type = "small")
+                    }
                 }
             }
         }

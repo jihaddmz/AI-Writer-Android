@@ -10,11 +10,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -99,405 +97,392 @@ class MainActivity : ComponentActivity() {
 
             AIWriterTheme {
 
-                    val changeTargetValue = remember {
-                        mutableStateOf(false)
-                    }
-                    val dpSize = animateDpAsState(
-                        targetValue = if (changeTargetValue.value && (HelperSharedPreference.getIsSavedOutputsEnabled() || SettingsNotifier.enableSheetContent.value)
-                            && (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
-                                    && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route
-                                    && navBackStackEntry?.destination?.route != BottomNavScreens.Settings.route
-                                    && navBackStackEntry?.destination?.route != BottomNavScreens.History.route
-                                    && navBackStackEntry?.destination?.route != BottomNavScreens.Home.route)
-                        ) 80.dp else 0.dp,
-                        animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)
-                    )
-                    LaunchedEffect(key1 = true, block = {
-                        delay(Constants.SPLASH_SCREEN_DURATION + 1200L)
-                        changeTargetValue.value = true
-                    })
-                    BottomSheetScaffold(
-                        modifier = Modifier,
-                        scaffoldState = sheetScaffoldState,
-                        sheetContent = {
-                            BottomSheet()
-                        },
-                        sheetShape = SheetShape,
-                        sheetPeekHeight = dpSize.value,
-                        sheetBackgroundColor = Glass,
-                        backgroundColor = Glass,
-                        drawerShape = DrawerShape,
-                        sheetGesturesEnabled = SettingsNotifier.enableSheetContent.value,
-                        drawerGesturesEnabled = !SettingsNotifier.disableDrawerContent.value,
-                        // region drawer content
-                        drawerContent = {
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    scaffoldState = scaffoldState,
+                    backgroundColor = Glass,
+                    drawerContent = {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                        ) {
+                            items(
+                                SettingsNotifier.predefinedTemplates.value.size,
+                                key = { it }) { index ->
+                                val text =
+                                    SettingsNotifier.predefinedTemplates.value[index].query
+                                val imageUrl =
+                                    SettingsNotifier.predefinedTemplates.value[index].imageUrl
 
-                            LazyColumn(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                            ) {
-                                items(
-                                    SettingsNotifier.predefinedTemplates.value.size,
-                                    key = { it }) { index ->
-                                    val text =
-                                        SettingsNotifier.predefinedTemplates.value[index].query
-                                    val imageUrl =
-                                        SettingsNotifier.predefinedTemplates.value[index].imageUrl
+                                DrawerListItem(
+                                    modifier = Modifier.padding(SpacersSize.medium),
+                                    text = text,
+                                    imageUrl = imageUrl
+                                ) {
 
-                                    DrawerListItem(
-                                        modifier = Modifier.padding(SpacersSize.medium),
-                                        text = text,
-                                        imageUrl = imageUrl
-                                    ) {
+                                    SettingsNotifier.resetValues() // clearing values
 
-                                        SettingsNotifier.resetValues() // clearing values
-
-                                        when (text) {
-                                            App.getTextFromString(R.string.write_an_email) -> {
-                                                navController.navigate(Screens.ScreenEmail.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_blog_top_bar) -> {
-                                                navController.navigate(Screens.ScreenBlog.route)
-                                            }
-                                            App.getTextFromString(R.string.write_an_essay) -> {
-                                                navController.navigate(Screens.ScreenEssay.route)
-                                            }
-                                            App.getTextFromString(R.string.write_an_article_top_bar) -> {
-                                                navController.navigate(Screens.ScreenArticle.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_letter) -> {
-                                                navController.navigate(Screens.ScreenLetter.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_cv) -> {
-                                                navController.navigate(Screens.ScreenCV.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_resume) -> {
-                                                navController.navigate(Screens.ScreenResume.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
-                                                navController.navigate(Screens.ScreenPersonalBio.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
-                                                navController.navigate(Screens.ScreenTwitter.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
-                                                navController.navigate(Screens.ScreenTiktok.route)
-                                            }
-                                            App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
-                                                navController.navigate(Screens.ScreenInstagram.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
-                                                navController.navigate(Screens.ScreenFacebook.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_linkedin_post_top_bar) -> {
-                                                navController.navigate(Screens.ScreenLinkedIn.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
-                                                navController.navigate(Screens.ScreenYoutube.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_podcast_top_bar) -> {
-                                                navController.navigate(Screens.ScreenPodcast.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_game_script_top_label) -> {
-                                                navController.navigate(Screens.ScreenGame.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_poem_top_bar) -> {
-                                                navController.navigate(Screens.ScreenPoem.route)
-                                            }
-
-                                            App.getTextFromString(R.string.write_a_song_top_bar) -> {
-                                                navController.navigate(Screens.ScreenSong.route)
-                                            }
-                                            App.getTextFromString(R.string.write_a_code) -> {
-                                                navController.navigate(Screens.ScreenCode.route)
-                                            }
-                                            App.getTextFromString(R.string.custom) -> {
-                                                navController.navigate(Screens.ScreenCustom.route)
-                                            }
-                                            else -> {
-                                                SettingsNotifier.currentQuerySection = text
-                                                navController.navigate(Screens.ScreenUserAddedTemplate.route)
-                                            }
+                                    when (text) {
+                                        App.getTextFromString(R.string.write_an_email) -> {
+                                            navController.navigate(Screens.ScreenEmail.route)
                                         }
-                                        coroutineScope.launch {
-                                            scaffoldState.drawerState.animateTo(
-                                                DrawerValue.Closed,
-                                                anim = tween(durationMillis = Constants.ANIMATION_LENGTH)
-                                            )
+                                        App.getTextFromString(R.string.write_a_blog_top_bar) -> {
+                                            navController.navigate(Screens.ScreenBlog.route)
+                                        }
+                                        App.getTextFromString(R.string.write_an_essay) -> {
+                                            navController.navigate(Screens.ScreenEssay.route)
+                                        }
+                                        App.getTextFromString(R.string.write_an_article_top_bar) -> {
+                                            navController.navigate(Screens.ScreenArticle.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_letter) -> {
+                                            navController.navigate(Screens.ScreenLetter.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_cv) -> {
+                                            navController.navigate(Screens.ScreenCV.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_resume) -> {
+                                            navController.navigate(Screens.ScreenResume.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
+                                            navController.navigate(Screens.ScreenPersonalBio.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
+                                            navController.navigate(Screens.ScreenTwitter.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
+                                            navController.navigate(Screens.ScreenTiktok.route)
+                                        }
+                                        App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
+                                            navController.navigate(Screens.ScreenInstagram.route)
                                         }
 
+                                        App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
+                                            navController.navigate(Screens.ScreenFacebook.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_linkedin_post_top_bar) -> {
+                                            navController.navigate(Screens.ScreenLinkedIn.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
+                                            navController.navigate(Screens.ScreenYoutube.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_podcast_top_bar) -> {
+                                            navController.navigate(Screens.ScreenPodcast.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_game_script_top_label) -> {
+                                            navController.navigate(Screens.ScreenGame.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_poem_top_bar) -> {
+                                            navController.navigate(Screens.ScreenPoem.route)
+                                        }
+
+                                        App.getTextFromString(R.string.write_a_song_top_bar) -> {
+                                            navController.navigate(Screens.ScreenSong.route)
+                                        }
+                                        App.getTextFromString(R.string.write_a_code) -> {
+                                            navController.navigate(Screens.ScreenCode.route)
+                                        }
+                                        App.getTextFromString(R.string.custom) -> {
+                                            navController.navigate(Screens.ScreenCustom.route)
+                                        }
+                                        else -> {
+                                            SettingsNotifier.currentQuerySection = text
+                                            navController.navigate(Screens.ScreenUserAddedTemplate.route)
+                                        }
+                                    }
+                                    coroutineScope.launch {
+                                        scaffoldState.drawerState.animateTo(
+                                            DrawerValue.Closed,
+                                            anim = tween(durationMillis = Constants.ANIMATION_LENGTH)
+                                        )
                                     }
                                 }
                             }
                         }
-                        // endregion
-                    ) { paddingValues ->
-                        Scaffold(
-                            scaffoldState = scaffoldState,
-                            backgroundColor = Glass,
-                            bottomBar = {
-                                if (navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route
-                                    && navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
-                                ) {
-                                    val listOfBottomNavScreens =
-                                        listOf(
-                                            BottomNavScreens.Home,
-                                            BottomNavScreens.History,
-                                            BottomNavScreens.Settings
-                                        )
-                                    BottomNavigation(
-                                        modifier = Modifier.animateOffsetY(
-                                            initialOffsetY = 100.dp,
-                                            delay = Constants.SPLASH_SCREEN_DURATION + 500L
-                                        ), backgroundColor = Glass
-                                    ) {
-                                        val currentRoute = navBackStackEntry?.destination?.route
+                    },
+                    bottomBar = {
+                        val changeTargetValue = remember {
+                            mutableStateOf(false)
+                        }
+//                        val shouldBottomBarBeVisible = remember {
+//                            mutableStateOf(false)
+//                        }
 
-                                        listOfBottomNavScreens.forEach { screen ->
-                                            BottomNavigationItem(
-                                                selected = currentRoute == screen.route,
-                                                onClick = {
-                                                    SettingsNotifier.resetValues()
+                        val shouldBottomBarBeVisible =
+                            (navBackStackEntry?.destination?.route == BottomNavScreens.Home.route
+                                    || navBackStackEntry?.destination?.route == BottomNavScreens.History.route
+                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Settings.route)
 
-                                                    if (currentRoute != screen.route) {
-                                                        if (screen.route == BottomNavScreens.History.route) {
-                                                            HelperAnalytics.sendEvent("history")
-                                                            // if there is network access, navigate to history
-                                                            if (SettingsNotifier.isConnected.value) {
-                                                                navController.navigate(BottomNavScreens.History.route)
-                                                            } else {
-                                                                HelperUI.showToast(
-                                                                    msg = App.getTextFromString(
-                                                                        R.string.no_connection
-                                                                    )
-                                                                )
-                                                            }
-                                                        } else
-                                                            navController.navigate(screen.route)
-                                                    }
-                                                },
-                                                icon = {
-                                                    MyIcon(
-                                                        iconID = screen.iconID,
-                                                        contentDesc = stringResource(
-                                                            id = screen.labelID
+                        LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
+                            if (shouldBottomBarBeVisible) {
+                                delay(Constants.SPLASH_SCREEN_DURATION + 500L)
+                                changeTargetValue.value = true
+                            } else {
+                                changeTargetValue.value = false
+                            }
+//                            if (shouldBottomBarBeVisible) {
+//                            } else {
+//                            }
+                        })
+
+                        if (changeTargetValue.value) {
+                            val listOfBottomNavScreens =
+                                listOf(
+                                    BottomNavScreens.Home,
+                                    BottomNavScreens.History,
+                                    BottomNavScreens.Settings
+                                )
+                            BottomNavigation(
+                                modifier = Modifier.animateOffsetY(
+                                    initialOffsetY = 100.dp,
+                                ), backgroundColor = Glass
+                            ) {
+                                val currentRoute = navBackStackEntry?.destination?.route
+
+                                listOfBottomNavScreens.forEach { screen ->
+                                    BottomNavigationItem(
+                                        selected = currentRoute == screen.route,
+                                        onClick = {
+                                            SettingsNotifier.resetValues()
+
+                                            if (currentRoute != screen.route) {
+                                                if (screen.route == BottomNavScreens.History.route) {
+                                                    HelperAnalytics.sendEvent("history")
+                                                    // if there is network access, navigate to history
+                                                    if (SettingsNotifier.isConnected.value) {
+                                                        navController.navigate(BottomNavScreens.History.route)
+                                                    } else {
+                                                        HelperUI.showToast(
+                                                            msg = App.getTextFromString(
+                                                                R.string.no_connection
+                                                            )
                                                         )
-                                                    )
-                                                },
-                                                label = { Text(text = stringResource(id = screen.labelID)) },
-                                                selectedContentColor = Blue,
-                                                unselectedContentColor = Color.Black
+                                                    }
+                                                } else
+                                                    navController.navigate(screen.route)
+                                            }
+                                        },
+                                        icon = {
+                                            MyIcon(
+                                                iconID = screen.iconID,
+                                                contentDesc = stringResource(
+                                                    id = screen.labelID
+                                                )
                                             )
-                                        }
-                                    }
+                                        },
+                                        label = { Text(text = stringResource(id = screen.labelID)) },
+                                        selectedContentColor = Blue,
+                                        unselectedContentColor = Color.Black
+                                    )
                                 }
                             }
-                        ) {
-                        Surface(
+                        }
+                    }
+                ) {
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(it)
+                    ) {
+                        Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(paddingValues)
                         ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                            ) {
 
-                                if (SettingsNotifier.basePlanMaxNbOfWordsExceeded.value) {
-                                    DialogSubscriptionNbOfWordsExceeded(SettingsNotifier.basePlanMaxNbOfWordsExceeded)
-                                }
+                            if (SettingsNotifier.basePlanMaxNbOfWordsExceeded.value) {
+                                DialogSubscriptionNbOfWordsExceeded(SettingsNotifier.basePlanMaxNbOfWordsExceeded)
+                            }
 
-                                if (SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value)
-                                    DialogSubscription(SettingsNotifier.showDialogNbOfGenerationsLeftExceeded)
+                            if (SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value)
+                                DialogSubscription(SettingsNotifier.showDialogNbOfGenerationsLeftExceeded)
 
-                                /**
-                                 * if the android version is equal or greater than 12, remove the custom splash screen
-                                 * and check if the user should be navigated directly to the sign in or home screen
-                                 **/
-                                /**
-                                 * if the android version is equal or greater than 12, remove the custom splash screen
-                                 * and check if the user should be navigated directly to the sign in or home screen
-                                 **/
-                                val startScreenRoute = if (Build.VERSION.SDK_INT >= 31) {
-                                    setSpacersSize()
-                                    if (HelperSharedPreference.getUsername() == "") {
-                                        Screens.ScreenSignIn.route
-                                    } else {
-                                        BottomNavScreens.Home.route
-                                    }
-
+                            /**
+                             * if the android version is equal or greater than 12, remove the custom splash screen
+                             * and check if the user should be navigated directly to the sign in or home screen
+                             **/
+                            /**
+                             * if the android version is equal or greater than 12, remove the custom splash screen
+                             * and check if the user should be navigated directly to the sign in or home screen
+                             **/
+                            val startScreenRoute = if (Build.VERSION.SDK_INT >= 31) {
+                                setSpacersSize()
+                                if (HelperSharedPreference.getUsername() == "") {
+                                    Screens.ScreenSignIn.route
                                 } else {
-                                    Screens.ScreenLaunch.route
+                                    BottomNavScreens.Home.route
                                 }
 
-                                Box(
-                                    modifier = Modifier,
-                                    contentAlignment = Alignment.Center
+                            } else {
+                                Screens.ScreenLaunch.route
+                            }
+
+                            Box(
+                                modifier = Modifier,
+                                contentAlignment = Alignment.Center
+                            ) {
+                                NavHost(
+                                    navController = navController,
+                                    startDestination = startScreenRoute
                                 ) {
-                                    NavHost(
-                                        navController = navController,
-                                        startDestination = startScreenRoute
-                                    ) {
-                                        // region composables
-                                        composable(route = Screens.ScreenLaunch.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenLaunch(
-                                                modifier = Modifier,
-                                                navController = navController
-                                            )
-                                        }
-
-                                        composable(route = BottomNavScreens.History.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenHistory(
-                                                modifier = Modifier,
-                                                navController = navController
-                                            )
-                                        }
-
-                                        composable(route = Screens.ScreenSignIn.route) {
-                                            HomeBackHandler(context = this@MainActivity)
-                                            ScreenSignIn(
-                                            )
-                                        }
-
-                                        composable(route = BottomNavScreens.Home.route) {
-                                            HomeBackHandler(context = this@MainActivity)
-                                            ScreenHome(
-                                                modifier = Modifier,
-                                                navController = navController
-                                            )
-                                        }
-
-                                        composable(route = Screens.ScreenArticle.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenArticle(
-                                                navController = navController,
-                                                modifier = Modifier,
-                                            )
-                                        }
-
-                                        composable(route = Screens.ScreenUserAddedTemplate.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenUserAddedTemplate(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenBlog.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenBlog(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenCode.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenCode(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenCV.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenCV(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenResume.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenResume(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenEmail.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenEmail(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenEssay.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenEssay(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenInstagram.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenInstagram(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenLetter.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenLetter(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenPoem.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenPoem(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenTiktok.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenTiktok(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenTwitter.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenTweet(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenPersonalBio.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenPersonalBio(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenCustom.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenCustom(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenYoutube.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenYoutube(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenFacebook.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenFacebook(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenLinkedIn.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenLinkedIn(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenSong.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenSong(navController = navController)
-                                        }
-
-                                        composable(route = BottomNavScreens.Settings.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenSettings(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenPodcast.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenPodcast(navController = navController)
-                                        }
-
-                                        composable(route = Screens.ScreenGame.route) {
-                                            MyBackHandler(navController = navController)
-                                            ScreenGame(navController = navController)
-                                        }
-                                        // endregion
+                                    // region composables
+                                    composable(route = Screens.ScreenLaunch.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenLaunch(
+                                            modifier = Modifier,
+                                            navController = navController
+                                        )
                                     }
 
-                                    if (SettingsNotifier.showLoadingDialog.value) {
-                                        DialogLoading(title = stringResource(id = R.string.loading_ad))
+                                    composable(route = BottomNavScreens.History.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenHistory(
+                                            modifier = Modifier,
+                                            navController = navController
+                                        )
                                     }
+
+                                    composable(route = Screens.ScreenSignIn.route) {
+                                        HomeBackHandler(context = this@MainActivity)
+                                        ScreenSignIn(
+                                        )
+                                    }
+
+                                    composable(route = BottomNavScreens.Home.route) {
+                                        HomeBackHandler(context = this@MainActivity)
+                                        ScreenHome(
+                                            modifier = Modifier,
+                                            navController = navController
+                                        )
+                                    }
+
+                                    composable(route = Screens.ScreenArticle.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenArticle(
+                                            navController = navController,
+                                            modifier = Modifier,
+                                        )
+                                    }
+
+                                    composable(route = Screens.ScreenUserAddedTemplate.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenUserAddedTemplate(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenBlog.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenBlog(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenCode.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenCode(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenCV.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenCV(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenResume.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenResume(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenEmail.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenEmail(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenEssay.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenEssay(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenInstagram.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenInstagram(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenLetter.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenLetter(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenPoem.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenPoem(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenTiktok.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenTiktok(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenTwitter.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenTweet(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenPersonalBio.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenPersonalBio(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenCustom.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenCustom(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenYoutube.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenYoutube(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenFacebook.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenFacebook(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenLinkedIn.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenLinkedIn(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenSong.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenSong(navController = navController)
+                                    }
+
+                                    composable(route = BottomNavScreens.Settings.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenSettings(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenPodcast.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenPodcast(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenGame.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenGame(navController = navController)
+                                    }
+                                    // endregion
+                                }
+
+                                if (SettingsNotifier.showLoadingDialog.value) {
+                                    DialogLoading(title = stringResource(id = R.string.loading_ad))
                                 }
                             }
                         }
                     }
                 }
+//                }
             }
         }
     }
@@ -546,69 +531,6 @@ class MainActivity : ComponentActivity() {
 //                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
 //            }
 //        }
-        }
-    }
-
-    @Composable
-    fun BottomSheet() {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.9f)
-                .padding(32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            item {
-                Text(
-                    text = stringResource(id = R.string.save_outputs),
-                    style = MaterialTheme.typography.h6
-                )
-            }
-
-            if (SettingsNotifier.comparisonGenerationEntries.value.isEmpty()) {
-                item {
-                    MyText(text = stringResource(id = R.string.label_no_saved_items_added))
-
-                    MySpacer(type = "medium")
-
-                    MyLottieAnim(
-                        lottieID = R.raw.empty_box,
-                        isLottieAnimationPlaying = mutableStateOf(true)
-                    )
-                }
-            }
-
-            items(SettingsNotifier.comparisonGenerationEntries.value.size) { index ->
-                MySpacer(type = "medium")
-                val modelComparedGenerationItem =
-                    SettingsNotifier.comparisonGenerationEntries.value[index]
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    MyLabelText(
-                        label = "${stringResource(id = R.string.input)}:",
-                        text = "\n${modelComparedGenerationItem.input}"
-                    )
-                    MySpacer(type = "small")
-                    SelectionContainer {
-                        MyLabelText(
-                            label = "${stringResource(id = R.string.output)}:",
-                            text = "\n${modelComparedGenerationItem.output}"
-                        )
-                    }
-
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.BottomEnd
-                    ) {
-                        MyOutlinedButton(text = stringResource(id = R.string.delete)) {
-                            SettingsNotifier.deleteComparisonGenerationEntry(index)
-                        }
-                    }
-                    Divider(color = Blue, thickness = 2.dp)
-                }
-            }
         }
     }
 

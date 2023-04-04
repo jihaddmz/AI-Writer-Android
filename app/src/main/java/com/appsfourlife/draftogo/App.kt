@@ -12,6 +12,7 @@ import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -33,6 +34,7 @@ class App : Application() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
 
@@ -59,7 +61,7 @@ class App : Application() {
 
         Timer().scheduleAtFixedRate(timerTask {
             GlobalScope.launch(Dispatchers.IO) {
-                SettingsNotifier.isConnected.value = Helpers.isConnected()
+                SettingsNotifier.isConnected.value = Helpers.isInternetAvailable()
             }
         }, 0, 2000)
 
