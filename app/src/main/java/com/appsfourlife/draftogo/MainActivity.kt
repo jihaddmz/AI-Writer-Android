@@ -240,7 +240,7 @@ class MainActivity : ComponentActivity() {
                             BottomNavigation(
                                 modifier = Modifier.animateOffsetY(
                                     initialOffsetY = 100.dp,
-                                ), backgroundColor = Glass
+                                ), backgroundColor = Color.Transparent
                             ) {
                                 val currentRoute = navBackStackEntry?.destination?.route
 
