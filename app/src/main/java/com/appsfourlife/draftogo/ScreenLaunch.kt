@@ -15,12 +15,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.WindowInfo
 import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 import com.appsfourlife.draftogo.ui.theme.DrawerShape
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.Screens
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,19 +37,6 @@ fun ScreenLaunch(
     val context = LocalContext.current
 
     setSpacersSize()
-
-//    LaunchedEffect(key1 = true, block = {
-//        coroutineScope.launch(Dispatchers.IO) {
-//            Constants.PREDEFINED_TEMPLATES.forEach {
-//                if (App.dbGenerateText.daoTemplates.getTemplateByQuery(it) == null)
-//                    App.dbGenerateText.daoTemplates.insertTemplate(ModelTemplate(it, ""))
-//                else
-//                    return@forEach
-//            }
-//            SettingsNotifier.predefinedTemplates =
-//                App.dbGenerateText.daoTemplates.getAllTemplates()
-//        }
-//    })
 
     Box(
         modifier = modifier
@@ -65,7 +54,7 @@ fun ScreenLaunch(
         val startScreenRoute = if (HelperSharedPreference.getUsername() == "") {
             Screens.ScreenSignIn.route
         } else {
-            Screens.ScreenHome.route
+            BottomNavScreens.Home.route
         }
 
         Timer().schedule(timerTask {
@@ -78,7 +67,7 @@ fun ScreenLaunch(
                 )
                 navController.navigate(startScreenRoute)
             }
-        }, 800)
+        }, Constants.SPLASH_SCREEN_DURATION)
     }
 }
 

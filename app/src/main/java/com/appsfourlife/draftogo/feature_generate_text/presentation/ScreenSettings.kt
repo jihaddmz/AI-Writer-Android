@@ -19,11 +19,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperAuth
-import com.appsfourlife.draftogo.helpers.HelperIntent
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
+import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlin.math.abs
 
 @Composable
@@ -89,6 +87,25 @@ fun ScreenSettings(
             )
 
             TypeWriterLength()
+
+            mySwitch(
+                modifier = Modifier.padding(end = SpacersSize.small),
+                label = stringResource(id = R.string.enable_save_outputs),
+                initialValue = HelperSharedPreference.getIsSavedOutputsEnabled()
+            ) {
+                HelperSharedPreference.setBool(
+                    HelperSharedPreference.SP_SETTINGS,
+                    HelperSharedPreference.SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED,
+                    it
+                )
+                SettingsNotifier.enableSheetContent.value = it
+
+                if (it) {
+                    HelperAnalytics.sendEvent("enabled_saved_outputs")
+                } else {
+                    HelperAnalytics.sendEvent("disabled_saved_outputs")
+                }
+            }
 
             Column(
                 modifier = Modifier

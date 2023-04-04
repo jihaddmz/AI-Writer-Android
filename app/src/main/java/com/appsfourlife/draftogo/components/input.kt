@@ -96,6 +96,8 @@ fun input(
                         SettingsNotifier.input.value = Helpers.pasteFromClipBoard(
                             mutableStateOf(SettingsNotifier.input.value), context
                         )
+                        if (SettingsNotifier.input.value.text.isNotEmpty())
+                            isGenerateBtnEnabled.value = true
                     }, modifier = Modifier.animateOffsetX(initialOffsetX = 100.dp)) {
                         MyIcon(
                             iconID = R.drawable.icon_paste,

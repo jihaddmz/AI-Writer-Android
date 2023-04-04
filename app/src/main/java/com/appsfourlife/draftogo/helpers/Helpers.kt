@@ -9,13 +9,9 @@ import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.core.content.ContextCompat.startActivity
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.helpers.Constants.TAG
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.IOException
 import java.net.InetSocketAddress
 import java.net.Socket
@@ -108,6 +104,11 @@ object Helpers {
         } catch (e: IOException) {
             false
         }
+    }
+
+    fun isInternetAvailable(): Boolean {
+        val command = Runtime.getRuntime().exec("ping -c 2 www.google.com")
+        return command.waitFor() == 0
     }
 
     fun logD(msg: String) {

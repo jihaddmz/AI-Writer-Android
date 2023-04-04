@@ -11,3 +11,4 @@ var Shapes = Shapes(
 )
 
 var DrawerShape = RoundedCornerShape(topEnd = 13.dp, bottomEnd = 13.dp, topStart = 0.dp, bottomStart = 0.dp)
+var SheetShape = RoundedCornerShape(topEnd = 13.dp, topStart = 13.dp)
