@@ -9,13 +9,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @Composable
 fun ScreenCV(
@@ -34,44 +35,47 @@ fun ScreenCV(
     ) {
         if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(SpacersSize.medium)
-                .verticalScroll(verticalScroll)
-        ) {
+        BottomSheetSaveOutputs(navController = navController) {
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = SpacersSize.medium, end = SpacersSize.medium, bottom = 80.dp)
+                    .verticalScroll(verticalScroll)
+            ) {
 
 
-            val cvType =
-                myDropDown(label = stringResource(id = R.string.type), list = App.listOfCVTypes)
+                val cvType =
+                    myDropDown(label = stringResource(id = R.string.type), list = App.listOfCVTypes)
 
-            Spacer(modifier = Modifier.height(SpacersSize.medium))
+                Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            myEditTextLabel(
-                label = stringResource(id = R.string.job_title), placeHolder = stringResource(
-                    id = R.string.web_developer
-                )
-            )
-
-            Spacer(modifier = Modifier.height(SpacersSize.medium))
-
-            input(
-                label = stringResource(id = R.string.cv_input_label),
-                inputPrefix = "${
-                    stringResource(
-                        id = R.string.write_a_cv_of_type,
-                        HelperSharedPreference.getOutputLanguage(),
-                        cvType
+                myEditTextLabel(
+                    label = stringResource(id = R.string.job_title), placeHolder = stringResource(
+                        id = R.string.web_developer
                     )
-                } for a ${SettingsNotifier.jobTitle.value} ",
-                showDialog = showDialog,
-                verticalScrollState = verticalScroll
-            )
+                )
 
-            Spacer(modifier = Modifier.height(SpacersSize.medium))
+                Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            Output(outputText = SettingsNotifier.output)
+                input(
+                    label = stringResource(id = R.string.cv_input_label),
+                    inputPrefix = "${
+                        stringResource(
+                            id = R.string.write_a_cv_of_type,
+                            HelperSharedPreference.getOutputLanguage(),
+                            cvType
+                        )
+                    } for a ${SettingsNotifier.jobTitle.value} ",
+                    showDialog = showDialog,
+                    verticalScrollState = verticalScroll
+                )
 
+                Spacer(modifier = Modifier.height(SpacersSize.medium))
+
+                Output(outputText = SettingsNotifier.output)
+
+            }
         }
     }
 }

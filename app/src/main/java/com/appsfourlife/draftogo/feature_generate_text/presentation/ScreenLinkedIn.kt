@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
@@ -34,42 +35,43 @@ fun ScreenLinkedIn(
         navController = navController
     ) {
 
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(SpacersSize.medium)
-                .verticalScroll(verticalScroll)
-        ) {
+        BottomSheetSaveOutputs(navController = navController) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = SpacersSize.medium, end = SpacersSize.medium, bottom = 80.dp)
+                    .verticalScroll(verticalScroll)
+            ) {
 
-            if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-            val nbOfGenerations = sliderNbOfGenerations()
+                val nbOfGenerations = sliderNbOfGenerations()
 
-            MySpacer(type = "small")
+                MySpacer(type = "small")
 
-            input(
-                label = stringResource(id = R.string.linkedin_input_label),
-                inputPrefix = stringResource(
-                    id = R.string.write_a_linkedin_post,
-                    HelperSharedPreference.getOutputLanguage()
-                ),
-                showDialog = showDialog,
-                length = Constants.MAX_GENERATION_LENGTH.toInt(),
-                nbOfGenerations = nbOfGenerations,
-                verticalScrollState = verticalScroll
-            )
+                input(
+                    label = stringResource(id = R.string.linkedin_input_label),
+                    inputPrefix = stringResource(
+                        id = R.string.write_a_linkedin_post,
+                        HelperSharedPreference.getOutputLanguage()
+                    ),
+                    showDialog = showDialog,
+                    length = Constants.MAX_GENERATION_LENGTH.toInt(),
+                    nbOfGenerations = nbOfGenerations,
+                    verticalScrollState = verticalScroll
+                )
 
-            Spacer(modifier = Modifier.height(SpacersSize.medium))
+                Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            if (SettingsNotifier.outputList.isEmpty()) {
-                Output(outputText = SettingsNotifier.output, fromScreen = "linkedin")
-            } else if (SettingsNotifier.outputList.isNotEmpty()) {
-                SettingsNotifier.outputList.forEach {
-                    Output(outputText = mutableStateOf(it), fromScreen = "linkedin")
-                    MySpacer(type = "small")
+                if (SettingsNotifier.outputList.isEmpty()) {
+                    Output(outputText = SettingsNotifier.output, fromScreen = "linkedin")
+                } else if (SettingsNotifier.outputList.isNotEmpty()) {
+                    SettingsNotifier.outputList.forEach {
+                        Output(outputText = mutableStateOf(it), fromScreen = "linkedin")
+                        MySpacer(type = "small")
+                    }
                 }
             }
-
         }
     }
 }

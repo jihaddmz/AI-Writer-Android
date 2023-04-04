@@ -27,7 +27,6 @@ import com.appsfourlife.draftogo.extensions.sectionsGridContent
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
-import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -174,27 +173,9 @@ fun MainAppBar(
 
         IconButton(
             onClick = {
-                HelperAnalytics.sendEvent("history")
-                // if there is network access, navigate to history
-                if (SettingsNotifier.isConnected.value) {
-                    navController.navigate(Screens.ScreenHistory.route)
-                } else {
-                    HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
-                }
-            }, modifier = Modifier
-                .animateOffsetY(initialOffsetY = (-100).dp)
-        ) {
-            MyIcon(
-                iconID = R.drawable.icon_history,
-                contentDesc = stringResource(id = R.string.history)
-            )
-        }
-
-        IconButton(
-            onClick = {
                 SettingsNotifier.showAddTemplateDialog.value = true
             }, modifier = Modifier
-                .animateOffsetY(initialOffsetY = (-100).dp, delay = 100)
+                .animateOffsetY(initialOffsetY = (-100).dp, delay = 0)
         ) {
             MyIcon(
                 iconID = R.drawable.icon_add_new,
@@ -268,18 +249,6 @@ fun MainAppBar(
                         }
                     }
                 })
-        }
-
-        IconButton(
-            onClick = {
-                navController.navigate(Screens.ScreenSettings.route)
-            }, modifier = Modifier
-                .animateOffsetY(initialOffsetY = (-100).dp, delay = 300)
-        ) {
-            MyIcon(
-                iconID = R.drawable.icon_settings,
-                contentDesc = stringResource(id = R.string.settings)
-            )
         }
     }
 }

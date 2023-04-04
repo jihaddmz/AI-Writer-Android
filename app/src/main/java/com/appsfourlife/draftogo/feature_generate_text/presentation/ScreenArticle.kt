@@ -11,12 +11,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.components.Output
-import com.appsfourlife.draftogo.components.TopBar
-import com.appsfourlife.draftogo.components.input
-import com.appsfourlife.draftogo.components.length
+import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
@@ -42,32 +40,39 @@ fun ScreenArticle(
         if (showDialog.value)
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-        Column(
+        BottomSheetSaveOutputs(
             modifier = modifier
-                .fillMaxSize()
-                .padding(SpacersSize.medium)
-                .verticalScroll(verticalScroll),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxSize(),
+            navController = navController
         ) {
 
-            val length = length()
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(verticalScroll)
+                    .padding(start = SpacersSize.medium, end = SpacersSize.medium, bottom = 80.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-            Spacer(modifier = Modifier.height(SpacersSize.medium))
+                val length = length()
 
-            input(
-                label = stringResource(id = R.string.article_input_label),
-                inputPrefix = stringResource(
-                    id = R.string.write_an_article,
-                    HelperSharedPreference.getOutputLanguage()
-                ),
-                length = length,
-                showDialog = showDialog,
-                verticalScrollState = verticalScroll
-            )
+                Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-            Spacer(modifier = Modifier.height(SpacersSize.medium))
+                input(
+                    label = stringResource(id = R.string.article_input_label),
+                    inputPrefix = stringResource(
+                        id = R.string.write_an_article,
+                        HelperSharedPreference.getOutputLanguage()
+                    ),
+                    length = length,
+                    showDialog = showDialog,
+                    verticalScrollState = verticalScroll
+                )
 
-            Output(outputText = SettingsNotifier.output)
+                Spacer(modifier = Modifier.height(SpacersSize.medium))
+
+                Output(outputText = SettingsNotifier.output)
+            }
         }
     }
 }

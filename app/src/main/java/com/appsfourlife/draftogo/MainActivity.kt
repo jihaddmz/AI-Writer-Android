@@ -10,15 +10,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -28,9 +27,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.extensions.animateOffsetY
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.*
+import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.google.android.gms.ads.*
@@ -96,37 +97,11 @@ class MainActivity : ComponentActivity() {
 
             AIWriterTheme {
 
-                val changeTargetValue = remember{
-                    mutableStateOf(false)
-                }
-                val dpSize = animateDpAsState(targetValue = if (changeTargetValue.value && (HelperSharedPreference.getIsSavedOutputsEnabled() || SettingsNotifier.enableSheetContent.value)
-                    && (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
-                            && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route
-                            && navBackStackEntry?.destination?.route != Screens.ScreenSettings.route
-                            && navBackStackEntry?.destination?.route != Screens.ScreenHistory.route
-                            && navBackStackEntry?.destination?.route != Screens.ScreenHome.route)
-                ) 80.dp else 0.dp,
-                    animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)
-                )
-                LaunchedEffect(key1 = true, block = {
-                    delay(Constants.SPLASH_SCREEN_DURATION + 1200L)
-                    changeTargetValue.value = true
-                })
-                BottomSheetScaffold(
-                    scaffoldState = sheetScaffoldState,
-                    sheetContent = {
-                        BottomSheet()
-                    },
-                    sheetShape = SheetShape,
-                    sheetPeekHeight = dpSize.value,
-                    sheetBackgroundColor = Glass,
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    scaffoldState = scaffoldState,
                     backgroundColor = Glass,
-                    drawerShape = DrawerShape,
-                    sheetGesturesEnabled = SettingsNotifier.enableSheetContent.value,
-                    drawerGesturesEnabled = !SettingsNotifier.disableDrawerContent.value,
-                    // region drawer content
                     drawerContent = {
-
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -226,17 +201,93 @@ class MainActivity : ComponentActivity() {
                                             anim = tween(durationMillis = Constants.ANIMATION_LENGTH)
                                         )
                                     }
+                                }
+                            }
+                        }
+                    },
+                    bottomBar = {
+                        val changeTargetValue = remember {
+                            mutableStateOf(false)
+                        }
+//                        val shouldBottomBarBeVisible = remember {
+//                            mutableStateOf(false)
+//                        }
 
+                        val shouldBottomBarBeVisible =
+                            (navBackStackEntry?.destination?.route == BottomNavScreens.Home.route
+                                    || navBackStackEntry?.destination?.route == BottomNavScreens.History.route
+                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Settings.route)
+
+                        LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
+                            if (shouldBottomBarBeVisible) {
+                                delay(Constants.SPLASH_SCREEN_DURATION + 500L)
+                                changeTargetValue.value = true
+                            } else {
+                                changeTargetValue.value = false
+                            }
+//                            if (shouldBottomBarBeVisible) {
+//                            } else {
+//                            }
+                        })
+
+                        if (changeTargetValue.value) {
+                            val listOfBottomNavScreens =
+                                listOf(
+                                    BottomNavScreens.Home,
+                                    BottomNavScreens.History,
+                                    BottomNavScreens.Settings
+                                )
+                            BottomNavigation(
+                                modifier = Modifier.animateOffsetY(
+                                    initialOffsetY = 100.dp,
+                                ), backgroundColor = Glass
+                            ) {
+                                val currentRoute = navBackStackEntry?.destination?.route
+
+                                listOfBottomNavScreens.forEach { screen ->
+                                    BottomNavigationItem(
+                                        selected = currentRoute == screen.route,
+                                        onClick = {
+                                            SettingsNotifier.resetValues()
+
+                                            if (currentRoute != screen.route) {
+                                                if (screen.route == BottomNavScreens.History.route) {
+                                                    HelperAnalytics.sendEvent("history")
+                                                    // if there is network access, navigate to history
+                                                    if (SettingsNotifier.isConnected.value) {
+                                                        navController.navigate(BottomNavScreens.History.route)
+                                                    } else {
+                                                        HelperUI.showToast(
+                                                            msg = App.getTextFromString(
+                                                                R.string.no_connection
+                                                            )
+                                                        )
+                                                    }
+                                                } else
+                                                    navController.navigate(screen.route)
+                                            }
+                                        },
+                                        icon = {
+                                            MyIcon(
+                                                iconID = screen.iconID,
+                                                contentDesc = stringResource(
+                                                    id = screen.labelID
+                                                )
+                                            )
+                                        },
+                                        label = { Text(text = stringResource(id = screen.labelID)) },
+                                        selectedContentColor = Blue,
+                                        unselectedContentColor = Color.Black
+                                    )
                                 }
                             }
                         }
                     }
-                    // endregion
-                ) { paddingValues ->
+                ) {
                     Surface(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(paddingValues)
+                            .padding(it)
                     ) {
                         Column(
                             modifier = Modifier
@@ -263,7 +314,7 @@ class MainActivity : ComponentActivity() {
                                 if (HelperSharedPreference.getUsername() == "") {
                                     Screens.ScreenSignIn.route
                                 } else {
-                                    Screens.ScreenHome.route
+                                    BottomNavScreens.Home.route
                                 }
 
                             } else {
@@ -287,7 +338,7 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
 
-                                    composable(route = Screens.ScreenHistory.route) {
+                                    composable(route = BottomNavScreens.History.route) {
                                         MyBackHandler(navController = navController)
                                         ScreenHistory(
                                             modifier = Modifier,
@@ -301,7 +352,7 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
 
-                                    composable(route = Screens.ScreenHome.route) {
+                                    composable(route = BottomNavScreens.Home.route) {
                                         HomeBackHandler(context = this@MainActivity)
                                         ScreenHome(
                                             modifier = Modifier,
@@ -407,7 +458,7 @@ class MainActivity : ComponentActivity() {
                                         ScreenSong(navController = navController)
                                     }
 
-                                    composable(route = Screens.ScreenSettings.route) {
+                                    composable(route = BottomNavScreens.Settings.route) {
                                         MyBackHandler(navController = navController)
                                         ScreenSettings(navController = navController)
                                     }
@@ -431,6 +482,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+//                }
             }
         }
     }
@@ -448,7 +500,7 @@ class MainActivity : ComponentActivity() {
                     HelperAuth.auth.signInWithCredential(credential).addOnCompleteListener {
                         if (it.isSuccessful) {
                             HelperSharedPreference.setUsername(account.email!!)
-                            navController.navigate(Screens.ScreenHome.route) // from login screen to home screen
+                            navController.navigate(BottomNavScreens.Home.route) // from login screen to home screen
                         }
                     }
                 }
@@ -479,66 +531,6 @@ class MainActivity : ComponentActivity() {
 //                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
 //            }
 //        }
-        }
-    }
-
-    @Composable
-    fun BottomSheet() {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.9f)
-                .padding(32.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-
-            item {
-                Text(
-                    text = stringResource(id = R.string.save_outputs),
-                    style = MaterialTheme.typography.h6
-                )
-            }
-
-            if (SettingsNotifier.comparisonGenerationEntries.value.isEmpty()) {
-                item {
-                    MyText(text = stringResource(id = R.string.label_no_saved_items_added))
-
-                    MySpacer(type = "medium")
-
-                    MyLottieAnim(
-                        lottieID = R.raw.empty_box,
-                        isLottieAnimationPlaying = mutableStateOf(true)
-                    )
-                }
-            }
-
-            items(SettingsNotifier.comparisonGenerationEntries.value.size) { index ->
-                MySpacer(type = "medium")
-                val modelComparedGenerationItem =
-                    SettingsNotifier.comparisonGenerationEntries.value[index]
-                Column(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    MyLabelText(
-                        label = "${stringResource(id = R.string.input)}:",
-                        text = "\n${modelComparedGenerationItem.input}"
-                    )
-                    MySpacer(type = "small")
-                    SelectionContainer {
-                        MyLabelText(
-                            label = "${stringResource(id = R.string.output)}:",
-                            text = "\n${modelComparedGenerationItem.output}"
-                        )
-                    }
-
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd) {
-                        MyOutlinedButton(text = stringResource(id = R.string.delete)) {
-                            SettingsNotifier.deleteComparisonGenerationEntry(index)
-                        }
-                    }
-                    Divider(color = Blue, thickness = 2.dp)
-                }
-            }
         }
     }
 

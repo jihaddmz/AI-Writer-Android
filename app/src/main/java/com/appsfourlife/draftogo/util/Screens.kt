@@ -2,7 +2,6 @@ package com.appsfourlife.draftogo.util
 
 sealed class Screens(val route: String){
 
-    object ScreenHome: Screens("screen_home")
     object ScreenEmail: Screens("screen_email")
     object ScreenBlog: Screens("screen_blog")
     object ScreenTwitter: Screens("screen_twitter")
@@ -22,10 +21,8 @@ sealed class Screens(val route: String){
     object ScreenFacebook: Screens("screen_facebook")
     object ScreenLinkedIn: Screens("screen_linkedin")
     object ScreenSong: Screens("screen_song")
-    object ScreenSettings: Screens("screen_settings")
     object ScreenPodcast: Screens("screen_podcast")
     object ScreenGame: Screens("screen_game")
     object ScreenSignIn: Screens("screen_sign_in")
-    object ScreenHistory: Screens("screen_history")
     object ScreenUserAddedTemplate: Screens("screen_user_added_template")
 }
