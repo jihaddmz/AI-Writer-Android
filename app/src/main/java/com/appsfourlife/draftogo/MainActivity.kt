@@ -210,9 +210,6 @@ class MainActivity : ComponentActivity() {
                         val changeTargetValue = remember {
                             mutableStateOf(false)
                         }
-//                        val shouldBottomBarBeVisible = remember {
-//                            mutableStateOf(false)
-//                        }
 
                         val shouldBottomBarBeVisible =
                             (navBackStackEntry?.destination?.route == BottomNavScreens.Home.route
@@ -221,14 +218,11 @@ class MainActivity : ComponentActivity() {
 
                         LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
                             if (shouldBottomBarBeVisible) {
-                                delay(Constants.SPLASH_SCREEN_DURATION + 500L)
+                                delay(Constants.SPLASH_SCREEN_DURATION + 200L)
                                 changeTargetValue.value = true
                             } else {
                                 changeTargetValue.value = false
                             }
-//                            if (shouldBottomBarBeVisible) {
-//                            } else {
-//                            }
                         })
 
                         if (changeTargetValue.value) {

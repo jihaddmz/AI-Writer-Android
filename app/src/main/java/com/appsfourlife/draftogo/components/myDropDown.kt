@@ -124,7 +124,7 @@ fun myDropDown(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        MyText(text = "$label:", color = Blue, fontWeight = FontWeight.Bold)
+        MyText(text = "$label:", fontWeight = FontWeight.Bold)
 
         Row(
             modifier = Modifier
@@ -139,7 +139,6 @@ fun myDropDown(
                 MyText(
                     modifier = Modifier.padding(start = SpacersSize.small, end = SpacersSize.small),
                     text = chosenItem.value,
-                    fontWeight = FontWeight.Bold
                 )
 
             val rotateDegree = remember {
