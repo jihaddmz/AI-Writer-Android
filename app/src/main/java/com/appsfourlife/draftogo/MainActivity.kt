@@ -205,6 +205,7 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     },
+                    drawerShape = DrawerShape,
                     bottomBar = {
                         val changeTargetValue = remember {
                             mutableStateOf(false)

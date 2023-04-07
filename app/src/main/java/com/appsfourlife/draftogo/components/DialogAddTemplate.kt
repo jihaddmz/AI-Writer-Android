@@ -4,7 +4,6 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +23,6 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DialogAddTemplate(
     modifier: Modifier = Modifier,
@@ -37,7 +35,7 @@ fun DialogAddTemplate(
         mutableStateOf(false)
     }
     val clickedImageUrl = remember {
-        mutableStateOf("https://user-images.githubusercontent.com/124468932/226972135-c541e5a6-1d45-4376-bd10-6e832253059e.svg")
+        mutableStateOf("https://user-images.githubusercontent.com/124468932/230606491-b8ec8c39-406d-478d-937a-cd4c1714e93a.svg")
     }
 
     Dialog(onDismissRequest = {
