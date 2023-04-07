@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -103,7 +104,8 @@ fun ScreenHistory(
                     ) {
                         Column(
                             modifier = Modifier
-                                .fillMaxSize()
+                                .fillMaxWidth()
+                                .height(70.dp)
                                 .padding(SpacersSize.small)
                                 .clickable {
                                     showDialog.value = true
@@ -156,6 +158,10 @@ fun DialogHistoryEntry(
             MyText(modifier = Modifier.clickable {
                 Helpers.copyToClipBoard(modelHistory.input, msgID = R.string.text_copied)
             }, text = modelHistory.input)
+
+            MySpacer(type = "medium")
+
+            Divider(color = Blue)
 
             MySpacer(type = "medium")
 

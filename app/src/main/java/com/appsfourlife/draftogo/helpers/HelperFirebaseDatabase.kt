@@ -85,11 +85,11 @@ object HelperFirebaseDatabase {
             .document(HelperAuth.auth.currentUser?.email!!)
             .collection("history")
             .get()
-            .addOnCompleteListener {
-                if (it.result.documents.isEmpty()) {
+            .addOnCompleteListener { task ->
+                if (task.result.documents.isEmpty()) {
                     noHistory.value = true
                 } else
-                    it.result.documents.forEach { documentSnapshot ->
+                    task.result.documents.forEach { documentSnapshot ->
                         result.add(
                             ModelHistory(
                                 type = documentSnapshot.get("type").toString().trim(),
@@ -99,7 +99,8 @@ object HelperFirebaseDatabase {
                             )
                         )
                     }
-                list.value = result
+                list.value = result.sortedBy { HelperDate.parseStringToDate(it.date, "yyyy-MM-dd hh:mm:ss")?.time } as MutableList<ModelHistory>
+                list.value.reverse()
                 showCircularIndicator.value = false
             }
     }
