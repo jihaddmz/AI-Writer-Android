@@ -96,11 +96,6 @@ fun DialogAddTemplate(
 
                 HelperAnalytics.sendEvent("add_template")
 
-                if (HelperSharedPreference.getSubscriptionType() != Constants.SUBSCRIPTION_TYPE_PLUS){
-                    HelperUI.showToast(msg = App.getTextFromString(R.string.plus_feature))
-                    return@MyButton
-                }
-
                 if (input.isEmpty()) {
                     HelperUI.showToast(msg = App.getTextFromString(R.string.no_query_defined))
                     return@MyButton

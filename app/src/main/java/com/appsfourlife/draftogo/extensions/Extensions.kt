@@ -14,8 +14,6 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.WritingType
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
-import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -44,11 +42,9 @@ fun LazyGridScope.sectionsGridContent(
                 text = text,
                 imageUrl = imageUrl,
                 onLongClick = {
-                    if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_PLUS) {
-                        SettingsNotifier.showDeleteTemplateDialog.value = true
-                        SettingsNotifier.templateToDelete =
-                            ModelTemplate(query = text, imageUrl, userAdded)
-                    }
+                    SettingsNotifier.showDeleteTemplateDialog.value = true
+                    SettingsNotifier.templateToDelete =
+                        ModelTemplate(query = text, imageUrl, userAdded)
                 }
             ) {
                 when (text) {
