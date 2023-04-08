@@ -82,6 +82,11 @@ class MainActivity : ComponentActivity() {
 
         }
 
+        if (SettingsNotifier.isConnected.value)
+            HelperAds.loadAds {
+
+            }
+
         setContent {
 
             navController = rememberNavController()

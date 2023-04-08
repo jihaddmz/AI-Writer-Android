@@ -226,7 +226,19 @@ fun DialogSubscriptionNbOfWordsExceeded(
                         if (SettingsNotifier.isConnected.value) {
                             SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value = false
                             SettingsNotifier.showLoadingDialog.value = true
-                            HelperAds.loadAds {
+                            if (SettingsNotifier.mRewardedAds == null) {
+                                HelperAds.loadAds {
+                                    HelperAds.showAds(currentActivity) { amount ->
+                                        HelperFirebaseDatabase.updateNbOfWords()
+                                        HelperSharedPreference.setInt(
+                                            HelperSharedPreference.SP_SETTINGS,
+                                            HelperSharedPreference.SP_SETTINGS_NB_OF_WORDS_GENERATED,
+                                            Constants.BASE_PLAN_MAX_NB_OF_WORDS - 500
+                                        )
+                                        showDialog.value = false
+                                    }
+                                }
+                            } else {
                                 HelperAds.showAds(currentActivity) { amount ->
                                     HelperFirebaseDatabase.updateNbOfWords()
                                     HelperSharedPreference.setInt(
