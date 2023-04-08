@@ -81,11 +81,6 @@ fun ScreenSettings(
 
             }
 
-            myDropDown(
-                list = Constants.OUTPUT_LANGUAGES,
-                label = stringResource(id = R.string.output_language)
-            )
-
             TypeWriterLength()
 
             mySwitch(

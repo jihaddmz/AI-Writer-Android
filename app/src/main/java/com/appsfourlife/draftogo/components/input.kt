@@ -76,36 +76,51 @@ fun input(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(end = SpacersSize.small, bottom = SpacersSize.small),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
 
-                    IconButton(onClick = {
-                        SettingsNotifier.input.value = TextFieldValue(text = "")
-                        isGenerateBtnEnabled.value = false
-                    }, modifier = Modifier.animateOffsetX(initialOffsetX = 100.dp)) {
-                        MyIcon(
-                            iconID = R.drawable.clear, tint = Blue, contentDesc = stringResource(
-                                id = R.string.clear
-                            )
+                    Row(
+                        modifier = Modifier,
+                        horizontalArrangement = Arrangement.Start
+                    ) {
+                        MySpacer(type = "small", widthOrHeight = "width")
+                        SettingsNotifier.outputLanguage.value = myDropDown(
+                            list = Constants.OUTPUT_LANGUAGES,
                         )
                     }
 
-                    MySpacer(type = "small", widthOrHeight = "width")
-
-                    IconButton(onClick = {
-                        SettingsNotifier.input.value = Helpers.pasteFromClipBoard(
-                            mutableStateOf(SettingsNotifier.input.value), context
-                        )
-                        if (SettingsNotifier.input.value.text.isNotEmpty())
-                            isGenerateBtnEnabled.value = true
-                    }, modifier = Modifier.animateOffsetX(initialOffsetX = 100.dp)) {
-                        MyIcon(
-                            iconID = R.drawable.icon_paste,
-                            tint = Blue,
-                            contentDesc = stringResource(
-                                id = R.string.paste
+                    Row(
+                        modifier = Modifier,
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        IconButton(onClick = {
+                            SettingsNotifier.input.value = TextFieldValue(text = "")
+                            isGenerateBtnEnabled.value = false
+                        }, modifier = Modifier.animateOffsetX(initialOffsetX = 100.dp)) {
+                            MyIcon(
+                                iconID = R.drawable.clear, tint = Blue, contentDesc = stringResource(
+                                    id = R.string.clear
+                                )
                             )
-                        )
+                        }
+
+                        MySpacer(type = "small", widthOrHeight = "width")
+
+                        IconButton(onClick = {
+                            SettingsNotifier.input.value = Helpers.pasteFromClipBoard(
+                                mutableStateOf(SettingsNotifier.input.value), context
+                            )
+                            if (SettingsNotifier.input.value.text.isNotEmpty())
+                                isGenerateBtnEnabled.value = true
+                        }, modifier = Modifier.animateOffsetX(initialOffsetX = 100.dp)) {
+                            MyIcon(
+                                iconID = R.drawable.icon_paste,
+                                tint = Blue,
+                                contentDesc = stringResource(
+                                    id = R.string.paste
+                                )
+                            )
+                        }
                     }
                 }
             }

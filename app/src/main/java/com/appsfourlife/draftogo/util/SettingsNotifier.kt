@@ -38,6 +38,7 @@ object SettingsNotifier {
     var templateToDelete: ModelTemplate? = null
     var currentQuerySection: String? = null
     var tts: TextToSpeech? = null
+    val outputLanguage = mutableStateOf(HelperSharedPreference.getOutputLanguage())
 
     fun addComparisonGenerationEntry(modelComparedGenerationItem: ModelComparedGenerationItem) {
         val previous = comparisonGenerationEntries.value.toMutableList()

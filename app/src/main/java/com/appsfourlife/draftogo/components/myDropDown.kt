@@ -119,12 +119,13 @@ fun myDropDown(
         }
     }
     Row(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        MyText(text = "$label:", fontWeight = FontWeight.Bold)
+        if (label.isNotEmpty())
+            MyText(text = "$label:", fontWeight = FontWeight.Bold)
 
         Row(
             modifier = Modifier

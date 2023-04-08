@@ -13,9 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
+import com.appsfourlife.draftogo.util.SettingsNotifier.outputLanguage
 
 @Composable
 fun ScreenUserAddedTemplate(
@@ -42,13 +42,6 @@ fun ScreenUserAddedTemplate(
             ) {
 
                 if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-
-                MySpacer(type = "small")
-
-                val outputLanguage = myDropDown(
-                    list = Constants.OUTPUT_LANGUAGES,
-                    label = stringResource(id = R.string.output_language)
-                )
 
                 MySpacer(type = "small")
 
