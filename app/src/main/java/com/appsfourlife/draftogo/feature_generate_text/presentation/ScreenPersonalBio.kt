@@ -17,7 +17,6 @@ import com.appsfourlife.draftogo.components.Output
 import com.appsfourlife.draftogo.components.TopBar
 import com.appsfourlife.draftogo.components.input
 import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -34,7 +33,7 @@ fun ScreenPersonalBio(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_personal_bio_top_bar), navController = navController
+        text = stringResource(id = R.string.write_a_personal_bio), navController = navController
     ) {
 
         if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -48,8 +47,7 @@ fun ScreenPersonalBio(
             ) {
 
                 val inputPrefix = stringResource(
-                    id = R.string.write_a_personal_bio,
-                    HelperSharedPreference.getOutputLanguage()
+                    id = R.string.write_a_personal_bio
                 )
 
                 input(

@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -30,7 +29,7 @@ fun ScreenSong(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_song_top_bar), navController = navController
+        text = stringResource(id = R.string.write_a_song), navController = navController
     ) {
 
         if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -48,8 +47,7 @@ fun ScreenSong(
                 input(
                     label = stringResource(id = R.string.song_input_label),
                     inputPrefix = stringResource(
-                        id = R.string.write_a_song,
-                        HelperSharedPreference.getOutputLanguage()
+                        id = R.string.write_a_song
                     ),
                     showDialog = showDialog,
                     length = length,

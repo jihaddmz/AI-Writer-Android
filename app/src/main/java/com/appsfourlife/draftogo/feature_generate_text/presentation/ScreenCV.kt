@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -63,7 +62,6 @@ fun ScreenCV(
                     inputPrefix = "${
                         stringResource(
                             id = R.string.write_a_cv_of_type,
-                            HelperSharedPreference.getOutputLanguage(),
                             cvType
                         )
                     } for a ${SettingsNotifier.jobTitle.value} ",

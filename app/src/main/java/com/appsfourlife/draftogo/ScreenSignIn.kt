@@ -4,7 +4,6 @@ import android.app.Activity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,13 +16,9 @@ import androidx.compose.ui.text.font.FontWeight
 import com.appsfourlife.draftogo.components.MyButton
 import com.appsfourlife.draftogo.components.MyTextTitle
 import com.appsfourlife.draftogo.components.MyVideo
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
-import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Composable
 fun ScreenSignIn(
@@ -32,24 +27,6 @@ fun ScreenSignIn(
     val coroutineScope = rememberCoroutineScope()
 
     SettingsNotifier.disableDrawerContent.value = true
-
-    LaunchedEffect(key1 = true, block = {
-        coroutineScope.launch(Dispatchers.IO) {
-            Constants.PREDEFINED_TEMPLATES.forEach { template ->
-                if (App.dbGenerateText.daoTemplates.getTemplateByQuery(
-                        template
-                    ) == null
-                ) {
-                    App.dbGenerateText.daoTemplates.insertTemplate(
-                        ModelTemplate(template, "", 1)
-                    )
-                } else
-                    return@forEach
-            }
-            SettingsNotifier.predefinedTemplates.value =
-                App.dbGenerateText.daoTemplates.getAllTemplates() as MutableList<ModelTemplate>
-        }
-    })
 
     Box(modifier = Modifier.fillMaxSize()) {
         Image(

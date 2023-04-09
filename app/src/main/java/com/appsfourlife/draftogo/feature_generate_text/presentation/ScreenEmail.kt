@@ -56,7 +56,6 @@ fun ScreenEmail(
                     label = stringResource(id = R.string.email_input_label),
                     inputPrefix = stringResource(
                         id = R.string.write_an_email_to,
-                        HelperSharedPreference.getOutputLanguage(),
                         SettingsNotifier.name.value
                     ),
                     showDialog = showDialog,

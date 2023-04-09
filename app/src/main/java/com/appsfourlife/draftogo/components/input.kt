@@ -187,7 +187,7 @@ fun input(
                 generateText.value = App.getTextFromString(R.string.generating)
 
                 HelperChatGPT.getResponse(
-                    inputPrefix + " " + SettingsNotifier.input.value.text.trim(),
+                    inputPrefix + " " + SettingsNotifier.input.value.text.trim() + " and generate the output in " + SettingsNotifier.outputLanguage.value,
                     context,
                     length,
                     nbOfGenerations,

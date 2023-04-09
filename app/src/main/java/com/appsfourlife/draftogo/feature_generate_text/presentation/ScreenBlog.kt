@@ -34,7 +34,7 @@ fun ScreenBlog(
     TopBar(
         modifier = modifier
             .fillMaxSize(),
-        text = stringResource(id = R.string.write_a_blog_top_bar),
+        text = stringResource(id = R.string.write_a_blog),
         navController = navController
     ) {
 
@@ -66,8 +66,7 @@ fun ScreenBlog(
                 val inputPrefix = if (isHeadlinesEnabled) {
                     "${
                         stringResource(
-                            id = R.string.write_a_blog,
-                            HelperSharedPreference.getOutputLanguage()
+                            id = R.string.write_a_blog
                         )
                     } with headlines "
                 } else {

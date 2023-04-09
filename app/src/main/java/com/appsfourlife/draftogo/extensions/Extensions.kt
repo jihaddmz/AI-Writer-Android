@@ -51,13 +51,13 @@ fun LazyGridScope.sectionsGridContent(
                     App.getTextFromString(R.string.write_an_email) -> {
                         navController.navigate(Screens.ScreenEmail.route)
                     }
-                    App.getTextFromString(R.string.write_a_blog_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_blog) -> {
                         navController.navigate(Screens.ScreenBlog.route)
                     }
                     App.getTextFromString(R.string.write_an_essay) -> {
                         navController.navigate(Screens.ScreenEssay.route)
                     }
-                    App.getTextFromString(R.string.write_an_article_top_bar) -> {
+                    App.getTextFromString(R.string.write_an_article) -> {
                         navController.navigate(Screens.ScreenArticle.route)
                     }
                     App.getTextFromString(R.string.write_a_letter) -> {
@@ -69,28 +69,28 @@ fun LazyGridScope.sectionsGridContent(
                     App.getTextFromString(R.string.write_a_resume) -> {
                         navController.navigate(Screens.ScreenResume.route)
                     }
-                    App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_personal_bio) -> {
                         navController.navigate(Screens.ScreenPersonalBio.route)
                     }
-                    App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_tweet) -> {
                         navController.navigate(Screens.ScreenTwitter.route)
                     }
-                    App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_viral_tiktok_captions) -> {
                         navController.navigate(Screens.ScreenTiktok.route)
                     }
-                    App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
+                    App.getTextFromString(R.string.write_an_instagram_caption) -> {
                         navController.navigate(Screens.ScreenInstagram.route)
                     }
 
-                    App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_facebook_post) -> {
                         navController.navigate(Screens.ScreenFacebook.route)
                     }
 
-                    App.getTextFromString(R.string.write_a_linkedin_post_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_linkedin_post) -> {
                         navController.navigate(Screens.ScreenLinkedIn.route)
                     }
 
-                    App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_youtube_caption) -> {
                         navController.navigate(Screens.ScreenYoutube.route)
                     }
 
@@ -102,11 +102,11 @@ fun LazyGridScope.sectionsGridContent(
                         navController.navigate(Screens.ScreenGame.route)
                     }
 
-                    App.getTextFromString(R.string.write_a_poem_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_poem) -> {
                         navController.navigate(Screens.ScreenPoem.route)
                     }
 
-                    App.getTextFromString(R.string.write_a_song_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_song) -> {
                         navController.navigate(Screens.ScreenSong.route)
                     }
                     App.getTextFromString(R.string.write_a_code) -> {
@@ -115,8 +115,12 @@ fun LazyGridScope.sectionsGridContent(
                     App.getTextFromString(R.string.custom) -> {
                         navController.navigate(Screens.ScreenCustom.route)
                     }
+
+                    App.getTextFromString(R.string.summarize_this) -> {
+                        navController.navigate(Screens.ScreenSummarize.route)
+                    }
                     else -> {
-                        SettingsNotifier.currentQuerySection = text
+                        SettingsNotifier.currentUserQuerySection = text
                         navController.navigate(Screens.ScreenUserAddedTemplate.route)
                     }
                 }

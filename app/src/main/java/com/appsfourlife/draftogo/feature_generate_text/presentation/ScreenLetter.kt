@@ -80,7 +80,6 @@ fun ScreenLetter(
                     "${
                         stringResource(
                             id = R.string.write_a_letter_of_type,
-                            HelperSharedPreference.getOutputLanguage(),
                             type
                         )
                     } for a job position of $SettingsNotifier.jobTitle.value to ${SettingsNotifier.name.value} "

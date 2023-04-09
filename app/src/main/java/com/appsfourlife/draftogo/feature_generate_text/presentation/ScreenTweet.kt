@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -31,7 +30,7 @@ fun ScreenTweet(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_tweet_top_bar), navController = navController
+        text = stringResource(id = R.string.write_a_tweet), navController = navController
     ) {
 
         BottomSheetSaveOutputs(navController = navController) {
@@ -51,8 +50,7 @@ fun ScreenTweet(
                 input(
                     label = stringResource(id = R.string.tweet_input_label),
                     inputPrefix = stringResource(
-                        id = R.string.write_a_tweet,
-                        HelperSharedPreference.getOutputLanguage()
+                        id = R.string.write_a_tweet
                     ),
                     showDialog = showDialog,
                     length = Constants.DEFAULT_POSTING_GENERATION_LENGTH.toInt(),

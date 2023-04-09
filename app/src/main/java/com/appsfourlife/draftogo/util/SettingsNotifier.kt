@@ -36,7 +36,7 @@ object SettingsNotifier {
     var predefinedTemplates = mutableStateOf(listOf<ModelTemplate>())
     var comparisonGenerationEntries = mutableStateOf(listOf<ModelComparedGenerationItem>())
     var templateToDelete: ModelTemplate? = null
-    var currentQuerySection: String? = null
+    var currentUserQuerySection: String? = null
     var tts: TextToSpeech? = null
     val outputLanguage = mutableStateOf(HelperSharedPreference.getOutputLanguage())
 

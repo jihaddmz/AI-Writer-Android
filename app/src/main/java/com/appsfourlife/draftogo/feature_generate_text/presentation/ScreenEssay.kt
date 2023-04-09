@@ -57,7 +57,6 @@ fun ScreenEssay(
                     label = stringResource(id = R.string.essay_input_label),
                     inputPrefix = stringResource(
                         id = R.string.write_an_essay_of_type,
-                        HelperSharedPreference.getOutputLanguage(),
                         essayType
                     ),
                     length = length,

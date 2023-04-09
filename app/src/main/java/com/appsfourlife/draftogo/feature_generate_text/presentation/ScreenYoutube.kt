@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -31,7 +30,7 @@ fun ScreenYoutube(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_youtube_caption_top_bar),
+        text = stringResource(id = R.string.write_a_youtube_caption),
         navController = navController
     ) {
 
@@ -52,8 +51,7 @@ fun ScreenYoutube(
                 input(
                     label = stringResource(id = R.string.youtube_input_label),
                     inputPrefix = stringResource(
-                        id = R.string.write_a_youtube_caption,
-                        HelperSharedPreference.getOutputLanguage()
+                        id = R.string.write_a_youtube_caption
                     ),
                     showDialog = showDialog,
                     length = Constants.DEFAULT_POSTING_GENERATION_LENGTH.toInt(),

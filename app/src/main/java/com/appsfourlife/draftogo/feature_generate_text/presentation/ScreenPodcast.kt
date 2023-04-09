@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -60,7 +59,6 @@ fun ScreenPodcast(
                     label = stringResource(id = R.string.podcast_input_label),
                     inputPrefix = stringResource(
                         id = R.string.write_an_podcast_of_type,
-                        HelperSharedPreference.getOutputLanguage(),
                         type
                     ),
                     showDialog = showDialog,

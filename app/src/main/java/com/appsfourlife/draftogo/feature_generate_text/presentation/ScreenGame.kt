@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -61,7 +60,6 @@ fun ScreenGame(
                     label = stringResource(id = R.string.game_input_label),
                     inputPrefix = stringResource(
                         id = R.string.write_an_game_script,
-                        HelperSharedPreference.getOutputLanguage(),
                         type
                     ),
                     showDialog = showDialog,

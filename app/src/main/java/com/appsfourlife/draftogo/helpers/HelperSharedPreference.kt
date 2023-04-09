@@ -14,12 +14,18 @@ object HelperSharedPreference {
     const val SP_AUTHENTICATION = "authentication"
 
     /**
+     * first time app launched
+     **/
+    const val SP_SETTINGS_IS_FIRST_TIME_LAUNCHED = "is_first_time_launched"
+    const val SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED = "is_first_time_v120_launched"
+
+
+    /**
      * keys for settings shared preferences
      **/
     const val SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED = "nb_of_generations_consumed"
     const val SP_SETTINGS_NB_OF_WORDS_GENERATED = "nb_of_words_generated"
     const val SP_SETTINGS_NB_OF_GENERATIONS = "nb_of_generations"
-    const val SP_SETTINGS_IS_FIRST_TIME_LAUNCHED = "is_first_time_launched"
     const val SP_SETTINGS_ENABLE_HEADLINES = "enable_headlines"
     const val SP_SETTINGS_LENGTH = "length"
     const val SP_SETTINGS_LETTER_TYPE = "letter_type"

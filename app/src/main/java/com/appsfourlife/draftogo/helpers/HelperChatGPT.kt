@@ -44,7 +44,7 @@ object HelperChatGPT {
         jsonObject.put("prompt", query)
         jsonObject.put("temperature", 0.9)
         jsonObject.put("max_tokens", length)
-        jsonObject.put("top_p", 0.5)
+        jsonObject.put("top_p", 0.7)
         jsonObject.put("frequency_penalty", 0.0)
         jsonObject.put("presence_penalty", 0.0)
         jsonObject.put("n", nbOfGenerations)

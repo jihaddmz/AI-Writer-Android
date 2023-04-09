@@ -15,14 +15,13 @@ import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
-import com.appsfourlife.draftogo.util.SettingsNotifier.outputLanguage
 
 @Composable
 fun ScreenUserAddedTemplate(
     navController: NavController
 ) {
 
-    SettingsNotifier.templateType = SettingsNotifier.currentQuerySection!!
+    SettingsNotifier.templateType = SettingsNotifier.currentUserQuerySection!!
 
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
@@ -30,7 +29,7 @@ fun ScreenUserAddedTemplate(
     }
 
     TopBar(
-        text = SettingsNotifier.currentQuerySection!!, navController = navController
+        text = SettingsNotifier.currentUserQuerySection!!, navController = navController
     ) {
 
         BottomSheetSaveOutputs(navController = navController) {
@@ -47,7 +46,7 @@ fun ScreenUserAddedTemplate(
 
                 input(
                     label = stringResource(id = R.string.your_input),
-                    inputPrefix = "${SettingsNotifier.currentQuerySection!!} in $outputLanguage language",
+                    inputPrefix = SettingsNotifier.currentUserQuerySection!!,
                     showDialog = showDialog,
                     verticalScrollState = verticalScroll
                 )

@@ -28,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateOffsetY
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.*
@@ -41,6 +42,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -92,12 +94,32 @@ class MainActivity : ComponentActivity() {
             navController = rememberNavController()
             val scaffoldState = rememberScaffoldState()
             val coroutineScope = rememberCoroutineScope()
-            val sheetScaffoldState = rememberBottomSheetScaffoldState(
-                bottomSheetState = BottomSheetState(
-                    initialValue = BottomSheetValue.Collapsed
-                )
-            )
             val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+            LaunchedEffect(key1 = true, block = {
+                coroutineScope.launch(Dispatchers.IO) {
+                    if (HelperSharedPreference.getBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED, true)) {
+                        App.dbGenerateText.daoTemplates.getAllTemplates().forEach {
+                            App.dbGenerateText.daoTemplates.deleteTemplate(it)
+                        }
+                        HelperSharedPreference.setBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED, false)
+                    }
+                    Constants.PREDEFINED_TEMPLATES.forEach { template ->
+                        if (App.dbGenerateText.daoTemplates.getTemplateByQuery(
+                                template
+                            ) == null
+                        ) {
+                            App.dbGenerateText.daoTemplates.insertTemplate(
+                                ModelTemplate(template, "", 1)
+                            )
+                        } else
+                            return@forEach
+                    }
+                    SettingsNotifier.predefinedTemplates.value =
+                        App.dbGenerateText.daoTemplates.getAllTemplates() as MutableList<ModelTemplate>
+                }
+            })
+
 
 
             AIWriterTheme {
@@ -131,13 +153,13 @@ class MainActivity : ComponentActivity() {
                                         App.getTextFromString(R.string.write_an_email) -> {
                                             navController.navigate(Screens.ScreenEmail.route)
                                         }
-                                        App.getTextFromString(R.string.write_a_blog_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_blog) -> {
                                             navController.navigate(Screens.ScreenBlog.route)
                                         }
                                         App.getTextFromString(R.string.write_an_essay) -> {
                                             navController.navigate(Screens.ScreenEssay.route)
                                         }
-                                        App.getTextFromString(R.string.write_an_article_top_bar) -> {
+                                        App.getTextFromString(R.string.write_an_article) -> {
                                             navController.navigate(Screens.ScreenArticle.route)
                                         }
                                         App.getTextFromString(R.string.write_a_letter) -> {
@@ -149,28 +171,28 @@ class MainActivity : ComponentActivity() {
                                         App.getTextFromString(R.string.write_a_resume) -> {
                                             navController.navigate(Screens.ScreenResume.route)
                                         }
-                                        App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_personal_bio) -> {
                                             navController.navigate(Screens.ScreenPersonalBio.route)
                                         }
-                                        App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_tweet) -> {
                                             navController.navigate(Screens.ScreenTwitter.route)
                                         }
-                                        App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_viral_tiktok_captions) -> {
                                             navController.navigate(Screens.ScreenTiktok.route)
                                         }
-                                        App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
+                                        App.getTextFromString(R.string.write_an_instagram_caption) -> {
                                             navController.navigate(Screens.ScreenInstagram.route)
                                         }
 
-                                        App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_facebook_post) -> {
                                             navController.navigate(Screens.ScreenFacebook.route)
                                         }
 
-                                        App.getTextFromString(R.string.write_a_linkedin_post_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_linkedin_post) -> {
                                             navController.navigate(Screens.ScreenLinkedIn.route)
                                         }
 
-                                        App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_youtube_caption) -> {
                                             navController.navigate(Screens.ScreenYoutube.route)
                                         }
 
@@ -182,11 +204,11 @@ class MainActivity : ComponentActivity() {
                                             navController.navigate(Screens.ScreenGame.route)
                                         }
 
-                                        App.getTextFromString(R.string.write_a_poem_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_poem) -> {
                                             navController.navigate(Screens.ScreenPoem.route)
                                         }
 
-                                        App.getTextFromString(R.string.write_a_song_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_song) -> {
                                             navController.navigate(Screens.ScreenSong.route)
                                         }
                                         App.getTextFromString(R.string.write_a_code) -> {
@@ -195,8 +217,11 @@ class MainActivity : ComponentActivity() {
                                         App.getTextFromString(R.string.custom) -> {
                                             navController.navigate(Screens.ScreenCustom.route)
                                         }
+                                        App.getTextFromString(R.string.summarize_this) -> {
+                                            navController.navigate(Screens.ScreenSummarize.route)
+                                        }
                                         else -> {
-                                            SettingsNotifier.currentQuerySection = text
+                                            SettingsNotifier.currentUserQuerySection = text
                                             navController.navigate(Screens.ScreenUserAddedTemplate.route)
                                         }
                                     }
@@ -366,6 +391,11 @@ class MainActivity : ComponentActivity() {
                                             navController = navController,
                                             modifier = Modifier,
                                         )
+                                    }
+
+                                    composable(route = Screens.ScreenSummarize.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenSummarize(navController = navController)
                                     }
 
                                     composable(route = Screens.ScreenUserAddedTemplate.route) {

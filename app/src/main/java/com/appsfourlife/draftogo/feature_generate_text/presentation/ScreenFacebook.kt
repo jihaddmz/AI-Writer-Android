@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -31,7 +30,7 @@ fun ScreenFacebook(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_facebook_post_top_bar),
+        text = stringResource(id = R.string.write_a_facebook_post),
         navController = navController
     ) {
         BottomSheetSaveOutputs(navController = navController) {
@@ -52,8 +51,7 @@ fun ScreenFacebook(
                 input(
                     label = stringResource(id = R.string.facebook_input_label),
                     inputPrefix = stringResource(
-                        id = R.string.write_a_facebook_post,
-                        HelperSharedPreference.getOutputLanguage()
+                        id = R.string.write_a_facebook_post
                     ),
                     showDialog = showDialog,
                     length = Constants.MAX_GENERATION_LENGTH.toInt(),

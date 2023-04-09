@@ -17,11 +17,11 @@ import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @Composable
-fun ScreenPoem(
+fun ScreenSummarize(
     navController: NavController
 ) {
 
-    SettingsNotifier.templateType = "Poem"
+    SettingsNotifier.templateType = "Summarize"
 
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
@@ -29,10 +29,8 @@ fun ScreenPoem(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_poem), navController = navController
+        text = stringResource(id = R.string.summarize_this), navController = navController
     ) {
-
-        if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
         BottomSheetSaveOutputs(navController = navController) {
             Column(
@@ -42,23 +40,26 @@ fun ScreenPoem(
                     .verticalScroll(verticalScroll)
             ) {
 
-                val length = length()
+                if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-                Spacer(modifier = Modifier.height(SpacersSize.medium))
+                MySpacer(type = "small")
 
                 input(
-                    label = stringResource(id = R.string.poem_input_label),
-                    inputPrefix = stringResource(
-                        id = R.string.write_a_poem
-                    ),
-                    length = length,
+                    label = stringResource(id = R.string.text_to_summarize),
                     showDialog = showDialog,
                     verticalScrollState = verticalScroll
                 )
 
                 Spacer(modifier = Modifier.height(SpacersSize.medium))
 
-                Output(outputText = SettingsNotifier.output)
+                if (SettingsNotifier.outputList.isEmpty()) {
+                    Output(outputText = SettingsNotifier.output)
+                } else if (SettingsNotifier.outputList.isNotEmpty()) {
+                    SettingsNotifier.outputList.forEach {
+                        Output(outputText = mutableStateOf(it))
+                        MySpacer(type = "small")
+                    }
+                }
             }
         }
     }
