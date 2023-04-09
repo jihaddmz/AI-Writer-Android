@@ -41,6 +41,7 @@ object Constants {
         App.getTextFromString(R.string.write_a_facebook_post),
         App.getTextFromString(R.string.write_a_linkedin_post),
         App.getTextFromString(R.string.write_a_youtube_caption),
+        App.getTextFromString(R.string.translate_the_following_text),
         App.getTextFromString(R.string.write_a_podcast_top_bar),
         App.getTextFromString(R.string.write_a_game_script_top_label),
         App.getTextFromString(R.string.write_a_poem),

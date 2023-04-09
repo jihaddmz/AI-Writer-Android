@@ -53,6 +53,7 @@ fun WritingType(
                 stringResource(id = R.string.write_a_personal_bio) -> R.drawable.icon_personal_bio
                 stringResource(id = R.string.summarize_the_following_text) -> R.drawable.icon_summarize
                 stringResource(id = R.string.correct_the_following_text) -> R.drawable.icon_grammar
+                stringResource(id = R.string.translate_the_following_text) -> R.drawable.icon_translate
                 stringResource(id = R.string.write_a_tweet) -> R.drawable.icon_logo_twitter
                 stringResource(id = R.string.write_a_viral_tiktok_captions) -> R.drawable.icon_tiktok
                 stringResource(id = R.string.write_an_instagram_caption) -> R.drawable.icon_instagram

@@ -50,7 +50,7 @@
     <string name="reference_letter">Reference Letter</string>
     <string name="resignation_letter">Resignation Letter</string>
     <string name="normal_letter">Normal Letter</string>
-    <string name="translate_text">Translate Text</string>
+    <string name="translate_the_following_text">Translate the following text</string>
     <string name="output_language">Output Language</string>
     <string name="text_copied">Text Copied!</string>
     <string name="server_not_ready">Error, server not ready, please try again later</string>
@@ -173,4 +173,5 @@
     <string name="text_to_summarize">Text to summarize</string>
     <string name="correct_the_following_text">Correct the following text</string>
     <string name="text_to_correct">Text to correct</string>
+    <string name="text_to_translate">Text to translate</string>
 </resources>

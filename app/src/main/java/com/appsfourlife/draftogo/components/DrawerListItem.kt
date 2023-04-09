@@ -50,6 +50,7 @@ fun DrawerListItem(
             stringResource(id = R.string.custom) -> R.drawable.icon_custom
             stringResource(id = R.string.summarize_the_following_text) -> R.drawable.icon_summarize
             stringResource(id = R.string.correct_the_following_text) -> R.drawable.icon_grammar
+            stringResource(id = R.string.translate_the_following_text) -> R.drawable.icon_translate
             else -> {
                 if (imageUrl.isEmpty())
                     R.drawable.icon_custom

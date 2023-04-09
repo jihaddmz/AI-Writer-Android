@@ -223,6 +223,9 @@ class MainActivity : ComponentActivity() {
                                         App.getTextFromString(R.string.correct_the_following_text) -> {
                                             navController.navigate(Screens.ScreenGrammar.route)
                                         }
+                                        App.getTextFromString(R.string.translate_the_following_text) -> {
+                                            navController.navigate(Screens.ScreenTranslate.route)
+                                        }
                                         else -> {
                                             SettingsNotifier.currentUserQuerySection = text
                                             navController.navigate(Screens.ScreenUserAddedTemplate.route)
@@ -394,6 +397,11 @@ class MainActivity : ComponentActivity() {
                                             navController = navController,
                                             modifier = Modifier,
                                         )
+                                    }
+
+                                    composable(route = Screens.ScreenTranslate.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenTranslate(navController = navController)
                                     }
 
                                     composable(route = Screens.ScreenSummarize.route) {
