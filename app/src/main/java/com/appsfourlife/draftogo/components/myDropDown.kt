@@ -113,6 +113,9 @@ fun myDropDown(
                     )
                 )
             }
+            Constants.FEEDBACK_TYPES -> {
+                mutableStateOf(Constants.FEEDBACK_TYPES[0])
+            }
             else -> {
                 mutableStateOf("")
             }
@@ -126,6 +129,8 @@ fun myDropDown(
 
         if (label.isNotEmpty())
             MyText(text = "$label:", fontWeight = FontWeight.Bold)
+
+        MySpacer(type = "medium", widthOrHeight = "width")
 
         Row(
             modifier = Modifier

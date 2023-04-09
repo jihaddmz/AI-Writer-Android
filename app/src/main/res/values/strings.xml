@@ -174,4 +174,12 @@
     <string name="correct_the_following_text">Correct the following text</string>
     <string name="text_to_correct">Text to correct</string>
     <string name="text_to_translate">Text to translate</string>
+    <string name="Feedback">Feedback</string>
+    <string name="feedback_title">Send you\'re feedback here, it could be a feature you want, a bug happened while using the app, or any other comment you want to mention.</string>
+    <string name="your_feedback">You\'re feedback goes here</string>
+    <string name="submit">Submit</string>
+    <string name="feature_request">Feature Request</string>
+    <string name="bug">Bug</string>
+    <string name="comment">Comment</string>
+    <string name="other">Other</string>
 </resources>

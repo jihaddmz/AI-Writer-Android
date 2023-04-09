@@ -35,7 +35,7 @@ fun ScreenSettings(
     TopBar(
         text = stringResource(id = R.string.settings),
         navController = navController,
-        isContextInSettings = true
+        hideNbOfGenerationsLeft = true
     ) {
 
         Column(

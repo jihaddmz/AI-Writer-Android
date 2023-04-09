@@ -24,6 +24,17 @@ object Constants {
     const val DAY_MONTH_YEAR_FORMAT = "dd/MM/yyyy"
     const val EXIT_TIME_BETWEEN = 3000L
     const val Toast_Lenght = 6000
+
+
+    /**
+     * lists
+     **/
+    val FEEDBACK_TYPES = listOf(
+        App.getTextFromString(R.string.feature_request),
+        App.getTextFromString(R.string.bug),
+        App.getTextFromString(R.string.comment),
+        App.getTextFromString(R.string.other)
+    )
     val PREDEFINED_TEMPLATES = listOf(
         App.getTextFromString(R.string.write_an_email),
         App.getTextFromString(R.string.write_a_blog),

@@ -31,6 +31,7 @@ import com.appsfourlife.draftogo.extensions.animateOffsetY
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
+import com.appsfourlife.draftogo.presentation.ScreenFeedback
 import com.appsfourlife.draftogo.ui.theme.*
 import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.Screens
@@ -250,7 +251,8 @@ class MainActivity : ComponentActivity() {
                         val shouldBottomBarBeVisible =
                             (navBackStackEntry?.destination?.route == BottomNavScreens.Home.route
                                     || navBackStackEntry?.destination?.route == BottomNavScreens.History.route
-                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Settings.route)
+                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Settings.route
+                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Feedback.route)
 
                         LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
                             if (shouldBottomBarBeVisible) {
@@ -266,7 +268,8 @@ class MainActivity : ComponentActivity() {
                                 listOf(
                                     BottomNavScreens.Home,
                                     BottomNavScreens.History,
-                                    BottomNavScreens.Settings
+                                    BottomNavScreens.Settings,
+                                    BottomNavScreens.Feedback
                                 )
                             BottomNavigation(
                                 modifier = Modifier.animateOffsetY(
@@ -375,6 +378,11 @@ class MainActivity : ComponentActivity() {
                                             modifier = Modifier,
                                             navController = navController
                                         )
+                                    }
+
+                                    composable(route = BottomNavScreens.Feedback.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenFeedback(navController = navController)
                                     }
 
                                     composable(route = Screens.ScreenSignIn.route) {

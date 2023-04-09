@@ -26,7 +26,7 @@ fun TopBar(
     modifier: Modifier = Modifier,
     text: String,
     navController: NavController,
-    isContextInSettings: Boolean = false,
+    hideNbOfGenerationsLeft: Boolean = false,
     content: @Composable () -> Unit,
 ) {
 
@@ -71,7 +71,7 @@ fun TopBar(
 
             MyText(text = text, color = Color.White, fontWeight = FontWeight.Bold)
 
-            if (!HelperAuth.isSubscribed() && !isContextInSettings) { // if user is not subscribed
+            if (!HelperAuth.isSubscribed() && !hideNbOfGenerationsLeft) { // if user is not subscribed
                 val nbOfGenerationsLeft = 2 - SettingsNotifier.nbOfGenerationsConsumed.value;
                 if (nbOfGenerationsLeft <= 0) {
                     MyText(
