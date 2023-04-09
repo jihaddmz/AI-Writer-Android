@@ -17,11 +17,11 @@ import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @Composable
-fun ScreenSummarize(
+fun ScreenGrammar(
     navController: NavController
 ) {
 
-    SettingsNotifier.templateType = "Summarize"
+    SettingsNotifier.templateType = "Grammar"
 
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
@@ -29,7 +29,7 @@ fun ScreenSummarize(
     }
 
     TopBar(
-        text = stringResource(id = R.string.summarize_the_following_text), navController = navController
+        text = stringResource(id = R.string.correct_the_following_text), navController = navController
     ) {
 
         BottomSheetSaveOutputs(navController = navController) {
@@ -45,8 +45,8 @@ fun ScreenSummarize(
                 MySpacer(type = "small")
 
                 input(
-                    label = stringResource(id = R.string.text_to_summarize),
-                    inputPrefix = stringResource(id = R.string.summarize_the_following_text),
+                    label = stringResource(id = R.string.text_to_correct),
+                    inputPrefix = stringResource(id = R.string.correct_the_following_text),
                     showDialog = showDialog,
                     verticalScrollState = verticalScroll
                 )

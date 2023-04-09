@@ -115,9 +115,11 @@ fun LazyGridScope.sectionsGridContent(
                     App.getTextFromString(R.string.custom) -> {
                         navController.navigate(Screens.ScreenCustom.route)
                     }
-
-                    App.getTextFromString(R.string.summarize_this) -> {
+                    App.getTextFromString(R.string.summarize_the_following_text) -> {
                         navController.navigate(Screens.ScreenSummarize.route)
+                    }
+                    App.getTextFromString(R.string.correct_the_following_text) -> {
+                        navController.navigate(Screens.ScreenGrammar.route)
                     }
                     else -> {
                         SettingsNotifier.currentUserQuerySection = text

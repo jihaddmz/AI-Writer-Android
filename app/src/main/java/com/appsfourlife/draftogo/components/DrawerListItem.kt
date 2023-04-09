@@ -48,7 +48,8 @@ fun DrawerListItem(
             stringResource(id = R.string.write_a_song) -> R.drawable.icon_song
             stringResource(id = R.string.write_a_code) -> R.drawable.icon_code
             stringResource(id = R.string.custom) -> R.drawable.icon_custom
-            stringResource(id = R.string.summarize_this) -> R.drawable.icon_summarize
+            stringResource(id = R.string.summarize_the_following_text) -> R.drawable.icon_summarize
+            stringResource(id = R.string.correct_the_following_text) -> R.drawable.icon_grammar
             else -> {
                 if (imageUrl.isEmpty())
                     R.drawable.icon_custom

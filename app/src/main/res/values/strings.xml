@@ -169,6 +169,8 @@
     <string name="enable_save_outputs">Enable Save Outputs</string>
     <string name="relaunch_app_to_enable_this_feature">Please relaunch the app to enable this feature</string>
     <string name="home">Home</string>
-    <string name="summarize_this">Summarize this:</string>
+    <string name="summarize_the_following_text">Summarize the following text</string>
     <string name="text_to_summarize">Text to summarize</string>
+    <string name="correct_the_following_text">Correct the following text</string>
+    <string name="text_to_correct">Text to correct</string>
 </resources>
