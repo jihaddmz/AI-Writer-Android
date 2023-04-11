@@ -10,6 +10,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.WindowInfo
@@ -40,7 +41,8 @@ fun MyText(
         text = text,
         fontWeight = fontWeight,
         style = textStyle,
-        textDecoration = textDecoration
+        textDecoration = textDecoration,
+        overflow = TextOverflow.Ellipsis
     )
 
 }

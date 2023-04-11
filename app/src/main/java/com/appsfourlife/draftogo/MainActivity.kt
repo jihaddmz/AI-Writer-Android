@@ -101,24 +101,24 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(key1 = true, block = {
                 coroutineScope.launch(Dispatchers.IO) {
                     if (HelperSharedPreference.getBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED, true)) {
-                        App.dbGenerateText.daoTemplates.getAllTemplates().forEach {
-                            App.dbGenerateText.daoTemplates.deleteTemplate(it)
+                        App.databaseApp.daoApp.getAllTemplates().forEach {
+                            App.databaseApp.daoApp.deleteTemplate(it)
                         }
                         HelperSharedPreference.setBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED, false)
                     }
                     Constants.PREDEFINED_TEMPLATES.forEach { template ->
-                        if (App.dbGenerateText.daoTemplates.getTemplateByQuery(
+                        if (App.databaseApp.daoApp.getTemplateByQuery(
                                 template
                             ) == null
                         ) {
-                            App.dbGenerateText.daoTemplates.insertTemplate(
+                            App.databaseApp.daoApp.insertTemplate(
                                 ModelTemplate(template, "", 1)
                             )
                         } else
                             return@forEach
                     }
                     SettingsNotifier.predefinedTemplates.value =
-                        App.dbGenerateText.daoTemplates.getAllTemplates() as MutableList<ModelTemplate>
+                        App.databaseApp.daoApp.getAllTemplates() as MutableList<ModelTemplate>
                 }
             })
 

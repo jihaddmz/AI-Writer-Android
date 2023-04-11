@@ -34,7 +34,7 @@ fun ScreenPodcast(
         text = stringResource(id = R.string.write_a_podcast_top_bar), navController = navController
     ) {
 
-        BottomSheet(navController = navController) {
+        BottomSheetWriting(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()

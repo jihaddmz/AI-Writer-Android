@@ -33,7 +33,7 @@ fun ScreenTweet(
         text = stringResource(id = R.string.write_a_tweet), navController = navController
     ) {
 
-        BottomSheet(navController = navController) {
+        BottomSheetWriting(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()

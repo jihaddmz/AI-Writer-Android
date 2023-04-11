@@ -32,7 +32,7 @@ fun ScreenTranslate(
         text = stringResource(id = R.string.translate_the_following_text), navController = navController
     ) {
 
-        BottomSheet(navController = navController) {
+        BottomSheetWriting(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()

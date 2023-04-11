@@ -102,7 +102,7 @@ fun DialogAddTemplate(
                 }
 
                 coroutineScope.launch(Dispatchers.IO) {
-                    App.dbGenerateText.daoTemplates.insertTemplate(
+                    App.databaseApp.daoApp.insertTemplate(
                         ModelTemplate(
                             query = input.trim(),
                             imageUrl = clickedImageUrl.value.trim(),

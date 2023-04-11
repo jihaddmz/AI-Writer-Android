@@ -32,7 +32,7 @@ fun ScreenUserAddedTemplate(
         text = SettingsNotifier.currentUserQuerySection!!, navController = navController
     ) {
 
-        BottomSheet(navController = navController) {
+        BottomSheetWriting(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()

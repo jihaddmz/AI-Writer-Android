@@ -33,7 +33,7 @@ fun ScreenFacebook(
         text = stringResource(id = R.string.write_a_facebook_post),
         navController = navController
     ) {
-        BottomSheet(navController = navController) {
+        BottomSheetWriting(navController = navController) {
 
             Column(
                 modifier = Modifier

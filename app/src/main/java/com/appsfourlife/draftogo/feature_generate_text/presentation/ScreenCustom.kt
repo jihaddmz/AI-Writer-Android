@@ -36,7 +36,7 @@ fun ScreenCustom(
         text = stringResource(id = R.string.custom), navController = navController
     ) {
 
-        BottomSheet(navController = navController) {
+        BottomSheetWriting(navController = navController) {
 
             Column(
                 modifier = Modifier

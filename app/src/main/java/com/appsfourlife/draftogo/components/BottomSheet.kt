@@ -1,54 +1,34 @@
 package com.appsfourlife.draftogo.components
 
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material.BottomSheetScaffold
+import androidx.compose.material.BottomSheetScaffoldState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.Glass
-import com.appsfourlife.draftogo.util.BottomNavScreens
-import com.appsfourlife.draftogo.util.Screens
-import com.appsfourlife.draftogo.util.SettingsNotifier
-import kotlinx.coroutines.delay
+import com.appsfourlife.draftogo.ui.theme.SheetShape
+
+/**
+ * this is a bottom sheet holder for the art feature
+ **/
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BottomSheet(
-    navController: NavController,
     modifier: Modifier = Modifier,
+    peekSize: Dp = 0.dp,
+    sheetScaffoldState: BottomSheetScaffoldState,
     bottomSheet: @Composable () -> Unit = { BottomSheetSavedOutputs() },
     content: @Composable () -> Unit
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val sheetScaffoldState = rememberBottomSheetScaffoldState()
-    val changeTargetValue = remember {
-        mutableStateOf(false)
-    }
-    val dpSize = animateDpAsState(
-        targetValue = if (changeTargetValue.value && (HelperSharedPreference.getIsSavedOutputsEnabled() || SettingsNotifier.enableSheetContent.value)
-            && (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
-                    && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route
-                    && navBackStackEntry?.destination?.route != BottomNavScreens.Settings.route
-                    && navBackStackEntry?.destination?.route != BottomNavScreens.History.route
-                    && navBackStackEntry?.destination?.route != BottomNavScreens.Home.route)
-        ) 70.dp else (-80).dp,
-        animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)
-    )
-    LaunchedEffect(key1 = true, block = {
-        delay(Constants.SPLASH_SCREEN_DURATION)
-        changeTargetValue.value = true
-    })
     BottomSheetScaffold(
         modifier = modifier,
         scaffoldState = sheetScaffoldState,
+        sheetShape = SheetShape,
         sheetContent = { bottomSheet() },
-        sheetPeekHeight = dpSize.value,
+        sheetPeekHeight = peekSize,
         backgroundColor = Glass
     ) {
         content()

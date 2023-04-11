@@ -60,7 +60,7 @@ fun ScreenHome(
         coroutineScope.launch(Dispatchers.IO) {
 
             SettingsNotifier.predefinedTemplates.value =
-                App.dbGenerateText.daoTemplates.getAllTemplates()
+                App.databaseApp.daoApp.getAllTemplates()
             SettingsNotifier.predefinedTemplates.value =
                 SettingsNotifier.predefinedTemplates.value.sortedBy { it.userAdded }
 
@@ -106,7 +106,7 @@ fun ScreenHome(
                 onTemplateAdded = {
                     coroutineScope.launch(Dispatchers.IO) {
                         SettingsNotifier.predefinedTemplates.value =
-                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                            App.databaseApp.daoApp.getAllTemplates()
                                 .sortedBy { it.userAdded }
                     }
                 })
@@ -119,10 +119,10 @@ fun ScreenHome(
             ) {
                 coroutineScope.launch(Dispatchers.IO) {
                     SettingsNotifier.templateToDelete?.let { modelTemplate ->
-                        App.dbGenerateText.daoTemplates.deleteTemplate(modelTemplate)
+                        App.databaseApp.daoApp.deleteTemplate(modelTemplate)
                         delay(1000)
                         SettingsNotifier.predefinedTemplates.value =
-                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                            App.databaseApp.daoApp.getAllTemplates()
                                 .sortedBy { it.userAdded }
                     }
                 }
@@ -249,7 +249,7 @@ fun MainAppBar(
                     showSearch.value = true
                     coroutineScope.launch(Dispatchers.IO) {
                         SettingsNotifier.predefinedTemplates.value =
-                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                            App.databaseApp.daoApp.getAllTemplates()
                                 .sortedBy { it.userAdded }
                     }
                 },
@@ -258,12 +258,12 @@ fun MainAppBar(
                     if (searchText.value.isEmpty()) {
                         coroutineScope.launch(Dispatchers.IO) {
                             SettingsNotifier.predefinedTemplates.value =
-                                App.dbGenerateText.daoTemplates.getAllTemplates()
+                                App.databaseApp.daoApp.getAllTemplates()
                         }
                     } else {
                         coroutineScope.launch(Dispatchers.IO) {
                             SettingsNotifier.predefinedTemplates.value =
-                                App.dbGenerateText.daoTemplates.getAllTemplates().filter {
+                                App.databaseApp.daoApp.getAllTemplates().filter {
                                     it.query.lowercase().contains(searchText.value.lowercase())
                                 }
                         }

@@ -40,7 +40,7 @@ fun ScreenBlog(
 
         if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-        BottomSheet(navController = navController) {
+        BottomSheetWriting(navController = navController) {
 
             Column(
                 modifier = Modifier

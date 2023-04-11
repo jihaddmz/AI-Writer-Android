@@ -45,6 +45,7 @@ fun MyCustomDialog(
                 }
                 MyOutlinedButton(text = positiveBtnText, borderColor = Blue) {
                     onPositiveBtnClick()
+                    showDialog.value = false
                 }
             }
         }

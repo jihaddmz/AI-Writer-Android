@@ -191,13 +191,12 @@
     <string name="astronaut_art_bio">A 3D render of an astronaut walking in a green desert</string>
     <string name="sketch_art_bio">A hand drawn sketch of a Porsche 911</string>
     <string name="bear_art_bio">A photo of a teddy bear on a skateboard in Times Square</string>
-    <string name="tip">Tip:</string>
-    <string name="generate_art_tip">Each generation costs 1 credit</string>
+    <string name="generate_art_tip">Tip: Each generation costs 1 credit</string>
     <string name="generate_art_textfield_label">A white siamese cat</string>
     <string name="credits">%d Credits</string>
     <string name="image_saved_to_gallery">Saved to Gallery</string>
-    <string name="art_download_image">Click the image to download it</string>
-    <string name="art_res_tip">This is the desired resolution of the image</string>
+    <string name="tip_art_download_image">Tip: Click the image to download it</string>
+    <string name="art_res_tip">Tip: This is the desired resolution of the image</string>
     <string name="save_to_history">Save to History</string>
     <string name="render_3d">3D Render</string>
     <string name="abstract1">Abstract</string>
@@ -214,4 +213,6 @@
     <string name="none">None</string>
     <string name="style">Style</string>
     <string name="i_need_inspiration">I Need Inspiration!</string>
+    <string name="prompt_history">Prompt History</string>
+    <string name="art_history_explanation">Select a prompt from your history to paste it in the input field</string>
 </resources>

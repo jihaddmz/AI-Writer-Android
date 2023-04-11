@@ -25,7 +25,7 @@ fun MyCardView(
                     startX = 50f,
                     endX = Float.POSITIVE_INFINITY
                 )
-            ),
+            )
     ) {
         content()
     }
