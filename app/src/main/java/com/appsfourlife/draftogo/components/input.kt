@@ -84,7 +84,7 @@ fun input(
                         horizontalArrangement = Arrangement.Start
                     ) {
                         MySpacer(type = "small", widthOrHeight = "width")
-                        SettingsNotifier.outputLanguage.value = myDropDown(
+                        SettingsNotifier.outputLanguage.value = inputDropDown(
                             list = Constants.OUTPUT_LANGUAGES,
                         )
                     }

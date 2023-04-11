@@ -37,7 +37,7 @@ fun ScreenLetter(
 
         if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-        BottomSheetSaveOutputs(navController = navController) {
+        BottomSheet(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()

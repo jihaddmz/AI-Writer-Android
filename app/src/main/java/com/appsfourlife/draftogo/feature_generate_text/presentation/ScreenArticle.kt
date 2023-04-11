@@ -39,7 +39,7 @@ fun ScreenArticle(
         if (showDialog.value)
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-        BottomSheetSaveOutputs(
+        BottomSheet(
             modifier = modifier
                 .fillMaxSize(),
             navController = navController

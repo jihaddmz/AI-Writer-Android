@@ -32,7 +32,7 @@ fun ScreenSummarize(
         text = stringResource(id = R.string.summarize_the_following_text), navController = navController
     ) {
 
-        BottomSheetSaveOutputs(navController = navController) {
+        BottomSheet(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()

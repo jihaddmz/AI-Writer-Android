@@ -76,7 +76,7 @@ fun DialogAddTemplate(
                 MyText(text = "${stringResource(id = R.string.choose_image)}:")
 
                 MySpacer(type = "medium", widthOrHeight = "width")
-                MyUrlImage(
+                MyUrlSvg(
                     modifier = Modifier.clickable {
                         if (!SettingsNotifier.isConnected.value) {
                             HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
@@ -182,7 +182,7 @@ fun ListItemTemplateIcon(
     onIconClicked: (String) -> Unit
 ) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        MyUrlImage(modifier = Modifier.clickable {
+        MyUrlSvg(modifier = Modifier.clickable {
             onIconClicked(url)
         }, imageUrl = url, contentDesc = name)
         MyText(text = name)

@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -39,7 +38,7 @@ fun ScreenEmail(
 
         if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-        BottomSheetSaveOutputs(navController = navController) {
+        BottomSheet(navController = navController) {
 
             Column(
                 modifier = Modifier

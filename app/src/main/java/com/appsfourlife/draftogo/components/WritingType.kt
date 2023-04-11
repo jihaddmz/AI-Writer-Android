@@ -81,7 +81,7 @@ fun WritingType(
                     contentDesc = text
                 )
             else
-                MyUrlImage(imageUrl = imageUrl, contentDesc = text)
+                MyUrlSvg(imageUrl = imageUrl, contentDesc = text)
 
             Spacer(modifier = Modifier.height(SpacersSize.small))
 

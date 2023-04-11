@@ -32,7 +32,7 @@ fun ScreenGrammar(
         text = stringResource(id = R.string.correct_the_following_text), navController = navController
     ) {
 
-        BottomSheetSaveOutputs(navController = navController) {
+        BottomSheet(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()

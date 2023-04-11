@@ -56,7 +56,9 @@ fun ScreenHistory(
         mutableStateOf(mutableListOf<ModelHistory>())
     }
 
-    HelperFirebaseDatabase.fetchHistory(result, noHistory, showCircularIndicator)
+    LaunchedEffect(key1 = true, block = {
+        HelperFirebaseDatabase.fetchHistory(result, noHistory, showCircularIndicator)
+    })
 
     TopBarHistory(
         text = stringResource(id = R.string.history),
@@ -251,7 +253,7 @@ fun TopBarHistory(
                 title = stringResource(id = R.string.deletion_confirmation)
             ) {
                 HelperFirebaseDatabase.deleteAllHistory()
-                list.value.clear()
+                list.value = mutableListOf()
                 noHistory.value = true
             }
 

@@ -62,7 +62,7 @@ fun DrawerListItem(
         if (iconID != 0)
             MyImage(imageID = iconID, contentDesc = text)
         else
-            MyUrlImage(imageUrl = imageUrl, contentDesc = text)
+            MyUrlSvg(imageUrl = imageUrl, contentDesc = text)
 
         MyText(text = text)
     }

@@ -1,0 +1,440 @@
+package com.appsfourlife.draftogo.feature_generate_art.presentation
+
+import android.graphics.Bitmap
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
+import androidx.compose.material.IconButton
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.appsfourlife.draftogo.App
+import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
+import com.appsfourlife.draftogo.feature_generate_art.util.ConstantsArt
+import com.appsfourlife.draftogo.feature_generate_art.util.ConstantsArt.LISTOF_ART_SHOWCASES
+import com.appsfourlife.draftogo.helpers.HelperUI
+import com.appsfourlife.draftogo.helpers.WindowInfo
+import com.appsfourlife.draftogo.helpers.rememberWindowInfo
+import com.appsfourlife.draftogo.ui.theme.Blue
+import com.appsfourlife.draftogo.ui.theme.Orange
+import com.appsfourlife.draftogo.ui.theme.Shapes
+import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.BottomNavScreens
+import com.appsfourlife.draftogo.util.SettingsNotifier
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.concurrent.timerTask
+
+@OptIn(ExperimentalPagerApi::class, ExperimentalComposeUiApi::class)
+@Composable
+fun ScreenArt(
+    navController: NavController
+) {
+
+    val localKeyboard = LocalSoftwareKeyboardController.current
+    val pagerState = rememberPagerState()
+    val coroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = true, block = {
+        Timer().scheduleAtFixedRate(timerTask {
+            coroutineScope.launch {
+                val secondPage =
+                    if (pagerState.currentPage == LISTOF_ART_SHOWCASES.size - 1) 0 else pagerState.currentPage + 1
+                pagerState.animateScrollToPage(
+                    secondPage,
+                )
+            }
+        }, 1000L, 5000L)
+    })
+
+    TopBarArt(
+        modifier = Modifier.verticalScroll(rememberScrollState()),
+        text = stringResource(id = R.string.generate_arts),
+        navController = navController,
+    ) {
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+
+            val prompt = remember {
+                mutableStateOf("")
+            }
+            val imageUrl = remember {
+                mutableStateOf("")
+            }
+            val resolution = remember {
+                mutableStateOf("")
+            }
+            val style = remember {
+                mutableStateOf("")
+            }
+            val showLoadingIndicator = remember {
+                mutableStateOf(false)
+            }
+            val bitmap = remember {
+                mutableStateOf<Bitmap?>(null)
+            }
+            val doneIconColor = remember {
+                mutableStateOf(Color.LightGray)
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = SpacersSize.medium), contentAlignment = Alignment.CenterEnd
+            ) {
+                Row(modifier = Modifier.clickable {
+                    prompt.value =
+                        ConstantsArt.LISTOF_ART_SHOWCASES[Random().nextInt(ConstantsArt.LISTOF_ART_SHOWCASES.size)].bio
+                    doneIconColor.value = Color.Green
+                }, verticalAlignment = Alignment.CenterVertically) {
+                    MyTextLink(
+                        text = stringResource(id = R.string.i_need_inspiration),
+                        modifier = Modifier
+                    )
+                    MyIcon(iconID = R.drawable.icon_light, contentDesc = "", tint = Orange)
+                }
+            }
+            MyCardView(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SpacersSize.medium),
+            ) {
+                Column {
+                    MyTextField(
+                        modifier = Modifier, value = prompt.value,
+                        onValueChanged = {
+                            prompt.value = it
+                            if (it.isNotEmpty())
+                                doneIconColor.value = Color.Green
+                            else
+                                doneIconColor.value = Color.LightGray
+                        },
+                        placeholder = stringResource(id = R.string.generate_art_textfield_label),
+                    )
+
+                    MySpacer(type = "small")
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        IconButton(onClick = {
+                            // todo on history icon click
+                        }) {
+                            MyIcon(
+                                iconID = R.drawable.icon_history,
+                                contentDesc = "",
+                                tint = Color.DarkGray
+                            )
+                        }
+
+                        IconButton(modifier = Modifier
+                            .padding(end = SpacersSize.small),
+                            enabled = doneIconColor.value == Color.Green,
+                            onClick = {
+                                if (!SettingsNotifier.isConnected.value) {
+                                    HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
+                                    return@IconButton
+                                }
+
+                                imageUrl.value = ""
+                                localKeyboard?.hide()
+                                showLoadingIndicator.value = true
+
+                                coroutineScope.launch {
+                                    Timer().schedule(timerTask {
+                                        showLoadingIndicator.value = false
+                                        imageUrl.value = "12"
+                                    }, 2000)
+                                }
+//                            val finalPrompt = if (style.value == App.getTextFromString(R.string.none)) prompt.value else "${prompt.value} with a $style style"
+//                            HelperChatGPT.getImageResponse(
+//                                size = resolution.value,
+//                                prompt = finalPrompt,
+//                            ) {
+//                                showLoadingIndicator.value = false
+//                                imageUrl.value = it
+//                                coroutineScope.launch(Dispatchers.IO) {
+//                                    bitmap.value = BitmapFactory.decodeStream(
+//                                        URL(it)
+//                                            .openConnection()
+//                                            .getInputStream()
+//                                    )
+//                                }
+//                            }
+                            }) {
+                            if (!showLoadingIndicator.value)
+                                MyIcon(
+                                    iconID = R.drawable.icon_checkcircle,
+                                    contentDesc = "",
+                                    tint = doneIconColor.value
+                                )
+                            MyAnimatedVisibility(visible = showLoadingIndicator.value) {
+                                MyIconLoading(tint = Color.Green)
+                            }
+                        } // end done icon
+                    }
+                }
+            } // end input card
+            MyAnnotatedText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SpacersSize.medium),
+                textAlign = TextAlign.Start,
+                text = AnnotatedString(
+                    text = stringResource(id = R.string.tip),
+                    spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                ).plus(AnnotatedString(text = stringResource(id = R.string.generate_art_tip)))
+            )
+
+            MySpacer(type = "large")
+
+            resolution.value = myOptionsSelector(
+                list = listOf("256x256", "512x512", "1024x1024"),
+                defaultSelectedText = "512x512"
+            )
+            MyAnnotatedText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SpacersSize.medium),
+                textAlign = TextAlign.Start,
+                text = AnnotatedString(
+                    text = stringResource(id = R.string.tip),
+                    spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                ).plus(AnnotatedString(text = stringResource(id = R.string.art_res_tip)))
+            )
+
+            MySpacer(type = "medium")
+
+            style.value = myDropDown(
+                modifier = Modifier.padding(horizontal = SpacersSize.medium),
+                list = ConstantsArt.LISTOF_ART_STYLES,
+                label = stringResource(id = R.string.style)
+            )
+
+            MySpacer(type = "large")
+
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth(),
+                count = LISTOF_ART_SHOWCASES.size
+            ) { index ->
+                val current = LISTOF_ART_SHOWCASES[index]
+
+                Card(shape = Shapes.large, modifier = Modifier.padding(SpacersSize.medium)) {
+
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        Image(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            painter = painterResource(id = current.artID),
+                            contentDescription = "",
+                            contentScale = ContentScale.Fit
+                        )
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.BottomCenter
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .background(
+                                        Brush.verticalGradient(
+                                            listOf(Color.Transparent, Color.Black)
+                                        )
+                                    ),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Bottom
+                            ) {
+                                MyText(
+                                    text = current.bio,
+                                    color = Color.White,
+                                    textAlign = TextAlign.Center
+                                )
+                                MySpacer(type = "small")
+                                HorizontalPagerIndicator(
+                                    pagerState = pagerState,
+                                    activeColor = Blue,
+                                    inactiveColor = Color.White
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+
+            val showDialog = remember {
+                mutableStateOf(false)
+            }
+            LaunchedEffect(key1 = imageUrl.value, block = {
+                showDialog.value = imageUrl.value.isNotEmpty()
+            })
+
+            if (showDialog.value) {
+                MyCustomDialog(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.75f),
+                    showDialog = showDialog,
+                    negativeBtnText = stringResource(id = R.string.done),
+                    positiveBtnText = stringResource(id = R.string.save_to_history),
+                    onPositiveBtnClick = {
+                        // todo save art entry to history
+                    }
+                ) {
+                    MyAnnotatedText(
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                        text = AnnotatedString(
+                            text = stringResource(id = R.string.tip),
+                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                        ).plus(AnnotatedString(text = stringResource(id = R.string.art_download_image)))
+                    )
+                    Image(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(0.85f),
+                        painter = painterResource(id = R.drawable.test),
+                        contentDescription = ""
+                    )
+//                    MyUrlImage(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .fillMaxHeight(0.85f)
+//                            .clickable {
+//                                coroutineScope.launch(Dispatchers.IO) {
+//                                    if (bitmap.value != null) {
+//                                        HelperImage.mSaveMediaToStorage(
+//                                            bitmap.value
+//                                        ) {
+//                                            coroutineScope.launch(Dispatchers.Main) {
+//                                                HelperUI.showToast(
+//                                                    App.context,
+//                                                    msg = App.getTextFromString(R.string.image_saved_to_gallery)
+//                                                )
+//                                            }
+//                                        }
+//                                    } else {
+//                                        coroutineScope.launch(Dispatchers.IO) {
+//                                            bitmap.value = BitmapFactory.decodeStream(
+//                                                URL(imageUrl.value)
+//                                                    .openConnection()
+//                                                    .getInputStream()
+//                                            )
+//                                            HelperImage.mSaveMediaToStorage(
+//                                                bitmap.value
+//                                            ) {
+//                                                coroutineScope.launch(Dispatchers.Main) {
+//                                                    HelperUI.showToast(
+//                                                        App.context,
+//                                                        msg = App.getTextFromString(R.string.image_saved_to_gallery)
+//                                                    )
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            },
+//                        imageUrl = imageUrl.value,
+//                        contentDesc = "",
+//                        contentScale = ContentScale.FillBounds
+//                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TopBarArt(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    text: String,
+    content: @Composable () -> Unit
+) {
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .fillMaxSize()
+    ) {
+
+        val padding = when (rememberWindowInfo().screenWidthInfo) {
+            is WindowInfo.WindowType.Compact -> 0.dp
+            is WindowInfo.WindowType.Medium -> 10.dp
+            else -> 20.dp
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = Blue)
+                .padding(padding),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            IconButton(onClick = {
+                navController.navigate(BottomNavScreens.Home.route)
+                SettingsNotifier.resetValues()
+            }) {
+
+                MyIcon(
+                    iconID = R.drawable.icon_arrow_back,
+                    contentDesc = stringResource(
+                        id = R.string.navigate_back
+                    ),
+                    tint = Color.White
+                )
+            }
+
+            when (rememberWindowInfo().screenWidthInfo) {
+                is WindowInfo.WindowType.Compact -> Spacer(modifier = Modifier.width(SpacersSize.small))
+                is WindowInfo.WindowType.Medium -> Spacer(modifier = Modifier.width(SpacersSize.small))
+                else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
+            }
+
+            MyText(text = text, color = Color.White, fontWeight = FontWeight.Bold)
+
+            MyText(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = SpacersSize.small),
+                color = Color.White,
+                text = stringResource(
+                    id = R.string.credits,
+                    NotifiersArt.credits.value
+                ),
+                textAlign = TextAlign.End
+            )
+        }
+
+        Spacer(modifier = Modifier.height(SpacersSize.small))
+
+        content()
+    }
+}

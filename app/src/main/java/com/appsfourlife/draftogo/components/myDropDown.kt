@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.feature_generate_art.util.ConstantsArt
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.Blue
@@ -116,21 +117,22 @@ fun myDropDown(
             Constants.FEEDBACK_TYPES -> {
                 mutableStateOf(Constants.FEEDBACK_TYPES[0])
             }
+            ConstantsArt.LISTOF_ART_STYLES -> {
+                mutableStateOf(App.getTextFromString(R.string.none))
+            }
             else -> {
                 mutableStateOf("")
             }
         }
     }
     Row(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
 
         if (label.isNotEmpty())
             MyText(text = "$label:", fontWeight = FontWeight.Bold)
-
-        MySpacer(type = "medium", widthOrHeight = "width")
 
         Row(
             modifier = Modifier

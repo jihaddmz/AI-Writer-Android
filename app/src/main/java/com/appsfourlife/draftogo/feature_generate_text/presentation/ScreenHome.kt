@@ -2,18 +2,21 @@ package com.appsfourlife.draftogo.feature_generate_text.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
@@ -27,6 +30,8 @@ import com.appsfourlife.draftogo.extensions.sectionsGridContent
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
+import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -142,6 +147,20 @@ fun ScreenHome(
 
         MySpacer(type = "small")
 
+        Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+            MyTextLink(
+                text = stringResource(id = R.string.view_history),
+                modifier = Modifier
+                    .padding(end = SpacersSize.medium)
+                    .clickable {
+                        navController.navigate(BottomNavScreens.History.route)
+                    },
+                textAlign = TextAlign.End
+            )
+        }
+
+        MySpacer(type = "small")
+
         LazyVerticalGrid(modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 5.dp),
@@ -230,7 +249,8 @@ fun MainAppBar(
                     showSearch.value = true
                     coroutineScope.launch(Dispatchers.IO) {
                         SettingsNotifier.predefinedTemplates.value =
-                            App.dbGenerateText.daoTemplates.getAllTemplates().sortedBy { it.userAdded }
+                            App.dbGenerateText.daoTemplates.getAllTemplates()
+                                .sortedBy { it.userAdded }
                     }
                 },
                 onValueChanged = { itr ->

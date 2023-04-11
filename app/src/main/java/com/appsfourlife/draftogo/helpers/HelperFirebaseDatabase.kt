@@ -88,7 +88,7 @@ object HelperFirebaseDatabase {
             .addOnCompleteListener { task ->
                 if (task.result.documents.isEmpty()) {
                     noHistory.value = true
-                } else
+                } else {
                     task.result.documents.forEach { documentSnapshot ->
                         result.add(
                             ModelHistory(
@@ -99,8 +99,14 @@ object HelperFirebaseDatabase {
                             )
                         )
                     }
-                list.value = result.sortedBy { HelperDate.parseStringToDate(it.date, "yyyy-MM-dd hh:mm:ss")?.time } as MutableList<ModelHistory>
-                list.value.reverse()
+                    list.value = result.sortedBy {
+                        HelperDate.parseStringToDate(
+                            it.date,
+                            "yyyy-MM-dd hh:mm:ss"
+                        )?.time
+                    } as MutableList<ModelHistory>
+                    list.value.reverse()
+                }
                 showCircularIndicator.value = false
             }
     }

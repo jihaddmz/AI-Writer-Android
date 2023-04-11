@@ -15,6 +15,8 @@ fun MyOutlinedButton(
     modifier: Modifier = Modifier,
     text: String,
     isEnabled: Boolean = true,
+    borderColor: Color = Blue,
+    textColor: Color = Color.Black,
     onCLick: () -> Unit
 ) {
     OutlinedButton(
@@ -25,8 +27,8 @@ fun MyOutlinedButton(
         shape = Shapes.medium,
         enabled = isEnabled,
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent),
-        border = BorderStroke(2.dp, Blue)
+        border = BorderStroke(2.dp, borderColor)
     ) {
-        MyText(text = text, color = Blue)
+        MyText(text = text, color = textColor)
     }
 }

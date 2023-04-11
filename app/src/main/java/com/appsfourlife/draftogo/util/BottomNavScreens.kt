@@ -7,4 +7,5 @@ sealed class BottomNavScreens(val route: String, val iconID: Int, val labelID: I
     object History : BottomNavScreens("screen_history", R.drawable.icon_history, R.string.history)
     object Home : BottomNavScreens("screen_home", R.drawable.icon_home, R.string.home)
     object Feedback : BottomNavScreens("screen_feedback", R.drawable.icon_feedback, R.string.Feedback)
+    object Art : BottomNavScreens("screen_art", R.drawable.icon_image, R.string.art)
 }

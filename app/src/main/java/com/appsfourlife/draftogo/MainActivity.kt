@@ -28,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateOffsetY
+import com.appsfourlife.draftogo.feature_generate_art.presentation.ScreenArt
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
@@ -252,7 +253,8 @@ class MainActivity : ComponentActivity() {
                             (navBackStackEntry?.destination?.route == BottomNavScreens.Home.route
                                     || navBackStackEntry?.destination?.route == BottomNavScreens.History.route
                                     || navBackStackEntry?.destination?.route == BottomNavScreens.Settings.route
-                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Feedback.route)
+                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Feedback.route
+                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Art.route)
 
                         LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
                             if (shouldBottomBarBeVisible) {
@@ -267,14 +269,14 @@ class MainActivity : ComponentActivity() {
                             val listOfBottomNavScreens =
                                 listOf(
                                     BottomNavScreens.Home,
-                                    BottomNavScreens.History,
-                                    BottomNavScreens.Settings,
-                                    BottomNavScreens.Feedback
+                                    BottomNavScreens.Art,
+                                    BottomNavScreens.Feedback,
+                                    BottomNavScreens.Settings
                                 )
                             BottomNavigation(
                                 modifier = Modifier.animateOffsetY(
-                                    initialOffsetY = 100.dp,
-                                ), backgroundColor = Color.Transparent
+                                    initialOffsetY = 70.dp,
+                                ), backgroundColor = Glass
                             ) {
                                 val currentRoute = navBackStackEntry?.destination?.route
 
@@ -420,6 +422,11 @@ class MainActivity : ComponentActivity() {
                                     composable(route = Screens.ScreenGrammar.route) {
                                         MyBackHandler(navController = navController)
                                         ScreenGrammar(navController = navController)
+                                    }
+
+                                    composable(route = BottomNavScreens.Art.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenArt(navController = navController)
                                     }
 
                                     composable(route = Screens.ScreenUserAddedTemplate.route) {
