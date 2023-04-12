@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -13,19 +14,20 @@ import com.appsfourlife.draftogo.ui.theme.Shapes
 @Composable
 fun MyCardView(
     modifier: Modifier = Modifier,
+    backgroundColor: Color = Color.Transparent,
     content: @Composable () -> Unit
 ) {
     Box(
         modifier = modifier
             .border(
-                1.dp,
+                width =  1.dp,
                 shape = Shapes.medium,
                 brush = Brush.horizontalGradient(
                     listOf(Blue, Color.Cyan),
                     startX = 50f,
                     endX = Float.POSITIVE_INFINITY
                 )
-            )
+            ).background(color = backgroundColor, shape = Shapes.medium)
     ) {
         content()
     }

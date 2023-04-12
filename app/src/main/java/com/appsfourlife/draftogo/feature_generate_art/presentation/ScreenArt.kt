@@ -202,6 +202,8 @@ fun ScreenArt(
                                 .animateOffsetX(initialOffsetX = 70.dp),
                                 enabled = doneIconColor.value == Color.Green,
                                 onClick = {
+                                    HelperAnalytics.sendEvent("generate_art")
+
                                     if (!SettingsNotifier.isConnected.value) {
                                         HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
                                         return@IconButton

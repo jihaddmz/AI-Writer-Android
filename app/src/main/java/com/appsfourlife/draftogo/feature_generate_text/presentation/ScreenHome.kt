@@ -198,7 +198,8 @@ fun MainAppBar(
         ) {
             MyIcon(
                 iconID = R.drawable.icon_add_new,
-                contentDesc = stringResource(id = R.string.add_your_template)
+                contentDesc = stringResource(id = R.string.add_your_template),
+                tint = Color.Red
             )
         }
 
@@ -220,7 +221,8 @@ fun MainAppBar(
             }, modifier = Modifier.animateOffsetY(initialOffsetY = (-100).dp, delay = 200)) {
                 MyIcon(
                     iconID = R.drawable.icon_search,
-                    contentDesc = stringResource(id = R.string.search)
+                    contentDesc = stringResource(id = R.string.search),
+                    tint = Color.Black
                 )
             }
 

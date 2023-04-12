@@ -4,7 +4,6 @@ import android.speech.tts.TextToSpeech
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -21,9 +20,10 @@ import com.appsfourlife.draftogo.feature_generate_text.models.ModelComparedGener
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.Helpers
-import com.appsfourlife.draftogo.ui.theme.Blue
-import com.appsfourlife.draftogo.ui.theme.Shapes
+import com.appsfourlife.draftogo.ui.theme.Azure
+import com.appsfourlife.draftogo.ui.theme.Orange
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.ui.theme.Violet
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import java.util.*
 
@@ -37,8 +37,9 @@ fun Output(
 
     val context = LocalContext.current
 
-    Card(
-        modifier = modifier.fillMaxSize(), shape = Shapes.medium, backgroundColor = Color.White
+    MyCardView(
+        modifier = modifier.fillMaxSize(),
+        backgroundColor = Color.White
     ) {
         Column(
             modifier = Modifier
@@ -75,7 +76,7 @@ fun Output(
                                     )
                                 )
                             }) {
-                                MyIcon(iconID = R.drawable.icon_save, contentDesc = "save")
+                                MyIcon(iconID = R.drawable.icon_save, contentDesc = "save", tint = Color.Black)
                             }
 
                         IconButton(modifier = Modifier, onClick = {
@@ -99,7 +100,7 @@ fun Output(
                                 contentDesc = stringResource(
                                     id = com.appsfourlife.draftogo.R.string.share
                                 ),
-                                tint = Blue
+                                tint = Violet
                             )
                         }
 
@@ -150,7 +151,7 @@ fun Output(
                                 contentDesc = stringResource(
                                     id = com.appsfourlife.draftogo.R.string.speaker
                                 ),
-                                tint = Blue
+                                tint = Azure
                             )
                         }
 
@@ -166,7 +167,7 @@ fun Output(
                                 contentDesc = stringResource(
                                     id = com.appsfourlife.draftogo.R.string.copy
                                 ),
-                                tint = Blue
+                                tint = Orange
                             )
                         }
                     }

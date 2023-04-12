@@ -1,11 +1,9 @@
 package com.appsfourlife.draftogo.components
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.Card
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -20,8 +18,8 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.extensions.animateOffsetX
 import com.appsfourlife.draftogo.helpers.*
-import com.appsfourlife.draftogo.ui.theme.Blue
-import com.appsfourlife.draftogo.ui.theme.Shapes
+import com.appsfourlife.draftogo.ui.theme.Amber
+import com.appsfourlife.draftogo.ui.theme.Rose
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.*
@@ -53,7 +51,7 @@ fun input(
 
     Column(modifier = modifier) {
 
-        Card(shape = Shapes.medium, border = BorderStroke(3.dp, color = Blue)) {
+        MyCardView {
 
             Column {
 
@@ -68,6 +66,10 @@ fun input(
                     placeholder = label,
                     value = SettingsNotifier.input.value.text
                 )
+
+                /**
+                 * input actions
+                 **/
 
                 /**
                  * input actions
@@ -98,7 +100,7 @@ fun input(
                             isGenerateBtnEnabled.value = false
                         }, modifier = Modifier.animateOffsetX(initialOffsetX = 100.dp)) {
                             MyIcon(
-                                iconID = R.drawable.clear, tint = Blue, contentDesc = stringResource(
+                                iconID = R.drawable.clear, tint = Rose, contentDesc = stringResource(
                                     id = R.string.clear
                                 )
                             )
@@ -115,7 +117,7 @@ fun input(
                         }, modifier = Modifier.animateOffsetX(initialOffsetX = 100.dp)) {
                             MyIcon(
                                 iconID = R.drawable.icon_paste,
-                                tint = Blue,
+                                tint = Amber,
                                 contentDesc = stringResource(
                                     id = R.string.paste
                                 )

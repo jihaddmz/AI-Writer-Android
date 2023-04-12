@@ -18,6 +18,7 @@ fun MyButton(
     text: String = "",
     content: @Composable () -> Unit = {},
     isEnabled: Boolean = true,
+    bgC: Color = Blue,
     onClick: () -> Unit
 ) {
 
@@ -25,7 +26,7 @@ fun MyButton(
         modifier = modifier,
         enabled = isEnabled,
         shape = Shapes.medium,
-        colors = ButtonDefaults.buttonColors(backgroundColor = Blue),
+        colors = ButtonDefaults.buttonColors(backgroundColor = bgC),
         onClick = {
             onClick()
         }
