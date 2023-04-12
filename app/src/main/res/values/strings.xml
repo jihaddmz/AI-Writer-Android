@@ -193,7 +193,7 @@
     <string name="bear_art_bio">A photo of a teddy bear on a skateboard in Times Square</string>
     <string name="generate_art_tip">Tip: Each generation costs 1 credit</string>
     <string name="generate_art_textfield_label">A white siamese cat</string>
-    <string name="credits">%d Credits</string>
+    <string name="nbof_credits">%d</string>
     <string name="image_saved_to_gallery">Saved to Gallery</string>
     <string name="tip_art_download_image">Tip: Click the image to download it</string>
     <string name="art_res_tip">Tip: This is the desired resolution of the image</string>
@@ -215,4 +215,15 @@
     <string name="i_need_inspiration">I Need Inspiration!</string>
     <string name="prompt_history">Prompt History</string>
     <string name="art_history_explanation">Select a prompt from your history to paste it in the input field</string>
+    <string name="purchase_credits">Purchase Credits</string>
+    <string name="art_purchase_credits_desc">Unleash your creativity with our AI tool</string>
+    <string name="arts_per_credits">Create arts per credits (1 art per 1 credit)</string>
+    <string name="download_high_resolution_artwork">Download high resolution artwork</string>
+    <string name="access_to_all_styles">Access to all styles (10+)</string>
+    <string name="use_some_inspiration">Use some inspiration</string>
+    <string name="billed_once">Billed Once</string>
+    <string name="orange_art_bio">A blue orange sliced in half laying on a blue floor in front of a blue wall</string>
+    <string name="boul_art_bio">A bowl of soup that is also a portal to another dimension, digital art</string>
+    <string name="computer_art_bio">A computer from the 90s in the style of vaporwave</string>
+    <string name="dogandcat_art_bio">A photo of a Samoyed dog with its tongue out hugging a white Siamese cat</string>
 </resources>

@@ -13,8 +13,8 @@ android {
         applicationId 'com.appsfourlife.draftogo'
         minSdk 24
         targetSdk 33
-        versionCode 21
-        versionName "1.1.0"
+        versionCode 23
+        versionName "2.0"
 
         signingConfigs {
             config {
@@ -38,7 +38,7 @@ android {
             release {
                 minifyEnabled true
 //                debuggable true
-                signingConfig signingConfigs.config
+//                signingConfig signingConfigs.config
                 proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             }
         }

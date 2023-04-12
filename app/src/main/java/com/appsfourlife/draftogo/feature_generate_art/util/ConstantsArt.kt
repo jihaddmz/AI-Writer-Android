@@ -47,5 +47,21 @@ object ConstantsArt {
             artID = R.drawable.teddy_bear,
             bio = App.getTextFromString(R.string.bear_art_bio)
         ),
+        ModelArtShowCase(
+            artID = R.drawable.orange,
+            bio = App.getTextFromString(R.string.orange_art_bio)
+        ),
+        ModelArtShowCase(
+            artID = R.drawable.boul,
+            bio = App.getTextFromString(R.string.boul_art_bio)
+        ),
+        ModelArtShowCase(
+            artID = R.drawable.computer,
+            bio = App.getTextFromString(R.string.computer_art_bio)
+        ),
+        ModelArtShowCase(
+            artID = R.drawable.dogandcat,
+            bio = App.getTextFromString(R.string.dogandcat_art_bio)
+        ),
     )
 }

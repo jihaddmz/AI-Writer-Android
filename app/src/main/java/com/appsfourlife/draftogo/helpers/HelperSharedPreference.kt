@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
 
 object HelperSharedPreference {
 
@@ -38,6 +39,7 @@ object HelperSharedPreference {
     const val SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH = "output_typewriter_length"
     const val SP_SETTINGS_SUBSCRIBE_TYPE = "subscribe_type"
     const val SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED = "is_compare_outputs_enabled"
+    const val SP_SETTINGS_NB_0F_ARTS_CREDITS = "nb_0f_arts_credits"
 
 
     /**
@@ -51,6 +53,14 @@ object HelperSharedPreference {
     /**
      * most common shared preferences keys
      **/
+
+    fun getNbOfArtsCredits(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_CREDITS, 0)
+    }
+
+    fun setNbOfArtsCredits() {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_CREDITS, NotifiersArt.credits.value)
+    }
 
     fun getIsSavedOutputsEnabled(): Boolean{
         return getBool(SP_SETTINGS, SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED, false)

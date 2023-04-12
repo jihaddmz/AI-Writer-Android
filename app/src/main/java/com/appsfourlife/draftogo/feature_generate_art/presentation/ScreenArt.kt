@@ -1,6 +1,7 @@
 package com.appsfourlife.draftogo.feature_generate_art.presentation
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
@@ -26,14 +27,12 @@ import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateOffsetX
 import com.appsfourlife.draftogo.extensions.animateVisibility
+import com.appsfourlife.draftogo.feature_generate_art.components.BottomSheetArtPricing
 import com.appsfourlife.draftogo.feature_generate_art.data.model.ModelArtHistory
 import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
 import com.appsfourlife.draftogo.feature_generate_art.util.ConstantsArt
 import com.appsfourlife.draftogo.feature_generate_art.util.ConstantsArt.LISTOF_ART_SHOWCASES
-import com.appsfourlife.draftogo.helpers.HelperDate
-import com.appsfourlife.draftogo.helpers.HelperUI
-import com.appsfourlife.draftogo.helpers.WindowInfo
-import com.appsfourlife.draftogo.helpers.rememberWindowInfo
+import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Orange
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -46,6 +45,7 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URL
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -59,6 +59,8 @@ fun ScreenArt(
     val pagerState = rememberPagerState()
     val coroutineScope = rememberCoroutineScope()
     val sheetScaffoldState = rememberBottomSheetScaffoldState()
+
+    HelperFirebaseDatabase.getNbOfArtCredits()
 
     LaunchedEffect(key1 = true, block = {
         Timer().scheduleAtFixedRate(timerTask {
@@ -99,18 +101,25 @@ fun ScreenArt(
         val doneIconColor = remember {
             mutableStateOf(Color.LightGray)
         }
+        val isBottomSheetArtHistory = remember {
+            mutableStateOf(true)
+        }
 
         BottomSheet(modifier = Modifier
             .fillMaxSize(),
             sheetScaffoldState = sheetScaffoldState,
             bottomSheet = {
-                BottomSheetArtHistory(
-                    sheetScaffoldState = sheetScaffoldState,
-                    onArtHistoryClick = {
-                        prompt.value = it
-                        doneIconColor.value = Color.Green
-                    }
-                )
+                if (isBottomSheetArtHistory.value) {
+                    BottomSheetArtHistory(
+                        sheetScaffoldState = sheetScaffoldState,
+                        onArtHistoryClick = {
+                            prompt.value = it
+                            doneIconColor.value = Color.Green
+                        }
+                    )
+                } else {
+                    BottomSheetArtPricing(sheetScaffoldState = sheetScaffoldState)
+                }
             }) {
 
             Column(
@@ -166,6 +175,7 @@ fun ScreenArt(
                                 modifier = Modifier.animateOffsetX(initialOffsetX = (-70).dp),
                                 onClick = {
                                     coroutineScope.launch {
+                                        isBottomSheetArtHistory.value = true
                                         sheetScaffoldState.bottomSheetState.expand()
                                     }
                                 }) {
@@ -197,31 +207,45 @@ fun ScreenArt(
                                         return@IconButton
                                     }
 
-                                    imageUrl.value = ""
+                                    if (NotifiersArt.credits.value == 0) {
+                                        coroutineScope.launch {
+                                            isBottomSheetArtHistory.value = false
+                                            sheetScaffoldState.bottomSheetState.expand()
+                                        }
+                                        return@IconButton
+                                    }
+
+//                                    imageUrl.value = ""
                                     localKeyboard?.hide()
                                     showLoadingIndicator.value = true
 
-                                    coroutineScope.launch {
-                                        Timer().schedule(timerTask {
-                                            showLoadingIndicator.value = false
-                                            imageUrl.value = "12"
-                                        }, 2000)
+//                                    coroutineScope.launch {
+//                                        Timer().schedule(timerTask {
+//                                            showLoadingIndicator.value = false
+//                                            imageUrl.value = "12"
+//                                            NotifiersArt.credits.value -= 1
+//                                            HelperFirebaseDatabase.setNbOfArtCredits()
+//                                        }, 2000)
+//                                    }
+                                    val finalPrompt =
+                                        if (style.value == App.getTextFromString(R.string.none)) prompt.value else "${prompt.value} with a $style style"
+                                    HelperChatGPT.getImageResponse(
+                                        size = resolution.value,
+                                        prompt = finalPrompt,
+                                    ) {
+                                        showLoadingIndicator.value = false
+                                        imageUrl.value = it
+                                        coroutineScope.launch(Dispatchers.IO) {
+                                            NotifiersArt.credits.value -= 1
+                                            HelperSharedPreference.setNbOfArtsCredits()
+                                            HelperFirebaseDatabase.setNbOfArtCredits()
+                                            bitmap.value = BitmapFactory.decodeStream(
+                                                URL(it)
+                                                    .openConnection()
+                                                    .getInputStream()
+                                            )
+                                        }
                                     }
-//                            val finalPrompt = if (style.value == App.getTextFromString(R.string.none)) prompt.value else "${prompt.value} with a $style style"
-//                            HelperChatGPT.getImageResponse(
-//                                size = resolution.value,
-//                                prompt = finalPrompt,
-//                            ) {
-//                                showLoadingIndicator.value = false
-//                                imageUrl.value = it
-//                                coroutineScope.launch(Dispatchers.IO) {
-//                                    bitmap.value = BitmapFactory.decodeStream(
-//                                        URL(it)
-//                                            .openConnection()
-//                                            .getInputStream()
-//                                    )
-//                                }
-//                            }
                                 }) {
                                 if (!showLoadingIndicator.value)
                                     MyIcon(
@@ -324,7 +348,7 @@ fun ScreenArt(
                 })
 
                 if (showDialog.value) {
-                    MyCustomDialog(
+                    MyCustomConfirmationDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight(0.75f),
@@ -368,55 +392,55 @@ fun ScreenArt(
                                 .fillMaxWidth(),
                             text = stringResource(id = R.string.tip_art_download_image)
                         )
-                        Image(
+//                        Image(
+//                            modifier = Modifier
+//                                .fillMaxWidth()
+//                                .fillMaxHeight(0.85f),
+//                            painter = painterResource(id = R.drawable.test),
+//                            contentDescription = ""
+//                        )
+                        MyUrlImage(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(0.85f),
-                            painter = painterResource(id = R.drawable.test),
-                            contentDescription = ""
+                                .fillMaxHeight(0.85f)
+                                .clickable {
+                                    coroutineScope.launch(Dispatchers.IO) {
+                                        if (bitmap.value != null) {
+                                            HelperImage.mSaveMediaToStorage(
+                                                bitmap.value
+                                            ) {
+                                                coroutineScope.launch(Dispatchers.Main) {
+                                                    HelperUI.showToast(
+                                                        App.context,
+                                                        msg = App.getTextFromString(R.string.image_saved_to_gallery)
+                                                    )
+                                                }
+                                            }
+                                        } else {
+                                            coroutineScope.launch(Dispatchers.IO) {
+                                                bitmap.value = BitmapFactory.decodeStream(
+                                                    URL(imageUrl.value)
+                                                        .openConnection()
+                                                        .getInputStream()
+                                                )
+                                                HelperImage.mSaveMediaToStorage(
+                                                    bitmap.value
+                                                ) {
+                                                    coroutineScope.launch(Dispatchers.Main) {
+                                                        HelperUI.showToast(
+                                                            App.context,
+                                                            msg = App.getTextFromString(R.string.image_saved_to_gallery)
+                                                        )
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                            imageUrl = imageUrl.value,
+                            contentDesc = "",
+                            contentScale = ContentScale.FillBounds
                         )
-//                    MyUrlImage(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .fillMaxHeight(0.85f)
-//                            .clickable {
-//                                coroutineScope.launch(Dispatchers.IO) {
-//                                    if (bitmap.value != null) {
-//                                        HelperImage.mSaveMediaToStorage(
-//                                            bitmap.value
-//                                        ) {
-//                                            coroutineScope.launch(Dispatchers.Main) {
-//                                                HelperUI.showToast(
-//                                                    App.context,
-//                                                    msg = App.getTextFromString(R.string.image_saved_to_gallery)
-//                                                )
-//                                            }
-//                                        }
-//                                    } else {
-//                                        coroutineScope.launch(Dispatchers.IO) {
-//                                            bitmap.value = BitmapFactory.decodeStream(
-//                                                URL(imageUrl.value)
-//                                                    .openConnection()
-//                                                    .getInputStream()
-//                                            )
-//                                            HelperImage.mSaveMediaToStorage(
-//                                                bitmap.value
-//                                            ) {
-//                                                coroutineScope.launch(Dispatchers.Main) {
-//                                                    HelperUI.showToast(
-//                                                        App.context,
-//                                                        msg = App.getTextFromString(R.string.image_saved_to_gallery)
-//                                                    )
-//                                                }
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                            },
-//                        imageUrl = imageUrl.value,
-//                        contentDesc = "",
-//                        contentScale = ContentScale.FillBounds
-//                    )
                     }
                 }
             }
@@ -449,42 +473,49 @@ fun TopBarArt(
                 .fillMaxWidth()
                 .background(color = Blue)
                 .padding(padding),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            IconButton(onClick = {
-                navController.navigate(BottomNavScreens.Home.route)
-                SettingsNotifier.resetValues()
-            }) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
 
-                MyIcon(
-                    iconID = R.drawable.icon_arrow_back,
-                    contentDesc = stringResource(
-                        id = R.string.navigate_back
+                IconButton(onClick = {
+                    navController.navigate(BottomNavScreens.Home.route)
+                    SettingsNotifier.resetValues()
+                }) {
+
+                    MyIcon(
+                        iconID = R.drawable.icon_arrow_back,
+                        contentDesc = stringResource(
+                            id = R.string.navigate_back
+                        ),
+                        tint = Color.White
+                    )
+                }
+
+                when (rememberWindowInfo().screenWidthInfo) {
+                    is WindowInfo.WindowType.Compact -> Spacer(modifier = Modifier.width(SpacersSize.small))
+                    is WindowInfo.WindowType.Medium -> Spacer(modifier = Modifier.width(SpacersSize.small))
+                    else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
+                }
+
+                MyText(text = text, color = Color.White, fontWeight = FontWeight.Bold)
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+
+                MyText(
+                    modifier = Modifier
+                        .padding(end = SpacersSize.small),
+                    color = Color.White,
+                    text = stringResource(
+                        id = R.string.nbof_credits,
+                        NotifiersArt.credits.value
                     ),
-                    tint = Color.White
+                    textAlign = TextAlign.End
                 )
+                MyIcon(iconID = R.drawable.icon_star, contentDesc = "", tint = Color.Yellow)
             }
-
-            when (rememberWindowInfo().screenWidthInfo) {
-                is WindowInfo.WindowType.Compact -> Spacer(modifier = Modifier.width(SpacersSize.small))
-                is WindowInfo.WindowType.Medium -> Spacer(modifier = Modifier.width(SpacersSize.small))
-                else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
-            }
-
-            MyText(text = text, color = Color.White, fontWeight = FontWeight.Bold)
-
-            MyText(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = SpacersSize.small),
-                color = Color.White,
-                text = stringResource(
-                    id = R.string.credits,
-                    NotifiersArt.credits.value
-                ),
-                textAlign = TextAlign.End
-            )
         }
 
         Spacer(modifier = Modifier.height(SpacersSize.small))

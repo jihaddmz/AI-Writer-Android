@@ -1,9 +1,11 @@
 package com.appsfourlife.draftogo.helpers
 
 import androidx.compose.runtime.MutableState
+import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelTemplateIcon
 import com.appsfourlife.draftogo.util.SettingsNotifier
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -25,7 +27,7 @@ object HelperFirebaseDatabase {
                     "nbOfGenerationsConsumed" to HelperSharedPreference.getNbOfGenerationsConsumed(),
                     "nbOfWordsGenerated" to HelperSharedPreference.getNbOfWordsGenerated(),
                     "renewalDate" to HelperAuth.getExpirationDate()
-                )
+                ), SetOptions.merge()
             )
 
         firestore.collection("users")
@@ -131,10 +133,9 @@ object HelperFirebaseDatabase {
             .document(HelperAuth.auth.currentUser?.email!!)
             .set(
                 hashMapOf(
-                    "nbOfGenerationsConsumed" to 0,
                     "nbOfWordsGenerated" to 0,
                     "renewalDate" to HelperAuth.getExpirationDate()
-                )
+                ), SetOptions.merge()
             )
     }
 
@@ -150,7 +151,7 @@ object HelperFirebaseDatabase {
             .set(
                 hashMapOf(
                     "renewalDate" to HelperAuth.getExpirationDate()
-                )
+                ), SetOptions.merge()
             )
     }
 
@@ -179,6 +180,27 @@ object HelperFirebaseDatabase {
                     }
                 }
                 list.value = result
+            }
+    }
+
+    fun setNbOfArtCredits() {
+        val hashmap = hashMapOf(
+            "nbOfArtCredits" to NotifiersArt.credits.value
+        )
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).set(hashmap, SetOptions.merge())
+            .addOnCompleteListener {
+
+            }
+    }
+
+   fun getNbOfArtCredits() {
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
+            .addOnCompleteListener { document ->
+               val result = document.result.get("nbOfArtCredits").toString()
+                if (result != "null") {
+                    NotifiersArt.credits.value = result.toInt()
+                    HelperSharedPreference.setNbOfArtsCredits()
+                }
             }
     }
 }

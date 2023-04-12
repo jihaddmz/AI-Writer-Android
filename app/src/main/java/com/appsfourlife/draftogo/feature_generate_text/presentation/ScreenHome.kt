@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
-import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateOffsetY
@@ -64,9 +63,10 @@ fun ScreenHome(
             SettingsNotifier.predefinedTemplates.value =
                 SettingsNotifier.predefinedTemplates.value.sortedBy { it.userAdded }
 
-            HelperFirebaseDatabase.fetchAppVersion {
-                isAppOutDated.value = it != BuildConfig.VERSION_NAME
-            }
+            // todo uncomment app version check
+//            HelperFirebaseDatabase.fetchAppVersion {
+//                isAppOutDated.value = it != BuildConfig.VERSION_NAME
+//            }
 
             HelperFirebaseDatabase.fetchNbOfGenerationsConsumed()
 
