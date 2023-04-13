@@ -1,8 +1,6 @@
 package com.appsfourlife.draftogo.presentation
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -15,8 +13,6 @@ import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperIntent
-import com.appsfourlife.draftogo.ui.theme.Blue
-import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 
 @Composable
@@ -41,11 +37,11 @@ fun ScreenFeedback(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
-            MyText(text = stringResource(id = R.string.feedback_title))
+            MyTipText(text = stringResource(id = R.string.feedback_title))
 
            val type = myDropDown(label = stringResource(id = R.string.type), list = Constants.FEEDBACK_TYPES)
 
-            Card(shape = Shapes.medium, border = BorderStroke(3.dp, color = Blue)) {
+            MyCardView {
                 MyTextField(
                     value = feedback.value,
                     onValueChanged = {
@@ -60,6 +56,7 @@ fun ScreenFeedback(
 
             MyButton(
                 modifier = Modifier.fillMaxWidth(),
+                isEnabled = feedback.value.isNotEmpty(),
                 text = stringResource(id = R.string.submit)
             ) {
                 HelperIntent.sendEmail("developer@appsfourlife.com", subject = type, message = feedback.value)
