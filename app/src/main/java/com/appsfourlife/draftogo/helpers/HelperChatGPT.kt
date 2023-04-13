@@ -2,7 +2,6 @@ package com.appsfourlife.draftogo.helpers
 
 import android.content.Context
 import androidx.compose.foundation.ScrollState
-import androidx.compose.runtime.MutableState
 import com.android.volley.*
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
@@ -76,7 +75,6 @@ object HelperChatGPT {
         context: Context,
         length: Int,
         nbOfGenerations: Int = 1,
-        isGenerateBtnEnabled: MutableState<Boolean>,
         coroutineScope: CoroutineScope,
         verticalScrollState: ScrollState,
         onErrorAction: () -> Unit,
@@ -127,7 +125,6 @@ object HelperChatGPT {
                                 text
                             )
                         }
-                        isGenerateBtnEnabled.value = true
                     } else { // 1 output to generate
                         val responseMsg: String =
                             response.getJSONArray("choices").getJSONObject(0).getString("text")
@@ -163,7 +160,6 @@ object HelperChatGPT {
                                     )
                                 }
                             }
-                            isGenerateBtnEnabled.value = true
                         }
                     }
                     onDoneAction()

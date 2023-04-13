@@ -330,12 +330,12 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                         ) {
 
-                            if (SettingsNotifier.basePlanMaxNbOfWordsExceeded.value) {
-                                DialogSubscriptionNbOfWordsExceeded(SettingsNotifier.basePlanMaxNbOfWordsExceeded)
-                            }
+//                            if (SettingsNotifier.basePlanMaxNbOfWordsExceeded.value) {
+//                                DialogSubscriptionNbOfWordsExceeded(SettingsNotifier.basePlanMaxNbOfWordsExceeded)
+//                            }
 
-                            if (SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value)
-                                DialogSubscription(SettingsNotifier.showDialogNbOfGenerationsLeftExceeded)
+//                            if (SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value)
+//                                DialogSubscription(SettingsNotifier.showDialogNbOfGenerationsLeftExceeded)
 
                             /**
                              * if the android version is equal or greater than 12, remove the custom splash screen

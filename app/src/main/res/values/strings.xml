@@ -80,7 +80,6 @@
     <string name="normal_essay">Normal Essay</string>
     <string name="write_an_essay_of_type">Write a %s Essay</string>
     <string name="generating">Generating…</string>
-    <string name="generated">Generated</string>
     <string name="done">Done</string>
     <string name="no_text_to_translate">There is no text to translate</string>
     <string name="fr">fr</string>
@@ -215,7 +214,6 @@
     <string name="i_need_inspiration">I Need Inspiration!</string>
     <string name="prompt_history">Prompt History</string>
     <string name="art_history_explanation">Select a prompt from your history to paste it in the input field</string>
-    <string name="purchase_credits">Purchase Credits</string>
     <string name="art_purchase_credits_desc">Unleash your creativity with our AI tool</string>
     <string name="arts_per_credits">Create arts per credits (1 art per 1 credit)</string>
     <string name="download_high_resolution_artwork">Download high resolution artwork</string>
@@ -226,4 +224,15 @@
     <string name="boul_art_bio">A bowl of soup that is also a portal to another dimension, digital art</string>
     <string name="computer_art_bio">A computer from the 90s in the style of vaporwave</string>
     <string name="dogandcat_art_bio">A photo of a Samoyed dog with its tongue out hugging a white Siamese cat</string>
+    <string name="access_to_all_templates">Access to 20+ templates</string>
+    <string name="generate_content_in_different_languages">Generate content in 10+ languages</string>
+    <string name="create_custom_templates">Create custom templates</string>
+    <string name="read_output_outload">Read output outload</string>
+    <string name="share_content_directly">Share content directly to different platforms</string>
+    <string name="save_outputs_for_comparison">Save outputs for comparison</string>
+    <string name="no_generations_left">Your free generations is out, please subscribe to one of our plans or watch an ad</string>
+    <string name="upgrade">Upgrade</string>
+    <string name="writing_price_header">Level up your productivity with our content generation tool</string>
+    <string name="ai_art_generation">AI Art Generation</string>
+    <string name="ai_content_writer">AI Content Writer</string>
 </resources>

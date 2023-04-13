@@ -44,8 +44,8 @@ fun MyCustomConfirmationDialog(
                     onNegativeBtnClick()
                 }
                 MyOutlinedButton(text = positiveBtnText, borderColor = Blue) {
-                    onPositiveBtnClick()
                     showDialog.value = false
+                    onPositiveBtnClick()
                 }
             }
         }

@@ -1,8 +1,6 @@
 package com.appsfourlife.draftogo.feature_generate_art.components
 
 import android.app.Activity
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,19 +11,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
-import com.appsfourlife.draftogo.ui.theme.Glass
 import com.appsfourlife.draftogo.ui.theme.Orange
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.revenuecat.purchases.CustomerInfo
@@ -38,9 +29,10 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
+@Preview
 fun BottomSheetArtPricing(
     modifier: Modifier = Modifier,
-    sheetScaffoldState: BottomSheetScaffoldState,
+    sheetScaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val currentActivity = LocalContext.current as Activity
@@ -52,62 +44,11 @@ fun BottomSheetArtPricing(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Card(
-            elevation = 0.dp, modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.4f),
-            border = null
-        ) {
-
-            Box(modifier = Modifier.fillMaxSize()) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    painter = painterResource(id = R.drawable.astronaut),
-                    contentDescription = "",
-                    contentScale = ContentScale.FillBounds
-                )
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.BottomCenter
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(
-                                Brush.verticalGradient(
-                                    listOf(Color.Transparent, Glass),
-                                    startY = 50f,
-                                    endY = 700f
-                                )
-                            ),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Bottom
-                    ) {
-                        MyTextTitle(
-                            text = stringResource(id = R.string.purchase_credits),
-                            color = Color.Black,
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-                }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(SpacersSize.small),
-                    contentAlignment = Alignment.TopStart
-                ) {
-                    IconButton(onClick = {
-                        coroutineScope.launch {
-                            sheetScaffoldState.bottomSheetState.collapse()
-                        }
-                    }) {
-                        MyIcon(iconID = R.drawable.clear, contentDesc = "", tint = Color.LightGray)
-                    }
-                }
-            }
-        }
+        TopImageHeader(
+            title = stringResource(id = R.string.ai_art_generation),
+            sheetScaffoldState = sheetScaffoldState,
+            drawableID = R.drawable.astronaut
+        )
 
         MySpacer(type = "medium")
 
