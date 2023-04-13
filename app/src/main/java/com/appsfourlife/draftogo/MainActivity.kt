@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
@@ -330,13 +329,6 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                         ) {
 
-//                            if (SettingsNotifier.basePlanMaxNbOfWordsExceeded.value) {
-//                                DialogSubscriptionNbOfWordsExceeded(SettingsNotifier.basePlanMaxNbOfWordsExceeded)
-//                            }
-
-//                            if (SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value)
-//                                DialogSubscription(SettingsNotifier.showDialogNbOfGenerationsLeftExceeded)
-
                             /**
                              * if the android version is equal or greater than 12, remove the custom splash screen
                              * and check if the user should be navigated directly to the sign in or home screen
@@ -566,7 +558,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             } catch (e: ApiException) {
-                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT).show()
             }
         }
     }

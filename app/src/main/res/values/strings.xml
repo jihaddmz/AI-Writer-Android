@@ -141,7 +141,6 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="learn_more">Learn More</string>
-    <string name="login">Login</string>
     <string name="sign_in_with_google">Sign in with Google</string>
     <string name="history">History</string>
     <string name="delete">Delete</string>
@@ -235,4 +234,7 @@
     <string name="writing_price_header">Level up your productivity with our content generation tool</string>
     <string name="ai_art_generation">AI Art Generation</string>
     <string name="ai_content_writer">AI Content Writer</string>
+    <string name="ai_writing_tool">AI Writing Tool</string>
+    <string name="ai_art_tool">AI Art Tool</string>
+    <string name="welcome_text">Welcome to Draftogo, the only platform you need to level up your productivity and creativity with ease</string>
 </resources>

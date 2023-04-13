@@ -1,25 +1,25 @@
 package com.appsfourlife.draftogo
 
 import android.app.Activity
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import com.appsfourlife.draftogo.components.MyButton
-import com.appsfourlife.draftogo.components.MyTextTitle
-import com.appsfourlife.draftogo.components.MyVideo
+import androidx.compose.ui.text.style.TextAlign
+import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
+import java.util.*
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ScreenSignIn(
 ) {
@@ -28,42 +28,134 @@ fun ScreenSignIn(
 
     SettingsNotifier.disableDrawerContent.value = true
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Image(
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop,
-            painter = painterResource(id = R.drawable.login_bg),
-            contentDescription = "login bg"
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = SpacersSize.medium),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+
+        TopImageHeader(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.4f),
+            sheetScaffoldState = null,
+            showQuitBtn = false,
+            drawableID = R.drawable.login,
+            title = stringResource(id = R.string.sign_in),
+            endY = 800f
         )
 
-        Column(
+        MySpacer(type = "medium")
+
+        MyTipText(
+            text = stringResource(id = R.string.welcome_text),
+            modifier = Modifier.padding(horizontal = SpacersSize.medium)
+        )
+
+        MySpacer(type = "large")
+        MySpacer(type = "large")
+
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(SpacersSize.medium)
-                .padding(top = SpacersSize.large),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+                .weight(1f), contentAlignment = Alignment.Center
         ) {
-            MyTextTitle(
-                text = stringResource(id = R.string.login),
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
 
-//            MyVideo(modifier = Modifier
-//                .fillMaxWidth()
-//                .fillMaxHeight(0.5f), videoUri = "https://user-images.githubusercontent.com/124468932/224495423-a39f624f-836f-4526-8e0a-2e51c814e960.mp4")
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = SpacersSize.medium),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
 
-            MyVideo(
+                Column {
+
+                    MyTextTitle(
+                        text = "${stringResource(id = R.string.ai_writing_tool)}:",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                    )
+                    MySpacer(type = "small")
+                    val listOfWritingFeatures = listOf(
+                        stringResource(id = R.string.access_to_all_templates),
+                        stringResource(id = R.string.generate_content_in_different_languages),
+                        stringResource(id = R.string.create_custom_templates),
+                        stringResource(id = R.string.read_output_outload),
+                        stringResource(id = R.string.share_content_directly),
+                        stringResource(id = R.string.save_outputs_for_comparison),
+                    )
+                    val state = rememberScrollState()
+                    LaunchedEffect(key1 = Unit, block = {
+                        while (true) {
+                            if (state.value == state.maxValue)
+                                state.animateScrollTo(0)
+                            else
+                                state.animateScrollTo(state.value + 50)
+                        }
+                    })
+                    Row(modifier = Modifier.horizontalScroll(state)) {
+                        listOfWritingFeatures.forEach {
+                            Row {
+                                MyIcon(iconID = R.drawable.icon_checkcircle, contentDesc = "")
+                                MySpacer(type = "small", widthOrHeight = "width")
+                                MyText(text = it)
+                            }
+                            MySpacer(type = "medium", widthOrHeight = "width")
+                        }
+                    }
+                }
+
+                Column {
+
+                    val state = rememberScrollState()
+
+                    MyTextTitle(
+                        text = "${stringResource(id = R.string.ai_art_tool)}:",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                    )
+                    MySpacer(type = "small")
+                    val listOfArtFeatures = listOf(
+                        stringResource(id = R.string.arts_per_credits),
+                        stringResource(id = R.string.download_high_resolution_artwork),
+                        stringResource(id = R.string.access_to_all_styles),
+                        stringResource(id = R.string.use_some_inspiration),
+                    )
+
+                    LaunchedEffect(key1 = Unit, block = {
+                        while (true) {
+                            if (state.value == state.maxValue)
+                                state.animateScrollTo(0)
+                            else
+                                state.animateScrollTo(state.value + 50)
+                        }
+                    })
+                    Row(modifier = Modifier.horizontalScroll(state)) {
+                        listOfArtFeatures.forEach {
+                            Row {
+                                MyIcon(iconID = R.drawable.icon_checkcircle, contentDesc = "")
+                                MySpacer(type = "small", widthOrHeight = "width")
+                                MyText(text = it)
+                            }
+                            MySpacer(type = "medium", widthOrHeight = "width")
+                        }
+                    }
+                }
+            }
+        }
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f), contentAlignment = Alignment.BottomCenter
+        ) {
+            MyIconTextButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),
-                videoUri = "https://firebasestorage.googleapis.com/v0/b/ai-writer-9832b.appspot.com/o/Draftogo%20promo%20video%20android_720p%20(1).mp4?alt=media&token=b7afc317-e712-48a1-980d-e8d7e858ab32"
-            )
-
-            MyButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.sign_in_with_google)
+                    .padding(horizontal = SpacersSize.large),
+                text = stringResource(id = R.string.sign_in_with_google),
+                iconID = R.drawable.icon_google
             ) {
                 HelperAuth.signIn(currentActivity)
             }

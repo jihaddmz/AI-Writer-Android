@@ -26,15 +26,19 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun TopImageHeader(
-    sheetScaffoldState: BottomSheetScaffoldState,
+    modifier: Modifier = Modifier,
+    sheetScaffoldState: BottomSheetScaffoldState?,
     showQuitBtn: Boolean = true,
     drawableID: Int,
+    startY: Float = 50f,
+    endY: Float = 500f,
     title: String
 ) {
     val coroutineScope = rememberCoroutineScope()
 
     Card(
-        elevation = 0.dp, modifier = Modifier
+        elevation = 0.dp,
+        modifier = modifier
             .fillMaxWidth()
             .fillMaxHeight(0.3f),
         border = null
@@ -59,8 +63,8 @@ fun TopImageHeader(
                         .background(
                             Brush.verticalGradient(
                                 listOf(Color.Transparent, Glass),
-                                startY = 50f,
-                                endY = 500f
+                                startY = startY,
+                                endY = endY
                             )
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -83,7 +87,7 @@ fun TopImageHeader(
                 ) {
                     IconButton(onClick = {
                         coroutineScope.launch {
-                            sheetScaffoldState.bottomSheetState.collapse()
+                            sheetScaffoldState!!.bottomSheetState.collapse()
                         }
                     }) {
                         MyIcon(iconID = R.drawable.clear, contentDesc = "", tint = Color.LightGray)
