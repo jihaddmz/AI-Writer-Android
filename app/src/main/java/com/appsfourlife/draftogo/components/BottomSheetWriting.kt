@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.feature_generate_text.components.BottomSheetWritePricing
 import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.ui.theme.Glass
+import com.appsfourlife.draftogo.ui.theme.SheetShape
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
 /**
@@ -39,6 +40,7 @@ fun BottomSheetWriting(
             }
         },
         sheetPeekHeight = 0.dp,
+        sheetShape = SheetShape,
         backgroundColor = Glass
     ) {
         content()

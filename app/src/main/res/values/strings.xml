@@ -166,7 +166,6 @@
     <string name="label_no_saved_items_added">No Saved Outputs added, use the save icon in the output to add them here</string>
     <string name="enable_save_outputs">Enable Save Outputs</string>
     <string name="relaunch_app_to_enable_this_feature">Please relaunch the app to enable this feature</string>
-    <string name="home">Home</string>
     <string name="summarize_the_following_text">Summarize the following text</string>
     <string name="text_to_summarize">Text to summarize</string>
     <string name="correct_the_following_text">Correct the following text</string>
@@ -245,6 +244,8 @@
     <string name="favorite_templates">Favorite Templates</string>
     <string name="view_all">View All</string>
     <string name="favorite_template_bottom_sheet_explanation">Click the one you want to navigate to its corresponding screen</string>
-    <string name="purchases_history">Purchases History</string>
+    <string name="purchase_history">Purchase History</string>
     <string name="dashboard">Dashboard</string>
+    <string name="content">Content</string>
+    <string name="template_already_exists">You already have this template</string>
 </resources>

@@ -8,7 +8,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -69,7 +68,7 @@ fun TopBar(
                 else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
             }
 
-            MyText(text = text, color = Color.White, fontWeight = FontWeight.Bold)
+            MyTextTitle(text = text, color = Color.White)
 
             if (!HelperAuth.isSubscribed() && !hideNbOfGenerationsLeft) { // if user is not subscribed
                 val nbOfGenerationsLeft = 2 - SettingsNotifier.nbOfGenerationsConsumed.value;

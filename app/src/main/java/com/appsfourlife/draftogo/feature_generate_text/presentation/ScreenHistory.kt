@@ -1,10 +1,12 @@
 package com.appsfourlife.draftogo.feature_generate_text.presentation
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.Card
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
@@ -13,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -22,14 +23,16 @@ import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateScaling
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
-import com.appsfourlife.draftogo.helpers.*
+import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
+import com.appsfourlife.draftogo.helpers.Helpers
+import com.appsfourlife.draftogo.helpers.WindowInfo
+import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ScreenHistory(
     modifier: Modifier = Modifier,
@@ -94,12 +97,10 @@ fun ScreenHistory(
             content = {
                 items(count = result.value.size) { index ->
                     val history = result.value[index]
-                    Card(
+                    MyCardView(
                         modifier = Modifier
                             .fillMaxHeight(0.2f)
                             .animateScaling(),
-                        backgroundColor = Blue,
-                        shape = Shapes.medium
                     ) {
                         Column(
                             modifier = Modifier
@@ -112,11 +113,11 @@ fun ScreenHistory(
                                 }, horizontalAlignment = Alignment.CenterHorizontally
                         ) {
 
-                            MyText(text = history.type, color = Color.White)
+                            MyText(text = history.type)
 
                             MySpacer(type = "small")
 
-                            MyText(text = history.input, color = Color.White, textAlign = TextAlign.Center)
+                            MyText(text = history.input, textAlign = TextAlign.Center)
 
                         }
                     }
@@ -226,7 +227,7 @@ fun TopBarHistory(
                 else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
             }
 
-            MyText(text = text, color = Color.White, fontWeight = FontWeight.Bold)
+            MyTextTitle(text = text, color = Color.White)
 
             Spacer(modifier = Modifier.height(SpacersSize.small))
 

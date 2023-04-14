@@ -39,7 +39,7 @@ fun ChartPurchasesHistory(
 
     Column(modifier = Modifier.fillMaxSize()) {
         MyTextTitle(
-            text = stringResource(id = R.string.purchases_history),
+            text = stringResource(id = R.string.purchase_history),
             modifier = Modifier
                 .fillMaxWidth(),
             color = Color.White

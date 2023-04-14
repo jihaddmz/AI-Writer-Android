@@ -1,9 +1,12 @@
 package com.appsfourlife.draftogo.components
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +17,9 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelTemplateIcon
-import com.appsfourlife.draftogo.helpers.*
+import com.appsfourlife.draftogo.helpers.HelperAnalytics
+import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
+import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
@@ -102,6 +107,15 @@ fun DialogAddTemplate(
                 }
 
                 coroutineScope.launch(Dispatchers.IO) {
+
+                    if (App.databaseApp.daoApp.getTemplateByQuery(input.trim()) != null) {
+                        coroutineScope.launch(Dispatchers.Main) {
+                            HelperUI.showToast(msg = App.getTextFromString(R.string.template_already_exists))
+                        }
+                        return@launch
+                    }
+
+
                     App.databaseApp.daoApp.insertTemplate(
                         ModelTemplate(
                             query = input.trim(),
@@ -120,7 +134,6 @@ fun DialogAddTemplate(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DialogIconChooser(
     showDialog: MutableState<Boolean>,

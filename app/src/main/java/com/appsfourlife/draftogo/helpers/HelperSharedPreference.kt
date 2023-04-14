@@ -76,7 +76,7 @@ object HelperSharedPreference {
     }
 
     fun getIsSavedOutputsEnabled(): Boolean{
-        return getBool(SP_SETTINGS, SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED, false)
+        return getBool(SP_SETTINGS, SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED, true)
     }
 
     fun getSubscriptionType(): String {

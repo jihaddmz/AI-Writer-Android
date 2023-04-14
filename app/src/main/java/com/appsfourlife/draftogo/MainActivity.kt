@@ -258,13 +258,16 @@ class MainActivity : ComponentActivity() {
                             mutableStateOf(false)
                         }
 
+//                        val shouldBottomBarBeVisible =
+//                            (navBackStackEntry?.destination?.route == BottomNavScreens.Home.route
+//                                    || navBackStackEntry?.destination?.route == BottomNavScreens.History.route
+//                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Settings.route
+//                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Feedback.route
+//                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Art.route
+//                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Dashboard.route)
                         val shouldBottomBarBeVisible =
-                            (navBackStackEntry?.destination?.route == BottomNavScreens.Home.route
-                                    || navBackStackEntry?.destination?.route == BottomNavScreens.History.route
-                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Settings.route
-                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Feedback.route
-                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Art.route
-                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Dashboard.route)
+                            (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
+                                    && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route)
 
                         LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
                             if (shouldBottomBarBeVisible) {

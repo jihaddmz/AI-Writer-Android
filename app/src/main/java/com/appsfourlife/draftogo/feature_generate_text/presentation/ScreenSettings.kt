@@ -22,7 +22,6 @@ import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
-import kotlin.math.abs
 
 @Composable
 fun ScreenSettings(
@@ -44,15 +43,13 @@ fun ScreenSettings(
                 .verticalScroll(verticalScroll)
                 .padding(horizontal = SpacersSize.medium)
                 .animateContentSize(animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)),
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = SpacersSize.large),
+                modifier = Modifier.padding(top = SpacersSize.medium),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.SpaceBetween
             ) {
 
                 AppLogo(
@@ -67,19 +64,9 @@ fun ScreenSettings(
                     text = stringResource(id = R.string.app_name),
                     fontWeight = FontWeight.Bold
                 )
-
-                MySpacer(type = "small")
-
-                MyText(text = HelperSharedPreference.getUsername())
-
-                if (HelperAuth.isSubscribed() && HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
-                    MySpacer(type = "small")
-                    val nbOfWordsLeft =
-                        abs(Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated())
-                    MyText(text = stringResource(id = R.string.nb_words_left, nbOfWordsLeft))
-                }
-
             }
+
+            MySpacer(type = "small")
 
             TypeWriterLength()
 

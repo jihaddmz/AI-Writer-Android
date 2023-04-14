@@ -111,10 +111,6 @@ fun input(
                 /**
                  * input actions
                  **/
-
-                /**
-                 * input actions
-                 **/
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -260,20 +256,22 @@ fun input(
                     text = generateText.value,
                     color = Color.White
                 )
-                MyText(text = "|", color = Color.White)
-                MyText(
-                    modifier = Modifier
-                        .padding(horizontal = SpacersSize.small)
-                        .clickable {
-                            coroutineScope.launch {
-                                SettingsNotifier.isPricingBottomSheets.value = false
-                                SettingsNotifier.sheetScaffoldState?.bottomSheetState?.expand()
-                            }
-                        },
-                    textAlign = TextAlign.Center,
-                    text = stringResource(id = R.string.save_outputs),
-                    color = Color.White
-                )
+                if (HelperSharedPreference.getIsSavedOutputsEnabled()) {
+                    MyText(text = "|", color = Color.White)
+                    MyText(
+                        modifier = Modifier
+                            .padding(horizontal = SpacersSize.small)
+                            .clickable {
+                                coroutineScope.launch {
+                                    SettingsNotifier.isPricingBottomSheets.value = false
+                                    SettingsNotifier.sheetScaffoldState?.bottomSheetState?.expand()
+                                }
+                            },
+                        textAlign = TextAlign.Center,
+                        text = stringResource(id = R.string.save_outputs),
+                        color = Color.White
+                    )
+                }
             }
         }
     }
