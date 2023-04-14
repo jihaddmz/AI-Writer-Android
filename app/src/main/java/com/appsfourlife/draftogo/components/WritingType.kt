@@ -1,19 +1,24 @@
 package com.appsfourlife.draftogo.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -24,6 +29,7 @@ fun WritingType(
     onLongClick: () -> Unit,
     onClick: () -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
 
     Card(
         modifier = modifier
@@ -74,14 +80,61 @@ fun WritingType(
                 }
             }
 
-            if (imageID != 0)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+
+                val starIconId = remember {
+                    mutableStateOf(R.drawable.icon_outlined_star)
+                }
+
+                /**
+                 * checking if this entry is in the database make the star icon filled, otherwise use the outlined
+                 * icon
+                 **/
+                LaunchedEffect(key1 = true, block = {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        if (App.databaseApp.daoApp.getFavoriteTemplate(text) != null) {
+                            starIconId.value = R.drawable.icon_favorite
+                        }
+                    }
+                })
+
+                if (imageID != 0)
+                    MyImage(
+                        modifier = Modifier,
+                        imageID = imageID,
+                        contentDesc = text
+                    )
+                else
+                    MyUrlSvg(imageUrl = imageUrl, contentDesc = text)
+
                 MyImage(
-                    modifier = Modifier,
-                    imageID = imageID,
-                    contentDesc = text
-                )
-            else
-                MyUrlSvg(imageUrl = imageUrl, contentDesc = text)
+                    imageID = starIconId.value,
+                    contentDesc = "",
+                    modifier = Modifier.clickable {
+                        if (starIconId.value == R.drawable.icon_outlined_star) {
+                            starIconId.value = R.drawable.icon_favorite
+                            coroutineScope.launch(Dispatchers.IO) {
+                                if (imageUrl.isEmpty())
+                                    App.databaseApp.daoApp.insertFavoriteTemplate(ModelFavoriteTemplate(text, imageID, null))
+                                else
+                                    App.databaseApp.daoApp.insertFavoriteTemplate(ModelFavoriteTemplate(text, null, imageUrl))
+                            }
+                        }
+                        else {
+                            starIconId.value = R.drawable.icon_outlined_star
+                            coroutineScope.launch(Dispatchers.IO) {
+                                if (imageUrl.isEmpty())
+                                    App.databaseApp.daoApp.deleteFavoriteTemplate(ModelFavoriteTemplate(text, imageID, null))
+                                else
+                                    App.databaseApp.daoApp.deleteFavoriteTemplate(ModelFavoriteTemplate(text, null, imageUrl))
+                            }
+                        }
+
+                    })
+            }
 
             Spacer(modifier = Modifier.height(SpacersSize.small))
 

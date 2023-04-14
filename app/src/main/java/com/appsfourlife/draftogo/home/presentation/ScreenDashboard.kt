@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.home.presentation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -10,9 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.rememberBottomSheetScaffoldState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,36 +22,42 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.home.components.BottomSheetFavoriteTemplates
 import com.appsfourlife.draftogo.home.components.ChartPurchasesHistory
 import com.appsfourlife.draftogo.home.listitems.FavoriteTemplateItem
 import com.appsfourlife.draftogo.home.listitems.UsageItem
 import com.appsfourlife.draftogo.home.model.ModelDashboardUsage
-import com.appsfourlife.draftogo.home.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 @Preview
 fun ScreenDashboard() {
     val sheetScaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
+    val listOfFavoriteTemplates = remember {
+        mutableStateOf(listOf<ModelFavoriteTemplate>())
+    }
+
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
-
             // todo uncomment app version check
 //            HelperFirebaseDatabase.fetchAppVersion {
 //                isAppOutDated.value = it != BuildConfig.VERSION_NAME
 //            }
 
             HelperFirebaseDatabase.fetchNbOfGenerationsConsumedAndNbOfWordsGenerated()
+
+            listOfFavoriteTemplates.value = App.databaseApp.daoApp.getAllFavoriteTemplates()
 
             // if the user is on base plan subscription, check if we are currently on the same renewal date, if so
             // reset all values on firebase and set the new renewal date, if no, check if currently we are after the
@@ -196,8 +201,8 @@ fun ScreenDashboard() {
                                 iconID = R.drawable.icon_image
                             ),
                             ModelDashboardUsage(
-                                nb = 2, // todo change nb of favorite templates
-                                text = stringResource(id = R.string.template),
+                                nb = listOfFavoriteTemplates.value.size,
+                                text = stringResource(id = R.string.templates),
                                 iconID = R.drawable.icon_template
                             )
                         )
@@ -255,32 +260,23 @@ fun ScreenDashboard() {
                             })
                     }
 
-                    // todo get all favorite templates
-                    val listOfFavoriteTemplates = listOf(
-                        ModelFavoriteTemplate(
-                            imageID = R.drawable.icon_article,
-                            text = stringResource(id = R.string.write_an_article)
-                        ),
-                        ModelFavoriteTemplate(
-                            imageID = R.drawable.icon_logo_twitter,
-                            text = stringResource(id = R.string.write_a_tweet)
-                        ),
-                        ModelFavoriteTemplate(
-                            imageID = R.drawable.icon_game_script,
-                            text = stringResource(id = R.string.write_a_game_script_top_label)
-                        ),
-                    )
-
                     LazyRow(content = {
-                        items(listOfFavoriteTemplates.size) { index ->
-                            val current = listOfFavoriteTemplates[index]
+                        items(listOfFavoriteTemplates.value.size, key = {listOfFavoriteTemplates.value[it].query}) { index ->
+                            val current = listOfFavoriteTemplates.value[index]
 
                             FavoriteTemplateItem(
-                                modifier = Modifier.fillParentMaxWidth(),
-                                imageID = current.imageID,
-                                text = current.text
+                                modifier = Modifier.fillParentMaxWidth().animateItemPlacement(),
+                                imageID = current.iconID ?: current.imageUrl!!,
+                                text = current.query
                             ) {
-                                // todo on favorite template icon click
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    if (current.imageUrl.isNullOrEmpty())
+                                        App.databaseApp.daoApp.deleteFavoriteTemplate(ModelFavoriteTemplate(current.query, current.iconID, null))
+                                    else
+                                        App.databaseApp.daoApp.deleteFavoriteTemplate(ModelFavoriteTemplate(current.query, null, current.imageUrl))
+
+                                    listOfFavoriteTemplates.value = App.databaseApp.daoApp.getAllFavoriteTemplates()
+                                }
                             }
 
                             MySpacer(type = "small", widthOrHeight = "width")

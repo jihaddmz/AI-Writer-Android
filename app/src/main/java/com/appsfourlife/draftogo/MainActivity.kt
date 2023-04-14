@@ -33,7 +33,6 @@ import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.home.presentation.ScreenDashboard
 import com.appsfourlife.draftogo.home.presentation.ScreenFeedback
-import com.appsfourlife.draftogo.feature_generate_text.presentation.ScreenContent
 import com.appsfourlife.draftogo.home.presentation.ScreenSettings
 import com.appsfourlife.draftogo.ui.theme.*
 import com.appsfourlife.draftogo.util.BottomNavScreens
@@ -96,6 +95,7 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             navController = rememberNavController()
+            SettingsNotifier.navHostController = navController
             val scaffoldState = rememberScaffoldState()
             val coroutineScope = rememberCoroutineScope()
             val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -554,7 +554,7 @@ class MainActivity : ComponentActivity() {
                     HelperAuth.auth.signInWithCredential(credential).addOnCompleteListener {
                         if (it.isSuccessful) {
                             HelperSharedPreference.setUsername(account.email!!)
-                            navController.navigate(BottomNavScreens.Home.route) // from login screen to home screen
+                            navController.navigate(BottomNavScreens.Dashboard.route) // from login screen to home screen
                         }
                     }
                 }

@@ -1,31 +1,46 @@
 package com.appsfourlife.draftogo.home.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.MyIcon
 import com.appsfourlife.draftogo.components.MySpacer
 import com.appsfourlife.draftogo.components.MyText
 import com.appsfourlife.draftogo.components.MyTextTitle
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.home.listitems.FavoriteTemplateItem
-import com.appsfourlife.draftogo.home.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 @Preview
 fun BottomSheetFavoriteTemplates(
     modifier: Modifier = Modifier
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val listOfFavoriteTemplates = remember {
+        mutableStateOf(listOf<ModelFavoriteTemplate>())
+    }
+
+    LaunchedEffect(key1 = true, block = {
+        coroutineScope.launch(Dispatchers.IO) {
+            listOfFavoriteTemplates.value = App.databaseApp.daoApp.getAllFavoriteTemplates()
+        }
+    })
 
     Column(
         modifier = modifier
@@ -65,33 +80,39 @@ fun BottomSheetFavoriteTemplates(
 
         MySpacer(type = "medium")
 
-        // todo get all favorite templates
-        val listOfFavoriteTemplates = listOf(
-            ModelFavoriteTemplate(
-                imageID = R.drawable.icon_article,
-                text = stringResource(id = R.string.write_an_article)
-            ),
-            ModelFavoriteTemplate(
-                imageID = R.drawable.icon_logo_twitter,
-                text = stringResource(id = R.string.write_a_tweet)
-            ),
-            ModelFavoriteTemplate(
-                imageID = R.drawable.icon_game_script,
-                text = stringResource(id = R.string.write_a_game_script_top_label)
-            ),
-        )
-
-        LazyColumn(content = {
-            items(listOfFavoriteTemplates.size) { index ->
-                val current = listOfFavoriteTemplates[index]
+        LazyColumn(modifier = Modifier.fillMaxSize(), content = {
+            items(
+                count = listOfFavoriteTemplates.value.size,
+                key = { listOfFavoriteTemplates.value[it].query }) { index ->
+                val current = listOfFavoriteTemplates.value[index]
 
                 FavoriteTemplateItem(
-                    imageID = current.imageID,
-                    text = current.text,
-                    onFavoriteIconClick = {
+                    modifier = Modifier.animateItemPlacement(),
+                    imageID = current.iconID ?: current.imageUrl!!,
+                    text = current.query
+                ) {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        if (current.imageUrl.isNullOrEmpty())
+                            App.databaseApp.daoApp.deleteFavoriteTemplate(
+                                ModelFavoriteTemplate(
+                                    current.query,
+                                    current.iconID,
+                                    null
+                                )
+                            )
+                        else
+                            App.databaseApp.daoApp.deleteFavoriteTemplate(
+                                ModelFavoriteTemplate(
+                                    current.query,
+                                    null,
+                                    current.imageUrl
+                                )
+                            )
 
+                        listOfFavoriteTemplates.value =
+                            App.databaseApp.daoApp.getAllFavoriteTemplates()
                     }
-                )
+                }
 
                 MySpacer(type = "small")
             }

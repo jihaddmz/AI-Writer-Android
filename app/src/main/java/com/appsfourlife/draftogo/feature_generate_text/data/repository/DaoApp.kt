@@ -2,11 +2,15 @@ package com.appsfourlife.draftogo.feature_generate_text.data.repository
 
 import androidx.room.*
 import com.appsfourlife.draftogo.feature_generate_art.data.model.ModelArtHistory
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 
 @Dao
 interface DaoApp {
 
+    /**
+     * templates
+     **/
     @Insert
     suspend fun insertTemplate(modelTemplate: ModelTemplate)
 
@@ -20,6 +24,25 @@ interface DaoApp {
     suspend fun getTemplateByQuery(query: String): ModelTemplate?
 
 
+    /**
+     * favorite templates
+     **/
+    @Insert
+    suspend fun insertFavoriteTemplate(modelFavoriteTemplate: ModelFavoriteTemplate)
+
+    @Delete
+    suspend fun deleteFavoriteTemplate(modelFavoriteTemplate: ModelFavoriteTemplate)
+
+    @Query("select * from table_favoritetemplates")
+    suspend fun getAllFavoriteTemplates(): List<ModelFavoriteTemplate>
+
+    @Query("select * from table_favoritetemplates where query=:query")
+    suspend fun getFavoriteTemplate(query: String): ModelFavoriteTemplate?
+
+
+    /**
+     * arts
+     **/
     @Insert
     suspend fun insertArt(modelArtHistory: ModelArtHistory)
 
@@ -34,4 +57,6 @@ interface DaoApp {
 
     @Query("select * from table_arthistory where prompt=:prompt")
     suspend fun getArt(prompt: String): ModelArtHistory?
+
+
 }
