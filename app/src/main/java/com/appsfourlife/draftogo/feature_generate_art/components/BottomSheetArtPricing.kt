@@ -14,9 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelPurchaseHistory
+import com.appsfourlife.draftogo.helpers.HelperDate
 import com.appsfourlife.draftogo.ui.theme.Orange
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.revenuecat.purchases.CustomerInfo
@@ -25,7 +28,9 @@ import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.getOfferingsWith
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.models.StoreTransaction
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -100,6 +105,38 @@ fun BottomSheetArtPricing(
                     MyCardView(modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
+                            val price = product.price.replace(product.price.filter { !it.isDigit() && it != '.' }, "")
+                            coroutineScope.launch(Dispatchers.IO) {
+                                if (App.databaseApp.daoApp.getPurchaseHistory(
+                                        HelperDate.parseDateToString(
+                                            Date(), "dd/MM/yyyy"
+                                        )
+                                    ) == null
+                                ) {
+                                    App.databaseApp.daoApp.insertPurchaseHistory(
+                                        ModelPurchaseHistory(
+                                            HelperDate.parseDateToString(
+                                                Date(), "dd/MM/yyyy"
+                                            ), price.toFloat()
+                                        )
+                                    )
+                                } else {
+                                    val purchaseHistory =
+                                        App.databaseApp.daoApp.getPurchaseHistory(
+                                            HelperDate.parseDateToString(
+                                                Date(), "dd/MM/yyyy"
+                                            )
+                                        )!!
+                                    purchaseHistory.price += price.toFloat()
+                                    App.databaseApp.daoApp.updatePurchaseHistory(
+                                        ModelPurchaseHistory(
+                                            HelperDate.parseDateToString(
+                                                Date(), "dd/MM/yyyy"
+                                            ), purchaseHistory.price
+                                        )
+                                    )
+                                }
+                            }
                             Purchases.sharedInstance.purchaseProduct(currentActivity, product,
                                 object : PurchaseCallback {
                                     override fun onCompleted(

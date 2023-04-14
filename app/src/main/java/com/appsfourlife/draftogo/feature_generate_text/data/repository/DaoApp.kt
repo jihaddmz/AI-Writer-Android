@@ -3,6 +3,7 @@ package com.appsfourlife.draftogo.feature_generate_text.data.repository
 import androidx.room.*
 import com.appsfourlife.draftogo.feature_generate_art.data.model.ModelArtHistory
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelPurchaseHistory
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 
 @Dao
@@ -59,4 +60,18 @@ interface DaoApp {
     suspend fun getArt(prompt: String): ModelArtHistory?
 
 
+    /**
+     * purchase history
+     **/
+    @Insert
+    suspend fun insertPurchaseHistory(modelPurchaseHistory: ModelPurchaseHistory)
+
+    @Update
+    suspend fun updatePurchaseHistory(modelPurchaseHistory: ModelPurchaseHistory)
+
+    @Query("select * from table_purchasehistory")
+    suspend fun getAllPurchaseHistory(): List<ModelPurchaseHistory>
+
+    @Query("select * from table_purchasehistory where date=:date")
+    suspend fun getPurchaseHistory(date: String): ModelPurchaseHistory?
 }

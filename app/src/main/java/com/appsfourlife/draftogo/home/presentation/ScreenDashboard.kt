@@ -1,8 +1,6 @@
 package com.appsfourlife.draftogo.home.presentation
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -95,7 +93,8 @@ fun ScreenDashboard() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(SpacersSize.small),
+                .padding(SpacersSize.small)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
@@ -103,7 +102,7 @@ fun ScreenDashboard() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.35f)
-                    .weight(1f)
+                    .weight(0.4f)
                     .background(color = Glass, shape = Shapes.medium)
                     .padding(SpacersSize.small)
             ) {
@@ -235,6 +234,7 @@ fun ScreenDashboard() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.2f)
+                    .weight(0.2f)
                     .background(color = Azure, shape = Shapes.medium)
             ) {
                 Column(
@@ -265,7 +265,9 @@ fun ScreenDashboard() {
                             val current = listOfFavoriteTemplates.value[index]
 
                             FavoriteTemplateItem(
-                                modifier = Modifier.fillParentMaxWidth().animateItemPlacement(),
+                                modifier = Modifier
+                                    .fillParentMaxWidth()
+                                    .animateItemPlacement(),
                                 imageID = current.iconID ?: current.imageUrl!!,
                                 text = current.query
                             ) {
@@ -291,7 +293,7 @@ fun ScreenDashboard() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .fillMaxHeight(0.35f)
-                    .weight(1f)
+                    .weight(0.4f)
                     .background(color = Amber, shape = Shapes.medium)
                     .padding(SpacersSize.small)
             ) {

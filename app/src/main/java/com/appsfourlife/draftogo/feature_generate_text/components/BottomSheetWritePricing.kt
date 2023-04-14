@@ -23,10 +23,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelPurchaseHistory
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperAuth
+import com.appsfourlife.draftogo.helpers.HelperDate
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -35,7 +39,9 @@ import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.revenuecat.purchases.*
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.models.StoreTransaction
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -90,11 +96,65 @@ fun BottomSheetWritePricing(
             content = {
                 items(listOfPackages.value.size) { index ->
                     val purchasePackage = listOfPackages.value[index]
+                    val product = purchasePackage.product
+
                     SubscriptionItem(
                         title = purchasePackage.product.title.split("(")[0].trim(),
                         description = purchasePackage.product.description,
                         price = purchasePackage.product.price
                     ) {
+                        val price = product.price.replace(product.price.filter { !it.isDigit() && it != '.' }, "")
+                        coroutineScope.launch(Dispatchers.IO) {
+                            if (App.databaseApp.daoApp.getPurchaseHistory(
+                                    HelperDate.parseDateToString(
+                                        Date(), "dd/MM/yyyy"
+                                    )
+                                ) == null
+                            ) {
+                                App.databaseApp.daoApp.insertPurchaseHistory(
+                                    ModelPurchaseHistory(
+                                        HelperDate.parseDateToString(
+                                            Date(), "dd/MM/yyyy"
+                                        ), price.toFloat()
+                                    )
+                                )
+                            } else {
+                                val purchaseHistory =
+                                    App.databaseApp.daoApp.getPurchaseHistory(
+                                        HelperDate.parseDateToString(
+                                            Date(), "dd/MM/yyyy"
+                                        )
+                                    )!!
+                                purchaseHistory.price += price.toFloat()
+                                App.databaseApp.daoApp.updatePurchaseHistory(
+                                    ModelPurchaseHistory(
+                                        HelperDate.parseDateToString(
+                                            Date(), "dd/MM/yyyy"
+                                        ), purchaseHistory.price
+                                    )
+                                )
+                            }
+                        }
+                        Purchases.sharedInstance.purchaseProduct(currentActivity, product,
+                            object : PurchaseCallback {
+                                override fun onCompleted(
+                                    storeTransaction: StoreTransaction,
+                                    customerInfo: CustomerInfo
+                                ) {
+                                    coroutineScope.launch {
+                                        sheetScaffoldState.bottomSheetState.collapse()
+                                        NotifiersArt.credits.value += product.title.split("(")[0]
+                                            .trim()
+                                            .split(" ")[0].toInt()
+                                    }
+                                }
+
+                                override fun onError(
+                                    error: PurchasesError,
+                                    userCancelled: Boolean
+                                ) {
+                                }
+                            })
 
                         Purchases.sharedInstance.purchaseProduct(
                             currentActivity,
