@@ -28,4 +28,7 @@ sealed class Screens(val route: String){
     object ScreenSummarize: Screens("screen_summarize")
     object ScreenGrammar: Screens("screen_grammar")
     object ScreenTranslate: Screens("screen_translate")
+    object ScreenHistory: Screens("screen_history")
+    object ScreenFeedback: Screens("screen_feedback")
+
 }

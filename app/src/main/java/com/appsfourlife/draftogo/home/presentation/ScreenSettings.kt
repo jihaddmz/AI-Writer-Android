@@ -1,4 +1,4 @@
-package com.appsfourlife.draftogo.feature_generate_text.presentation
+package com.appsfourlife.draftogo.home.presentation
 
 import android.app.Activity
 import androidx.compose.animation.animateContentSize
@@ -21,6 +21,7 @@ import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @Composable
@@ -64,6 +65,12 @@ fun ScreenSettings(
                     text = stringResource(id = R.string.app_name),
                     fontWeight = FontWeight.Bold
                 )
+
+                MySpacer(type = "small")
+
+                MyOutlinedButton(text = stringResource(id = R.string.send_feedback)) {
+                    navController.navigate(Screens.ScreenFeedback.route)
+                }
             }
 
             MySpacer(type = "small")

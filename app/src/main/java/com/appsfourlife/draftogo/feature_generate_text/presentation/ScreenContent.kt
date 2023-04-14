@@ -26,10 +26,11 @@ import com.appsfourlife.draftogo.extensions.animateOffsetY
 import com.appsfourlife.draftogo.extensions.animateScaling
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
+import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
-import com.appsfourlife.draftogo.util.BottomNavScreens
+import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,7 +39,7 @@ import kotlinx.coroutines.launch
 
 
 @Composable
-fun ScreenHome(
+fun ScreenContent(
     modifier: Modifier = Modifier, navController: NavController
 ) {
 
@@ -116,7 +117,17 @@ fun ScreenHome(
                 modifier = Modifier
                     .padding(end = SpacersSize.medium)
                     .clickable {
-                        navController.navigate(BottomNavScreens.History.route)
+                        HelperAnalytics.sendEvent("history")
+                        // if there is network access, navigate to history
+                        if (SettingsNotifier.isConnected.value) {
+                            navController.navigate(Screens.ScreenHistory.route)
+                        } else {
+                            HelperUI.showToast(
+                                msg = App.getTextFromString(
+                                    R.string.no_connection
+                                )
+                            )
+                        }
                     },
                 textAlign = TextAlign.End
             )

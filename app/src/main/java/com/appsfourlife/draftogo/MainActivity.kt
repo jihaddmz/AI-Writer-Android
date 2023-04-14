@@ -33,6 +33,8 @@ import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.home.presentation.ScreenDashboard
 import com.appsfourlife.draftogo.home.presentation.ScreenFeedback
+import com.appsfourlife.draftogo.feature_generate_text.presentation.ScreenContent
+import com.appsfourlife.draftogo.home.presentation.ScreenSettings
 import com.appsfourlife.draftogo.ui.theme.*
 import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.Screens
@@ -258,13 +260,6 @@ class MainActivity : ComponentActivity() {
                             mutableStateOf(false)
                         }
 
-//                        val shouldBottomBarBeVisible =
-//                            (navBackStackEntry?.destination?.route == BottomNavScreens.Home.route
-//                                    || navBackStackEntry?.destination?.route == BottomNavScreens.History.route
-//                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Settings.route
-//                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Feedback.route
-//                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Art.route
-//                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Dashboard.route)
                         val shouldBottomBarBeVisible =
                             (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
                                     && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route)
@@ -300,20 +295,7 @@ class MainActivity : ComponentActivity() {
                                             SettingsNotifier.resetValues()
 
                                             if (currentRoute != screen.route) {
-                                                if (screen.route == BottomNavScreens.History.route) {
-                                                    HelperAnalytics.sendEvent("history")
-                                                    // if there is network access, navigate to history
-                                                    if (SettingsNotifier.isConnected.value) {
-                                                        navController.navigate(BottomNavScreens.History.route)
-                                                    } else {
-                                                        HelperUI.showToast(
-                                                            msg = App.getTextFromString(
-                                                                R.string.no_connection
-                                                            )
-                                                        )
-                                                    }
-                                                } else
-                                                    navController.navigate(screen.route)
+                                                navController.navigate(screen.route)
                                             }
                                         },
                                         icon = {
@@ -380,7 +362,7 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
 
-                                    composable(route = BottomNavScreens.History.route) {
+                                    composable(route = Screens.ScreenHistory.route) {
                                         MyBackHandler(navController = navController)
                                         ScreenHistory(
                                             modifier = Modifier,
@@ -388,7 +370,7 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
 
-                                    composable(route = BottomNavScreens.Feedback.route) {
+                                    composable(route = Screens.ScreenFeedback.route) {
                                         MyBackHandler(navController = navController)
                                         ScreenFeedback(navController = navController)
                                     }
@@ -401,7 +383,7 @@ class MainActivity : ComponentActivity() {
 
                                     composable(route = BottomNavScreens.Home.route) {
                                         MyBackHandler(navController = navController)
-                                        ScreenHome(
+                                        ScreenContent(
                                             modifier = Modifier,
                                             navController = navController
                                         )
