@@ -4,9 +4,8 @@ import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomSheetScaffoldState
@@ -46,7 +45,6 @@ fun BottomSheetWritePricing(
 ) {
     val currentActivity = LocalContext.current as Activity
     val coroutineScope = rememberCoroutineScope()
-    val state = rememberLazyListState()
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -86,8 +84,7 @@ fun BottomSheetWritePricing(
         LazyVerticalGrid(modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = SpacersSize.small),
-            state = state,
-            cells = GridCells.Fixed(count = 2),
+            columns = GridCells.Fixed(count = 2),
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
             content = {

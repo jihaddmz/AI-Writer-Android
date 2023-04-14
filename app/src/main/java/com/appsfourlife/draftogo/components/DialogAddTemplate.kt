@@ -2,8 +2,8 @@ package com.appsfourlife.draftogo.components
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -152,7 +152,7 @@ fun DialogIconChooser(
         ) {
 
             LazyVerticalGrid(
-                cells = GridCells.Fixed(count = 4),
+                columns = GridCells.Fixed(count = 4),
                 content = {
                     items(icons.value.size) { index ->
                         val name = icons.value[index].name

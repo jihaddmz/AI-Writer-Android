@@ -31,7 +31,8 @@ import com.appsfourlife.draftogo.feature_generate_art.presentation.ScreenArt
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
-import com.appsfourlife.draftogo.presentation.ScreenFeedback
+import com.appsfourlife.draftogo.home.presentation.ScreenDashboard
+import com.appsfourlife.draftogo.home.presentation.ScreenFeedback
 import com.appsfourlife.draftogo.ui.theme.*
 import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.Screens
@@ -99,11 +100,20 @@ class MainActivity : ComponentActivity() {
 
             LaunchedEffect(key1 = true, block = {
                 coroutineScope.launch(Dispatchers.IO) {
-                    if (HelperSharedPreference.getBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED, true)) {
+                    if (HelperSharedPreference.getBool(
+                            HelperSharedPreference.SP_SETTINGS,
+                            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED,
+                            true
+                        )
+                    ) {
                         App.databaseApp.daoApp.getAllTemplates().forEach {
                             App.databaseApp.daoApp.deleteTemplate(it)
                         }
-                        HelperSharedPreference.setBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED, false)
+                        HelperSharedPreference.setBool(
+                            HelperSharedPreference.SP_SETTINGS,
+                            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED,
+                            false
+                        )
                     }
                     Constants.PREDEFINED_TEMPLATES.forEach { template ->
                         if (App.databaseApp.daoApp.getTemplateByQuery(
@@ -253,7 +263,8 @@ class MainActivity : ComponentActivity() {
                                     || navBackStackEntry?.destination?.route == BottomNavScreens.History.route
                                     || navBackStackEntry?.destination?.route == BottomNavScreens.Settings.route
                                     || navBackStackEntry?.destination?.route == BottomNavScreens.Feedback.route
-                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Art.route)
+                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Art.route
+                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Dashboard.route)
 
                         LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
                             if (shouldBottomBarBeVisible) {
@@ -267,9 +278,9 @@ class MainActivity : ComponentActivity() {
                         if (changeTargetValue.value) {
                             val listOfBottomNavScreens =
                                 listOf(
+                                    BottomNavScreens.Dashboard,
                                     BottomNavScreens.Home,
                                     BottomNavScreens.Art,
-                                    BottomNavScreens.Feedback,
                                     BottomNavScreens.Settings
                                 )
                             BottomNavigation(
@@ -342,7 +353,7 @@ class MainActivity : ComponentActivity() {
                                 if (HelperSharedPreference.getUsername() == "") {
                                     Screens.ScreenSignIn.route
                                 } else {
-                                    BottomNavScreens.Home.route
+                                    BottomNavScreens.Dashboard.route
                                 }
 
                             } else {
@@ -386,11 +397,16 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     composable(route = BottomNavScreens.Home.route) {
-                                        HomeBackHandler(context = this@MainActivity)
+                                        MyBackHandler(navController = navController)
                                         ScreenHome(
                                             modifier = Modifier,
                                             navController = navController
                                         )
+                                    }
+
+                                    composable(route = BottomNavScreens.Dashboard.route) {
+                                        HomeBackHandler(context = this@MainActivity)
+                                        ScreenDashboard()
                                     }
 
                                     composable(route = Screens.ScreenArticle.route) {

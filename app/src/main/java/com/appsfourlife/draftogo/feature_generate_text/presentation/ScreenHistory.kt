@@ -2,9 +2,8 @@ package com.appsfourlife.draftogo.feature_generate_text.presentation
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
@@ -37,7 +36,6 @@ fun ScreenHistory(
     navController: NavController
 ) {
 
-    val state = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val showDialog = remember {
         mutableStateOf(false)
@@ -90,8 +88,7 @@ fun ScreenHistory(
         LazyVerticalGrid(modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 5.dp, vertical = SpacersSize.medium),
-            state = state,
-            cells = GridCells.Fixed(count = 2),
+            columns = GridCells.Fixed(count = 2),
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
             content = {

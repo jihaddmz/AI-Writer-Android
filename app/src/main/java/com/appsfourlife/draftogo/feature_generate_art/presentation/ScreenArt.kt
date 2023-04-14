@@ -240,6 +240,7 @@ fun ScreenArt(
                                         coroutineScope.launch(Dispatchers.IO) {
                                             NotifiersArt.credits.value -= 1
                                             HelperSharedPreference.setNbOfArtsCredits()
+                                            HelperSharedPreference.incrementNbOfArtsGenerated()
                                             HelperFirebaseDatabase.setNbOfArtCredits()
                                             bitmap.value = BitmapFactory.decodeStream(
                                                 URL(it)

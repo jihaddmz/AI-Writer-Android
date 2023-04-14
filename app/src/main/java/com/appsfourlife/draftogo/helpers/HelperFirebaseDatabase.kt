@@ -39,7 +39,7 @@ object HelperFirebaseDatabase {
             }
     }
 
-    fun fetchNbOfGenerationsConsumed() {
+    fun fetchNbOfGenerationsConsumedAndNbOfWordsGenerated() {
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
             .get().addOnCompleteListener {
