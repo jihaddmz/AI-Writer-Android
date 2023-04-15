@@ -16,7 +16,7 @@ fun UsageItem(
     text: String,
     imageID: Int
 ) {
-    MyCardView {
+    MyCardView(modifier = Modifier.padding(SpacersSize.small)) {
         Row(
             modifier = Modifier.padding(SpacersSize.small),
             horizontalArrangement = Arrangement.SpaceBetween,

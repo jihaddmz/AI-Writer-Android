@@ -103,7 +103,7 @@ class MainActivity : ComponentActivity() {
                 coroutineScope.launch(Dispatchers.IO) {
                     if (HelperSharedPreference.getBool(
                             HelperSharedPreference.SP_SETTINGS,
-                            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED,
+                            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED,
                             true
                         )
                     ) {
@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
                         }
                         HelperSharedPreference.setBool(
                             HelperSharedPreference.SP_SETTINGS,
-                            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V120_LAUNCHED,
+                            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED,
                             false
                         )
                     }

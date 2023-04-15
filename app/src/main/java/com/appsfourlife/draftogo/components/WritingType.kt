@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
+import com.appsfourlife.draftogo.helpers.HelperAnalytics
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import kotlinx.coroutines.Dispatchers
@@ -115,6 +116,8 @@ fun WritingType(
                     contentDesc = "",
                     modifier = Modifier.clickable {
                         if (starIconId.value == R.drawable.icon_outlined_star) {
+                            HelperAnalytics.sendEvent("favorite_template")
+
                             starIconId.value = R.drawable.icon_favorite
                             coroutineScope.launch(Dispatchers.IO) {
                                 if (imageUrl.isEmpty())
