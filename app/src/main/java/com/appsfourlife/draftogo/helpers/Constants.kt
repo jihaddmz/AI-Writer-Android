@@ -97,6 +97,11 @@ object Constants {
         )
     }
 
+    val listOfWritingModels = listOf(
+        "gpt-3.5-turbo",
+        "text-davinci-003"
+    )
+
     val listOfProgrammingLanguages by lazy {
         listOf(
             "Java",

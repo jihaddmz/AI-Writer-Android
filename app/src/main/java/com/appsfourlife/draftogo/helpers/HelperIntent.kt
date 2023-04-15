@@ -16,6 +16,11 @@ object HelperIntent {
         App.context.startActivity(intent)
     }
 
+    fun navigateToUrl(url: String){
+        val intent = Intent(Intent.parseUri(url, 0))
+        App.context.startActivity(intent)
+    }
+
     fun sendEmail(recipient: String, subject: String, message: String) {
         /*ACTION_SEND action to launch an email client installed on your Android device.*/
         val mIntent = Intent(Intent.ACTION_SEND)

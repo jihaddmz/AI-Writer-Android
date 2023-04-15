@@ -226,29 +226,56 @@ fun input(
                                 showDialog.value = true
                                 generateText.value = App.getTextFromString(R.string.generating)
 
-                                HelperChatGPT.getChatResponse(
-                                    inputPrefix + " " + SettingsNotifier.input.value.text.trim() + ". Generate the response using the " + SettingsNotifier.outputLanguage.value + " language",
-                                    context,
-                                    length,
-                                    nbOfGenerations,
-                                    coroutineScope = coroutineScope,
-                                    onErrorAction = {
+                                if (HelperSharedPreference.getTypeOfWritingModel() == "gpt-3.5-turbo") {
+                                    HelperChatGPT.getChatResponse(
+                                        inputPrefix + " " + SettingsNotifier.input.value.text.trim() + ". Generate the response using the " + SettingsNotifier.outputLanguage.value + " language",
+                                        context,
+                                        length,
+                                        nbOfGenerations,
+                                        coroutineScope = coroutineScope,
+                                        onErrorAction = {
+                                            showDialog.value = false
+                                            generateText.value =
+                                                App.getTextFromString(R.string.generate)
+
+                                        }, verticalScrollState = verticalScrollState
+                                    ) { // on fetching response action done
                                         showDialog.value = false
-                                        generateText.value =
-                                            App.getTextFromString(R.string.generate)
 
-                                    }, verticalScrollState = verticalScrollState
-                                ) { // on fetching response action done
-                                    showDialog.value = false
+                                        if (!HelperAuth.isSubscribed()) { // if the user is not yet subscribed, decrement the nb of generations left
+                                            SettingsNotifier.nbOfGenerationsConsumed.value += 1
+                                        }
 
-                                    if (!HelperAuth.isSubscribed()) { // if the user is not yet subscribed, decrement the nb of generations left
-                                        SettingsNotifier.nbOfGenerationsConsumed.value += 1
+                                        Timer().schedule(timerTask {
+                                            generateText.value =
+                                                App.getTextFromString(R.string.generate)
+                                        }, 1500)
                                     }
+                                } else {
+                                    HelperChatGPT.getResponse(
+                                        inputPrefix + " " + SettingsNotifier.input.value.text.trim() + ". Generate the response using the " + SettingsNotifier.outputLanguage.value + " language",
+                                        context,
+                                        length,
+                                        nbOfGenerations,
+                                        coroutineScope = coroutineScope,
+                                        onErrorAction = {
+                                            showDialog.value = false
+                                            generateText.value =
+                                                App.getTextFromString(R.string.generate)
 
-                                    Timer().schedule(timerTask {
-                                        generateText.value =
-                                            App.getTextFromString(R.string.generate)
-                                    }, 1500)
+                                        }, verticalScrollState = verticalScrollState
+                                    ) { // on fetching response action done
+                                        showDialog.value = false
+
+                                        if (!HelperAuth.isSubscribed()) { // if the user is not yet subscribed, decrement the nb of generations left
+                                            SettingsNotifier.nbOfGenerationsConsumed.value += 1
+                                        }
+
+                                        Timer().schedule(timerTask {
+                                            generateText.value =
+                                                App.getTextFromString(R.string.generate)
+                                        }, 1500)
+                                    }
                                 }
                             }
                         },

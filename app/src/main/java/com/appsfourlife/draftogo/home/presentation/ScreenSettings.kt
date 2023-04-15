@@ -3,6 +3,7 @@ package com.appsfourlife.draftogo.home.presentation
 import android.app.Activity
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -20,6 +21,7 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.*
+import com.appsfourlife.draftogo.home.components.TypeModelChooser
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
@@ -71,9 +73,17 @@ fun ScreenSettings(
                 MyOutlinedButton(text = stringResource(id = R.string.send_feedback)) {
                     navController.navigate(Screens.ScreenFeedback.route)
                 }
+
+                MySpacer(type = "small")
+
+                MyTextLink(text = stringResource(id = R.string.website), modifier = Modifier.clickable {
+                    HelperIntent.navigateToUrl("https://appsfourlife.com/draftogo/")
+                })
             }
 
             MySpacer(type = "small")
+
+            TypeModelChooser()
 
             TypeWriterLength()
 

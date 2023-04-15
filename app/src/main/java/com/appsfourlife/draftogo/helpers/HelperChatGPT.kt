@@ -90,14 +90,13 @@ object HelperChatGPT {
         // adding params to json object.
         jsonObject.put("model", "text-davinci-003") // text-davinci-003 // gpt-3.5-turbo
         jsonObject.put("prompt", query)
-        jsonObject.put("temperature", 0.9)
+        jsonObject.put("temperature", 0.4)
         jsonObject.put("max_tokens", length)
-        jsonObject.put("top_p", 0.7)
-        jsonObject.put("frequency_penalty", 0.0)
-        jsonObject.put("presence_penalty", 0.0)
+//        jsonObject.put("frequency_penalty", 0.0)
+//        jsonObject.put("presence_penalty", 0.0)
         jsonObject.put("n", nbOfGenerations)
-        jsonObject.put("stream", false)
-        jsonObject.put("logprobs", null)
+//        jsonObject.put("stream", false)
+//        jsonObject.put("logprobs", null)
 
         // on below line making json object request.
         val postRequest: JsonObjectRequest =
@@ -226,7 +225,7 @@ object HelperChatGPT {
         // adding params to json object.
         jsonObject.put("model", "gpt-3.5-turbo") // text-davinci-003 // gpt-3.5-turbo
         jsonObject.put("messages", jsonArrayHeader)
-//        jsonObject.put("temperature", 0.9)
+        jsonObject.put("temperature", 0.4) // change this or top_p
         jsonObject.put("max_tokens", length)
 //        jsonObject.put("top_p", 0.7)
 //        jsonObject.put("frequency_penalty", 0.0)

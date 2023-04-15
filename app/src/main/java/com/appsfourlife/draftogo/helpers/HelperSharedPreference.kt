@@ -41,6 +41,7 @@ object HelperSharedPreference {
     const val SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED = "is_compare_outputs_enabled"
     const val SP_SETTINGS_NB_0F_ARTS_CREDITS = "nb_0f_arts_credits"
     const val SP_SETTINGS_NB_0F_ARTS_GENERATED = "nb_0f_arts_generated"
+    const val SP_SETTINGS_TYPE_OF_WRITING_MODEL = "type_of_writing_model"
 
 
     /**
@@ -54,6 +55,14 @@ object HelperSharedPreference {
     /**
      * most common shared preferences keys
      **/
+
+    fun getTypeOfWritingModel(): String {
+        return getString(SP_SETTINGS, SP_SETTINGS_TYPE_OF_WRITING_MODEL, "gpt-3.5-turbo")
+    }
+
+    fun setTypeOfWritingModel(value: String) {
+        setString(SP_SETTINGS, SP_SETTINGS_TYPE_OF_WRITING_MODEL, value)
+    }
 
     fun getNbOfArtsGenerated(): Int {
         return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_GENERATED, 0)

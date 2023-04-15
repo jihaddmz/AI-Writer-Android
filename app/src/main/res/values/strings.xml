@@ -252,4 +252,8 @@
     <string name="saved_output_already_exists">You\'ve already saved this entry</string>
     <string name="art_purchase_history_type">Arts: %s</string>
     <string name="write_purchase_history_type">Write: %s</string>
+    <string name="turbo_model_explanation">If you want speed and coherent response, choose this model</string>
+    <string name="davinci_model_explanation">If you want accurate and complex response, choose this model</string>
+    <string name="model_chooser_label">Model Chooser</string>
+    <string name="website">Website</string>
 </resources>
