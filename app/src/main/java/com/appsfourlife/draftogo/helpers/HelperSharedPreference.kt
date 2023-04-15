@@ -40,6 +40,7 @@ object HelperSharedPreference {
     const val SP_SETTINGS_SUBSCRIBE_TYPE = "subscribe_type"
     const val SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED = "is_compare_outputs_enabled"
     const val SP_SETTINGS_NB_0F_ARTS_CREDITS = "nb_0f_arts_credits"
+    const val SP_SETTINGS_NB_0F_ARTS_GENERATED = "nb_0f_arts_generated"
 
 
     /**
@@ -54,6 +55,18 @@ object HelperSharedPreference {
      * most common shared preferences keys
      **/
 
+    fun getNbOfArtsGenerated(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_GENERATED, 0)
+    }
+
+    fun incrementNbOfArtsGenerated() {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_GENERATED, getNbOfArtsGenerated() + 1)
+    }
+
+    fun setNbOfArtsGenerated(value: Int) {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_GENERATED, value)
+    }
+
     fun getNbOfArtsCredits(): Int {
         return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_CREDITS, 0)
     }
@@ -63,7 +76,7 @@ object HelperSharedPreference {
     }
 
     fun getIsSavedOutputsEnabled(): Boolean{
-        return getBool(SP_SETTINGS, SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED, false)
+        return getBool(SP_SETTINGS, SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED, true)
     }
 
     fun getSubscriptionType(): String {

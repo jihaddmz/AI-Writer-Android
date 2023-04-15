@@ -29,8 +29,8 @@ class App : Application() {
         val listOfCVTypes by lazy { mutableListOf<String>() }
         val listOfLetterTypes by lazy { mutableListOf<String>() }
         val listOfEssays by lazy { mutableListOf<String>() }
-        fun getTextFromString(textID: Int): String {
-            return context.getString(textID)
+        fun getTextFromString(textID: Int, args: Any? = null): String {
+            return context.getString(textID, args)
         }
     }
 
@@ -120,7 +120,7 @@ class App : Application() {
                     }
                 }
             })
-        }, 5000, 5000)
+        }, 0, 5000)
 
         listOfCVTypes.add(getString(R.string.chronological))
         listOfCVTypes.add(getString(R.string.functional))

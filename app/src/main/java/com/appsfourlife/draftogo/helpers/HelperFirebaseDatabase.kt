@@ -39,7 +39,7 @@ object HelperFirebaseDatabase {
             }
     }
 
-    fun fetchNbOfGenerationsConsumed() {
+    fun fetchNbOfGenerationsConsumedAndNbOfWordsGenerated(onComplete: () -> Unit) {
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
             .get().addOnCompleteListener {
@@ -73,6 +73,8 @@ object HelperFirebaseDatabase {
                         nbOfWordsGenerated.toInt()
                     )
                 }
+
+                onComplete()
             }
     }
 
@@ -193,7 +195,7 @@ object HelperFirebaseDatabase {
             }
     }
 
-   fun getNbOfArtCredits() {
+   fun getNbOfArtCredits(onComplete: () -> Unit = {}) {
         firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
             .addOnCompleteListener { document ->
                val result = document.result.get("nbOfArtCredits").toString()
@@ -201,6 +203,8 @@ object HelperFirebaseDatabase {
                     NotifiersArt.credits.value = result.toInt()
                     HelperSharedPreference.setNbOfArtsCredits()
                 }
+
+                onComplete()
             }
     }
 }

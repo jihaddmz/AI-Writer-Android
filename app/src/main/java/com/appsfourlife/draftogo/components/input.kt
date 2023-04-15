@@ -111,10 +111,6 @@ fun input(
                 /**
                  * input actions
                  **/
-
-                /**
-                 * input actions
-                 **/
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -231,7 +227,7 @@ fun input(
                                 generateText.value = App.getTextFromString(R.string.generating)
 
                                 HelperChatGPT.getResponse(
-                                    inputPrefix + " " + SettingsNotifier.input.value.text.trim() + " and generate the output in " + SettingsNotifier.outputLanguage.value,
+                                    inputPrefix + " " + SettingsNotifier.input.value.text.trim() + ". Generate the response using the " + SettingsNotifier.outputLanguage.value + " language",
                                     context,
                                     length,
                                     nbOfGenerations,
@@ -260,20 +256,22 @@ fun input(
                     text = generateText.value,
                     color = Color.White
                 )
-                MyText(text = "|", color = Color.White)
-                MyText(
-                    modifier = Modifier
-                        .padding(horizontal = SpacersSize.small)
-                        .clickable {
-                            coroutineScope.launch {
-                                SettingsNotifier.isPricingBottomSheets.value = false
-                                SettingsNotifier.sheetScaffoldState?.bottomSheetState?.expand()
-                            }
-                        },
-                    textAlign = TextAlign.Center,
-                    text = stringResource(id = R.string.save_outputs),
-                    color = Color.White
-                )
+                if (HelperSharedPreference.getIsSavedOutputsEnabled()) {
+                    MyText(text = "|", color = Color.White)
+                    MyText(
+                        modifier = Modifier
+                            .padding(horizontal = SpacersSize.small)
+                            .clickable {
+                                coroutineScope.launch {
+                                    SettingsNotifier.isPricingBottomSheets.value = false
+                                    SettingsNotifier.sheetScaffoldState?.bottomSheetState?.expand()
+                                }
+                            },
+                        textAlign = TextAlign.Center,
+                        text = stringResource(id = R.string.save_outputs),
+                        color = Color.White
+                    )
+                }
             }
         }
     }

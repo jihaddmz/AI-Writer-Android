@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.util
 
+import android.annotation.SuppressLint
 import android.speech.tts.TextToSpeech
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -7,11 +8,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.navigation.NavHostController
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelComparedGenerationItem
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.google.android.gms.ads.rewarded.RewardedAd
 
+@SuppressLint("StaticFieldLeak")
 object SettingsNotifier {
 
     val showLoadingDialog = mutableStateOf(false)
@@ -39,6 +42,8 @@ object SettingsNotifier {
     var currentUserQuerySection: String? = null
     var tts: TextToSpeech? = null
     val outputLanguage = mutableStateOf(HelperSharedPreference.getOutputLanguage())
+
+    var navHostController: NavHostController? = null
 
     /**
      * bottom sheets

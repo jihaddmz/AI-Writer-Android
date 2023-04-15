@@ -166,7 +166,6 @@
     <string name="label_no_saved_items_added">No Saved Outputs added, use the save icon in the output to add them here</string>
     <string name="enable_save_outputs">Enable Save Outputs</string>
     <string name="relaunch_app_to_enable_this_feature">Please relaunch the app to enable this feature</string>
-    <string name="home">Home</string>
     <string name="summarize_the_following_text">Summarize the following text</string>
     <string name="text_to_summarize">Text to summarize</string>
     <string name="correct_the_following_text">Correct the following text</string>
@@ -237,4 +236,20 @@
     <string name="ai_writing_tool">AI Writing Tool</string>
     <string name="ai_art_tool">AI Art Tool</string>
     <string name="welcome_text">Welcome to Draftogo, the only platform you need to level up your productivity and creativity with ease</string>
+    <string name="words">Words</string>
+    <string name="generations">Generations</string>
+    <string name="arts">Arts</string>
+    <string name="Usage">Usage</string>
+    <string name="templates">Templates</string>
+    <string name="favorite_templates">Favorite Templates</string>
+    <string name="view_all">View All</string>
+    <string name="favorite_template_bottom_sheet_explanation">Click the one you want to navigate to its corresponding screen</string>
+    <string name="purchase_history">Purchase History</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="content">Content</string>
+    <string name="template_already_exists">You already have this template</string>
+    <string name="send_feedback">Send Feedback</string>
+    <string name="saved_output_already_exists">You\'ve already saved this entry</string>
+    <string name="art_purchase_history_type">Arts: %s</string>
+    <string name="write_purchase_history_type">Write: %s</string>
 </resources>

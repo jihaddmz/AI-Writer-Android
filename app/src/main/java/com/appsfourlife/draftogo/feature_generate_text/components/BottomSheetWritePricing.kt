@@ -4,9 +4,8 @@ import android.app.Activity
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.BottomSheetScaffoldState
@@ -24,10 +23,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelPurchaseHistory
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperAuth
+import com.appsfourlife.draftogo.helpers.HelperDate
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -36,7 +38,9 @@ import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.revenuecat.purchases.*
 import com.revenuecat.purchases.interfaces.PurchaseCallback
 import com.revenuecat.purchases.models.StoreTransaction
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -46,7 +50,6 @@ fun BottomSheetWritePricing(
 ) {
     val currentActivity = LocalContext.current as Activity
     val coroutineScope = rememberCoroutineScope()
-    val state = rememberLazyListState()
     val scrollState = rememberScrollState()
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -86,18 +89,39 @@ fun BottomSheetWritePricing(
         LazyVerticalGrid(modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = SpacersSize.small),
-            state = state,
-            cells = GridCells.Fixed(count = 2),
+            columns = GridCells.Fixed(count = 2),
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
             content = {
                 items(listOfPackages.value.size) { index ->
                     val purchasePackage = listOfPackages.value[index]
+                    val product = purchasePackage.product
+
                     SubscriptionItem(
                         title = purchasePackage.product.title.split("(")[0].trim(),
                         description = purchasePackage.product.description,
                         price = purchasePackage.product.price
                     ) {
+//                        Purchases.sharedInstance.purchaseProduct(currentActivity, product,
+//                            object : PurchaseCallback {
+//                                override fun onCompleted(
+//                                    storeTransaction: StoreTransaction,
+//                                    customerInfo: CustomerInfo
+//                                ) {
+//                                    coroutineScope.launch {
+//                                        sheetScaffoldState.bottomSheetState.collapse()
+//                                        NotifiersArt.credits.value += product.title.split("(")[0]
+//                                            .trim()
+//                                            .split(" ")[0].toInt()
+//                                    }
+//                                }
+//
+//                                override fun onError(
+//                                    error: PurchasesError,
+//                                    userCancelled: Boolean
+//                                ) {
+//                                }
+//                            })
 
                         Purchases.sharedInstance.purchaseProduct(
                             currentActivity,
@@ -108,6 +132,40 @@ fun BottomSheetWritePricing(
                                     customerInfo: CustomerInfo
                                 ) {
                                     if (customerInfo.entitlements["premium"]?.isActive == true) {
+                                        val price = product.price.replace(product.price.filter { !it.isDigit() && it != '.' }, "")
+                                        coroutineScope.launch(Dispatchers.IO) {
+                                            if (App.databaseApp.daoApp.getPurchaseHistory(
+                                                    HelperDate.parseDateToString(
+                                                        Date(), "dd/MM/yyyy"
+                                                    )
+                                                ) == null
+                                            ) {
+                                                App.databaseApp.daoApp.insertPurchaseHistory(
+                                                    ModelPurchaseHistory(
+                                                        HelperDate.parseDateToString(
+                                                            Date(), "dd/MM/yyyy"
+                                                        ), price.toFloat(),
+                                                        App.getTextFromString(R.string.write_purchase_history_type, purchasePackage.product.title.split("(")[0].trim())
+                                                    )
+                                                )
+                                            } else {
+                                                val purchaseHistory =
+                                                    App.databaseApp.daoApp.getPurchaseHistory(
+                                                        HelperDate.parseDateToString(
+                                                            Date(), "dd/MM/yyyy"
+                                                        )
+                                                    )!!
+                                                purchaseHistory.price += price.toFloat()
+                                                App.databaseApp.daoApp.updatePurchaseHistory(
+                                                    ModelPurchaseHistory(
+                                                        HelperDate.parseDateToString(
+                                                            Date(), "dd/MM/yyyy"
+                                                        ), purchaseHistory.price,
+                                                        App.getTextFromString(R.string.write_purchase_history_type, purchasePackage.product.title.split("(")[0].trim())
+                                                    )
+                                                )
+                                            }
+                                        }
                                         HelperAuth.makeUserSubscribed()
                                         HelperSharedPreference.setSubscriptionType(Constants.SUBSCRIPTION_TYPE_BASE)
                                         coroutineScope.launch {

@@ -24,6 +24,7 @@ object Constants {
     const val DAY_MONTH_YEAR_FORMAT = "dd/MM/yyyy"
     const val EXIT_TIME_BETWEEN = 3000L
     const val Toast_Lenght = 6000
+    const val NB_OF_MAX_ALLOWED_GENERATIONS = 2
 
 
     /**
