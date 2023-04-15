@@ -24,13 +24,9 @@ import com.appsfourlife.draftogo.extensions.animateScaling
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
 import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
 import com.appsfourlife.draftogo.helpers.Helpers
-import com.appsfourlife.draftogo.helpers.WindowInfo
-import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
-import com.appsfourlife.draftogo.util.BottomNavScreens
-import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @Composable
 fun ScreenHistory(
@@ -191,43 +187,17 @@ fun TopBarHistory(
             .fillMaxWidth()
     ) {
 
-        val padding = when (rememberWindowInfo().screenWidthInfo) {
-            is WindowInfo.WindowType.Compact -> 0.dp
-            is WindowInfo.WindowType.Medium -> 10.dp
-            else -> 20.dp
-        }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Blue)
-                .padding(padding),
+                .padding(start = SpacersSize.small),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            IconButton(onClick = {
-                navController.navigate(BottomNavScreens.Home.route)
-                SettingsNotifier.resetValues()
-            }) {
-
-                MyIcon(
-                    iconID = R.drawable.icon_arrow_back,
-                    contentDesc = stringResource(
-                        id = R.string.navigate_back
-                    ),
-                    tint = Color.White
-                )
-            }
-
-            when (rememberWindowInfo().screenWidthInfo) {
-                is WindowInfo.WindowType.Compact -> Spacer(modifier = Modifier.width(SpacersSize.small))
-                is WindowInfo.WindowType.Medium -> Spacer(modifier = Modifier.width(SpacersSize.small))
-                else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
-            }
-
             MyTextTitle(text = text, color = Color.White)
 
-            Spacer(modifier = Modifier.height(SpacersSize.small))
+            MySpacer(type = "small")
 
             Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
                 IconButton(onClick = {

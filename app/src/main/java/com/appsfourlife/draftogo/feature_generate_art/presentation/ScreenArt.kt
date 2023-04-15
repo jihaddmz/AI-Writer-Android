@@ -36,7 +36,6 @@ import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Orange
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
-import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -464,45 +463,16 @@ fun TopBarArt(
             .fillMaxSize()
     ) {
 
-        val padding = when (rememberWindowInfo().screenWidthInfo) {
-            is WindowInfo.WindowType.Compact -> 0.dp
-            is WindowInfo.WindowType.Medium -> 10.dp
-            else -> 20.dp
-        }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = Blue)
-                .padding(padding),
+                .padding(SpacersSize.small),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-
-                IconButton(onClick = {
-                    navController.navigate(BottomNavScreens.Home.route)
-                    SettingsNotifier.resetValues()
-                }) {
-
-                    MyIcon(
-                        iconID = R.drawable.icon_arrow_back,
-                        contentDesc = stringResource(
-                            id = R.string.navigate_back
-                        ),
-                        tint = Color.White
-                    )
-                }
-
-                when (rememberWindowInfo().screenWidthInfo) {
-                    is WindowInfo.WindowType.Compact -> Spacer(modifier = Modifier.width(SpacersSize.small))
-                    is WindowInfo.WindowType.Medium -> Spacer(modifier = Modifier.width(SpacersSize.small))
-                    else -> Spacer(modifier = Modifier.width(SpacersSize.medium))
-                }
-
-                MyTextTitle(text = text, color = Color.White)
-            }
+            MyTextTitle(text = text, color = Color.White)
 
             Row(verticalAlignment = Alignment.CenterVertically) {
 

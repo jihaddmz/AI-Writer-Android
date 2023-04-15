@@ -46,9 +46,7 @@ fun ScreenContent(
     val context = LocalContext.current
     val state = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
-    val isAppOutDated = remember {
-        mutableStateOf(false)
-    }
+
 
     SettingsNotifier.disableDrawerContent.value = false
     SettingsNotifier.enableSheetContent.value = false
@@ -91,18 +89,6 @@ fun ScreenContent(
                     }
                 }
             }
-
-        if (isAppOutDated.value) // if the app is outdated show the alert dialog to update
-            MyDialog(
-                modifier = Modifier,
-                showDialog = isAppOutDated,
-                text = stringResource(id = R.string.app_is_outdated),
-                title = stringResource(id = R.string.attention),
-                properties = DialogProperties(
-                    dismissOnBackPress = false,
-                    dismissOnClickOutside = false,
-                )
-            )
 
         MainAppBar(
             navController = navController,

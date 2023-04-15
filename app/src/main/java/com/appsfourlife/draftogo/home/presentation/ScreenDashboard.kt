@@ -19,6 +19,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.window.DialogProperties
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
@@ -46,6 +47,9 @@ fun ScreenDashboard() {
     }
     val nbOfArtsLeft = remember {
         mutableStateOf(AnnotatedString(text = "0"))
+    }
+    val isAppOutDated = remember {
+        mutableStateOf(false)
     }
 
     LaunchedEffect(key1 = true, block = {
@@ -138,6 +142,19 @@ fun ScreenDashboard() {
     BottomSheet(sheetScaffoldState = sheetScaffoldState, bottomSheet = {
         BottomSheetFavoriteTemplates()
     }) {
+
+        if (isAppOutDated.value) // if the app is outdated show the alert dialog to update
+            MyDialog(
+                modifier = Modifier,
+                showDialog = isAppOutDated,
+                text = stringResource(id = R.string.app_is_outdated),
+                title = stringResource(id = R.string.attention),
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
+                )
+            )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -183,7 +200,7 @@ fun ScreenDashboard() {
                     MySpacer(type = "large")
 
                     Column {
-                        MyTextTitle(text = "${stringResource(id = R.string.Usage)}:")
+                        MyTextTitle(text = "${stringResource(id = R.string.monthly_usage)}:")
 
                         MySpacer(type = "small")
 

@@ -239,7 +239,7 @@
     <string name="words">Words</string>
     <string name="generations">Generations</string>
     <string name="arts">Arts</string>
-    <string name="Usage">Usage</string>
+    <string name="monthly_usage">Monthly Usage</string>
     <string name="templates">Templates</string>
     <string name="favorite_templates">Favorite Templates</string>
     <string name="view_all">View All</string>
@@ -254,6 +254,6 @@
     <string name="write_purchase_history_type">Write: %s</string>
     <string name="turbo_model_explanation">If you want speed and coherent response, choose this model</string>
     <string name="davinci_model_explanation">If you want accurate and complex response, choose this model</string>
-    <string name="model_chooser_label">Model Chooser</string>
+    <string name="writing_model_chooser_label">Writing Model Chooser</string>
     <string name="website">Website</string>
 </resources>

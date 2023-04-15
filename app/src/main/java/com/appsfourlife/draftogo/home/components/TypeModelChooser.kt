@@ -27,7 +27,7 @@ fun TypeModelChooser(
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
 
         MyText(
-            text = "${stringResource(id = R.string.model_chooser_label)}:",
+            text = "${stringResource(id = R.string.writing_model_chooser_label)}:",
             fontWeight = FontWeight.Bold
         )
 
