@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.IconButton
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,16 +18,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateOffsetY
-import com.appsfourlife.draftogo.extensions.animateScaling
+import com.appsfourlife.draftogo.extensions.animateVisibility
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
 import com.appsfourlife.draftogo.helpers.HelperUI
+import com.appsfourlife.draftogo.ui.theme.Amber
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
@@ -194,12 +195,15 @@ fun MainAppBar(
             })
 
             MyTextField(modifier = Modifier
-                .animateScaling()
+                .padding(SpacersSize.small)
+                .animateVisibility()
                 .weight(1f)
                 .focusRequester(focusRequester)
                 .background(color = Blue, shape = Shapes.medium),
                 value = searchText.value,
-                textColor = Color.White,
+                textColor = Color.Black,
+                trailingIconTint = Amber,
+                colors = TextFieldDefaults.textFieldColors(backgroundColor = Color.White),
                 cursorColor = Color.White,
                 placeholder = stringResource(id = R.string.search),
                 trailingIcon = R.drawable.icon_wrong,
