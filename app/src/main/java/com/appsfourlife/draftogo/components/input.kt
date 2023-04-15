@@ -226,7 +226,7 @@ fun input(
                                 showDialog.value = true
                                 generateText.value = App.getTextFromString(R.string.generating)
 
-                                HelperChatGPT.getResponse(
+                                HelperChatGPT.getChatResponse(
                                     inputPrefix + " " + SettingsNotifier.input.value.text.trim() + ". Generate the response using the " + SettingsNotifier.outputLanguage.value + " language",
                                     context,
                                     length,

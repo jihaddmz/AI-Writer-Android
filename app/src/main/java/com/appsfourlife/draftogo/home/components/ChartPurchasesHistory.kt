@@ -40,16 +40,10 @@ fun ChartPurchasesHistory(
         coroutineScope.launch(Dispatchers.IO) {
             listOfPurchases.value = App.databaseApp.daoApp.getAllPurchaseHistory()
                 .sortedBy { HelperDate.parseStringToDate(it.date, "dd/MM/yyyy") }
-            listOfPurchases.value = listOfPurchases.value.reversed()
 
             if (listOfPurchases.value.isNotEmpty()) {
                 val result = mutableListOf<BarData>()
-                val lastIndex = if (listOfPurchases.value.size >= 5) {
-                    5
-                } else {
-                    listOfPurchases.value.size
-                }
-                for (i in 0 until lastIndex) {
+                for (i in 0 until listOfPurchases.value.size) {
                     val current = listOfPurchases.value[i]
                     result.add(BarData(current.date, current.price))
                 }
@@ -88,7 +82,7 @@ fun ChartPurchasesHistory(
                     yAxisColor = Color.Black
                 ),
                 color = colors.first(),
-                barData = list.value
+                barData = list.value.takeLast(5)
             )
         } else {
             MyLottieAnim(

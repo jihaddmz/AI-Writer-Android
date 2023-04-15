@@ -106,10 +106,10 @@ object HelperFirebaseDatabase {
                     list.value = result.sortedBy {
                         HelperDate.parseStringToDate(
                             it.date,
-                            "yyyy-MM-dd hh:mm:ss"
+                            "yyyy-MM-dd HH:mm:ss"
                         )?.time
                     } as MutableList<ModelHistory>
-                    list.value.reverse()
+                    list.value = list.value.reversed() as MutableList<ModelHistory>
                 }
                 showCircularIndicator.value = false
             }

@@ -20,6 +20,8 @@ import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelPurchaseHistory
 import com.appsfourlife.draftogo.helpers.HelperDate
+import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
+import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.Orange
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.revenuecat.purchases.CustomerInfo
@@ -160,6 +162,8 @@ fun BottomSheetArtPricing(
                                             NotifiersArt.credits.value += product.title.split("(")[0]
                                                 .trim()
                                                 .split(" ")[0].toInt()
+                                            HelperFirebaseDatabase.setNbOfArtCredits()
+                                            HelperSharedPreference.setNbOfArtsCredits()
                                         }
                                     }
 
