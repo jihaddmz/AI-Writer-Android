@@ -5,9 +5,7 @@ import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,7 +41,6 @@ fun ScreenSignIn(
             showQuitBtn = false,
             drawableID = R.drawable.login,
             title = stringResource(id = R.string.sign_in),
-            endY = 800f
         )
 
         MySpacer(type = "medium")

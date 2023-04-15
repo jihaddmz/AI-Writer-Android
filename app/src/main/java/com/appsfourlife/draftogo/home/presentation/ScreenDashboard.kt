@@ -82,10 +82,10 @@ fun ScreenDashboard() {
                     }
                 } else {
                     val nbOfGenerationsLeft =
-                        if (HelperSharedPreference.getNbOfGenerationsConsumed() - Constants.NB_OF_MAX_ALLOWED_GENERATIONS < 0) {
+                        if (Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed() < 0) {
                             0
                         } else {
-                            HelperSharedPreference.getNbOfGenerationsConsumed() - Constants.NB_OF_MAX_ALLOWED_GENERATIONS
+                            Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed()
                         }
                     AnnotatedString(
                         text = "$nbOfGenerationsLeft\n",

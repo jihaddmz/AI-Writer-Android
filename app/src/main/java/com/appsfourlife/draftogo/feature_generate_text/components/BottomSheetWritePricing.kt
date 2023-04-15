@@ -102,26 +102,6 @@ fun BottomSheetWritePricing(
                         description = purchasePackage.product.description,
                         price = purchasePackage.product.price
                     ) {
-//                        Purchases.sharedInstance.purchaseProduct(currentActivity, product,
-//                            object : PurchaseCallback {
-//                                override fun onCompleted(
-//                                    storeTransaction: StoreTransaction,
-//                                    customerInfo: CustomerInfo
-//                                ) {
-//                                    coroutineScope.launch {
-//                                        sheetScaffoldState.bottomSheetState.collapse()
-//                                        NotifiersArt.credits.value += product.title.split("(")[0]
-//                                            .trim()
-//                                            .split(" ")[0].toInt()
-//                                    }
-//                                }
-//
-//                                override fun onError(
-//                                    error: PurchasesError,
-//                                    userCancelled: Boolean
-//                                ) {
-//                                }
-//                            })
 
                         Purchases.sharedInstance.purchaseProduct(
                             currentActivity,
