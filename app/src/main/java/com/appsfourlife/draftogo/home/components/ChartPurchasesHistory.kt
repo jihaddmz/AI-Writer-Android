@@ -1,6 +1,5 @@
 package com.appsfourlife.draftogo.home.components
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -23,21 +22,11 @@ import com.himanshoe.charty.common.axis.AxisConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@SuppressLint("UnrememberedMutableState")
 @Composable
 fun ChartPurchasesHistory(
     colors: List<Color> = listOf(Rose)
 ) {
     val coroutineScope = rememberCoroutineScope()
-
-//   val listOf = listOf(
-//        // todo update history purchases
-//        BarData("14/4/2023", 24f),
-//        BarData("14/5/2023", 27f),
-//        BarData("14/6/2023", 27f),
-//        BarData("14/7/2023", 27f),
-//        BarData("14/8/2023", 27f),
-//    )
 
     val list = remember {
         mutableStateOf(listOf<BarData>())
@@ -105,8 +94,7 @@ fun ChartPurchasesHistory(
             MyLottieAnim(
                 modifier = Modifier
                     .fillMaxSize(),
-                lottieID = R.raw.empty,
-                isLottieAnimationPlaying = mutableStateOf(true)
+                lottieID = R.raw.loading,
             )
         }
     }

@@ -20,6 +20,7 @@ import com.appsfourlife.draftogo.components.MyText
 import com.appsfourlife.draftogo.components.MyTextTitle
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.home.listitems.FavoriteTemplateItem
+import com.appsfourlife.draftogo.home.util.NotifiersHome.listOfFavoriteTemplates
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import kotlinx.coroutines.Dispatchers
@@ -32,9 +33,6 @@ fun BottomSheetFavoriteTemplates(
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val listOfFavoriteTemplates = remember {
-        mutableStateOf(listOf<ModelFavoriteTemplate>())
-    }
 
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {

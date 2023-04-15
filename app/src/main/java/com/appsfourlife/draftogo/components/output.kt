@@ -19,6 +19,7 @@ import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelComparedGenerationItem
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
+import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.ui.theme.Azure
 import com.appsfourlife.draftogo.ui.theme.Orange
@@ -69,6 +70,15 @@ fun Output(
                         if (HelperSharedPreference.getIsSavedOutputsEnabled())
                             IconButton(onClick = {
                                 HelperAnalytics.sendEvent("saved_output")
+                                SettingsNotifier.comparisonGenerationEntries.value.forEach {
+                                    /**
+                                     * checking if the input together with the output is being already added, if so don't add it again
+                                     **/
+                                    if ("${it.output} ${it.input}" == "${outputText.value} ${SettingsNotifier.input.value.text}") {
+                                        HelperUI.showToast(msg = App.getTextFromString(R.string.saved_output_already_exists))
+                                        return@IconButton
+                                    }
+                                }
                                 SettingsNotifier.addComparisonGenerationEntry(
                                     ModelComparedGenerationItem(
                                         input = SettingsNotifier.input.value.text,

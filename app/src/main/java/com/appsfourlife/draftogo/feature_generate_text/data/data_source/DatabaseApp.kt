@@ -30,7 +30,7 @@ abstract class DatabaseApp : RoomDatabase() {
                 // create table_arthistory table
                 database.execSQL("CREATE TABLE IF NOT EXISTS `table_arthistory` (`prompt` TEXT NOT NULL, `imageUrl` TEXT NOT NULL, dateTime INTEGER NOT NULL, PRIMARY KEY(`prompt`))")
                 database.execSQL("CREATE TABLE IF NOT EXISTS `table_favoritetemplates` (`query` TEXT NOT NULL, `imageUrl` TEXT NULL, iconID INTEGER NULL, PRIMARY KEY(`query`))")
-                database.execSQL("CREATE TABLE IF NOT EXISTS `table_purchasehistory` (`date` TEXT NOT NULL, `price` FLOAT NOT NULL, PRIMARY KEY(`date`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `table_purchasehistory` (`date` TEXT NOT NULL, `price` FLOAT NOT NULL, 'type' TEXT NOT NULL, PRIMARY KEY(`date`))")
             }
         }
 

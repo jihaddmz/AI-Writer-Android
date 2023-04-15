@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
@@ -76,14 +75,13 @@ fun ScreenHistory(
 
         if (showCircularIndicator.value) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+                MyLottieAnim(R.raw.loading)
             }
         } else if (noHistory.value) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 MyLottieAnim(
                     modifier = Modifier.fillMaxSize(0.5f),
                     lottieID = R.raw.empty_box,
-                    isLottieAnimationPlaying = noHistory
                 )
             }
         }

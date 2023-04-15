@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,7 +9,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +19,7 @@ import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun BottomSheetSavedOutputs() {
     LazyColumn(
@@ -61,17 +62,20 @@ fun BottomSheetSavedOutputs() {
 
                 MyLottieAnim(
                     lottieID = R.raw.empty_box,
-                    isLottieAnimationPlaying = mutableStateOf(true)
                 )
             }
         }
 
-        items(SettingsNotifier.comparisonGenerationEntries.value.size) { index ->
+        items(
+            SettingsNotifier.comparisonGenerationEntries.value.size,
+            key = { "${SettingsNotifier.comparisonGenerationEntries.value[it].output} ${SettingsNotifier.comparisonGenerationEntries.value[it].input}" }) { index ->
             MySpacer(type = "medium")
             val modelComparedGenerationItem =
                 SettingsNotifier.comparisonGenerationEntries.value[index]
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .animateItemPlacement(),
             ) {
                 MyLabelText(
                     label = "${stringResource(id = R.string.input)}:",

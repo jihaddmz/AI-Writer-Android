@@ -6,5 +6,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "table_purchasehistory")
 data class ModelPurchaseHistory(
     @PrimaryKey val date: String,
-    var price: Float
+    var price: Float,
+    val type: String
 )

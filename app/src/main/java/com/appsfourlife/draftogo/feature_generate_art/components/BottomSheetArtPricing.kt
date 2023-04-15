@@ -105,44 +105,56 @@ fun BottomSheetArtPricing(
                     MyCardView(modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
-                            val price = product.price.replace(product.price.filter { !it.isDigit() && it != '.' }, "")
-                            coroutineScope.launch(Dispatchers.IO) {
-                                if (App.databaseApp.daoApp.getPurchaseHistory(
-                                        HelperDate.parseDateToString(
-                                            Date(), "dd/MM/yyyy"
-                                        )
-                                    ) == null
-                                ) {
-                                    App.databaseApp.daoApp.insertPurchaseHistory(
-                                        ModelPurchaseHistory(
-                                            HelperDate.parseDateToString(
-                                                Date(), "dd/MM/yyyy"
-                                            ), price.toFloat()
-                                        )
-                                    )
-                                } else {
-                                    val purchaseHistory =
-                                        App.databaseApp.daoApp.getPurchaseHistory(
-                                            HelperDate.parseDateToString(
-                                                Date(), "dd/MM/yyyy"
-                                            )
-                                        )!!
-                                    purchaseHistory.price += price.toFloat()
-                                    App.databaseApp.daoApp.updatePurchaseHistory(
-                                        ModelPurchaseHistory(
-                                            HelperDate.parseDateToString(
-                                                Date(), "dd/MM/yyyy"
-                                            ), purchaseHistory.price
-                                        )
-                                    )
-                                }
-                            }
                             Purchases.sharedInstance.purchaseProduct(currentActivity, product,
                                 object : PurchaseCallback {
                                     override fun onCompleted(
                                         storeTransaction: StoreTransaction,
                                         customerInfo: CustomerInfo
                                     ) {
+                                        val price = product.price.replace(
+                                            product.price.filter { !it.isDigit() && it != '.' },
+                                            ""
+                                        )
+                                        coroutineScope.launch(Dispatchers.IO) {
+                                            if (App.databaseApp.daoApp.getPurchaseHistory(
+                                                    HelperDate.parseDateToString(
+                                                        Date(), "dd/MM/yyyy"
+                                                    )
+                                                ) == null
+                                            ) {
+                                                App.databaseApp.daoApp.insertPurchaseHistory(
+                                                    ModelPurchaseHistory(
+                                                        HelperDate.parseDateToString(
+                                                            Date(), "dd/MM/yyyy"
+                                                        ), price.toFloat(),
+                                                        App.getTextFromString(
+                                                            R.string.art_purchase_history_type,
+                                                            product.title.split("(")[0].trim()
+                                                        )
+                                                    )
+                                                )
+                                            } else {
+                                                val purchaseHistory =
+                                                    App.databaseApp.daoApp.getPurchaseHistory(
+                                                        HelperDate.parseDateToString(
+                                                            Date(), "dd/MM/yyyy"
+                                                        )
+                                                    )!!
+                                                purchaseHistory.price += price.toFloat()
+                                                App.databaseApp.daoApp.updatePurchaseHistory(
+                                                    ModelPurchaseHistory(
+                                                        HelperDate.parseDateToString(
+                                                            Date(), "dd/MM/yyyy"
+                                                        ),
+                                                        purchaseHistory.price,
+                                                        App.getTextFromString(
+                                                            R.string.art_purchase_history_type,
+                                                            product.title.split("(")[0].trim()
+                                                        )
+                                                    )
+                                                )
+                                            }
+                                        }
                                         coroutineScope.launch {
                                             sheetScaffoldState.bottomSheetState.collapse()
                                             NotifiersArt.credits.value += product.title.split("(")[0]

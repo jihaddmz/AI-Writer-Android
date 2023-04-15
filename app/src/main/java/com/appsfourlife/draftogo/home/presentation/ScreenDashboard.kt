@@ -30,6 +30,7 @@ import com.appsfourlife.draftogo.home.components.ChartPurchasesHistory
 import com.appsfourlife.draftogo.home.listitems.FavoriteTemplateItem
 import com.appsfourlife.draftogo.home.listitems.UsageItem
 import com.appsfourlife.draftogo.home.model.ModelDashboardUsage
+import com.appsfourlife.draftogo.home.util.NotifiersHome.listOfFavoriteTemplates
 import com.appsfourlife.draftogo.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,8 +43,11 @@ fun ScreenDashboard() {
     val sheetScaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
 
-    val listOfFavoriteTemplates = remember {
-        mutableStateOf(listOf<ModelFavoriteTemplate>())
+    val nbOfWordsLeft = remember {
+        mutableStateOf(AnnotatedString(text = "0"))
+    }
+    val nbOfArtsLeft = remember {
+        mutableStateOf(AnnotatedString(text = "0"))
     }
 
     LaunchedEffect(key1 = true, block = {
@@ -53,7 +57,53 @@ fun ScreenDashboard() {
 //                isAppOutDated.value = it != BuildConfig.VERSION_NAME
 //            }
 
-            HelperFirebaseDatabase.fetchNbOfGenerationsConsumedAndNbOfWordsGenerated()
+            HelperFirebaseDatabase.fetchNbOfGenerationsConsumedAndNbOfWordsGenerated() {
+                nbOfWordsLeft.value = if (HelperAuth.isSubscribed()) {
+                    if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
+                        AnnotatedString(
+                            "${Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated()}\n",
+                            spanStyle = (SpanStyle(fontWeight = FontWeight.Bold))
+                        ).plus(
+                            AnnotatedString(
+                                text = App.getTextFromString(R.string.words)
+                            )
+                        )
+                    } else {
+                        AnnotatedString(
+                            text = "∞\n",
+                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                        ).plus(
+                            AnnotatedString(
+                                App.getTextFromString(R.string.words)
+                            )
+                        )
+                    }
+                } else {
+                    val nbOfGenerationsLeft =
+                        if (HelperSharedPreference.getNbOfGenerationsConsumed() - Constants.NB_OF_MAX_ALLOWED_GENERATIONS < 0) {
+                            0
+                        } else {
+                            HelperSharedPreference.getNbOfGenerationsConsumed() - Constants.NB_OF_MAX_ALLOWED_GENERATIONS
+                        }
+                    AnnotatedString(
+                        text = "$nbOfGenerationsLeft\n",
+                        spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                    ).plus(
+                        AnnotatedString(text = App.getTextFromString(R.string.generations))
+                    )
+                }
+            }
+
+            HelperFirebaseDatabase.getNbOfArtCredits() {
+                nbOfArtsLeft.value = AnnotatedString(
+                    text = "${HelperSharedPreference.getNbOfArtsCredits()}\n",
+                    spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                ).plus(
+                    AnnotatedString(
+                        text = App.getTextFromString(R.string.arts)
+                    )
+                )
+            }
 
             listOfFavoriteTemplates.value = App.databaseApp.daoApp.getAllFavoriteTemplates()
 
@@ -121,57 +171,12 @@ fun ScreenDashboard() {
                                 contentDesc = ""
                             )
 
-                            val nbOfWordsLeft = if (HelperAuth.isSubscribed()) {
-                                if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
-                                    AnnotatedString(
-                                        "${Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated()}\n",
-                                        spanStyle = (SpanStyle(fontWeight = FontWeight.Bold))
-                                    ).plus(
-                                        AnnotatedString(
-                                            text = stringResource(
-                                                id = R.string.words
-                                            )
-                                        )
-                                    )
-                                } else {
-                                    AnnotatedString(
-                                        text = "∞\n",
-                                        spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                                    ).plus(
-                                        AnnotatedString(
-                                            stringResource(
-                                                id = R.string.words
-                                            )
-                                        )
-                                    )
-                                }
-                            } else {
-                                val nbOfGenerationsLeft =
-                                    if (HelperSharedPreference.getNbOfGenerationsConsumed() - Constants.NB_OF_MAX_ALLOWED_GENERATIONS < 0) {
-                                        0
-                                    } else {
-                                        HelperSharedPreference.getNbOfGenerationsConsumed() - Constants.NB_OF_MAX_ALLOWED_GENERATIONS
-                                    }
-                                AnnotatedString(
-                                    text = "$nbOfGenerationsLeft\n",
-                                    spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                                ).plus(
-                                    AnnotatedString(text = stringResource(id = R.string.generations))
-                                )
-                            }
-                            MyAnnotatedText(text = nbOfWordsLeft, textAlign = TextAlign.Center)
-                            MyText(text = "|", color = Color.Black)
-                            val nbOfArtsLeft = AnnotatedString(
-                                text = "${HelperSharedPreference.getNbOfArtsCredits()}\n",
-                                spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                            ).plus(
-                                AnnotatedString(
-                                    text = stringResource(
-                                        id = R.string.arts
-                                    )
-                                )
+                            MyAnnotatedText(
+                                text = nbOfWordsLeft.value,
+                                textAlign = TextAlign.Center
                             )
-                            MyAnnotatedText(text = nbOfArtsLeft, textAlign = TextAlign.Center)
+                            MyText(text = "|", color = Color.Black)
+                            MyAnnotatedText(text = nbOfArtsLeft.value, textAlign = TextAlign.Center)
                         }
                         MyText(text = HelperAuth.auth.currentUser?.displayName!!)
                         MyText(text = HelperAuth.auth.currentUser?.email!!)
@@ -261,7 +266,9 @@ fun ScreenDashboard() {
                     }
 
                     LazyRow(content = {
-                        items(listOfFavoriteTemplates.value.size, key = {listOfFavoriteTemplates.value[it].query}) { index ->
+                        items(
+                            listOfFavoriteTemplates.value.size,
+                            key = { listOfFavoriteTemplates.value[it].query }) { index ->
                             val current = listOfFavoriteTemplates.value[index]
 
                             FavoriteTemplateItem(
@@ -273,11 +280,24 @@ fun ScreenDashboard() {
                             ) {
                                 coroutineScope.launch(Dispatchers.IO) {
                                     if (current.imageUrl.isNullOrEmpty())
-                                        App.databaseApp.daoApp.deleteFavoriteTemplate(ModelFavoriteTemplate(current.query, current.iconID, null))
+                                        App.databaseApp.daoApp.deleteFavoriteTemplate(
+                                            ModelFavoriteTemplate(
+                                                current.query,
+                                                current.iconID,
+                                                null
+                                            )
+                                        )
                                     else
-                                        App.databaseApp.daoApp.deleteFavoriteTemplate(ModelFavoriteTemplate(current.query, null, current.imageUrl))
+                                        App.databaseApp.daoApp.deleteFavoriteTemplate(
+                                            ModelFavoriteTemplate(
+                                                current.query,
+                                                null,
+                                                current.imageUrl
+                                            )
+                                        )
 
-                                    listOfFavoriteTemplates.value = App.databaseApp.daoApp.getAllFavoriteTemplates()
+                                    listOfFavoriteTemplates.value =
+                                        App.databaseApp.daoApp.getAllFavoriteTemplates()
                                 }
                             }
 

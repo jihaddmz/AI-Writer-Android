@@ -249,4 +249,7 @@
     <string name="content">Content</string>
     <string name="template_already_exists">You already have this template</string>
     <string name="send_feedback">Send Feedback</string>
+    <string name="saved_output_already_exists">You\'ve already saved this entry</string>
+    <string name="art_purchase_history_type">Arts: %s</string>
+    <string name="write_purchase_history_type">Write: %s</string>
 </resources>
