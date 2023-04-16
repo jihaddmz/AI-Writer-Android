@@ -11,7 +11,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
@@ -36,12 +35,12 @@ fun ScreenCustom(
         text = stringResource(id = R.string.custom), navController = navController
     ) {
 
-        BottomSheetSaveOutputs(navController = navController) {
+        BottomSheetWriting(navController = navController) {
 
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = SpacersSize.medium, end = SpacersSize.medium, bottom = 80.dp)
+                    .padding(start = SpacersSize.medium, end = SpacersSize.medium)
                     .verticalScroll(verticalScroll)
             ) {
 

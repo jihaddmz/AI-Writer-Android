@@ -9,11 +9,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -22,7 +20,7 @@ fun ScreenUserAddedTemplate(
     navController: NavController
 ) {
 
-    SettingsNotifier.templateType = SettingsNotifier.currentQuerySection!!
+    SettingsNotifier.templateType = SettingsNotifier.currentUserQuerySection!!
 
     val verticalScroll = rememberScrollState()
     val showDialog = remember {
@@ -30,14 +28,14 @@ fun ScreenUserAddedTemplate(
     }
 
     TopBar(
-        text = SettingsNotifier.currentQuerySection!!, navController = navController
+        text = SettingsNotifier.currentUserQuerySection!!, navController = navController
     ) {
 
-        BottomSheetSaveOutputs(navController = navController) {
+        BottomSheetWriting(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = SpacersSize.medium, end = SpacersSize.medium, bottom = 80.dp)
+                    .padding(start = SpacersSize.medium, end = SpacersSize.medium)
                     .verticalScroll(verticalScroll)
             ) {
 
@@ -45,16 +43,9 @@ fun ScreenUserAddedTemplate(
 
                 MySpacer(type = "small")
 
-                val outputLanguage = myDropDown(
-                    list = Constants.OUTPUT_LANGUAGES,
-                    label = stringResource(id = R.string.output_language)
-                )
-
-                MySpacer(type = "small")
-
                 input(
                     label = stringResource(id = R.string.your_input),
-                    inputPrefix = "${SettingsNotifier.currentQuerySection!!} in $outputLanguage language",
+                    inputPrefix = SettingsNotifier.currentUserQuerySection!!,
                     showDialog = showDialog,
                     verticalScrollState = verticalScroll
                 )

@@ -9,15 +9,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.components.BottomSheetSaveOutputs
+import com.appsfourlife.draftogo.components.BottomSheetWriting
 import com.appsfourlife.draftogo.components.Output
 import com.appsfourlife.draftogo.components.TopBar
 import com.appsfourlife.draftogo.components.input
 import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -34,22 +32,21 @@ fun ScreenPersonalBio(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_a_personal_bio_top_bar), navController = navController
+        text = stringResource(id = R.string.write_a_personal_bio), navController = navController
     ) {
 
         if (showDialog.value) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-        BottomSheetSaveOutputs(navController = navController) {
+        BottomSheetWriting(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = SpacersSize.medium, end = SpacersSize.medium, bottom = 80.dp)
+                    .padding(start = SpacersSize.medium, end = SpacersSize.medium)
                     .verticalScroll(verticalScroll)
             ) {
 
                 val inputPrefix = stringResource(
-                    id = R.string.write_a_personal_bio,
-                    HelperSharedPreference.getOutputLanguage()
+                    id = R.string.write_a_personal_bio
                 )
 
                 input(

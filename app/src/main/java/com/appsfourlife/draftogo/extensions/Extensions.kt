@@ -2,66 +2,51 @@ package com.appsfourlife.draftogo.extensions
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.lazy.LazyGridScope
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.WritingType
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
-import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @OptIn(ExperimentalFoundationApi::class)
 fun LazyGridScope.sectionsGridContent(
     list: List<ModelTemplate>,
-    columns: Int,
-    state: LazyListState,
     navController: NavController,
 ) {
     if (list.isNotEmpty())
-        items(list.size) { index ->
-            val (delay, easing) = state.calculateDelayAndEasing(index, columns)
-            val animation = tween<Float>(durationMillis = 300, delayMillis = delay, easing = easing)
-            val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
-            val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
+        items(list.size, key = { list[it].query }) { index ->
             val text = list[index].query
             val imageUrl = list[index].imageUrl
             val userAdded = list[index].userAdded
             WritingType(
-                modifier = Modifier.graphicsLayer(
-                    alpha = alpha,
-                    scaleX = scale,
-                    scaleY = scale
-                ),
+                modifier = Modifier.animateItemPlacement(),
                 text = text,
                 imageUrl = imageUrl,
                 onLongClick = {
-                    if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_PLUS) {
-                        SettingsNotifier.showDeleteTemplateDialog.value = true
-                        SettingsNotifier.templateToDelete =
-                            ModelTemplate(query = text, imageUrl, userAdded)
-                    }
+                    SettingsNotifier.showDeleteTemplateDialog.value = true
+                    SettingsNotifier.templateToDelete =
+                        ModelTemplate(query = text, imageUrl, userAdded)
                 }
             ) {
                 when (text) {
                     App.getTextFromString(R.string.write_an_email) -> {
                         navController.navigate(Screens.ScreenEmail.route)
                     }
-                    App.getTextFromString(R.string.write_a_blog_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_blog) -> {
                         navController.navigate(Screens.ScreenBlog.route)
                     }
                     App.getTextFromString(R.string.write_an_essay) -> {
                         navController.navigate(Screens.ScreenEssay.route)
                     }
-                    App.getTextFromString(R.string.write_an_article_top_bar) -> {
+                    App.getTextFromString(R.string.write_an_article) -> {
                         navController.navigate(Screens.ScreenArticle.route)
                     }
                     App.getTextFromString(R.string.write_a_letter) -> {
@@ -73,28 +58,28 @@ fun LazyGridScope.sectionsGridContent(
                     App.getTextFromString(R.string.write_a_resume) -> {
                         navController.navigate(Screens.ScreenResume.route)
                     }
-                    App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_personal_bio) -> {
                         navController.navigate(Screens.ScreenPersonalBio.route)
                     }
-                    App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_tweet) -> {
                         navController.navigate(Screens.ScreenTwitter.route)
                     }
-                    App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_viral_tiktok_captions) -> {
                         navController.navigate(Screens.ScreenTiktok.route)
                     }
-                    App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
+                    App.getTextFromString(R.string.write_an_instagram_caption) -> {
                         navController.navigate(Screens.ScreenInstagram.route)
                     }
 
-                    App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_facebook_post) -> {
                         navController.navigate(Screens.ScreenFacebook.route)
                     }
 
-                    App.getTextFromString(R.string.write_a_linkedin_post_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_linkedin_post) -> {
                         navController.navigate(Screens.ScreenLinkedIn.route)
                     }
 
-                    App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_youtube_caption) -> {
                         navController.navigate(Screens.ScreenYoutube.route)
                     }
 
@@ -106,11 +91,11 @@ fun LazyGridScope.sectionsGridContent(
                         navController.navigate(Screens.ScreenGame.route)
                     }
 
-                    App.getTextFromString(R.string.write_a_poem_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_poem) -> {
                         navController.navigate(Screens.ScreenPoem.route)
                     }
 
-                    App.getTextFromString(R.string.write_a_song_top_bar) -> {
+                    App.getTextFromString(R.string.write_a_song) -> {
                         navController.navigate(Screens.ScreenSong.route)
                     }
                     App.getTextFromString(R.string.write_a_code) -> {
@@ -119,8 +104,17 @@ fun LazyGridScope.sectionsGridContent(
                     App.getTextFromString(R.string.custom) -> {
                         navController.navigate(Screens.ScreenCustom.route)
                     }
+                    App.getTextFromString(R.string.summarize_the_following_text) -> {
+                        navController.navigate(Screens.ScreenSummarize.route)
+                    }
+                    App.getTextFromString(R.string.correct_the_following_text) -> {
+                        navController.navigate(Screens.ScreenGrammar.route)
+                    }
+                    App.getTextFromString(R.string.translate_the_following_text) -> {
+                        navController.navigate(Screens.ScreenTranslate.route)
+                    }
                     else -> {
-                        SettingsNotifier.currentQuerySection = text
+                        SettingsNotifier.currentUserQuerySection = text
                         navController.navigate(Screens.ScreenUserAddedTemplate.route)
                     }
                 }

@@ -39,7 +39,7 @@ fun mySwitch(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        MyText(text = "$label:", color = Blue, fontWeight = FontWeight.Bold)
+        MyText(text = "$label:", fontWeight = FontWeight.Bold)
 
         val switchSize = when (rememberWindowInfo().screenWidthInfo){
             is WindowInfo.WindowType.Compact -> 25.dp

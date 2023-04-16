@@ -10,7 +10,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.util.SettingsNotifier
-import com.appsfourlife.draftogo.ui.theme.Blue
 
 @Composable
 fun myEditTextLabel(
@@ -25,7 +24,7 @@ fun myEditTextLabel(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        MyText(text = "$label:", color = Blue, fontWeight = FontWeight.Bold)
+        MyText(text = "$label:", fontWeight = FontWeight.Bold)
 
         if (label == stringResource(id = R.string.to))
             myOutlinedTextField(placeHolder = placeHolder, value = SettingsNotifier.name)

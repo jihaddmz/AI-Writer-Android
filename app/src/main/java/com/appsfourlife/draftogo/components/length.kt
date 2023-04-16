@@ -16,7 +16,6 @@ import androidx.compose.ui.text.font.FontWeight
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
-import com.appsfourlife.draftogo.ui.theme.Blue
 import kotlin.math.roundToInt
 
 @Composable
@@ -39,7 +38,7 @@ fun length(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        MyText(text = "$label:", color = Blue, fontWeight = FontWeight.Bold)
+        MyText(text = "$label:", fontWeight = FontWeight.Bold)
 
         value.value = mySlider(
             modifier.fillMaxWidth(0.6f),

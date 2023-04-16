@@ -11,11 +11,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -34,13 +32,13 @@ fun ScreenArticle(
     val coroutineScope = rememberCoroutineScope()
 
     TopBar(
-        text = stringResource(id = R.string.write_an_article_top_bar),
+        text = stringResource(id = R.string.write_an_article),
         navController = navController
     ) {
         if (showDialog.value)
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 
-        BottomSheetSaveOutputs(
+        BottomSheetWriting(
             modifier = modifier
                 .fillMaxSize(),
             navController = navController
@@ -50,7 +48,7 @@ fun ScreenArticle(
                 modifier = Modifier
                     .fillMaxSize()
                     .verticalScroll(verticalScroll)
-                    .padding(start = SpacersSize.medium, end = SpacersSize.medium, bottom = 80.dp),
+                    .padding(start = SpacersSize.medium, end = SpacersSize.medium),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
@@ -61,8 +59,7 @@ fun ScreenArticle(
                 input(
                     label = stringResource(id = R.string.article_input_label),
                     inputPrefix = stringResource(
-                        id = R.string.write_an_article,
-                        HelperSharedPreference.getOutputLanguage()
+                        id = R.string.write_an_article
                     ),
                     length = length,
                     showDialog = showDialog,

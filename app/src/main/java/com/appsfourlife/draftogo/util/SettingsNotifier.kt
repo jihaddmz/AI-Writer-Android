@@ -1,20 +1,23 @@
 package com.appsfourlife.draftogo.util
 
+import android.annotation.SuppressLint
 import android.speech.tts.TextToSpeech
+import androidx.compose.material.BottomSheetScaffoldState
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.navigation.NavHostController
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelComparedGenerationItem
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.google.android.gms.ads.rewarded.RewardedAd
 
+@SuppressLint("StaticFieldLeak")
 object SettingsNotifier {
 
-    val showDialogNbOfGenerationsLeftExceeded: MutableState<Boolean> = mutableStateOf(false)
     val showLoadingDialog = mutableStateOf(false)
-    val basePlanMaxNbOfWordsExceeded = mutableStateOf(false)
     val showAddTemplateDialog = mutableStateOf(false)
     val showDeleteTemplateDialog = mutableStateOf(false)
 
@@ -36,8 +39,19 @@ object SettingsNotifier {
     var predefinedTemplates = mutableStateOf(listOf<ModelTemplate>())
     var comparisonGenerationEntries = mutableStateOf(listOf<ModelComparedGenerationItem>())
     var templateToDelete: ModelTemplate? = null
-    var currentQuerySection: String? = null
+    var currentUserQuerySection: String? = null
     var tts: TextToSpeech? = null
+    val outputLanguage = mutableStateOf(HelperSharedPreference.getOutputLanguage())
+
+    var navHostController: NavHostController? = null
+
+    /**
+     * bottom sheets
+     **/
+    @OptIn(ExperimentalMaterialApi::class)
+    var sheetScaffoldState: BottomSheetScaffoldState? = null
+    var isPricingBottomSheets = mutableStateOf(false)
+    val isBasePlanNbOfWordsExceeded = mutableStateOf(false)
 
     fun addComparisonGenerationEntry(modelComparedGenerationItem: ModelComparedGenerationItem) {
         val previous = comparisonGenerationEntries.value.toMutableList()

@@ -3,7 +3,6 @@ package com.appsfourlife.draftogo.components
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -14,11 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
-import com.appsfourlife.draftogo.ui.theme.Blue
 import kotlin.math.roundToInt
 
 @Composable
@@ -46,7 +43,6 @@ fun sliderNbOfGenerations(
             MyText(
                 modifier = Modifier,
                 text = "${stringResource(id = R.string.nb_of_generations)}:",
-                color = Blue,
                 fontWeight = FontWeight.Bold
             )
 

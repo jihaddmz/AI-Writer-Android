@@ -1,13 +1,15 @@
 package com.appsfourlife.draftogo.components
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.airbnb.lottie.compose.*
 
 @Composable
 fun MyLottieAnim(
     lottieID: Int,
-    isLottieAnimationPlaying: MutableState<Boolean>,
     modifier: Modifier = Modifier
 ) {
 
@@ -33,7 +35,7 @@ fun MyLottieAnim(
         // Iterates Forever
         iterations = LottieConstants.IterateForever,
         // Lottie and pause/play
-        isPlaying = isLottieAnimationPlaying.value,
+        isPlaying = true,
         // Increasing the speed of change Lottie
         speed = animationSpeed,
         restartOnPlay = false,

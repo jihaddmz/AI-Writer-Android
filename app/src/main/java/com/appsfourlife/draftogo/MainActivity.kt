@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
@@ -28,8 +27,13 @@ import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateOffsetY
+import com.appsfourlife.draftogo.feature_generate_art.presentation.ScreenArt
+import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
+import com.appsfourlife.draftogo.home.presentation.ScreenDashboard
+import com.appsfourlife.draftogo.home.presentation.ScreenFeedback
+import com.appsfourlife.draftogo.home.presentation.ScreenSettings
 import com.appsfourlife.draftogo.ui.theme.*
 import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.Screens
@@ -41,6 +45,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
@@ -61,7 +66,6 @@ class MainActivity : ComponentActivity() {
             if (isGranted) {
                 // FCM SDK (and your app) can post notifications.
             } else {
-                // TODO: Inform user that that your app will not show notifications.
             }
         }
 
@@ -82,17 +86,52 @@ class MainActivity : ComponentActivity() {
 
         }
 
+        if (SettingsNotifier.isConnected.value)
+            HelperAds.loadAds {
+
+            }
+
         setContent {
 
             navController = rememberNavController()
+            SettingsNotifier.navHostController = navController
             val scaffoldState = rememberScaffoldState()
             val coroutineScope = rememberCoroutineScope()
-            val sheetScaffoldState = rememberBottomSheetScaffoldState(
-                bottomSheetState = BottomSheetState(
-                    initialValue = BottomSheetValue.Collapsed
-                )
-            )
             val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+            LaunchedEffect(key1 = true, block = {
+                coroutineScope.launch(Dispatchers.IO) {
+                    if (HelperSharedPreference.getBool(
+                            HelperSharedPreference.SP_SETTINGS,
+                            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED,
+                            true
+                        )
+                    ) {
+                        App.databaseApp.daoApp.getAllTemplates().forEach {
+                            App.databaseApp.daoApp.deleteTemplate(it)
+                        }
+                        HelperSharedPreference.setBool(
+                            HelperSharedPreference.SP_SETTINGS,
+                            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED,
+                            false
+                        )
+                    }
+                    Constants.PREDEFINED_TEMPLATES.forEach { template ->
+                        if (App.databaseApp.daoApp.getTemplateByQuery(
+                                template
+                            ) == null
+                        ) {
+                            App.databaseApp.daoApp.insertTemplate(
+                                ModelTemplate(template, "", 1)
+                            )
+                        } else
+                            return@forEach
+                    }
+                    SettingsNotifier.predefinedTemplates.value =
+                        App.databaseApp.daoApp.getAllTemplates() as MutableList<ModelTemplate>
+                }
+            })
+
 
 
             AIWriterTheme {
@@ -126,13 +165,13 @@ class MainActivity : ComponentActivity() {
                                         App.getTextFromString(R.string.write_an_email) -> {
                                             navController.navigate(Screens.ScreenEmail.route)
                                         }
-                                        App.getTextFromString(R.string.write_a_blog_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_blog) -> {
                                             navController.navigate(Screens.ScreenBlog.route)
                                         }
                                         App.getTextFromString(R.string.write_an_essay) -> {
                                             navController.navigate(Screens.ScreenEssay.route)
                                         }
-                                        App.getTextFromString(R.string.write_an_article_top_bar) -> {
+                                        App.getTextFromString(R.string.write_an_article) -> {
                                             navController.navigate(Screens.ScreenArticle.route)
                                         }
                                         App.getTextFromString(R.string.write_a_letter) -> {
@@ -144,28 +183,28 @@ class MainActivity : ComponentActivity() {
                                         App.getTextFromString(R.string.write_a_resume) -> {
                                             navController.navigate(Screens.ScreenResume.route)
                                         }
-                                        App.getTextFromString(R.string.write_a_personal_bio_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_personal_bio) -> {
                                             navController.navigate(Screens.ScreenPersonalBio.route)
                                         }
-                                        App.getTextFromString(R.string.write_a_tweet_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_tweet) -> {
                                             navController.navigate(Screens.ScreenTwitter.route)
                                         }
-                                        App.getTextFromString(R.string.write_a_viral_tiktok_captions_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_viral_tiktok_captions) -> {
                                             navController.navigate(Screens.ScreenTiktok.route)
                                         }
-                                        App.getTextFromString(R.string.write_an_instagram_caption_top_bar) -> {
+                                        App.getTextFromString(R.string.write_an_instagram_caption) -> {
                                             navController.navigate(Screens.ScreenInstagram.route)
                                         }
 
-                                        App.getTextFromString(R.string.write_a_facebook_post_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_facebook_post) -> {
                                             navController.navigate(Screens.ScreenFacebook.route)
                                         }
 
-                                        App.getTextFromString(R.string.write_a_linkedin_post_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_linkedin_post) -> {
                                             navController.navigate(Screens.ScreenLinkedIn.route)
                                         }
 
-                                        App.getTextFromString(R.string.write_a_youtube_caption_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_youtube_caption) -> {
                                             navController.navigate(Screens.ScreenYoutube.route)
                                         }
 
@@ -177,11 +216,11 @@ class MainActivity : ComponentActivity() {
                                             navController.navigate(Screens.ScreenGame.route)
                                         }
 
-                                        App.getTextFromString(R.string.write_a_poem_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_poem) -> {
                                             navController.navigate(Screens.ScreenPoem.route)
                                         }
 
-                                        App.getTextFromString(R.string.write_a_song_top_bar) -> {
+                                        App.getTextFromString(R.string.write_a_song) -> {
                                             navController.navigate(Screens.ScreenSong.route)
                                         }
                                         App.getTextFromString(R.string.write_a_code) -> {
@@ -190,8 +229,17 @@ class MainActivity : ComponentActivity() {
                                         App.getTextFromString(R.string.custom) -> {
                                             navController.navigate(Screens.ScreenCustom.route)
                                         }
+                                        App.getTextFromString(R.string.summarize_the_following_text) -> {
+                                            navController.navigate(Screens.ScreenSummarize.route)
+                                        }
+                                        App.getTextFromString(R.string.correct_the_following_text) -> {
+                                            navController.navigate(Screens.ScreenGrammar.route)
+                                        }
+                                        App.getTextFromString(R.string.translate_the_following_text) -> {
+                                            navController.navigate(Screens.ScreenTranslate.route)
+                                        }
                                         else -> {
-                                            SettingsNotifier.currentQuerySection = text
+                                            SettingsNotifier.currentUserQuerySection = text
                                             navController.navigate(Screens.ScreenUserAddedTemplate.route)
                                         }
                                     }
@@ -205,42 +253,37 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     },
+                    drawerShape = DrawerShape,
                     bottomBar = {
                         val changeTargetValue = remember {
                             mutableStateOf(false)
                         }
-//                        val shouldBottomBarBeVisible = remember {
-//                            mutableStateOf(false)
-//                        }
 
                         val shouldBottomBarBeVisible =
-                            (navBackStackEntry?.destination?.route == BottomNavScreens.Home.route
-                                    || navBackStackEntry?.destination?.route == BottomNavScreens.History.route
-                                    || navBackStackEntry?.destination?.route == BottomNavScreens.Settings.route)
+                            (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
+                                    && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route)
 
                         LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
                             if (shouldBottomBarBeVisible) {
-                                delay(Constants.SPLASH_SCREEN_DURATION + 500L)
+                                delay(Constants.SPLASH_SCREEN_DURATION)
                                 changeTargetValue.value = true
                             } else {
                                 changeTargetValue.value = false
                             }
-//                            if (shouldBottomBarBeVisible) {
-//                            } else {
-//                            }
                         })
 
                         if (changeTargetValue.value) {
                             val listOfBottomNavScreens =
                                 listOf(
+                                    BottomNavScreens.Dashboard,
                                     BottomNavScreens.Home,
-                                    BottomNavScreens.History,
+                                    BottomNavScreens.Art,
                                     BottomNavScreens.Settings
                                 )
                             BottomNavigation(
                                 modifier = Modifier.animateOffsetY(
-                                    initialOffsetY = 100.dp,
-                                ), backgroundColor = Color.Transparent
+                                    initialOffsetY = 70.dp,
+                                ), backgroundColor = Glass
                             ) {
                                 val currentRoute = navBackStackEntry?.destination?.route
 
@@ -251,20 +294,7 @@ class MainActivity : ComponentActivity() {
                                             SettingsNotifier.resetValues()
 
                                             if (currentRoute != screen.route) {
-                                                if (screen.route == BottomNavScreens.History.route) {
-                                                    HelperAnalytics.sendEvent("history")
-                                                    // if there is network access, navigate to history
-                                                    if (SettingsNotifier.isConnected.value) {
-                                                        navController.navigate(BottomNavScreens.History.route)
-                                                    } else {
-                                                        HelperUI.showToast(
-                                                            msg = App.getTextFromString(
-                                                                R.string.no_connection
-                                                            )
-                                                        )
-                                                    }
-                                                } else
-                                                    navController.navigate(screen.route)
+                                                navController.navigate(screen.route)
                                             }
                                         },
                                         icon = {
@@ -294,13 +324,6 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                         ) {
 
-                            if (SettingsNotifier.basePlanMaxNbOfWordsExceeded.value) {
-                                DialogSubscriptionNbOfWordsExceeded(SettingsNotifier.basePlanMaxNbOfWordsExceeded)
-                            }
-
-                            if (SettingsNotifier.showDialogNbOfGenerationsLeftExceeded.value)
-                                DialogSubscription(SettingsNotifier.showDialogNbOfGenerationsLeftExceeded)
-
                             /**
                              * if the android version is equal or greater than 12, remove the custom splash screen
                              * and check if the user should be navigated directly to the sign in or home screen
@@ -314,7 +337,7 @@ class MainActivity : ComponentActivity() {
                                 if (HelperSharedPreference.getUsername() == "") {
                                     Screens.ScreenSignIn.route
                                 } else {
-                                    BottomNavScreens.Home.route
+                                    BottomNavScreens.Dashboard.route
                                 }
 
                             } else {
@@ -338,12 +361,17 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
 
-                                    composable(route = BottomNavScreens.History.route) {
+                                    composable(route = Screens.ScreenHistory.route) {
                                         MyBackHandler(navController = navController)
                                         ScreenHistory(
                                             modifier = Modifier,
                                             navController = navController
                                         )
+                                    }
+
+                                    composable(route = Screens.ScreenFeedback.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenFeedback(navController = navController)
                                     }
 
                                     composable(route = Screens.ScreenSignIn.route) {
@@ -353,11 +381,16 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     composable(route = BottomNavScreens.Home.route) {
-                                        HomeBackHandler(context = this@MainActivity)
-                                        ScreenHome(
+                                        MyBackHandler(navController = navController)
+                                        ScreenContent(
                                             modifier = Modifier,
                                             navController = navController
                                         )
+                                    }
+
+                                    composable(route = BottomNavScreens.Dashboard.route) {
+                                        HomeBackHandler(context = this@MainActivity)
+                                        ScreenDashboard()
                                     }
 
                                     composable(route = Screens.ScreenArticle.route) {
@@ -366,6 +399,26 @@ class MainActivity : ComponentActivity() {
                                             navController = navController,
                                             modifier = Modifier,
                                         )
+                                    }
+
+                                    composable(route = Screens.ScreenTranslate.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenTranslate(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenSummarize.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenSummarize(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenGrammar.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenGrammar(navController = navController)
+                                    }
+
+                                    composable(route = BottomNavScreens.Art.route) {
+                                        MyBackHandler(navController = navController)
+                                        ScreenArt(navController = navController)
                                     }
 
                                     composable(route = Screens.ScreenUserAddedTemplate.route) {
@@ -500,12 +553,12 @@ class MainActivity : ComponentActivity() {
                     HelperAuth.auth.signInWithCredential(credential).addOnCompleteListener {
                         if (it.isSuccessful) {
                             HelperSharedPreference.setUsername(account.email!!)
-                            navController.navigate(BottomNavScreens.Home.route) // from login screen to home screen
+                            navController.navigate(BottomNavScreens.Dashboard.route) // from login screen to home screen
                         }
                     }
                 }
             } catch (e: ApiException) {
-                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -522,7 +575,6 @@ class MainActivity : ComponentActivity() {
 //            ) {
 //                // FCM SDK (and your app) can post notifications.
 //            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-//                // TODO: display an educational UI explaining to the user the features that will be enabled
 //                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
 //                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
 //                //       If the user selects "No thanks," allow the user to continue without notifications.

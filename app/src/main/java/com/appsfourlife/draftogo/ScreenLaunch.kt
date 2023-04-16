@@ -54,7 +54,7 @@ fun ScreenLaunch(
         val startScreenRoute = if (HelperSharedPreference.getUsername() == "") {
             Screens.ScreenSignIn.route
         } else {
-            BottomNavScreens.Home.route
+            BottomNavScreens.Dashboard.route
         }
 
         Timer().schedule(timerTask {
