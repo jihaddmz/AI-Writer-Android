@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.DialogProperties
 import com.appsfourlife.draftogo.App
+import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
@@ -55,9 +56,9 @@ fun ScreenDashboard() {
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
             // todo uncomment app version check
-//            HelperFirebaseDatabase.fetchAppVersion {
-//                isAppOutDated.value = it != BuildConfig.VERSION_NAME
-//            }
+            HelperFirebaseDatabase.fetchAppVersion {
+                isAppOutDated.value = it != BuildConfig.VERSION_NAME
+            }
 
             HelperFirebaseDatabase.fetchNbOfGenerationsConsumedAndNbOfWordsGenerated() {
                 nbOfWordsLeft.value = if (HelperAuth.isSubscribed()) {
