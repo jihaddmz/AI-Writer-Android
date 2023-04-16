@@ -25,7 +25,7 @@ fun MyTextTitle(
 ) {
 
     val fontSize = when (rememberWindowInfo().screenWidthInfo){
-        is WindowInfo.WindowType.Compact -> 20.sp
+        is WindowInfo.WindowType.Compact -> 17.sp
         is WindowInfo.WindowType.Medium -> 30.sp
         else -> 35.sp
     }

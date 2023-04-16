@@ -1,9 +1,11 @@
 package com.appsfourlife.draftogo.helpers
 
 import androidx.compose.runtime.MutableState
+import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelTemplateIcon
 import com.appsfourlife.draftogo.util.SettingsNotifier
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -25,7 +27,7 @@ object HelperFirebaseDatabase {
                     "nbOfGenerationsConsumed" to HelperSharedPreference.getNbOfGenerationsConsumed(),
                     "nbOfWordsGenerated" to HelperSharedPreference.getNbOfWordsGenerated(),
                     "renewalDate" to HelperAuth.getExpirationDate()
-                )
+                ), SetOptions.merge()
             )
 
         firestore.collection("users")
@@ -37,7 +39,7 @@ object HelperFirebaseDatabase {
             }
     }
 
-    fun fetchNbOfGenerationsConsumed() {
+    fun fetchNbOfGenerationsConsumedAndNbOfWordsGenerated(onComplete: () -> Unit) {
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
             .get().addOnCompleteListener {
@@ -71,6 +73,8 @@ object HelperFirebaseDatabase {
                         nbOfWordsGenerated.toInt()
                     )
                 }
+
+                onComplete()
             }
     }
 
@@ -85,11 +89,11 @@ object HelperFirebaseDatabase {
             .document(HelperAuth.auth.currentUser?.email!!)
             .collection("history")
             .get()
-            .addOnCompleteListener {
-                if (it.result.documents.isEmpty()) {
+            .addOnCompleteListener { task ->
+                if (task.result.documents.isEmpty()) {
                     noHistory.value = true
-                } else
-                    it.result.documents.forEach { documentSnapshot ->
+                } else {
+                    task.result.documents.forEach { documentSnapshot ->
                         result.add(
                             ModelHistory(
                                 type = documentSnapshot.get("type").toString().trim(),
@@ -99,7 +103,14 @@ object HelperFirebaseDatabase {
                             )
                         )
                     }
-                list.value = result
+                    list.value = result.sortedBy {
+                        HelperDate.parseStringToDate(
+                            it.date,
+                            "yyyy-MM-dd HH:mm:ss"
+                        )?.time
+                    } as MutableList<ModelHistory>
+                    list.value = list.value.reversed() as MutableList<ModelHistory>
+                }
                 showCircularIndicator.value = false
             }
     }
@@ -124,10 +135,9 @@ object HelperFirebaseDatabase {
             .document(HelperAuth.auth.currentUser?.email!!)
             .set(
                 hashMapOf(
-                    "nbOfGenerationsConsumed" to 0,
                     "nbOfWordsGenerated" to 0,
                     "renewalDate" to HelperAuth.getExpirationDate()
-                )
+                ), SetOptions.merge()
             )
     }
 
@@ -143,7 +153,7 @@ object HelperFirebaseDatabase {
             .set(
                 hashMapOf(
                     "renewalDate" to HelperAuth.getExpirationDate()
-                )
+                ), SetOptions.merge()
             )
     }
 
@@ -172,6 +182,29 @@ object HelperFirebaseDatabase {
                     }
                 }
                 list.value = result
+            }
+    }
+
+    fun setNbOfArtCredits() {
+        val hashmap = hashMapOf(
+            "nbOfArtCredits" to NotifiersArt.credits.value
+        )
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).set(hashmap, SetOptions.merge())
+            .addOnCompleteListener {
+
+            }
+    }
+
+   fun getNbOfArtCredits(onComplete: () -> Unit = {}) {
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
+            .addOnCompleteListener { document ->
+               val result = document.result.get("nbOfArtCredits").toString()
+                if (result != "null") {
+                    NotifiersArt.credits.value = result.toInt()
+                    HelperSharedPreference.setNbOfArtsCredits()
+                }
+
+                onComplete()
             }
     }
 }

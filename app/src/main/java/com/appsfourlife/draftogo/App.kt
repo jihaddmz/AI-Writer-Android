@@ -3,7 +3,7 @@ package com.appsfourlife.draftogo
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.appsfourlife.draftogo.feature_generate_text.data.data_source.DatabaseGenerateText
+import com.appsfourlife.draftogo.feature_generate_text.data.data_source.DatabaseApp
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.onesignal.OneSignal
@@ -25,12 +25,12 @@ class App : Application() {
 
     companion object {
         lateinit var context: Context
-        lateinit var dbGenerateText: DatabaseGenerateText
+        lateinit var databaseApp: DatabaseApp
         val listOfCVTypes by lazy { mutableListOf<String>() }
         val listOfLetterTypes by lazy { mutableListOf<String>() }
         val listOfEssays by lazy { mutableListOf<String>() }
-        fun getTextFromString(textID: Int): String {
-            return context.getString(textID)
+        fun getTextFromString(textID: Int, args: Any? = null): String {
+            return context.getString(textID, args)
         }
     }
 
@@ -39,7 +39,7 @@ class App : Application() {
         super.onCreate()
 
         context = this
-        dbGenerateText = DatabaseGenerateText.getInstance(this)!!
+        databaseApp = DatabaseApp.getInstance(this)!!
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
@@ -120,7 +120,7 @@ class App : Application() {
                     }
                 }
             })
-        }, 5000, 5000)
+        }, 0, 5000)
 
         listOfCVTypes.add(getString(R.string.chronological))
         listOfCVTypes.add(getString(R.string.functional))

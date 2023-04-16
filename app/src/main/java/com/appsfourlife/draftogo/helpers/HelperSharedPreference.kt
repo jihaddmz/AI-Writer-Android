@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.core.content.edit
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
+import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
 
 object HelperSharedPreference {
 
@@ -14,12 +15,18 @@ object HelperSharedPreference {
     const val SP_AUTHENTICATION = "authentication"
 
     /**
+     * first time app launched
+     **/
+    const val SP_SETTINGS_IS_FIRST_TIME_LAUNCHED = "is_first_time_launched"
+    const val SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED = "is_first_time_v2_launched"
+
+
+    /**
      * keys for settings shared preferences
      **/
     const val SP_SETTINGS_NB_OF_GENERATIONS_CONSUMED = "nb_of_generations_consumed"
     const val SP_SETTINGS_NB_OF_WORDS_GENERATED = "nb_of_words_generated"
     const val SP_SETTINGS_NB_OF_GENERATIONS = "nb_of_generations"
-    const val SP_SETTINGS_IS_FIRST_TIME_LAUNCHED = "is_first_time_launched"
     const val SP_SETTINGS_ENABLE_HEADLINES = "enable_headlines"
     const val SP_SETTINGS_LENGTH = "length"
     const val SP_SETTINGS_LETTER_TYPE = "letter_type"
@@ -32,6 +39,9 @@ object HelperSharedPreference {
     const val SP_SETTINGS_OUTPUT_TYPEWRITER_LENGTH = "output_typewriter_length"
     const val SP_SETTINGS_SUBSCRIBE_TYPE = "subscribe_type"
     const val SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED = "is_compare_outputs_enabled"
+    const val SP_SETTINGS_NB_0F_ARTS_CREDITS = "nb_0f_arts_credits"
+    const val SP_SETTINGS_NB_0F_ARTS_GENERATED = "nb_0f_arts_generated"
+    const val SP_SETTINGS_TYPE_OF_WRITING_MODEL = "type_of_writing_model"
 
 
     /**
@@ -46,8 +56,36 @@ object HelperSharedPreference {
      * most common shared preferences keys
      **/
 
+    fun getTypeOfWritingModel(): String {
+        return getString(SP_SETTINGS, SP_SETTINGS_TYPE_OF_WRITING_MODEL, "gpt-3.5-turbo")
+    }
+
+    fun setTypeOfWritingModel(value: String) {
+        setString(SP_SETTINGS, SP_SETTINGS_TYPE_OF_WRITING_MODEL, value)
+    }
+
+    fun getNbOfArtsGenerated(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_GENERATED, 0)
+    }
+
+    fun incrementNbOfArtsGenerated() {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_GENERATED, getNbOfArtsGenerated() + 1)
+    }
+
+    fun setNbOfArtsGenerated(value: Int) {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_GENERATED, value)
+    }
+
+    fun getNbOfArtsCredits(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_CREDITS, 0)
+    }
+
+    fun setNbOfArtsCredits() {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_CREDITS, NotifiersArt.credits.value)
+    }
+
     fun getIsSavedOutputsEnabled(): Boolean{
-        return getBool(SP_SETTINGS, SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED, false)
+        return getBool(SP_SETTINGS, SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED, true)
     }
 
     fun getSubscriptionType(): String {

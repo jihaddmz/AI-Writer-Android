@@ -9,6 +9,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.sp
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.WindowInfo
@@ -21,11 +23,12 @@ fun MyText(
     textAlign: TextAlign = TextAlign.Start,
     textStyle: TextStyle = TextStyle(),
     color: Color = Color.Black,
+    textDecoration: TextDecoration = TextDecoration.None,
     fontWeight: FontWeight = FontWeight.Normal
 ) {
 
     val fontSize = when (rememberWindowInfo().screenWidthInfo){
-        is WindowInfo.WindowType.Compact -> 15.sp
+        is WindowInfo.WindowType.Compact -> 14.sp
         is WindowInfo.WindowType.Medium -> 20.sp
         else -> 24.sp
     }
@@ -37,7 +40,9 @@ fun MyText(
         fontSize = fontSize,
         text = text,
         fontWeight = fontWeight,
-        style = textStyle
+        style = textStyle,
+        textDecoration = textDecoration,
+        overflow = TextOverflow.Ellipsis
     )
 
 }

@@ -20,7 +20,7 @@ fun MyDialog(
     showDialog: MutableState<Boolean>,
     text: String,
     title: String,
-    properties: DialogProperties
+    properties: DialogProperties = DialogProperties()
 ) {
 
     Dialog(onDismissRequest = {

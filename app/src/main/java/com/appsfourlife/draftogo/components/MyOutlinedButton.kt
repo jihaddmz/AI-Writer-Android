@@ -5,6 +5,7 @@ import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.appsfourlife.draftogo.ui.theme.Blue
@@ -15,6 +16,8 @@ fun MyOutlinedButton(
     modifier: Modifier = Modifier,
     text: String,
     isEnabled: Boolean = true,
+    borderColor: Color = Blue,
+    textColor: Color = Color.Black,
     onCLick: () -> Unit
 ) {
     OutlinedButton(
@@ -25,8 +28,14 @@ fun MyOutlinedButton(
         shape = Shapes.medium,
         enabled = isEnabled,
         colors = ButtonDefaults.outlinedButtonColors(backgroundColor = Color.Transparent),
-        border = BorderStroke(2.dp, Blue)
+        border = BorderStroke(
+            1.dp, brush = Brush.horizontalGradient(
+                listOf(Blue, Color.Cyan),
+                startX = 50f,
+                endX = Float.POSITIVE_INFINITY
+            )
+        )
     ) {
-        MyText(text = text, color = Blue)
+        MyText(text = text, color = textColor)
     }
 }

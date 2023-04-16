@@ -9,12 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -31,15 +29,15 @@ fun ScreenInstagram(
     }
 
     TopBar(
-        text = stringResource(id = R.string.write_an_instagram_caption_top_bar),
+        text = stringResource(id = R.string.write_an_instagram_caption),
         navController = navController
     ) {
 
-        BottomSheetSaveOutputs(navController = navController) {
+        BottomSheetWriting(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = SpacersSize.medium, end = SpacersSize.medium, bottom = 80.dp)
+                    .padding(start = SpacersSize.medium, end = SpacersSize.medium)
                     .verticalScroll(verticalScroll)
             ) {
 
@@ -52,8 +50,7 @@ fun ScreenInstagram(
                 input(
                     label = stringResource(id = R.string.instagram_input_label),
                     inputPrefix = stringResource(
-                        id = R.string.write_an_instagram_caption,
-                        HelperSharedPreference.getOutputLanguage()
+                        id = R.string.write_an_instagram_caption
                     ),
                     showDialog = showDialog,
                     length = Constants.DEFAULT_POSTING_GENERATION_LENGTH.toInt(),

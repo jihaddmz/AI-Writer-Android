@@ -1,10 +1,12 @@
 package com.appsfourlife.draftogo.components
 
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -15,7 +17,9 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelTemplateIcon
-import com.appsfourlife.draftogo.helpers.*
+import com.appsfourlife.draftogo.helpers.HelperAnalytics
+import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
+import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
@@ -24,7 +28,6 @@ import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DialogAddTemplate(
     modifier: Modifier = Modifier,
@@ -37,7 +40,7 @@ fun DialogAddTemplate(
         mutableStateOf(false)
     }
     val clickedImageUrl = remember {
-        mutableStateOf("https://user-images.githubusercontent.com/124468932/226972135-c541e5a6-1d45-4376-bd10-6e832253059e.svg")
+        mutableStateOf("https://user-images.githubusercontent.com/124468932/230606491-b8ec8c39-406d-478d-937a-cd4c1714e93a.svg")
     }
 
     Dialog(onDismissRequest = {
@@ -78,7 +81,7 @@ fun DialogAddTemplate(
                 MyText(text = "${stringResource(id = R.string.choose_image)}:")
 
                 MySpacer(type = "medium", widthOrHeight = "width")
-                MyUrlImage(
+                MyUrlSvg(
                     modifier = Modifier.clickable {
                         if (!SettingsNotifier.isConnected.value) {
                             HelperUI.showToast(msg = App.getTextFromString(R.string.no_connection))
@@ -98,18 +101,22 @@ fun DialogAddTemplate(
 
                 HelperAnalytics.sendEvent("add_template")
 
-                if (HelperSharedPreference.getSubscriptionType() != Constants.SUBSCRIPTION_TYPE_PLUS){
-                    HelperUI.showToast(msg = App.getTextFromString(R.string.plus_feature))
-                    return@MyButton
-                }
-
                 if (input.isEmpty()) {
                     HelperUI.showToast(msg = App.getTextFromString(R.string.no_query_defined))
                     return@MyButton
                 }
 
                 coroutineScope.launch(Dispatchers.IO) {
-                    App.dbGenerateText.daoTemplates.insertTemplate(
+
+                    if (App.databaseApp.daoApp.getTemplateByQuery(input.trim()) != null) {
+                        coroutineScope.launch(Dispatchers.Main) {
+                            HelperUI.showToast(msg = App.getTextFromString(R.string.template_already_exists))
+                        }
+                        return@launch
+                    }
+
+
+                    App.databaseApp.daoApp.insertTemplate(
                         ModelTemplate(
                             query = input.trim(),
                             imageUrl = clickedImageUrl.value.trim(),
@@ -127,7 +134,6 @@ fun DialogAddTemplate(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun DialogIconChooser(
     showDialog: MutableState<Boolean>,
@@ -159,7 +165,7 @@ fun DialogIconChooser(
         ) {
 
             LazyVerticalGrid(
-                cells = GridCells.Fixed(count = 4),
+                columns = GridCells.Fixed(count = 4),
                 content = {
                     items(icons.value.size) { index ->
                         val name = icons.value[index].name
@@ -189,7 +195,7 @@ fun ListItemTemplateIcon(
     onIconClicked: (String) -> Unit
 ) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        MyUrlImage(modifier = Modifier.clickable {
+        MyUrlSvg(modifier = Modifier.clickable {
             onIconClicked(url)
         }, imageUrl = url, contentDesc = name)
         MyText(text = name)

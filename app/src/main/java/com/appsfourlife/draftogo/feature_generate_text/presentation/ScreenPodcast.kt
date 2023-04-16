@@ -9,12 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
-import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -35,11 +33,11 @@ fun ScreenPodcast(
         text = stringResource(id = R.string.write_a_podcast_top_bar), navController = navController
     ) {
 
-        BottomSheetSaveOutputs(navController = navController) {
+        BottomSheetWriting(navController = navController) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(start = SpacersSize.medium, end = SpacersSize.medium, bottom = 80.dp)
+                    .padding(start = SpacersSize.medium, end = SpacersSize.medium)
                     .verticalScroll(verticalScroll)
             ) {
 
@@ -60,7 +58,6 @@ fun ScreenPodcast(
                     label = stringResource(id = R.string.podcast_input_label),
                     inputPrefix = stringResource(
                         id = R.string.write_an_podcast_of_type,
-                        HelperSharedPreference.getOutputLanguage(),
                         type
                     ),
                     showDialog = showDialog,

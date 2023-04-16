@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -87,4 +88,23 @@ fun Modifier.animateOffsetX(initialOffsetX: Dp, delay: Long = 0): Modifier = com
     })
 
     offset(x = offsetXState.value)
+}
+
+fun Modifier.animateVisibility(delay: Long = 0): Modifier = composed {
+    val animate = remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = true, block = {
+        Timer().schedule(timerTask {
+            animate.value = true
+        }, delay)
+    })
+
+    val alpha1 = animateFloatAsState(
+        targetValue = if (!animate.value) 0f else 1f,
+        animationSpec = tween(durationMillis = 1000)
+    )
+
+    alpha(alpha = alpha1.value)
 }
