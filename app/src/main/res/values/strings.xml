@@ -256,4 +256,9 @@
     <string name="davinci_model_explanation">If you want accurate and complex response, choose this model</string>
     <string name="writing_model_chooser_label">Writing Model Chooser</string>
     <string name="website">Website</string>
+
+
+
+    <string name="accessibility_service_label">Accessibility service label</string>
+    <string name="accessibility_service_description">Accessibility service desc</string>
 </resources>

@@ -71,6 +71,86 @@ object HelperChatGPT {
         queue.add(postRequest)
     }
 
+    fun getResponse1(
+        query: String,
+        onErrorAction: () -> Unit,
+        onDoneAction: (String) -> Unit
+    ) {
+        Helpers.logD("ntered generating")
+        val url = "https://api.openai.com/v1/completions"
+        // setting text on for question on below line.
+        // creating a queue for request queue.
+        val queue: RequestQueue = Volley.newRequestQueue(App.context)
+        // creating a json object on below line.
+        val jsonObject: JSONObject = JSONObject()
+        // adding params to json object.
+        jsonObject.put("model", "text-davinci-003") // text-davinci-003 // gpt-3.5-turbo
+        jsonObject.put("prompt", query)
+        jsonObject.put("temperature", 0.4)
+        jsonObject.put("max_tokens", Constants.MAX_GENERATION_LENGTH)
+//        jsonObject.put("frequency_penalty", 0.0)
+//        jsonObject.put("presence_penalty", 0.0)
+        jsonObject.put("n", 1)
+//        jsonObject.put("stream", false)
+//        jsonObject.put("logprobs", null)
+
+        // on below line making json object request.
+        val postRequest: JsonObjectRequest =
+            // on below line making json object request.
+            object : JsonObjectRequest(
+                Method.POST, url, jsonObject, Response.Listener { response ->
+                    val totalNbOfToken: Int =
+                        response.getJSONObject("usage").getInt("total_tokens")
+                    HelperSharedPreference.incrementNbOfGenerationsConsumed()
+                    HelperSharedPreference.addToNbOfWordsGenerated((totalNbOfToken * 0.75).roundToInt())
+                    // on below line getting response message and setting it to text view.
+                    val responseMsg: String =
+                        response.getJSONArray("choices").getJSONObject(0).getString("text")
+                            .trim()
+                    HelperFirebaseDatabase.writeHistoryEntry(
+                        type = SettingsNotifier.templateType,
+                        input = SettingsNotifier.input.value.text.trim(),
+                        responseMsg
+                    )
+                    onDoneAction(responseMsg)
+                },
+                // adding on error listener
+                Response.ErrorListener { error ->
+                    onErrorAction()
+                    if (error.cause is SSLException) {
+                        HelperUI.showToast(msg = App.getTextFromString(textID = R.string.no_connection))
+                    } else HelperUI.showToast(msg = App.getTextFromString(textID = R.string.something_went_wrong))
+
+                }) {
+                override fun getHeaders(): MutableMap<String, String> {
+                    val params: MutableMap<String, String> = HashMap()
+                    // adding headers on below line.
+                    params["Content-Type"] = "application/json"
+                    params["Authorization"] =
+                        "Bearer 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"
+                    return params;
+                }
+            }
+
+        // on below line adding retry policy for our request.
+        postRequest.retryPolicy = object : RetryPolicy {
+            override fun getCurrentTimeout(): Int {
+                return 50000
+            }
+
+            override fun getCurrentRetryCount(): Int {
+                return 50000
+            }
+
+            @Throws(VolleyError::class)
+            override fun retry(error: VolleyError) {
+            }
+
+        }
+        // on below line adding our request to queue.
+        queue.add(postRequest)
+    }
+
     fun getResponse(
         query: String,
         context: Context,
