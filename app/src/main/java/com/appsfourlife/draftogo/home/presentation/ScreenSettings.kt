@@ -1,6 +1,8 @@
 package com.appsfourlife.draftogo.home.presentation
 
 import android.app.Activity
+import android.content.Intent
+import android.provider.Settings
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
@@ -8,6 +10,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +36,7 @@ fun ScreenSettings(
     modifier: Modifier = Modifier
 ) {
     val verticalScroll = rememberScrollState()
+    val context = LocalContext.current
     val currentActivity = LocalContext.current as Activity
 
     TopBar(
@@ -76,9 +81,11 @@ fun ScreenSettings(
 
                 MySpacer(type = "small")
 
-                MyTextLink(text = stringResource(id = R.string.website), modifier = Modifier.clickable {
-                    HelperIntent.navigateToUrl("https://appsfourlife.com/draftogo/")
-                })
+                MyTextLink(
+                    text = stringResource(id = R.string.website),
+                    modifier = Modifier.clickable {
+                        HelperIntent.navigateToUrl("https://appsfourlife.com/draftogo/")
+                    })
             }
 
             MySpacer(type = "small")
@@ -105,6 +112,26 @@ fun ScreenSettings(
                     HelperAnalytics.sendEvent("disabled_saved_outputs")
                 }
             }
+
+            val showAccessibilityPermissionRequester = remember {
+                mutableStateOf(false)
+            }
+            if (showAccessibilityPermissionRequester.value)
+                HelperUI.ShowAccessibilityPermissionRequester(false)
+            mySwitch(
+                modifier = Modifier.padding(end = SpacersSize.small),
+                label = stringResource(id = R.string.enable_write_anywhere),
+                initialValue = HelperPermissions.isAccessibilityEnabled(context = context),
+                onCheckedChange = {
+                    showAccessibilityPermissionRequester.value = it
+                    if (!it) {
+                        val intent =
+                            Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        // request permission via start activity for result
+                        context.startActivity(intent)
+                    }
+                })
 
             Column(
                 modifier = Modifier

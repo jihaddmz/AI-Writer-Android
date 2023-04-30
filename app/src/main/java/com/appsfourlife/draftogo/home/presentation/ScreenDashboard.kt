@@ -36,6 +36,7 @@ import com.appsfourlife.draftogo.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.concurrent.timerTask
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
@@ -53,9 +54,20 @@ fun ScreenDashboard() {
         mutableStateOf(false)
     }
 
+    val timer = remember {
+        mutableStateOf(0)
+    }
+
+    Timer().scheduleAtFixedRate(timerTask {
+        if (timer.value == 2)
+            return@timerTask
+        timer.value += 1
+    }, 2000, 1000)
+    if (timer.value == 2 && !HelperSharedPreference.getDontShowAnyWhereWritingPermission())
+        HelperUI.ShowAccessibilityPermissionRequester(true)
+
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
-            // todo uncomment app version check
             HelperFirebaseDatabase.fetchAppVersion {
                 isAppOutDated.value = it != BuildConfig.VERSION_NAME
             }
