@@ -77,6 +77,7 @@ fun ScreenSignIn(
                     val listOfWritingFeatures = listOf(
                         stringResource(id = R.string.access_to_all_templates),
                         stringResource(id = R.string.generate_content_in_different_languages),
+                        stringResource(id = R.string.write_anywhere),
                         stringResource(id = R.string.create_custom_templates),
                         stringResource(id = R.string.read_output_outload),
                         stringResource(id = R.string.share_content_directly),
