@@ -270,4 +270,5 @@
     <string name="write_anywhere">Write anywhere that has a text field</string>
     <string name="dont_show_again">Don\'t show again</string>
     <string name="enable_write_anywhere">Enable Write Anywhere</string>
+    <string name="no_favorite_templates_added">Add favorite templates</string>
 </resources>

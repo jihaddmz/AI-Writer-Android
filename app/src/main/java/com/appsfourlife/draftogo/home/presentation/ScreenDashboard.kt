@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.home.presentation
 
+import android.content.Intent
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -14,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
@@ -40,9 +43,10 @@ import kotlin.concurrent.timerTask
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ScreenDashboard() {
+fun ScreenDashboard(intent: Intent, navController: NavController) {
     val sheetScaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val nbOfWordsLeft = remember {
         mutableStateOf(AnnotatedString(text = "0"))
@@ -325,6 +329,8 @@ fun ScreenDashboard() {
 
                                     listOfFavoriteTemplates.value =
                                         App.databaseApp.daoApp.getAllFavoriteTemplates()
+
+                                    HelperUI.refreshWidget(context = context)
                                 }
                             }
 

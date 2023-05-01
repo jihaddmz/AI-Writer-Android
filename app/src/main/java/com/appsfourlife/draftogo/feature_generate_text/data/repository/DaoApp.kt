@@ -35,7 +35,7 @@ interface DaoApp {
     suspend fun deleteFavoriteTemplate(modelFavoriteTemplate: ModelFavoriteTemplate)
 
     @Query("select * from table_favoritetemplates")
-    suspend fun getAllFavoriteTemplates(): List<ModelFavoriteTemplate>
+    fun getAllFavoriteTemplates(): List<ModelFavoriteTemplate>
 
     @Query("select * from table_favoritetemplates where query=:query")
     suspend fun getFavoriteTemplate(query: String): ModelFavoriteTemplate?

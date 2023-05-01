@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/widget_margin">
+    <StackView
+        android:id="@+id/stack_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:loopViews="true" />
+
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:gravity="center"
+        android:background="@drawable/widget_item_background"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="20dp"
+        android:text="@string/no_favorite_templates_added"
+        android:textSize="14sp" />
+</FrameLayout>

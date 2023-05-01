@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,7 @@ import com.appsfourlife.draftogo.components.MySpacer
 import com.appsfourlife.draftogo.components.MyText
 import com.appsfourlife.draftogo.components.MyTextTitle
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
+import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.home.listitems.FavoriteTemplateItem
 import com.appsfourlife.draftogo.home.util.NotifiersHome.listOfFavoriteTemplates
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -33,6 +35,7 @@ fun BottomSheetFavoriteTemplates(
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
@@ -109,6 +112,8 @@ fun BottomSheetFavoriteTemplates(
 
                         listOfFavoriteTemplates.value =
                             App.databaseApp.daoApp.getAllFavoriteTemplates()
+
+                        HelperUI.refreshWidget(context = context)
                     }
                 }
 
