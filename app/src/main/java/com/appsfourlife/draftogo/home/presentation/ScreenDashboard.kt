@@ -57,7 +57,6 @@ fun ScreenDashboard() {
     val timer = remember {
         mutableStateOf(0)
     }
-
     Timer().scheduleAtFixedRate(timerTask {
         if (timer.value == 2)
             return@timerTask

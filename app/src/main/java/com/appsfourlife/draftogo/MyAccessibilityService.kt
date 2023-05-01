@@ -19,7 +19,7 @@ import kotlin.concurrent.timerTask
 
 class MyAccessibilityService : AccessibilityService() {
 
-    private val secondsToStartGenerating = 5
+    private val secondsToStartGenerating = 3
     private val textInProgress = App.getTextFromString(R.string.generating)
 
     private var nodeInfo: AccessibilityNodeInfo? = null
@@ -93,20 +93,6 @@ class MyAccessibilityService : AccessibilityService() {
                 AccessibilityNodeInfoCompat.ACTION_SET_TEXT,
                 arguments
             )
-
-//            Timer().schedule(timerTask {
-//                arguments.putString(
-//                    AccessibilityNodeInfoCompat.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
-//                    "Text is generated"
-//                )
-//                node.performAction(
-//                    AccessibilityNodeInfoCompat.ACTION_SET_TEXT,
-//                    arguments
-//                )
-//                startRecording = false
-//                seconds = 0
-//
-//            }, 3000)
 
             SettingsNotifier.input.value = TextFieldValue(node.text.split("/draft")[1].trim())
             HelperChatGPT.getResponse1(
