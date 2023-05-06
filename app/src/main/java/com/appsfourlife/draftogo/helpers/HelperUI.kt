@@ -7,7 +7,9 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -21,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.DialogProperties
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.MyWidgetProvider
@@ -71,12 +72,15 @@ object HelperUI {
                         context.startActivity(intent)
                     }) {
                     Column {
-                        MyTextTitle(
-                            text = stringResource(id = R.string.permission_write_anywhere),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                            MyTextTitle(
+                                text = stringResource(id = R.string.permission_write_anywhere),
+                                modifier = Modifier,
+                                fontWeight = FontWeight.Bold
+                            )
+                            MySpacer(type = "small", widthOrHeight = "width")
+                            IconLink(url = "https://appsfourlife.com/blogpost_writeanywhere")
+                        }
                         MySpacer(type = "small")
                         MyAnnotatedText(
                             text = AnnotatedString(text = stringResource(id = R.string.permission_accessibility_label_desc)).plus(

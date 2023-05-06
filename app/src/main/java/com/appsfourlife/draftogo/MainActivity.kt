@@ -79,7 +79,6 @@ class MainActivity : ComponentActivity() {
 
         try {
 
-            FirebaseApp.initializeApp(this)
             App.context = this
 
             MobileAds.initialize(this) {
@@ -333,7 +332,7 @@ class MainActivity : ComponentActivity() {
 
                                     composable(route = BottomNavScreens.Dashboard.route) {
                                         HomeBackHandler(context = this@MainActivity)
-                                        ScreenDashboard(intent, navController)
+                                        ScreenDashboard(navController)
                                     }
 
                                     composable(route = Screens.ScreenArticle.route) {
@@ -480,7 +479,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         } catch (e: Exception) {
-            Helpers.logD("error ${e.message}")
         }
     }
 
@@ -503,10 +501,6 @@ class MainActivity : ComponentActivity() {
                 }
             } catch (e: ApiException) {
 //                Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT).show()
-            }
-        } else if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                Helpers.logD(data.toString())
             }
         }
     }

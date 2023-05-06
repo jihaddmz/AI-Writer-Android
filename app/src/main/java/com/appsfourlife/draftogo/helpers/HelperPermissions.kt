@@ -48,7 +48,7 @@ object HelperPermissions {
                 splitter.setString(settingValue);
                 while (splitter.hasNext()) {
                     val accessabilityService = splitter.next();
-                    if (accessabilityService == "com.appsfourlife.draftogo.dev/com.appsfourlife.draftogo.MyAccessibilityService") { // todo change dev variant
+                    if (accessabilityService == "com.appsfourlife.draftogo/com.appsfourlife.draftogo.MyAccessibilityService") {
                         return true
                     }
                 }

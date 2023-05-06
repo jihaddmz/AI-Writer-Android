@@ -95,6 +95,7 @@ class MyAccessibilityService : AccessibilityService() {
             )
 
             SettingsNotifier.input.value = TextFieldValue(node.text.split("/draft")[1].trim())
+            SettingsNotifier.templateType = App.getTextFromString(R.string.written_anywhere)
             HelperChatGPT.getResponse1(
                 node.text.split("/draft")[1].trim(),
                 onErrorAction = {},

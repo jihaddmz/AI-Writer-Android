@@ -148,7 +148,7 @@
     <string name="wrong">Wrong</string>
     <string name="check">Check</string>
     <string name="deletion_confirmation">Are you sure you want to delete all history?</string>
-    <string name="app_is_outdated">A new release is available, please update it and relaunch the app</string>
+    <string name="app_is_outdated">A new release is available, please update it to enjoy the latest features and improvements</string>
     <string name="linkedin_input_label">about my present role</string>
     <string name="watch_an_ad">Watch an Ad -></string>
     <string name="loading_ad">Loading Ad</string>
@@ -271,4 +271,5 @@
     <string name="dont_show_again">Don\'t show again</string>
     <string name="enable_write_anywhere">Enable Write Anywhere</string>
     <string name="no_favorite_templates_added">Add favorite templates</string>
+    <string name="written_anywhere">Written Anywhere</string>
 </resources>

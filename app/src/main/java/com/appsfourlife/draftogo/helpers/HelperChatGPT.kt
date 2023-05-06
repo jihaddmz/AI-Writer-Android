@@ -76,7 +76,6 @@ object HelperChatGPT {
         onErrorAction: () -> Unit,
         onDoneAction: (String) -> Unit
     ) {
-        Helpers.logD("ntered generating")
         val url = "https://api.openai.com/v1/completions"
         // setting text on for question on below line.
         // creating a queue for request queue.
@@ -384,7 +383,6 @@ object HelperChatGPT {
                 },
                 // adding on error listener
                 Response.ErrorListener { error ->
-                    Helpers.logD("${error}")
                     onErrorAction()
                     if (error.cause is SSLException) {
                         HelperUI.showToast(msg = App.getTextFromString(textID = R.string.no_connection))

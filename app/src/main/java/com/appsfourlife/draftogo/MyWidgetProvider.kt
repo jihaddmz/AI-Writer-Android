@@ -38,6 +38,7 @@ class MyWidgetProvider : AppWidgetProvider() {
             val viewIndex = intent.getIntExtra(WIDGET_ITEM_POSITION, 0)
 //            HelperUI.showToast(msg = App.databaseApp.daoApp.getAllFavoriteTemplates()[viewIndex].query)
             val actionIntent  = Intent(context, MainActivity::class.java)
+            actionIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             actionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             actionIntent.putExtra("templateClickedQuery", App.databaseApp.daoApp.getAllFavoriteTemplates()[viewIndex].query)
             context?.startActivity(actionIntent)

@@ -1,6 +1,6 @@
 package com.appsfourlife.draftogo.home.presentation
 
-import android.content.Intent
+import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -37,13 +37,15 @@ import com.appsfourlife.draftogo.home.model.ModelDashboardUsage
 import com.appsfourlife.draftogo.home.util.NotifiersHome.listOfFavoriteTemplates
 import com.appsfourlife.draftogo.ui.theme.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.concurrent.timerTask
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ScreenDashboard(intent: Intent, navController: NavController) {
+fun ScreenDashboard(navController: NavController) {
     val sheetScaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -159,6 +161,31 @@ fun ScreenDashboard(intent: Intent, navController: NavController) {
         BottomSheetFavoriteTemplates()
     }) {
 
+        /**
+         * show reward dialog if there is a text reward in firebase for this particular user
+         **/
+        val rewardedDialogText = remember {
+            mutableStateOf("")
+        }
+        val showRewardDialog = remember {
+            mutableStateOf(false)
+        }
+        LaunchedEffect(key1 = true, block = {
+            coroutineScope.launch(Dispatchers.IO) {
+                delay(1000)
+                HelperFirebaseDatabase.getRewardText {
+                    if (!it.isNullOrEmpty() && it != "null") {
+                        rewardedDialogText.value = it
+                        showRewardDialog.value = true
+                    }
+                }
+            }
+        })
+        if (showRewardDialog.value) {
+            DialogReward(text = rewardedDialogText.value, showDialog = showRewardDialog)
+        }
+
+
         if (isAppOutDated.value) // if the app is outdated show the alert dialog to update
             MyDialog(
                 modifier = Modifier,
@@ -166,8 +193,8 @@ fun ScreenDashboard(intent: Intent, navController: NavController) {
                 text = stringResource(id = R.string.app_is_outdated),
                 title = stringResource(id = R.string.attention),
                 properties = DialogProperties(
-                    dismissOnBackPress = false,
-                    dismissOnClickOutside = false,
+                    dismissOnBackPress = true,
+                    dismissOnClickOutside = true,
                 )
             )
 

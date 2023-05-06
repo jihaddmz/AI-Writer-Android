@@ -27,7 +27,7 @@
             android:enabled="true"
             android:exported="true"
             android:icon="@drawable/logo"
-            android:label="Example Widget">
+            android:label="@string/favorite_templates">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

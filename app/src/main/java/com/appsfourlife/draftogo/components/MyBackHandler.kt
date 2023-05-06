@@ -10,6 +10,6 @@ import com.appsfourlife.draftogo.util.SettingsNotifier
 fun MyBackHandler(navController: NavController) {
     BackHandler(true) {
         SettingsNotifier.resetValues()
-        navController.navigate(BottomNavScreens.Home.route)
+        navController.navigate(BottomNavScreens.Dashboard.route)
     }
 }
