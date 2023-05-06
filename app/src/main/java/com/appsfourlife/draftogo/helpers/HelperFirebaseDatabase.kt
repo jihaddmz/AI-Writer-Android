@@ -189,16 +189,18 @@ object HelperFirebaseDatabase {
         val hashmap = hashMapOf(
             "nbOfArtCredits" to NotifiersArt.credits.value
         )
-        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).set(hashmap, SetOptions.merge())
-            .addOnCompleteListener {
+        HelperAuth.auth.currentUser?.email?.let {
+            firestore.collection("users").document(it).set(hashmap, SetOptions.merge())
+                .addOnCompleteListener {
 
-            }
+                }
+        }
     }
 
-   fun getNbOfArtCredits(onComplete: () -> Unit = {}) {
+    fun getNbOfArtCredits(onComplete: () -> Unit = {}) {
         firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
             .addOnCompleteListener { document ->
-               val result = document.result.get("nbOfArtCredits").toString()
+                val result = document.result.get("nbOfArtCredits").toString()
                 if (result != "null") {
                     NotifiersArt.credits.value = result.toInt()
                     HelperSharedPreference.setNbOfArtsCredits()
@@ -206,5 +208,29 @@ object HelperFirebaseDatabase {
 
                 onComplete()
             }
+    }
+
+    fun getRewardText(onSuccess: (String?) -> Unit) {
+        if (SettingsNotifier.isConnected.value) {
+            firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
+                .addOnCompleteListener { document ->
+                    onSuccess(document.result.get("textReward").toString())
+                    resetRewardText()
+                }
+        }
+    }
+
+    fun resetRewardText() {
+        if (SettingsNotifier.isConnected.value) {
+            val hashmap = hashMapOf(
+                "textReward" to ""
+            )
+
+            firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                .set(hashmap, SetOptions.merge())
+                .addOnCompleteListener {
+
+                }
+        }
     }
 }

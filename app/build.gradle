@@ -13,8 +13,8 @@ android {
         applicationId 'com.appsfourlife.draftogo'
         minSdk 24
         targetSdk 33
-        versionCode 27
-        versionName "2.0"
+        versionCode 29
+        versionName "2.1"
 
         signingConfigs {
             config {
@@ -64,6 +64,7 @@ android {
     buildTypes {
         dev {
             applicationIdSuffix '.dev'
+//            signingConfig signingConfigs.config
             debuggable true
         }
     }

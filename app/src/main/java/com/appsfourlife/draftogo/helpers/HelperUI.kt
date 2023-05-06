@@ -1,10 +1,15 @@
 package com.appsfourlife.draftogo.helpers
 
+import android.annotation.SuppressLint
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -18,13 +23,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.DialogProperties
 import com.appsfourlife.draftogo.App
+import com.appsfourlife.draftogo.MyWidgetProvider
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import java.util.*
-import kotlin.concurrent.timerTask
 
 object HelperUI {
 
@@ -37,6 +41,7 @@ object HelperUI {
         keyboardController.show()
     }
 
+    @SuppressLint("WrongConstant")
     fun showToast(context: Context = App.context, msg: String) {
         Toast.makeText(context, msg, Constants.Toast_Lenght).show()
     }
@@ -67,12 +72,15 @@ object HelperUI {
                         context.startActivity(intent)
                     }) {
                     Column {
-                        MyTextTitle(
-                            text = stringResource(id = R.string.permission_write_anywhere),
-                            modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold
-                        )
+                        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                            MyTextTitle(
+                                text = stringResource(id = R.string.permission_write_anywhere),
+                                modifier = Modifier,
+                                fontWeight = FontWeight.Bold
+                            )
+                            MySpacer(type = "small", widthOrHeight = "width")
+                            IconLink(url = "https://appsfourlife.com/blogpost_writeanywhere")
+                        }
                         MySpacer(type = "small")
                         MyAnnotatedText(
                             text = AnnotatedString(text = stringResource(id = R.string.permission_accessibility_label_desc)).plus(
@@ -100,5 +108,16 @@ object HelperUI {
                     }
                 }
         }
+    }
+
+    fun refreshWidget(context: Context) {
+        val appWidgetManager =
+            AppWidgetManager.getInstance(context)
+        val thisAppWidget = ComponentName(
+            context.packageName,
+            MyWidgetProvider::class.java.name
+        )
+        val appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget)
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.stack_view)
     }
 }

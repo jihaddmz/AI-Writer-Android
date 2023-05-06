@@ -58,7 +58,7 @@ object HelperSharedPreference {
      **/
 
     fun getDontShowAnyWhereWritingPermission(): Boolean {
-        return getBool(SP_SETTINGS, SP_SETTINGS_DONT_SHOW_ANYWHERE_WRITING_PERMISSION, true)
+        return getBool(SP_SETTINGS, SP_SETTINGS_DONT_SHOW_ANYWHERE_WRITING_PERMISSION, false)
     }
 
     fun setDontShowAnyWhereWritingPermission(value: Boolean) {
