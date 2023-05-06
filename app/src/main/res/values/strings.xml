@@ -2,7 +2,6 @@
     <string name="app_name">Draftogo</string>
     <string name="to">To</string>
     <string name="Name">Name</string>
-    <string name="length">Length</string>
     <string name="clear">Clear</string>
     <string name="paste">Paste</string>
     <string name="share">Share</string>
@@ -272,4 +271,5 @@
     <string name="enable_write_anywhere">Enable Write Anywhere</string>
     <string name="no_favorite_templates_added">Add favorite templates</string>
     <string name="written_anywhere">Written Anywhere</string>
+    <string name="nb_of_words">Nb of Words</string>
 </resources>

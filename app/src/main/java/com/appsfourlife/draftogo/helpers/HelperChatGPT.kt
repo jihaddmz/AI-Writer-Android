@@ -170,7 +170,7 @@ object HelperChatGPT {
         jsonObject.put("model", "text-davinci-003") // text-davinci-003 // gpt-3.5-turbo
         jsonObject.put("prompt", query)
         jsonObject.put("temperature", 0.4)
-        jsonObject.put("max_tokens", length)
+        jsonObject.put("max_tokens", (length / 0.75).roundToInt())
 //        jsonObject.put("frequency_penalty", 0.0)
 //        jsonObject.put("presence_penalty", 0.0)
         jsonObject.put("n", nbOfGenerations)
@@ -305,7 +305,7 @@ object HelperChatGPT {
         jsonObject.put("model", "gpt-3.5-turbo") // text-davinci-003 // gpt-3.5-turbo
         jsonObject.put("messages", jsonArrayHeader)
         jsonObject.put("temperature", 0.4) // change this or top_p
-        jsonObject.put("max_tokens", length)
+        jsonObject.put("max_tokens", (length / 0.75).roundToInt())
 //        jsonObject.put("top_p", 0.7)
 //        jsonObject.put("frequency_penalty", 0.0)
 //        jsonObject.put("presence_penalty", 0.0)
