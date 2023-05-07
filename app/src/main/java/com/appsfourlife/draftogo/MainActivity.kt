@@ -44,7 +44,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -206,7 +205,7 @@ class MainActivity : ComponentActivity() {
                                 val listOfBottomNavScreens =
                                     listOf(
                                         BottomNavScreens.Dashboard,
-                                        BottomNavScreens.Home,
+                                        BottomNavScreens.Content,
                                         BottomNavScreens.Art,
                                         BottomNavScreens.Settings
                                     )
@@ -218,8 +217,17 @@ class MainActivity : ComponentActivity() {
                                     val currentRoute = navBackStackEntry?.destination?.route
 
                                     listOfBottomNavScreens.forEach { screen ->
+                                        /**
+                                         * if the current screen is one of the templates, select the content bottom nav bar, otherwise select the current route
+                                         **/
+                                        val isSelected =
+                                            if (screen == BottomNavScreens.Content && currentRoute != Screens.ScreenSignIn.route && currentRoute != BottomNavScreens.Dashboard.route && currentRoute != BottomNavScreens.Art.route && currentRoute != BottomNavScreens.Settings.route && currentRoute != Screens.ScreenFeedback.route) {
+                                                true
+                                            } else {
+                                                currentRoute == screen.route
+                                            }
                                         BottomNavigationItem(
-                                            selected = currentRoute == screen.route,
+                                            selected = isSelected,
                                             onClick = {
                                                 SettingsNotifier.resetValues()
 
@@ -322,7 +330,7 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
 
-                                    composable(route = BottomNavScreens.Home.route) {
+                                    composable(route = BottomNavScreens.Content.route) {
                                         MyBackHandler(navController = navController)
                                         ScreenContent(
                                             modifier = Modifier,

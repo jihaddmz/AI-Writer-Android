@@ -13,7 +13,7 @@ object Constants {
 
     const val TAG = "Jihad"
     const val SPLASH_SCREEN_DURATION: Long = 800L
-    const val MAX_GENERATION_LENGTH = 1000f
+    const val MAX_GENERATION_LENGTH = 750f
     const val DEFAULT_POSTING_GENERATION_LENGTH = 400f
     const val MAX_NB_OF_GENERATIONS = 5f
     const val MAX_TYPEWRITER_LENGTH = 100f
