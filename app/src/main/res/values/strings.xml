@@ -272,4 +272,6 @@
     <string name="no_favorite_templates_added">Add favorite templates</string>
     <string name="written_anywhere">Written Anywhere</string>
     <string name="nb_of_words">Nb of Words</string>
+    <string name="redeem_code">Redeem Code</string>
+    <string name="redeem_code_desc">Write down the redeem code to activate the offer</string>
 </resources>

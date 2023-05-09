@@ -1,7 +1,7 @@
 package com.appsfourlife.draftogo.feature_generate_text.components
 
+import android.annotation.SuppressLint
 import android.app.Activity
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -176,6 +176,7 @@ fun BottomSheetWritePricing(
         val listOfFeatures = listOf(
             stringResource(id = R.string.access_to_all_templates),
             stringResource(id = R.string.generate_content_in_different_languages),
+            stringResource(id = R.string.write_anywhere),
             stringResource(id = R.string.create_custom_templates),
             stringResource(id = R.string.read_output_outload),
             stringResource(id = R.string.share_content_directly),
@@ -205,6 +206,7 @@ fun BottomSheetWritePricing(
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun SubscriptionItem(
     title: String,
@@ -239,7 +241,7 @@ fun SubscriptionItem(
             if (SettingsNotifier.isBasePlanNbOfWordsExceeded.value) {
                 if (title.lowercase().contains("base")) {
                     MyOutlinedButton(
-                        isEnabled = false,
+                        isEnabled = mutableStateOf(false),
                         text = stringResource(id = R.string.subscribe)
                     ) {
                         onSubscribeBtnClick()

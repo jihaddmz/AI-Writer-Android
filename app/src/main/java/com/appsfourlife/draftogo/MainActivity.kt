@@ -331,7 +331,7 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     composable(route = BottomNavScreens.Content.route) {
-                                        MyBackHandler(navController = navController)
+                                        MyBackHandler(navController = navController, BottomNavScreens.Dashboard.route)
                                         ScreenContent(
                                             modifier = Modifier,
                                             navController = navController

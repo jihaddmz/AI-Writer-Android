@@ -27,9 +27,9 @@ fun myEditTextLabel(
         MyText(text = "$label:", fontWeight = FontWeight.Bold)
 
         if (label == stringResource(id = R.string.to))
-            myOutlinedTextField(placeHolder = placeHolder, value = SettingsNotifier.name)
+            MyOutlinedTextField(placeHolder = placeHolder, value = SettingsNotifier.name)
         else if (label == stringResource(id = R.string.job_title))
-            myOutlinedTextField(placeHolder = placeHolder, value = SettingsNotifier.jobTitle)
+            MyOutlinedTextField(placeHolder = placeHolder, value = SettingsNotifier.jobTitle)
     }
 
 }

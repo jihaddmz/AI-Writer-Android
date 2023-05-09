@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 
@@ -39,11 +38,11 @@ fun MyCustomConfirmationDialog(
             MySpacer(type = "medium")
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                MyOutlinedButton(text = negativeBtnText, borderColor = Color.Red) {
+                MyOutlinedButton(text = negativeBtnText) {
                     showDialog.value = false
                     onNegativeBtnClick()
                 }
-                MyOutlinedButton(text = positiveBtnText, borderColor = Blue) {
+                MyOutlinedButton(text = positiveBtnText) {
                     showDialog.value = false
                     onPositiveBtnClick()
                 }
