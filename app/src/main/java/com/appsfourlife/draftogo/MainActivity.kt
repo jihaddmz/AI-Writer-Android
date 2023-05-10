@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.extensions.animateOffsetY
+import com.appsfourlife.draftogo.extensions.determineTemplateRoute
 import com.appsfourlife.draftogo.feature_generate_art.presentation.ScreenArt
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
@@ -43,7 +44,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -55,12 +55,13 @@ import kotlin.concurrent.timerTask
 class MainActivity : ComponentActivity() {
 
     private lateinit var navController: NavHostController
+    private lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
 
     override fun onStart() {
         super.onStart()
 
         // Declare the launcher at the top of your Activity/Fragment:
-        val requestPermissionLauncher = registerForActivityResult(
+        requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
@@ -68,266 +69,215 @@ class MainActivity : ComponentActivity() {
             } else {
             }
         }
-
-        Timer().schedule(timerTask {
-            askNotificationPermission(requestPermissionLauncher)
-        }, 2000)
-
     }
 
     @SuppressLint("UnrememberedMutableState")
     @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        FirebaseApp.initializeApp(this)
-        App.context = this
 
-        MobileAds.initialize(this) {
+        try {
 
-        }
+            App.context = this
 
-        if (SettingsNotifier.isConnected.value)
-            HelperAds.loadAds {
+            MobileAds.initialize(this) {
 
             }
 
-        setContent {
+            if (SettingsNotifier.isConnected.value)
+                HelperAds.loadAds {
 
-            navController = rememberNavController()
-            SettingsNotifier.navHostController = navController
-            val scaffoldState = rememberScaffoldState()
-            val coroutineScope = rememberCoroutineScope()
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
-
-            LaunchedEffect(key1 = true, block = {
-                coroutineScope.launch(Dispatchers.IO) {
-                    if (HelperSharedPreference.getBool(
-                            HelperSharedPreference.SP_SETTINGS,
-                            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED,
-                            true
-                        )
-                    ) {
-                        App.databaseApp.daoApp.getAllTemplates().forEach {
-                            App.databaseApp.daoApp.deleteTemplate(it)
-                        }
-                        HelperSharedPreference.setBool(
-                            HelperSharedPreference.SP_SETTINGS,
-                            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED,
-                            false
-                        )
-                    }
-                    Constants.PREDEFINED_TEMPLATES.forEach { template ->
-                        if (App.databaseApp.daoApp.getTemplateByQuery(
-                                template
-                            ) == null
-                        ) {
-                            App.databaseApp.daoApp.insertTemplate(
-                                ModelTemplate(template, "", 1)
-                            )
-                        } else
-                            return@forEach
-                    }
-                    SettingsNotifier.predefinedTemplates.value =
-                        App.databaseApp.daoApp.getAllTemplates() as MutableList<ModelTemplate>
                 }
-            })
 
+            setContent {
 
+                Timer().schedule(timerTask {
+                    askNotificationPermission(requestPermissionLauncher)
+                }, 2000)
 
-            AIWriterTheme {
+                navController = rememberNavController()
+                SettingsNotifier.navHostController = navController
+                val scaffoldState = rememberScaffoldState()
+                val coroutineScope = rememberCoroutineScope()
+                val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    scaffoldState = scaffoldState,
-                    backgroundColor = Glass,
-                    drawerContent = {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxWidth()
+                LaunchedEffect(key1 = true, block = {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        if (HelperSharedPreference.getBool(
+                                HelperSharedPreference.SP_SETTINGS,
+                                HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED,
+                                true
+                            )
                         ) {
-                            items(
-                                SettingsNotifier.predefinedTemplates.value.size,
-                                key = { it }) { index ->
-                                val text =
-                                    SettingsNotifier.predefinedTemplates.value[index].query
-                                val imageUrl =
-                                    SettingsNotifier.predefinedTemplates.value[index].imageUrl
+                            App.databaseApp.daoApp.getAllTemplates().forEach {
+                                App.databaseApp.daoApp.deleteTemplate(it)
+                            }
+                            HelperSharedPreference.setBool(
+                                HelperSharedPreference.SP_SETTINGS,
+                                HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED,
+                                false
+                            )
+                        }
+                        Constants.PREDEFINED_TEMPLATES.forEach { template ->
+                            if (App.databaseApp.daoApp.getTemplateByQuery(
+                                    template
+                                ) == null
+                            ) {
+                                App.databaseApp.daoApp.insertTemplate(
+                                    ModelTemplate(template, "", 1)
+                                )
+                            } else
+                                return@forEach
+                        }
+                        SettingsNotifier.predefinedTemplates.value =
+                            App.databaseApp.daoApp.getAllTemplates() as MutableList<ModelTemplate>
+                    }
+                })
 
-                                DrawerListItem(
-                                    modifier = Modifier.padding(SpacersSize.medium),
-                                    text = text,
-                                    imageUrl = imageUrl
-                                ) {
 
-                                    SettingsNotifier.resetValues() // clearing values
 
-                                    when (text) {
-                                        App.getTextFromString(R.string.write_an_email) -> {
-                                            navController.navigate(Screens.ScreenEmail.route)
-                                        }
-                                        App.getTextFromString(R.string.write_a_blog) -> {
-                                            navController.navigate(Screens.ScreenBlog.route)
-                                        }
-                                        App.getTextFromString(R.string.write_an_essay) -> {
-                                            navController.navigate(Screens.ScreenEssay.route)
-                                        }
-                                        App.getTextFromString(R.string.write_an_article) -> {
-                                            navController.navigate(Screens.ScreenArticle.route)
-                                        }
-                                        App.getTextFromString(R.string.write_a_letter) -> {
-                                            navController.navigate(Screens.ScreenLetter.route)
-                                        }
-                                        App.getTextFromString(R.string.write_a_cv) -> {
-                                            navController.navigate(Screens.ScreenCV.route)
-                                        }
-                                        App.getTextFromString(R.string.write_a_resume) -> {
-                                            navController.navigate(Screens.ScreenResume.route)
-                                        }
-                                        App.getTextFromString(R.string.write_a_personal_bio) -> {
-                                            navController.navigate(Screens.ScreenPersonalBio.route)
-                                        }
-                                        App.getTextFromString(R.string.write_a_tweet) -> {
-                                            navController.navigate(Screens.ScreenTwitter.route)
-                                        }
-                                        App.getTextFromString(R.string.write_a_viral_tiktok_captions) -> {
-                                            navController.navigate(Screens.ScreenTiktok.route)
-                                        }
-                                        App.getTextFromString(R.string.write_an_instagram_caption) -> {
-                                            navController.navigate(Screens.ScreenInstagram.route)
-                                        }
+                AIWriterTheme {
 
-                                        App.getTextFromString(R.string.write_a_facebook_post) -> {
-                                            navController.navigate(Screens.ScreenFacebook.route)
-                                        }
+                    Scaffold(
+                        modifier = Modifier.fillMaxSize(),
+                        scaffoldState = scaffoldState,
+                        backgroundColor = Glass,
+                        drawerContent = {
+                            LazyColumn(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                            ) {
+                                items(
+                                    SettingsNotifier.predefinedTemplates.value.size,
+                                    key = { it }) { index ->
+                                    val text =
+                                        SettingsNotifier.predefinedTemplates.value[index].query
+                                    val imageUrl =
+                                        SettingsNotifier.predefinedTemplates.value[index].imageUrl
 
-                                        App.getTextFromString(R.string.write_a_linkedin_post) -> {
-                                            navController.navigate(Screens.ScreenLinkedIn.route)
-                                        }
+                                    val templateDestinationRoute = remember {
+                                        mutableStateOf("")
+                                    }
+                                    DrawerListItem(
+                                        modifier = Modifier
+                                            .padding(SpacersSize.medium)
+                                            .determineTemplateRoute(
+                                                text = text,
+                                                templateDestinationRoute
+                                            ),
+                                        text = text,
+                                        imageUrl = imageUrl
+                                    ) {
 
-                                        App.getTextFromString(R.string.write_a_youtube_caption) -> {
-                                            navController.navigate(Screens.ScreenYoutube.route)
-                                        }
+                                        SettingsNotifier.resetValues() // clearing values
 
-                                        App.getTextFromString(R.string.write_a_podcast_top_bar) -> {
-                                            navController.navigate(Screens.ScreenPodcast.route)
-                                        }
-
-                                        App.getTextFromString(R.string.write_a_game_script_top_label) -> {
-                                            navController.navigate(Screens.ScreenGame.route)
-                                        }
-
-                                        App.getTextFromString(R.string.write_a_poem) -> {
-                                            navController.navigate(Screens.ScreenPoem.route)
-                                        }
-
-                                        App.getTextFromString(R.string.write_a_song) -> {
-                                            navController.navigate(Screens.ScreenSong.route)
-                                        }
-                                        App.getTextFromString(R.string.write_a_code) -> {
-                                            navController.navigate(Screens.ScreenCode.route)
-                                        }
-                                        App.getTextFromString(R.string.custom) -> {
-                                            navController.navigate(Screens.ScreenCustom.route)
-                                        }
-                                        App.getTextFromString(R.string.summarize_the_following_text) -> {
-                                            navController.navigate(Screens.ScreenSummarize.route)
-                                        }
-                                        App.getTextFromString(R.string.correct_the_following_text) -> {
-                                            navController.navigate(Screens.ScreenGrammar.route)
-                                        }
-                                        App.getTextFromString(R.string.translate_the_following_text) -> {
-                                            navController.navigate(Screens.ScreenTranslate.route)
-                                        }
-                                        else -> {
-                                            SettingsNotifier.currentUserQuerySection = text
-                                            navController.navigate(Screens.ScreenUserAddedTemplate.route)
+                                        coroutineScope.launch {
+                                            scaffoldState.drawerState.animateTo(
+                                                DrawerValue.Closed,
+                                                anim = tween(durationMillis = 500)
+                                            )
+                                            navController.navigate(templateDestinationRoute.value)
                                         }
                                     }
-                                    coroutineScope.launch {
-                                        scaffoldState.drawerState.animateTo(
-                                            DrawerValue.Closed,
-                                            anim = tween(durationMillis = Constants.ANIMATION_LENGTH)
+                                }
+                            }
+                        },
+                        drawerShape = DrawerShape,
+                        bottomBar = {
+                            val changeTargetValue = remember {
+                                mutableStateOf(false)
+                            }
+
+                            val shouldBottomBarBeVisible =
+                                (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
+                                        && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route)
+
+                            LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
+                                if (shouldBottomBarBeVisible) {
+                                    delay(Constants.SPLASH_SCREEN_DURATION)
+                                    changeTargetValue.value = true
+                                } else {
+                                    changeTargetValue.value = false
+                                }
+                            })
+
+                            if (changeTargetValue.value) {
+                                val listOfBottomNavScreens =
+                                    listOf(
+                                        BottomNavScreens.Dashboard,
+                                        BottomNavScreens.Content,
+                                        BottomNavScreens.Art,
+                                        BottomNavScreens.Settings
+                                    )
+                                BottomNavigation(
+                                    modifier = Modifier.animateOffsetY(
+                                        initialOffsetY = 70.dp,
+                                    ), backgroundColor = Glass
+                                ) {
+                                    val currentRoute = navBackStackEntry?.destination?.route
+
+                                    listOfBottomNavScreens.forEach { screen ->
+                                        /**
+                                         * if the current screen is one of the templates, select the content bottom nav bar, otherwise select the current route
+                                         **/
+                                        val isSelected =
+                                            if (screen == BottomNavScreens.Content && currentRoute != Screens.ScreenSignIn.route && currentRoute != BottomNavScreens.Dashboard.route && currentRoute != BottomNavScreens.Art.route && currentRoute != BottomNavScreens.Settings.route && currentRoute != Screens.ScreenFeedback.route) {
+                                                true
+                                            } else {
+                                                currentRoute == screen.route
+                                            }
+                                        BottomNavigationItem(
+                                            selected = isSelected,
+                                            onClick = {
+                                                SettingsNotifier.resetValues()
+
+                                                if (currentRoute != screen.route) {
+                                                    navController.navigate(screen.route)
+                                                }
+                                            },
+                                            icon = {
+                                                MyIcon(
+                                                    iconID = screen.iconID,
+                                                    contentDesc = stringResource(
+                                                        id = screen.labelID
+                                                    )
+                                                )
+                                            },
+                                            label = { Text(text = stringResource(id = screen.labelID)) },
+                                            selectedContentColor = Blue,
+                                            unselectedContentColor = Color.Black
                                         )
                                     }
                                 }
                             }
                         }
-                    },
-                    drawerShape = DrawerShape,
-                    bottomBar = {
-                        val changeTargetValue = remember {
-                            mutableStateOf(false)
-                        }
-
-                        val shouldBottomBarBeVisible =
-                            (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
-                                    && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route)
-
-                        LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
-                            if (shouldBottomBarBeVisible) {
-                                delay(Constants.SPLASH_SCREEN_DURATION)
-                                changeTargetValue.value = true
-                            } else {
-                                changeTargetValue.value = false
-                            }
-                        })
-
-                        if (changeTargetValue.value) {
-                            val listOfBottomNavScreens =
-                                listOf(
-                                    BottomNavScreens.Dashboard,
-                                    BottomNavScreens.Home,
-                                    BottomNavScreens.Art,
-                                    BottomNavScreens.Settings
-                                )
-                            BottomNavigation(
-                                modifier = Modifier.animateOffsetY(
-                                    initialOffsetY = 70.dp,
-                                ), backgroundColor = Glass
-                            ) {
-                                val currentRoute = navBackStackEntry?.destination?.route
-
-                                listOfBottomNavScreens.forEach { screen ->
-                                    BottomNavigationItem(
-                                        selected = currentRoute == screen.route,
-                                        onClick = {
-                                            SettingsNotifier.resetValues()
-
-                                            if (currentRoute != screen.route) {
-                                                navController.navigate(screen.route)
-                                            }
-                                        },
-                                        icon = {
-                                            MyIcon(
-                                                iconID = screen.iconID,
-                                                contentDesc = stringResource(
-                                                    id = screen.labelID
-                                                )
-                                            )
-                                        },
-                                        label = { Text(text = stringResource(id = screen.labelID)) },
-                                        selectedContentColor = Blue,
-                                        unselectedContentColor = Color.Black
-                                    )
-                                }
-                            }
-                        }
-                    }
-                ) {
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(it)
                     ) {
-                        Column(
+                        Surface(
                             modifier = Modifier
                                 .fillMaxSize()
+                                .padding(it)
                         ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                            ) {
 
-                            /**
-                             * if the android version is equal or greater than 12, remove the custom splash screen
-                             * and check if the user should be navigated directly to the sign in or home screen
-                             **/
+                                val route = remember {
+                                    mutableStateOf(Screens.ScreenEssay.route)
+                                }
+                                LaunchedEffect(key1 = true) {
+                                    coroutineScope.launch(Dispatchers.Main) {
+                                        delay(Constants.SPLASH_SCREEN_DURATION + 1000L)
+                                        if (intent.hasExtra("templateClickedQuery")) {
+                                            val query =
+                                                intent.getStringExtra("templateClickedQuery")
+                                            Modifier.determineTemplateRoute(query!!, route)
+                                            navController.navigate(route.value)
+                                        }
+                                    }
+                                }
+                            }
+
                             /**
                              * if the android version is equal or greater than 12, remove the custom splash screen
                              * and check if the user should be navigated directly to the sign in or home screen
@@ -380,8 +330,8 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
 
-                                    composable(route = BottomNavScreens.Home.route) {
-                                        MyBackHandler(navController = navController)
+                                    composable(route = BottomNavScreens.Content.route) {
+                                        MyBackHandler(navController = navController, BottomNavScreens.Dashboard.route)
                                         ScreenContent(
                                             modifier = Modifier,
                                             navController = navController
@@ -390,7 +340,7 @@ class MainActivity : ComponentActivity() {
 
                                     composable(route = BottomNavScreens.Dashboard.route) {
                                         HomeBackHandler(context = this@MainActivity)
-                                        ScreenDashboard()
+                                        ScreenDashboard(navController)
                                     }
 
                                     composable(route = Screens.ScreenArticle.route) {
@@ -535,8 +485,8 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-//                }
             }
+        } catch (e: Exception) {
         }
     }
 
@@ -570,19 +520,6 @@ class MainActivity : ComponentActivity() {
                 Manifest.permission.POST_NOTIFICATIONS,
                 requestPermissionLauncher
             )
-//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
-//                PackageManager.PERMISSION_GRANTED
-//            ) {
-//                // FCM SDK (and your app) can post notifications.
-//            } else if (shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)) {
-//                //       by them granting the POST_NOTIFICATION permission. This UI should provide the user
-//                //       "OK" and "No thanks" buttons. If the user selects "OK," directly request the permission.
-//                //       If the user selects "No thanks," allow the user to continue without notifications.
-//            } else {
-//                // Directly ask for the permission
-//                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-//            }
-//        }
         }
     }
 

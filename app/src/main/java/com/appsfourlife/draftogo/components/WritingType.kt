@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -16,6 +17,7 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
+import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +33,7 @@ fun WritingType(
     onClick: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     Card(
         modifier = modifier
@@ -121,21 +124,30 @@ fun WritingType(
                             starIconId.value = R.drawable.icon_favorite
                             coroutineScope.launch(Dispatchers.IO) {
                                 if (imageUrl.isEmpty())
-                                    App.databaseApp.daoApp.insertFavoriteTemplate(ModelFavoriteTemplate(text, imageID, null))
+                                    App.databaseApp.daoApp.insertFavoriteTemplate(
+                                        ModelFavoriteTemplate(text, imageID, null)
+                                    )
                                 else
-                                    App.databaseApp.daoApp.insertFavoriteTemplate(ModelFavoriteTemplate(text, null, imageUrl))
+                                    App.databaseApp.daoApp.insertFavoriteTemplate(
+                                        ModelFavoriteTemplate(text, null, imageUrl)
+                                    )
+
+                                HelperUI.refreshWidget(context)
                             }
-                        }
-                        else {
+                        } else {
                             starIconId.value = R.drawable.icon_outlined_star
                             coroutineScope.launch(Dispatchers.IO) {
                                 if (imageUrl.isEmpty())
-                                    App.databaseApp.daoApp.deleteFavoriteTemplate(ModelFavoriteTemplate(text, imageID, null))
+                                    App.databaseApp.daoApp.deleteFavoriteTemplate(
+                                        ModelFavoriteTemplate(text, imageID, null)
+                                    )
                                 else
-                                    App.databaseApp.daoApp.deleteFavoriteTemplate(ModelFavoriteTemplate(text, null, imageUrl))
+                                    App.databaseApp.daoApp.deleteFavoriteTemplate(
+                                        ModelFavoriteTemplate(text, null, imageUrl)
+                                    )
+                                HelperUI.refreshWidget(context)
                             }
                         }
-
                     })
             }
 
@@ -145,3 +157,4 @@ fun WritingType(
         }
     }
 }
+

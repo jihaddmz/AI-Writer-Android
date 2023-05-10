@@ -29,7 +29,8 @@ fun BottomSheet(
         sheetShape = SheetShape,
         sheetContent = { bottomSheet() },
         sheetPeekHeight = peekSize,
-        backgroundColor = Glass
+        backgroundColor = Glass,
+        sheetElevation = 15.dp
     ) {
         content()
     }

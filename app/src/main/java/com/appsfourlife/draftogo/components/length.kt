@@ -21,7 +21,7 @@ import kotlin.math.roundToInt
 @Composable
 fun length(
     modifier: Modifier = Modifier,
-    label: String = stringResource(id = R.string.length),
+    label: String = stringResource(id = R.string.nb_of_words),
     maxLength: Float = Constants.MAX_GENERATION_LENGTH
 ): Int {
 
@@ -48,6 +48,7 @@ fun length(
                 100f,
                 context = context
             ),
+            steps = 10,
             valueRange = 7f..maxLength,
             label = label,
             onValueChangeListener = {

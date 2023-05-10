@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "1057573893043-034hakp9qhh07bigbo9c7p141l3tqjse.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.appsfourlife.draftogo",
+            "certificate_hash": "7064a9889bfcedffa24bf6e730e88447ff33f315"
+          }
+        },
+        {
           "client_id": "1057573893043-par80oeb0j9snsj6emlj8l81qu6ane75.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -22,6 +30,42 @@
             "certificate_hash": "d5a1c564b078b0ac81c38b38abf22c84ebd3d231"
           }
         },
+        {
+          "client_id": "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxADdtuUjRg9R7KXFGUwPu2X7DmM-pQiU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1057573893043-2obv9ohl8dcc5k2lup1ver44mkfgv2ja.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.appsfourlife.aiwriter"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057573893043:android:be7b1e8989d797c17ad1c6",
+        "android_client_info": {
+          "package_name": "com.appsfourlife.draftogo.dev"
+        }
+      },
+      "oauth_client": [
         {
           "client_id": "1057573893043-i2303utnm9oufbqnbdpr8558csaqh066.apps.googleusercontent.com",
           "client_type": 3

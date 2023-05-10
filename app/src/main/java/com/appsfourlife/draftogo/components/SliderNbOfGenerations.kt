@@ -58,7 +58,8 @@ fun sliderNbOfGenerations(
                         it,
                         context = context
                     )
-                }
+                },
+                steps = 1,
             ).roundToInt()
 
             MyText(text = value.value.toString())

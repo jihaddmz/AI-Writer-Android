@@ -6,16 +6,14 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.appsfourlife.draftogo.feature_generate_text.data.data_source.DatabaseApp
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.util.SettingsNotifier
+import com.google.firebase.FirebaseApp
 import com.onesignal.OneSignal
 import com.revenuecat.purchases.CustomerInfo
 import com.revenuecat.purchases.Purchases
 import com.revenuecat.purchases.PurchasesConfiguration
 import com.revenuecat.purchases.PurchasesError
 import com.revenuecat.purchases.interfaces.ReceiveCustomerInfoCallback
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -40,6 +38,8 @@ class App : Application() {
 
         context = this
         databaseApp = DatabaseApp.getInstance(this)!!
+
+        FirebaseApp.initializeApp(this)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 

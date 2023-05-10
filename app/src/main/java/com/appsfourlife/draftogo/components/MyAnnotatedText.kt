@@ -17,7 +17,7 @@ fun MyAnnotatedText(
 ) {
 
     val fontSize = when (rememberWindowInfo().screenWidthInfo){
-        is WindowInfo.WindowType.Compact -> 15.sp
+        is WindowInfo.WindowType.Compact -> 14.sp
         is WindowInfo.WindowType.Medium -> 20.sp
         else -> 24.sp
     }
