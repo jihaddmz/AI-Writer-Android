@@ -320,7 +320,7 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     composable(route = Screens.ScreenFeedback.route) {
-                                        MyBackHandler(navController = navController)
+                                        MyBackHandler(navController = navController, destRoute = BottomNavScreens.Settings.route)
                                         ScreenFeedback(navController = navController)
                                     }
 
