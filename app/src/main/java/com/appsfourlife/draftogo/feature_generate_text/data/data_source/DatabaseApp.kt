@@ -40,7 +40,7 @@ abstract class DatabaseApp : RoomDatabase() {
                     context,
                     DatabaseApp::class.java,
                     "db_generate_text"
-                ).addMigrations(MIGRATION_1_2).build()
+                ).allowMainThreadQueries().addMigrations(MIGRATION_1_2).build()
             }
 
             return INSTANCE

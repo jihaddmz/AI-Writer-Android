@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.home.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -14,12 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
@@ -33,15 +36,20 @@ import com.appsfourlife.draftogo.home.listitems.UsageItem
 import com.appsfourlife.draftogo.home.model.ModelDashboardUsage
 import com.appsfourlife.draftogo.home.util.NotifiersHome.listOfFavoriteTemplates
 import com.appsfourlife.draftogo.ui.theme.*
+import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.concurrent.timerTask
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ScreenDashboard() {
+fun ScreenDashboard(navController: NavController) {
     val sheetScaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
 
     val nbOfWordsLeft = remember {
         mutableStateOf(AnnotatedString(text = "0"))
@@ -53,96 +61,135 @@ fun ScreenDashboard() {
         mutableStateOf(false)
     }
 
+    val timer = remember {
+        mutableStateOf(0)
+    }
+    Timer().scheduleAtFixedRate(timerTask {
+        if (timer.value == 2)
+            return@timerTask
+        timer.value += 1
+    }, 2000, 1000)
+    if (timer.value == 2 && !HelperSharedPreference.getDontShowAnyWhereWritingPermission())
+        HelperUI.ShowAccessibilityPermissionRequester(true)
+
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
-            // todo uncomment app version check
-            HelperFirebaseDatabase.fetchAppVersion {
-                isAppOutDated.value = it != BuildConfig.VERSION_NAME
-            }
+            if (SettingsNotifier.isConnected.value)
+                HelperFirebaseDatabase.fetchAppVersion {
+                    isAppOutDated.value = it != BuildConfig.VERSION_NAME
+                }
 
-            HelperFirebaseDatabase.fetchNbOfGenerationsConsumedAndNbOfWordsGenerated() {
-                nbOfWordsLeft.value = if (HelperAuth.isSubscribed()) {
-                    if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
-                        AnnotatedString(
-                            "${Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated()}\n",
-                            spanStyle = (SpanStyle(fontWeight = FontWeight.Bold))
-                        ).plus(
+            if (SettingsNotifier.isConnected.value)
+                HelperFirebaseDatabase.fetchNbOfGenerationsConsumedAndNbOfWordsGenerated() {
+                    nbOfWordsLeft.value = if (HelperAuth.isSubscribed()) {
+                        if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
                             AnnotatedString(
-                                text = App.getTextFromString(R.string.words)
+                                "${Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated()}\n",
+                                spanStyle = (SpanStyle(fontWeight = FontWeight.Bold))
+                            ).plus(
+                                AnnotatedString(
+                                    text = App.getTextFromString(R.string.words)
+                                )
                             )
-                        )
+                        } else {
+                            AnnotatedString(
+                                text = "∞\n",
+                                spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                            ).plus(
+                                AnnotatedString(
+                                    App.getTextFromString(R.string.words)
+                                )
+                            )
+                        }
                     } else {
+                        val nbOfGenerationsLeft =
+                            if (Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed() < 0) {
+                                0
+                            } else {
+                                Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed()
+                            }
                         AnnotatedString(
-                            text = "∞\n",
+                            text = "$nbOfGenerationsLeft\n",
                             spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                         ).plus(
-                            AnnotatedString(
-                                App.getTextFromString(R.string.words)
-                            )
+                            AnnotatedString(text = App.getTextFromString(R.string.generations))
                         )
                     }
-                } else {
-                    val nbOfGenerationsLeft =
-                        if (Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed() < 0) {
-                            0
-                        } else {
-                            Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed()
-                        }
-                    AnnotatedString(
-                        text = "$nbOfGenerationsLeft\n",
+                }
+
+            if (SettingsNotifier.isConnected.value)
+                HelperFirebaseDatabase.getNbOfArtCredits() {
+                    nbOfArtsLeft.value = AnnotatedString(
+                        text = "${HelperSharedPreference.getNbOfArtsCredits()}\n",
                         spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                     ).plus(
-                        AnnotatedString(text = App.getTextFromString(R.string.generations))
+                        AnnotatedString(
+                            text = App.getTextFromString(R.string.arts)
+                        )
                     )
                 }
-            }
-
-            HelperFirebaseDatabase.getNbOfArtCredits() {
-                nbOfArtsLeft.value = AnnotatedString(
-                    text = "${HelperSharedPreference.getNbOfArtsCredits()}\n",
-                    spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                ).plus(
-                    AnnotatedString(
-                        text = App.getTextFromString(R.string.arts)
-                    )
-                )
-            }
 
             listOfFavoriteTemplates.value = App.databaseApp.daoApp.getAllFavoriteTemplates()
 
             // if the user is on base plan subscription, check if we are currently on the same renewal date, if so
             // reset all values on firebase and set the new renewal date, if no, check if currently we are after the
             // renewal date on firebase, if so reset the value on firebase and set the new renewal date
-            HelperFirebaseDatabase.getRenewalDate {
-                if (it != "null" && it != "")
-                    if (it == HelperDate.getCurrentDateInString()) {
-                        HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
-                        HelperSharedPreference.setNbOfArtsGenerated(0)
-                        HelperFirebaseDatabase.setRenewalDate()
-                    } else {
-                        val dateInFirebase =
-                            HelperDate.parseStringToDate(it, Constants.DAY_MONTH_YEAR_FORMAT)
-                        val dateNow = HelperDate.parseStringToDate(
-                            HelperDate.parseDateToString(
-                                Date(),
-                                Constants.DAY_MONTH_YEAR_FORMAT
-                            ), Constants.DAY_MONTH_YEAR_FORMAT
-                        )
-                        dateNow?.let { dateNow ->
-                            if (dateNow.after(dateInFirebase)) {
-                                HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
-                                HelperSharedPreference.setNbOfArtsGenerated(0)
-                                HelperFirebaseDatabase.setRenewalDate()
+            if (SettingsNotifier.isConnected.value)
+                HelperFirebaseDatabase.getRenewalDate {
+                    if (it != "null" && it != "")
+                        if (it == HelperDate.getCurrentDateInString()) {
+                            HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                            HelperSharedPreference.setNbOfArtsGenerated(0)
+                            HelperFirebaseDatabase.setRenewalDate()
+                        } else {
+                            val dateInFirebase =
+                                HelperDate.parseStringToDate(it, Constants.DAY_MONTH_YEAR_FORMAT)
+                            val dateNow = HelperDate.parseStringToDate(
+                                HelperDate.parseDateToString(
+                                    Date(),
+                                    Constants.DAY_MONTH_YEAR_FORMAT
+                                ), Constants.DAY_MONTH_YEAR_FORMAT
+                            )
+                            dateNow?.let { dateNow ->
+                                if (dateNow.after(dateInFirebase)) {
+                                    HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                                    HelperSharedPreference.setNbOfArtsGenerated(0)
+                                    HelperFirebaseDatabase.setRenewalDate()
+                                }
                             }
                         }
-                    }
-            }
+                }
         }
     })
 
     BottomSheet(sheetScaffoldState = sheetScaffoldState, bottomSheet = {
         BottomSheetFavoriteTemplates()
     }) {
+
+        /**
+         * show reward dialog if there is a text reward in firebase for this particular user
+         **/
+        val rewardedDialogText = remember {
+            mutableStateOf("")
+        }
+        val showRewardDialog = remember {
+            mutableStateOf(false)
+        }
+        LaunchedEffect(key1 = true, block = {
+            coroutineScope.launch(Dispatchers.IO) {
+                delay(1000)
+                HelperFirebaseDatabase.getRewardText {
+                    if (!it.isNullOrEmpty() && it != "null") {
+                        rewardedDialogText.value = it
+                        showRewardDialog.value = true
+                    }
+                }
+            }
+        })
+        if (showRewardDialog.value) {
+            DialogReward(text = rewardedDialogText.value, showDialog = showRewardDialog)
+        }
+
 
         if (isAppOutDated.value) // if the app is outdated show the alert dialog to update
             MyDialog(
@@ -151,8 +198,8 @@ fun ScreenDashboard() {
                 text = stringResource(id = R.string.app_is_outdated),
                 title = stringResource(id = R.string.attention),
                 properties = DialogProperties(
-                    dismissOnBackPress = false,
-                    dismissOnClickOutside = false,
+                    dismissOnBackPress = true,
+                    dismissOnClickOutside = true,
                 )
             )
 
@@ -314,6 +361,8 @@ fun ScreenDashboard() {
 
                                     listOfFavoriteTemplates.value =
                                         App.databaseApp.daoApp.getAllFavoriteTemplates()
+
+                                    HelperUI.refreshWidget(context = context)
                                 }
                             }
 

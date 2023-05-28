@@ -7,9 +7,9 @@ import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @Composable
-fun MyBackHandler(navController: NavController) {
+fun MyBackHandler(navController: NavController, destRoute: String = BottomNavScreens.Content.route) {
     BackHandler(true) {
         SettingsNotifier.resetValues()
-        navController.navigate(BottomNavScreens.Home.route)
+        navController.navigate(destRoute)
     }
 }

@@ -47,6 +47,7 @@ fun TypeWriterLength(
                 context = context
             ),
             valueRange = 0f..Constants.MAX_TYPEWRITER_LENGTH,
+            steps = 10,
             onValueChangeListener = {
                 HelperSharedPreference.setFloat(
                     HelperSharedPreference.SP_SETTINGS,

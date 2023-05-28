@@ -42,6 +42,7 @@ object HelperSharedPreference {
     const val SP_SETTINGS_NB_0F_ARTS_CREDITS = "nb_0f_arts_credits"
     const val SP_SETTINGS_NB_0F_ARTS_GENERATED = "nb_0f_arts_generated"
     const val SP_SETTINGS_TYPE_OF_WRITING_MODEL = "type_of_writing_model"
+    const val SP_SETTINGS_DONT_SHOW_ANYWHERE_WRITING_PERMISSION = "dont_show_anywhere_writing_permission"
 
 
     /**
@@ -55,6 +56,14 @@ object HelperSharedPreference {
     /**
      * most common shared preferences keys
      **/
+
+    fun getDontShowAnyWhereWritingPermission(): Boolean {
+        return getBool(SP_SETTINGS, SP_SETTINGS_DONT_SHOW_ANYWHERE_WRITING_PERMISSION, false)
+    }
+
+    fun setDontShowAnyWhereWritingPermission(value: Boolean) {
+        setBool(SP_SETTINGS, SP_SETTINGS_DONT_SHOW_ANYWHERE_WRITING_PERMISSION, value)
+    }
 
     fun getTypeOfWritingModel(): String {
         return getString(SP_SETTINGS, SP_SETTINGS_TYPE_OF_WRITING_MODEL, "gpt-3.5-turbo")

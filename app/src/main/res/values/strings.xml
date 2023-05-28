@@ -2,7 +2,6 @@
     <string name="app_name">Draftogo</string>
     <string name="to">To</string>
     <string name="Name">Name</string>
-    <string name="length">Length</string>
     <string name="clear">Clear</string>
     <string name="paste">Paste</string>
     <string name="share">Share</string>
@@ -64,6 +63,7 @@
     <string name="add">Add</string>
     <string name="left">%d Left</string>
     <string name="nb_of_text_generations_exceeded">Number of text generations is exceeded, to continue using the app, please consider subscribing monthly for only %d$</string>
+    <string name="nb_of_text_generations_exceeded_anywhere">Number of text generations is exceeded, to continue generating text anywhere, please subscribe monthly to one of our plans</string>
     <string name="attention">Attention!</string>
     <string name="subscribe">Subscribe</string>
     <string name="write_a_linkedin_post">Write a linkedin post</string>
@@ -147,7 +147,7 @@
     <string name="wrong">Wrong</string>
     <string name="check">Check</string>
     <string name="deletion_confirmation">Are you sure you want to delete all history?</string>
-    <string name="app_is_outdated">A new release is available, please update it and relaunch the app</string>
+    <string name="app_is_outdated">A new release is available, please update it to enjoy the latest features and improvements</string>
     <string name="linkedin_input_label">about my present role</string>
     <string name="watch_an_ad">Watch an Ad -></string>
     <string name="loading_ad">Loading Ad</string>
@@ -256,4 +256,22 @@
     <string name="davinci_model_explanation">If you want accurate and complex response, choose this model</string>
     <string name="writing_model_chooser_label">Writing Model Chooser</string>
     <string name="website">Website</string>
+
+
+
+    <string name="accessibility_service_label">Draftogo</string>
+    <string name="accessibility_service_description">This permission lets the app detect when you type /draft in all applications inorder to generate text for you</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="permission_write_anywhere">Write AnyWhere Permission</string>
+    <string name="permission_accessibility_label_desc">Inorder to write anywhere, you need to grant the accessibility permission, so the app will be able to detect when you type</string>
+    <string name="base_plan_nb_of_words_exceeded">You have exceeded the 45000 number of words limit, please launch the app and upgrade to the Plus Plan to generate more</string>
+    <string name="write_anywhere">Write anywhere that has a text field</string>
+    <string name="dont_show_again">Don\'t show again</string>
+    <string name="enable_write_anywhere">Enable Write Anywhere</string>
+    <string name="no_favorite_templates_added">Add favorite templates</string>
+    <string name="written_anywhere">Written Anywhere</string>
+    <string name="nb_of_words">Nb of Words</string>
+    <string name="redeem_code">Redeem Code</string>
+    <string name="redeem_code_desc">Write down the redeem code to activate the offer</string>
 </resources>

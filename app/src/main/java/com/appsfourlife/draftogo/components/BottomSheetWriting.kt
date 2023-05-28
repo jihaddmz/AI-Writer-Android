@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.feature_generate_text.components.BottomSheetWritePricing
-import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.ui.theme.Glass
 import com.appsfourlife.draftogo.ui.theme.SheetShape
 import com.appsfourlife.draftogo.util.SettingsNotifier
@@ -32,11 +31,9 @@ fun BottomSheetWriting(
         scaffoldState = sheetScaffoldState,
         sheetContent = {
             if (SettingsNotifier.isPricingBottomSheets.value) {
-                Helpers.logD("1")
                 BottomSheetWritePricing(sheetScaffoldState)
             } else {
                 BottomSheetSavedOutputs()
-                Helpers.logD("2")
             }
         },
         sheetPeekHeight = 0.dp,

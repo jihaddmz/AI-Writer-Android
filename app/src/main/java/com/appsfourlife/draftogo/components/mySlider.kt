@@ -15,6 +15,7 @@ fun mySlider(
     initialValue: Float,
     valueRange: ClosedFloatingPointRange<Float> = 7f..Constants.MAX_GENERATION_LENGTH,
     label: String = "",
+    steps: Int = 0,
     onValueChangeListener: (Float) -> Unit
 ): Float {
 
@@ -24,13 +25,14 @@ fun mySlider(
 
     Slider(
         modifier = modifier,
+        valueRange = valueRange,
         value = value.value,
         onValueChange = {
             value.value = it
             onValueChangeListener(it)
         },
+        steps = steps,
         colors = SliderDefaults.colors(thumbColor = Blue, activeTrackColor = Blue),
-        valueRange = valueRange
     )
 
     return value.value
