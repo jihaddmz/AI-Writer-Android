@@ -1,9 +1,7 @@
 package com.appsfourlife.draftogo
 
 import android.accessibilityservice.AccessibilityService
-import android.accessibilityservice.AccessibilityServiceInfo
 import android.os.Bundle
-import android.text.Html
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.compose.ui.text.input.TextFieldValue
@@ -24,7 +22,7 @@ class MyAccessibilityService : AccessibilityService() {
 
     private var nodeInfo: AccessibilityNodeInfo? = null
     private var seconds: Int = 0
-    var startRecording = false
+    private var startRecording = false
 
     init {
         Timer().scheduleAtFixedRate(timerTask {
@@ -40,9 +38,7 @@ class MyAccessibilityService : AccessibilityService() {
                             val arguments = Bundle()
                             arguments.putString(
                                 AccessibilityNodeInfoCompat.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
-                                Html.fromHtml(App.getTextFromString(R.string.base_plan_nb_of_words_exceeded), 0)
-                                    .toString()
-
+                                App.getTextFromString(R.string.base_plan_nb_of_words_exceeded)
                             )
                             nodeInfo!!.performAction(
                                 AccessibilityNodeInfoCompat.ACTION_SET_TEXT,
@@ -53,7 +49,7 @@ class MyAccessibilityService : AccessibilityService() {
                         generate()
                     }
                 } else {
-                    if (HelperSharedPreference.getNbOfGenerationsConsumed() <= Constants.NB_OF_MAX_ALLOWED_GENERATIONS) {
+                    if (HelperSharedPreference.getNbOfGenerationsConsumed() < Constants.NB_OF_MAX_ALLOWED_GENERATIONS) {
                         generate()
                     } else {
                         startRecording = false
@@ -85,81 +81,74 @@ class MyAccessibilityService : AccessibilityService() {
             seconds = 0
 
             val arguments = Bundle()
-            arguments.putString(
-                AccessibilityNodeInfoCompat.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
-                textInProgress
-            )
-            node.performAction(
-                AccessibilityNodeInfoCompat.ACTION_SET_TEXT,
-                arguments
-            )
+            if (SettingsNotifier.isConnected.value) {
+                arguments.putString(
+                    AccessibilityNodeInfoCompat.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
+                    textInProgress
+                )
+                node.performAction(
+                    AccessibilityNodeInfoCompat.ACTION_SET_TEXT,
+                    arguments
+                )
 
-            SettingsNotifier.input.value = TextFieldValue(node.text.split("/draft")[1].trim())
-            SettingsNotifier.templateType = App.getTextFromString(R.string.written_anywhere)
-            HelperChatGPT.getResponse1(
-                node.text.split("/draft")[1].trim(),
-                onErrorAction = {},
-                onDoneAction = {
-                    arguments.putString(
-                        AccessibilityNodeInfoCompat.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
-                        it
-                    )
-                    node.performAction(
-                        AccessibilityNodeInfoCompat.ACTION_SET_TEXT,
-                        arguments
-                    )
-                })
+                SettingsNotifier.input.value = TextFieldValue(node.text.split("/draft")[1].trim())
+                SettingsNotifier.templateType = App.getTextFromString(R.string.written_anywhere)
+                HelperChatGPT.getResponse1(
+                    node.text.split("/draft")[1].trim(),
+                    onErrorAction = {},
+                    onDoneAction = {
+                        arguments.putString(
+                            AccessibilityNodeInfoCompat.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
+                            it
+                        )
+                        node.performAction(
+                            AccessibilityNodeInfoCompat.ACTION_SET_TEXT,
+                            arguments
+                        )
+                    })
+            } else {
+                arguments.putString(
+                    AccessibilityNodeInfoCompat.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE,
+                    App.getTextFromString(R.string.no_connection)
+                )
+                node.performAction(
+                    AccessibilityNodeInfoCompat.ACTION_SET_TEXT,
+                    arguments
+                )
+            }
         }
     }
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
-        event?.let {
-            if (event.eventType == AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED) {
-                if (startRecording) // if user is still typing don't start the timer
-                    seconds = 0
+        if (startRecording) { // if user is still typing don't start the timer
+            seconds = 0
+        }
 
-                event.beforeText?.let { it1 ->
-                    if (it1.contains("/draft")) {
+        if (event!!.packageName == "com.google.android.gm") {
+            event.source?.let { it1 ->
+                nodeInfo = it1
+                it1.text?.let {
+                    if (it.contains("/draft")) {
                         startRecording = true
-                        event.source?.let { nodeInfo ->
-                            this.nodeInfo = nodeInfo
-                        }
                     } else {
                         nodeInfo = null
                     }
+                }
+            }
+        } else {
+            event.beforeText?.let { it1 ->
+                if (it1.contains("/draft")) {
+                    startRecording = true
+                    event.source?.let { nodeInfo ->
+                        this.nodeInfo = nodeInfo
+                    }
+                } else {
+                    nodeInfo = null
                 }
             }
         }
     }
 
     override fun onInterrupt() {
-        TODO("Not yet implemented")
-    }
-
-    override fun onServiceConnected() {
-        serviceInfo.apply {
-            // Set the type of events that this service wants to listen to. Others
-            // won't be passed to this service.
-            eventTypes =
-                AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED
-
-            // If you only want this service to work with specific applications, set their
-            // package names here. Otherwise, when the service is activated, it will listen
-            // to events from all applications.
-//            packageNames = arrayOf("com.example.android.myFirstApp", "com.example.android.mySecondApp")
-
-            // Set the type of feedback your service will provide.
-            feedbackType = AccessibilityServiceInfo.FEEDBACK_VISUAL
-
-            // Default services are invoked only if no package-specific ones are present
-            // for the type of AccessibilityEvent generated. This service *is*
-            // application-specific, so the flag isn't necessary. If this was a
-            // general-purpose service, it would be worth considering setting the
-            // DEFAULT flag.
-
-//             flags = AccessibilityServiceInfo.DEFAULT;
-
-//            notificationTimeout = 100
-        }
     }
 }
