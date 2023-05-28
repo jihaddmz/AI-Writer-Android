@@ -13,8 +13,9 @@ android {
         applicationId 'com.appsfourlife.draftogo'
         minSdk 24
         targetSdk 33
-        versionCode 37
-        versionName "2.1.2"
+        versionCode 38
+        versionName "2.1.3"
+        resourceConfigurations += ["en", "ar"]
 
         signingConfigs {
             config {
@@ -24,6 +25,7 @@ android {
                 storePassword 'Jihad.AIWriter'
             }
         }
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

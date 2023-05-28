@@ -63,7 +63,7 @@
     <string name="action">فعل</string>
     <string name="whats_the_difference_between">ما الفرق بين</string>
     <string name="add">يضيف</string>
-    <string name="left">أيسر %s</string>
+    <string name="left">متبقي %s</string>
     <string name="nb_of_text_generations_exceeded">تم تجاوز عدد الأجيال النصية ، للاستمرار في استخدام التطبيق ، يرجى التفكير في الاشتراك شهريًا مقابل %d $ فقط</string>
     <string name="nb_of_text_generations_exceeded_anywhere">تم تجاوز عدد أجيال النص ، للاستمرار في إنشاء نص في أي مكان ، يرجى الاشتراك شهريًا في إحدى خططنا</string>
     <string name="attention">انتباه!</string>
@@ -90,7 +90,7 @@
     <string name="facebook_input_label">حول التغذية</string>
     <string name="write_a_song">أكتب أغنية</string>
     <string name="song_input_label">عن أملي الأكبر في الحياة.</string>
-    <string name="nb_of_generations">ملحوظة من الأجيال</string>
+    <string name="nb_of_generations">عدد النواتج</string>
     <string name="back_button_exit_text">اضغط مرة أخرى للخروج من التطبيق</string>
     <string name="subscribed">مشترك</string>
     <string name="settings">إعدادات</string>
@@ -184,32 +184,26 @@
     <string name="art">فن</string>
     <string name="view_history">عرض السجل</string>
     <string name="generate_arts">توليد الفنون</string>
-    <string name="fish_art_bio">عرض ثلاثي الأبعاد لسمكة استوائية لطيفة في حوض سمك على خلفية زرقاء داكنة ، فن رقمي</string>
-    <string name="avocado_art_bio">كرسي بذراعين على شكل ثمرة أفوكادو</string>
-    <string name="monster_art_bio">صورة لوحش من الفرو الأبيض يقف في غرفة أرجوانية</string>
-    <string name="astronaut_art_bio">عرض ثلاثي الأبعاد لرائد فضاء يسير في صحراء خضراء</string>
-    <string name="sketch_art_bio">رسم مرسوم باليد لسيارة بورش 911</string>
-    <string name="bear_art_bio">صورة لدب على لوح تزلج في تايمز سكوير</string>
     <string name="generate_art_tip">نصيحة: كل جيل يكلف 1 رصيد</string>
-    <string name="generate_art_textfield_label">قطة سيامية بيضاء</string>
-    <string name="nbof_credits">d%</string>
+    <string name="generate_art_textfield_label">A white siamese cat</string>
+    <string name="nbof_credits">متبقي %d</string>
     <string name="image_saved_to_gallery">تم الحفظ في المعرض</string>
     <string name="tip_art_download_image">نصيحة: انقر على الصورة لتنزيلها</string>
     <string name="art_res_tip">نصيحة: هذه هي الدقة المطلوبة للصورة</string>
     <string name="save_to_history">حفظ في المحفوظات</string>
-    <string name="render_3d">تجسيد ثلاثي الأبعاد</string>
-    <string name="abstract1">خلاصة</string>
-    <string name="anime">أنيمي</string>
-    <string name="cartoon">كارتون</string>
-    <string name="digital_art">الفن الرقمي</string>
-    <string name="illustration">توضيح</string>
+    <string name="render_3d">3D Render</string>
+    <string name="abstract1">Abstract</string>
+    <string name="anime">Anime</string>
+    <string name="cartoon">Cartoon</string>
+    <string name="digital_art">Digital Art</string>
+    <string name="illustration">Illustration</string>
     <string name="origami">Origami</string>
-    <string name="pixel_art">فن البكسل</string>
-    <string name="photography">التصوير</string>
-    <string name="pop_art">فن البوب</string>
-    <string name="retro">ريترو</string>
-    <string name="sketch">رسم</string>
-    <string name="none">لا أحد</string>
+    <string name="pixel_art">Pixel Art</string>
+    <string name="photography">Photography</string>
+    <string name="pop_art">Pop Art</string>
+    <string name="retro">Retro</string>
+    <string name="sketch">Sketch</string>
+    <string name="none">None</string>
     <string name="style">أسلوب</string>
     <string name="i_need_inspiration">أحتاج إلى إلهام!</string>
     <string name="prompt_history">التاريخ الفوري</string>
@@ -220,10 +214,19 @@
     <string name="access_to_all_styles">الوصول إلى جميع الأنماط (10)</string>
     <string name="use_some_inspiration">استخدم بعض الإلهام</string>
     <string name="billed_once">دفع مرة واحدة</string>
-    <string name="orange_art_bio">برتقالية زرقاء مقطعة إلى نصفين موضوعة على أرضية زرقاء أمام جدار أزرق</string>
-    <string name="boul_art_bio">وعاء من الحساء هو أيضًا بوابة لبعد آخر ، الفن الرقمي</string>
-    <string name="computer_art_bio">جهاز كمبيوتر من التسعينيات بأسلوب vaporwave</string>
-    <string name="dogandcat_art_bio">صورة لكلب ساموييد ولسانه خارج وهو يعانق قطة سيامية بيضاء</string>
+
+    <string name="fish_art_bio">3D render of a cute tropical fish in an aquarium on a dark blue background, digital art</string>
+    <string name="avocado_art_bio">An armchair in the shape of an avocado</string>
+    <string name="monster_art_bio">A photo of a white fur monster standing in a purple room</string>
+    <string name="astronaut_art_bio">A 3D render of an astronaut walking in a green desert</string>
+    <string name="sketch_art_bio">A hand drawn sketch of a Porsche 911</string>
+    <string name="bear_art_bio">A photo of a teddy bear on a skateboard in Times Square</string>
+    <string name="orange_art_bio">A blue orange sliced in half laying on a blue floor in front of a blue wall</string>
+    <string name="boul_art_bio">A bowl of soup that is also a portal to another dimension, digital art</string>
+    <string name="computer_art_bio">A computer from the 90s in the style of vaporwave</string>
+    <string name="dogandcat_art_bio">A photo of a Samoyed dog with its tongue out hugging a white Siamese cat</string>
+
+
     <string name="access_to_all_templates">الوصول إلى 20 نموذجًا</string>
     <string name="generate_content_in_different_languages">قم بإنشاء محتوى بـ 10 لغات</string>
     <string name="create_custom_templates">إنشاء قوالب مخصصة</string>
@@ -278,4 +281,7 @@
     <string name="redeem_code_desc">اكتب رمز الاسترداد لتفعيل العرض</string>
     <!-- Generated by Automatic String Resource Translation -->
     <!--          https://asrt.gluege.boerde.de             -->
+
+    <string name="draft">/درافت</string>
+
 </resources>
