@@ -182,12 +182,6 @@
     <string name="art">Art</string>
     <string name="view_history">View History</string>
     <string name="generate_arts">Generate Arts</string>
-    <string name="fish_art_bio">3D render of a cute tropical fish in an aquarium on a dark blue background, digital art</string>
-    <string name="avocado_art_bio">An armchair in the shape of an avocado</string>
-    <string name="monster_art_bio">A photo of a white fur monster standing in a purple room</string>
-    <string name="astronaut_art_bio">A 3D render of an astronaut walking in a green desert</string>
-    <string name="sketch_art_bio">A hand drawn sketch of a Porsche 911</string>
-    <string name="bear_art_bio">A photo of a teddy bear on a skateboard in Times Square</string>
     <string name="generate_art_tip">Tip: Each generation costs 1 credit</string>
     <string name="generate_art_textfield_label">A white siamese cat</string>
     <string name="nbof_credits">%d</string>
@@ -218,10 +212,18 @@
     <string name="access_to_all_styles">Access to all styles (10+)</string>
     <string name="use_some_inspiration">Use some inspiration</string>
     <string name="billed_once">Billed Once</string>
+
+    <string name="fish_art_bio">3D render of a cute tropical fish in an aquarium on a dark blue background, digital art</string>
+    <string name="avocado_art_bio">An armchair in the shape of an avocado</string>
+    <string name="monster_art_bio">A photo of a white fur monster standing in a purple room</string>
+    <string name="astronaut_art_bio">A 3D render of an astronaut walking in a green desert</string>
+    <string name="sketch_art_bio">A hand drawn sketch of a Porsche 911</string>
+    <string name="bear_art_bio">A photo of a teddy bear on a skateboard in Times Square</string>
     <string name="orange_art_bio">A blue orange sliced in half laying on a blue floor in front of a blue wall</string>
     <string name="boul_art_bio">A bowl of soup that is also a portal to another dimension, digital art</string>
     <string name="computer_art_bio">A computer from the 90s in the style of vaporwave</string>
     <string name="dogandcat_art_bio">A photo of a Samoyed dog with its tongue out hugging a white Siamese cat</string>
+
     <string name="access_to_all_templates">Access to 20+ templates</string>
     <string name="generate_content_in_different_languages">Generate content in 10+ languages</string>
     <string name="create_custom_templates">Create custom templates</string>
@@ -274,4 +276,5 @@
     <string name="nb_of_words">Nb of Words</string>
     <string name="redeem_code">Redeem Code</string>
     <string name="redeem_code_desc">Write down the redeem code to activate the offer</string>
+    <string name="draft">/draft</string>
 </resources>

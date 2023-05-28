@@ -15,6 +15,7 @@ android {
         targetSdk 33
         versionCode 37
         versionName "2.1.2"
+        resourceConfigurations += ["en", "ar"]
 
         signingConfigs {
             config {
@@ -24,6 +25,7 @@ android {
                 storePassword 'Jihad.AIWriter'
             }
         }
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

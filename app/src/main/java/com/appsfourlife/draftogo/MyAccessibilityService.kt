@@ -23,6 +23,7 @@ class MyAccessibilityService : AccessibilityService() {
     private var nodeInfo: AccessibilityNodeInfo? = null
     private var seconds: Int = 0
     private var startRecording = false
+    private var prefixWord = App.getTextFromString(R.string.draft)
 
     init {
         Timer().scheduleAtFixedRate(timerTask {
@@ -91,10 +92,10 @@ class MyAccessibilityService : AccessibilityService() {
                     arguments
                 )
 
-                SettingsNotifier.input.value = TextFieldValue(node.text.split("/draft")[1].trim())
+                SettingsNotifier.input.value = TextFieldValue(node.text.split(prefixWord)[1].trim())
                 SettingsNotifier.templateType = App.getTextFromString(R.string.written_anywhere)
                 HelperChatGPT.getResponse1(
-                    node.text.split("/draft")[1].trim(),
+                    node.text.split(prefixWord)[1].trim(),
                     onErrorAction = {},
                     onDoneAction = {
                         arguments.putString(
@@ -128,7 +129,7 @@ class MyAccessibilityService : AccessibilityService() {
             event.source?.let { it1 ->
                 nodeInfo = it1
                 it1.text?.let {
-                    if (it.contains("/draft")) {
+                    if (it.contains(prefixWord)) {
                         startRecording = true
                     } else {
                         nodeInfo = null
@@ -137,7 +138,7 @@ class MyAccessibilityService : AccessibilityService() {
             }
         } else {
             event.beforeText?.let { it1 ->
-                if (it1.contains("/draft")) {
+                if (it1.contains(prefixWord)) {
                     startRecording = true
                     event.source?.let { nodeInfo ->
                         this.nodeInfo = nodeInfo
