@@ -13,8 +13,8 @@ android {
         applicationId 'com.appsfourlife.draftogo'
         minSdk 24
         targetSdk 33
-        versionCode 32
-        versionName "2.1"
+        versionCode 37
+        versionName "2.1.2"
 
         signingConfigs {
             config {

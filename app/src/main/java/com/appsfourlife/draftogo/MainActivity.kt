@@ -183,6 +183,7 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         drawerShape = DrawerShape,
+                        drawerGesturesEnabled = navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route,
                         bottomBar = {
                             val changeTargetValue = remember {
                                 mutableStateOf(false)
@@ -320,7 +321,7 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     composable(route = Screens.ScreenFeedback.route) {
-                                        MyBackHandler(navController = navController)
+                                        MyBackHandler(navController = navController, destRoute = BottomNavScreens.Settings.route)
                                         ScreenFeedback(navController = navController)
                                     }
 
