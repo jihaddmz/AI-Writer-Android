@@ -1,7 +1,6 @@
 package com.appsfourlife.draftogo.extensions
 
 import androidx.compose.animation.core.*
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.runtime.Composable
@@ -16,7 +15,6 @@ import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
-@OptIn(ExperimentalFoundationApi::class)
 fun LazyGridScope.sectionsGridContent(
     list: List<ModelTemplate>,
     navController: NavController,
@@ -27,7 +25,7 @@ fun LazyGridScope.sectionsGridContent(
             val imageUrl = list[index].imageUrl
             val userAdded = list[index].userAdded
             WritingType(
-                modifier = Modifier.animateItemPlacement(),
+                modifier = Modifier,
                 text = text,
                 imageUrl = imageUrl,
                 onLongClick = {
