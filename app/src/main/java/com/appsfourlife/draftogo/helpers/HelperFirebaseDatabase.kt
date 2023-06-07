@@ -35,16 +35,20 @@ object HelperFirebaseDatabase {
             .collection("history")
             .document()
             .set(map)
-            .addOnCompleteListener {
+            .addOnSuccessListener {
+
+            }.addOnFailureListener {
+
             }
     }
 
     fun fetchNbOfGenerationsConsumedAndNbOfWordsGenerated(onComplete: () -> Unit) {
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
-            .get().addOnCompleteListener {
-                val nbOfGenerationsConsumed = it.result.get("nbOfGenerationsConsumed") as Long?
-                val nbOfWordsGenerated = it.result.get("nbOfWordsGenerated") as Long?
+            .get()
+            .addOnSuccessListener {
+                val nbOfGenerationsConsumed = it.get("nbOfGenerationsConsumed") as Long?
+                val nbOfWordsGenerated = it.get("nbOfWordsGenerated") as Long?
                 if (nbOfGenerationsConsumed == null) { // no field nbOfGenerationsConsumed yet
                     HelperSharedPreference.setInt(
                         HelperSharedPreference.SP_SETTINGS,
@@ -75,6 +79,8 @@ object HelperFirebaseDatabase {
                 }
 
                 onComplete()
+            }.addOnFailureListener {
+
             }
     }
 
@@ -89,11 +95,11 @@ object HelperFirebaseDatabase {
             .document(HelperAuth.auth.currentUser?.email!!)
             .collection("history")
             .get()
-            .addOnCompleteListener { task ->
-                if (task.result.documents.isEmpty()) {
+            .addOnSuccessListener { task ->
+                if (task.documents.isEmpty()) {
                     noHistory.value = true
                 } else {
-                    task.result.documents.forEach { documentSnapshot ->
+                    task.documents.forEach { documentSnapshot ->
                         result.add(
                             ModelHistory(
                                 type = documentSnapshot.get("type").toString().trim(),
@@ -112,21 +118,30 @@ object HelperFirebaseDatabase {
                     list.value = list.value.reversed() as MutableList<ModelHistory>
                 }
                 showCircularIndicator.value = false
+            }.addOnFailureListener {
+
             }
     }
 
     fun fetchAppVersion(onResultFetched: (String) -> Unit) {
-        firestore.collection("app").document("settings").get().addOnCompleteListener {
-            onResultFetched(it.result.get("appVersion").toString())
+        firestore.collection("app").document("settings").get().addOnSuccessListener {
+            onResultFetched(it.get("appVersion").toString())
+        }.addOnFailureListener {
+
         }
     }
 
     fun deleteAllHistory() {
         firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
-            .collection("history").get().addOnCompleteListener {
-                it.result.documents.forEach { documentSnapshot ->
+            .collection("history")
+            .get()
+            .addOnSuccessListener {
+                it.documents.forEach { documentSnapshot ->
                     documentSnapshot.reference.delete()
                 }
+            }
+            .addOnFailureListener {
+
             }
     }
 
@@ -143,8 +158,12 @@ object HelperFirebaseDatabase {
 
     fun getRenewalDate(onQueryComplete: (String) -> Unit) {
         firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
-            .get().addOnCompleteListener {
-                onQueryComplete(it.result.get("renewalDate").toString())
+            .get()
+            .addOnSuccessListener {
+                onQueryComplete(it.get("renewalDate").toString())
+            }
+            .addOnFailureListener {
+
             }
     }
 
@@ -172,8 +191,9 @@ object HelperFirebaseDatabase {
     fun getAllTemplateIcons(list: MutableState<List<ModelTemplateIcon>>) {
         val result = mutableListOf<ModelTemplateIcon>()
         firestore.collection("app").document("templates").collection("icons")
-            .get().addOnCompleteListener { task ->
-                task.result.documents.forEach {
+            .get()
+            .addOnSuccessListener { task ->
+                task.documents.forEach {
                     val name = it.getString("name")
                     val url = it.getString("url")
 
@@ -183,6 +203,9 @@ object HelperFirebaseDatabase {
                 }
                 list.value = result
             }
+            .addOnFailureListener {
+
+            }
     }
 
     fun setNbOfArtCredits() {
@@ -191,7 +214,10 @@ object HelperFirebaseDatabase {
         )
         HelperAuth.auth.currentUser?.email?.let {
             firestore.collection("users").document(it).set(hashmap, SetOptions.merge())
-                .addOnCompleteListener {
+                .addOnSuccessListener {
+
+                }
+                .addOnFailureListener {
 
                 }
         }
@@ -199,8 +225,8 @@ object HelperFirebaseDatabase {
 
     fun getNbOfArtCredits(onComplete: () -> Unit = {}) {
         firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
-            .addOnCompleteListener { document ->
-                val result = document.result.get("nbOfArtCredits").toString()
+            .addOnSuccessListener { document ->
+                val result = document.get("nbOfArtCredits").toString()
                 if (result != "null") {
                     NotifiersArt.credits.value = result.toInt()
                     HelperSharedPreference.setNbOfArtsCredits()
@@ -208,14 +234,20 @@ object HelperFirebaseDatabase {
 
                 onComplete()
             }
+            .addOnFailureListener {
+
+            }
     }
 
     fun getRewardText(onSuccess: (String?) -> Unit) {
         if (SettingsNotifier.isConnected.value) {
             firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
-                .addOnCompleteListener { document ->
-                    onSuccess(document.result.get("textReward").toString())
+                .addOnSuccessListener { document ->
+                    onSuccess(document.get("textReward").toString())
                     resetRewardText()
+                }
+                .addOnFailureListener {
+
                 }
         }
     }
@@ -228,7 +260,10 @@ object HelperFirebaseDatabase {
 
             firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
                 .set(hashmap, SetOptions.merge())
-                .addOnCompleteListener {
+                .addOnSuccessListener {
+
+                }
+                .addOnFailureListener {
 
                 }
         }

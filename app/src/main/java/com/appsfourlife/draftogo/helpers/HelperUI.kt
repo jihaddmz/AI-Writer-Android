@@ -87,7 +87,7 @@ object HelperUI {
                                 AnnotatedString(text = " ")
                             ).plus(
                                 AnnotatedString(
-                                    "/draft",
+                                    stringResource(id = R.string.draft),
                                     spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                                 ),
                             )
