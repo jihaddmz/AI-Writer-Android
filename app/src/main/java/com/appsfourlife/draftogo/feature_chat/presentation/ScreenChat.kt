@@ -32,7 +32,10 @@ val queryChat =
 @Composable
 fun ScreenChat(navHostController: NavHostController) {
     HelperAnalytics.sendEvent("chat")
-    queryChat.value = ""
+
+    LaunchedEffect(key1 = true, block = {
+        queryChat.value = ""
+    })
 
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current

@@ -621,4 +621,11 @@ class MainActivity : ComponentActivity() {
 
         SettingsNotifier.stopTTS()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SettingsNotifier.showLoadingDialog.value = false
+        SettingsNotifier.showAddTemplateDialog.value = false
+        SettingsNotifier.showDeleteTemplateDialog.value = false
+    }
 }
