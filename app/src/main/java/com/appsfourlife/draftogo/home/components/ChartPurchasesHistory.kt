@@ -11,7 +11,7 @@ import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.MyLottieAnim
 import com.appsfourlife.draftogo.components.MySpacer
 import com.appsfourlife.draftogo.components.MyTextTitle
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelPurchaseHistory
+import com.appsfourlife.draftogo.data.model.ModelPurchaseHistory
 import com.appsfourlife.draftogo.helpers.HelperDate
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Rose

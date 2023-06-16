@@ -27,6 +27,7 @@ import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.BottomNavScreens
 
 @Composable
 fun ScreenHistory(
@@ -190,23 +191,24 @@ fun TopBarHistory(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = Blue)
                 .padding(start = SpacersSize.small),
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            MyTextTitle(text = text, color = Color.White)
+            AppBarTransparent(title = text, modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .weight(1f)) {
+                navController.navigate(BottomNavScreens.Content.route)
+            }
 
-            MySpacer(type = "small")
-
-            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+            Box(modifier = Modifier.fillMaxWidth().weight(1f), contentAlignment = Alignment.CenterEnd) {
                 IconButton(onClick = {
                     showConfirmationDialog.value = true
                 }) {
                     MyIcon(
                         iconID = R.drawable.icon_delete,
                         contentDesc = stringResource(id = R.string.delete),
-                        tint = Color.White
+                        tint = Color.Black
                     )
                 }
 

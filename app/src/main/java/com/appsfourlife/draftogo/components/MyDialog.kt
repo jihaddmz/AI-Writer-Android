@@ -8,9 +8,11 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 
@@ -20,6 +22,8 @@ fun MyDialog(
     showDialog: MutableState<Boolean>,
     text: String,
     title: String,
+    showOkBtn: Boolean = false,
+    onOkBtnClick: () -> Unit = {},
     properties: DialogProperties = DialogProperties()
 ) {
 
@@ -37,6 +41,15 @@ fun MyDialog(
             MySpacer(type = "medium")
 
             MyText(text = text)
+
+            MySpacer(type = "medium")
+
+            if (showOkBtn){
+                MyButton(text = stringResource(id = R.string.ok)) {
+                    showDialog.value = false
+                    onOkBtnClick()
+                }
+            }
         }
     }
 }

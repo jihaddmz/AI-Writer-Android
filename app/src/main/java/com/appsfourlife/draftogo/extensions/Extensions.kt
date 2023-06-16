@@ -11,7 +11,7 @@ import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.WritingType
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
+import com.appsfourlife.draftogo.data.model.ModelTemplate
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 

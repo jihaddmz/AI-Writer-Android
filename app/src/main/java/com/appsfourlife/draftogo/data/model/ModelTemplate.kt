@@ -1,4 +1,4 @@
-package com.appsfourlife.draftogo.feature_generate_text.data.model
+package com.appsfourlife.draftogo.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
