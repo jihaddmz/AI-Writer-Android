@@ -1,15 +1,14 @@
 package com.appsfourlife.draftogo.home.presentation
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.BottomSheetValue
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberBottomSheetScaffoldState
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,7 +26,7 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
+import com.appsfourlife.draftogo.data.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.home.components.BottomSheetFavoriteTemplates
 import com.appsfourlife.draftogo.home.components.ChartPurchasesHistory
@@ -41,12 +40,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.concurrent.timerTask
 
 @SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun ScreenDashboard(navController: NavController) {
+fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) {
     val sheetScaffoldState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -61,16 +59,69 @@ fun ScreenDashboard(navController: NavController) {
         mutableStateOf(false)
     }
 
-    val timer = remember {
-        mutableStateOf(0)
+    /**
+     * showing the navigation drawer introduction
+     **/
+    val showNavigationDrawerIntroduction = remember {
+        mutableStateOf(
+            false
+        )
     }
-    Timer().scheduleAtFixedRate(timerTask {
-        if (timer.value == 2)
-            return@timerTask
-        timer.value += 1
-    }, 2000, 1000)
-    if (timer.value == 2 && !HelperSharedPreference.getDontShowAnyWhereWritingPermission())
-        HelperUI.ShowAccessibilityPermissionRequester(true)
+
+    if (showNavigationDrawerIntroduction.value) {
+        MyDialog(
+            showDialog = showNavigationDrawerIntroduction,
+            text = App.getTextFromString(textID = R.string.introducing_navigation_changed),
+            title = App.getTextFromString(textID = R.string.attention),
+            showOkBtn = true,
+            onOkBtnClick = {
+                HelperSharedPreference.setBool(
+                    HelperSharedPreference.SP_SETTINGS,
+                    HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V230_LAUNCHED,
+                    false
+                )
+            }
+        )
+    }
+
+    LaunchedEffect(key1 = true, block = {
+        val isFirstTimeV230Launched = HelperSharedPreference.getBool(
+            HelperSharedPreference.SP_SETTINGS,
+            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V230_LAUNCHED,
+            true
+        )
+
+        if (isFirstTimeV230Launched) {
+            coroutineScope.launch {
+                delay(2000)
+                isAppOutDated.value = false
+                scaffoldState.drawerState.animateTo(
+                    DrawerValue.Open,
+                    tween(durationMillis = 1000)
+                )
+                delay(300)
+                showNavigationDrawerIntroduction.value = true
+            }
+        }
+    })
+    /**
+     * end of showing the navigation drawer introduction
+     **/
+
+
+    /**
+     * Subscribing users to email sender
+     **/
+    if (SettingsNotifier.isConnected.value && !HelperSharedPreference.getBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_SUBSCRIBED_TO_EMAIL_SENDER, false))
+        LaunchedEffect(key1 = true, block = {
+            coroutineScope.launch(Dispatchers.IO) {
+                HelperAPISender.subscribeUser(HelperAuth.auth.currentUser!!)
+            }
+        })
+    /**
+     * end of Subscribing users to email sender
+     **/
+
 
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {

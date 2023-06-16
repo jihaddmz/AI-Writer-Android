@@ -16,9 +16,8 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,14 +25,14 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
-import com.appsfourlife.draftogo.extensions.animateOffsetY
+import com.appsfourlife.draftogo.data.model.ModelTemplate
 import com.appsfourlife.draftogo.extensions.determineTemplateRoute
+import com.appsfourlife.draftogo.feature_chat.presentation.ScreenChat
+import com.appsfourlife.draftogo.feature_feedback.presentation.ScreenFeedback
 import com.appsfourlife.draftogo.feature_generate_art.presentation.ScreenArt
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.home.presentation.ScreenDashboard
-import com.appsfourlife.draftogo.home.presentation.ScreenFeedback
 import com.appsfourlife.draftogo.home.presentation.ScreenSettings
 import com.appsfourlife.draftogo.ui.theme.*
 import com.appsfourlife.draftogo.util.BottomNavScreens
@@ -79,6 +78,7 @@ class MainActivity : ComponentActivity() {
         try {
 
             App.context = this
+            App.window = window
 
             MobileAds.initialize(this) {
 
@@ -131,6 +131,9 @@ class MainActivity : ComponentActivity() {
                         }
                         SettingsNotifier.predefinedTemplates.value =
                             App.databaseApp.daoApp.getAllTemplates() as MutableList<ModelTemplate>
+                        if (SettingsNotifier.predefinedTemplates.value.isNotEmpty())
+                            SettingsNotifier.predefinedTemplates.value =
+                                SettingsNotifier.predefinedTemplates.value.sortedBy { it.userAdded }
                     }
                 })
 
@@ -143,13 +146,76 @@ class MainActivity : ComponentActivity() {
                         scaffoldState = scaffoldState,
                         backgroundColor = Glass,
                         drawerContent = {
+                            val listOfNavigations = remember {
+                                mutableStateOf(listOf<String>())
+                            }
+                            LaunchedEffect(key1 = true, block = {
+                                listOfNavigations.value = listOf(
+                                    App.getTextFromString(R.string.dashboard),
+                                    App.getTextFromString(R.string.content),
+                                    App.getTextFromString(
+                                        R.string.chat
+                                    ),
+                                    App.getTextFromString(R.string.art),
+                                    App.getTextFromString(R.string.settings)
+                                )
+                            })
                             LazyColumn(
                                 modifier = Modifier
                                     .fillMaxWidth()
                             ) {
+
+                                items(listOfNavigations.value.size, key = { it }) { index ->
+                                    val text = listOfNavigations.value[index]
+                                    DrawerListItem(
+                                        modifier = Modifier
+                                            .padding(SpacersSize.medium),
+                                        text = text,
+                                    ) {
+
+                                        SettingsNotifier.resetValues() // clearing values
+
+                                        coroutineScope.launch {
+                                            scaffoldState.drawerState.animateTo(
+                                                DrawerValue.Closed,
+                                                anim = tween(durationMillis = 500)
+                                            )
+                                        }
+                                        if (text == App.getTextFromString(R.string.content)) {
+                                            navController.navigate(BottomNavScreens.Content.route)
+                                        } else if (text == App.getTextFromString(R.string.settings)) {
+                                            navController.navigate(BottomNavScreens.Settings.route)
+                                        } else if (text == App.getTextFromString(R.string.chat)) {
+                                            navController.navigate(Screens.ScreenChat.route)
+                                        } else if (text == App.getTextFromString(R.string.dashboard)) {
+                                            navController.navigate(BottomNavScreens.Dashboard.route)
+                                        } else {
+                                            navController.navigate(BottomNavScreens.Art.route)
+                                        }
+                                    }
+                                }
+
+                                item {
+                                    MyText(
+                                        text = " - - - - - - - - - - - - - - - - - - - - - - - - ",
+                                        modifier = Modifier.fillMaxWidth(),
+                                        textAlign = TextAlign.Center
+                                    )
+                                }
+
+                                if (SettingsNotifier.predefinedTemplates.value.isEmpty()) {
+                                    coroutineScope.launch(Dispatchers.IO) {
+                                        SettingsNotifier.predefinedTemplates.value =
+                                            App.databaseApp.daoApp.getAllTemplates() as MutableList<ModelTemplate>
+                                        if (SettingsNotifier.predefinedTemplates.value.isNotEmpty())
+                                            SettingsNotifier.predefinedTemplates.value =
+                                                SettingsNotifier.predefinedTemplates.value.sortedBy { it.userAdded }
+                                    }
+                                }
                                 items(
                                     SettingsNotifier.predefinedTemplates.value.size,
-                                    key = { it }) { index ->
+                                    key = null
+                                ) { index ->
                                     val text =
                                         SettingsNotifier.predefinedTemplates.value[index].query
                                     val imageUrl =
@@ -184,74 +250,79 @@ class MainActivity : ComponentActivity() {
                         },
                         drawerShape = DrawerShape,
                         drawerGesturesEnabled = navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route,
-                        bottomBar = {
-                            val changeTargetValue = remember {
-                                mutableStateOf(false)
-                            }
-
-                            val shouldBottomBarBeVisible =
-                                (navBackStackEntry?.destination?.route != Screens.ScreenSignIn.route
-                                        && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route)
-
-                            LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
-                                if (shouldBottomBarBeVisible) {
-                                    delay(Constants.SPLASH_SCREEN_DURATION)
-                                    changeTargetValue.value = true
-                                } else {
-                                    changeTargetValue.value = false
-                                }
-                            })
-
-                            if (changeTargetValue.value) {
-                                val listOfBottomNavScreens =
-                                    listOf(
-                                        BottomNavScreens.Dashboard,
-                                        BottomNavScreens.Content,
-                                        BottomNavScreens.Art,
-                                        BottomNavScreens.Settings
-                                    )
-                                BottomNavigation(
-                                    modifier = Modifier.animateOffsetY(
-                                        initialOffsetY = 70.dp,
-                                    ), backgroundColor = Glass
-                                ) {
-                                    val currentRoute = navBackStackEntry?.destination?.route
-
-                                    listOfBottomNavScreens.forEach { screen ->
-                                        /**
-                                         * if the current screen is one of the templates, select the content bottom nav bar, otherwise select the current route
-                                         **/
-                                        val isSelected =
-                                            if (screen == BottomNavScreens.Content && currentRoute != Screens.ScreenSignIn.route && currentRoute != BottomNavScreens.Dashboard.route && currentRoute != BottomNavScreens.Art.route && currentRoute != BottomNavScreens.Settings.route && currentRoute != Screens.ScreenFeedback.route) {
-                                                true
-                                            } else {
-                                                currentRoute == screen.route
-                                            }
-                                        BottomNavigationItem(
-                                            selected = isSelected,
-                                            onClick = {
-                                                SettingsNotifier.resetValues()
-
-                                                if (currentRoute != screen.route) {
-                                                    navController.navigate(screen.route)
-                                                }
-                                            },
-                                            icon = {
-                                                MyIcon(
-                                                    iconID = screen.iconID,
-                                                    contentDesc = stringResource(
-                                                        id = screen.labelID
-                                                    )
-                                                )
-                                            },
-                                            label = { Text(text = stringResource(id = screen.labelID)) },
-                                            selectedContentColor = Blue,
-                                            unselectedContentColor = Color.Black
-                                        )
-                                    }
-                                }
-                            }
-                        }
+//                        bottomBar = {
+//                            val changeTargetValue = remember {
+//                                mutableStateOf(false)
+//                            }
+//
+//                            val shouldBottomBarBeVisible =
+//                                (navBackStackEntry?.destination?.route == BottomNavScreens.Dashboard.route)
+////                                        && navBackStackEntry?.destination?.route != Screens.ScreenLaunch.route
+////                                        && navBackStackEntry?.destination?.route != Screens.ScreenChat.route
+////                                        && navBackStackEntry?.destination?.route != BottomNavScreens.Settings.route
+////                                        && navBackStackEntry?.destination?.route != Screens.ScreenFeedback.route
+////                                        && navBackStackEntry?.destination?.route != BottomNavScreens.Art.route
+////                                        && navBackStackEntry?.destination?.route != BottomNavScreens.Content.route)
+//
+//                            LaunchedEffect(key1 = shouldBottomBarBeVisible, block = {
+//                                if (shouldBottomBarBeVisible) {
+//                                    delay(Constants.SPLASH_SCREEN_DURATION)
+//                                    changeTargetValue.value = true
+//                                } else {
+//                                    changeTargetValue.value = false
+//                                }
+//                            })
+//
+//                            if (changeTargetValue.value) {
+//                                val listOfBottomNavScreens =
+//                                    listOf(
+//                                        BottomNavScreens.Dashboard,
+//                                        BottomNavScreens.Content,
+//                                        BottomNavScreens.Art,
+//                                        BottomNavScreens.Settings
+//                                    )
+//                                BottomNavigation(
+//                                    modifier = Modifier.animateOffsetY(
+//                                        initialOffsetY = 70.dp,
+//                                    ), backgroundColor = Glass
+//                                ) {
+//                                    val currentRoute = navBackStackEntry?.destination?.route
+//
+//                                    listOfBottomNavScreens.forEach { screen ->
+//                                        /**
+//                                         * if the current screen is one of the templates, select the content bottom nav bar, otherwise select the current route
+//                                         **/
+//                                        val isSelected =
+//                                            if (screen == BottomNavScreens.Content && currentRoute != Screens.ScreenSignIn.route && currentRoute != BottomNavScreens.Dashboard.route && currentRoute != BottomNavScreens.Art.route && currentRoute != BottomNavScreens.Settings.route && currentRoute != Screens.ScreenFeedback.route) {
+//                                                true
+//                                            } else {
+//                                                currentRoute == screen.route
+//                                            }
+//                                        BottomNavigationItem(
+//                                            selected = isSelected,
+//                                            onClick = {
+//                                                SettingsNotifier.resetValues()
+//
+//                                                if (currentRoute != screen.route) {
+//                                                    navController.navigate(screen.route)
+//                                                }
+//                                            },
+//                                            icon = {
+//                                                MyIcon(
+//                                                    iconID = screen.iconID,
+//                                                    contentDesc = stringResource(
+//                                                        id = screen.labelID
+//                                                    )
+//                                                )
+//                                            },
+//                                            label = { Text(text = stringResource(id = screen.labelID)) },
+//                                            selectedContentColor = Blue,
+//                                            unselectedContentColor = Color.Black
+//                                        )
+//                                    }
+//                                }
+//                            }
+//                        }
                     ) {
                         Surface(
                             modifier = Modifier
@@ -266,6 +337,7 @@ class MainActivity : ComponentActivity() {
                                 val route = remember {
                                     mutableStateOf(Screens.ScreenEssay.route)
                                 }
+
                                 LaunchedEffect(key1 = true) {
                                     coroutineScope.launch(Dispatchers.Main) {
                                         delay(Constants.SPLASH_SCREEN_DURATION + 1000L)
@@ -321,7 +393,10 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     composable(route = Screens.ScreenFeedback.route) {
-                                        MyBackHandler(navController = navController, destRoute = BottomNavScreens.Settings.route)
+                                        MyBackHandler(
+                                            navController = navController,
+                                            destRoute = BottomNavScreens.Settings.route
+                                        )
                                         ScreenFeedback(navController = navController)
                                     }
 
@@ -332,7 +407,10 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     composable(route = BottomNavScreens.Content.route) {
-                                        MyBackHandler(navController = navController, BottomNavScreens.Dashboard.route)
+                                        MyBackHandler(
+                                            navController = navController,
+                                            BottomNavScreens.Dashboard.route
+                                        )
                                         ScreenContent(
                                             modifier = Modifier,
                                             navController = navController
@@ -341,7 +419,7 @@ class MainActivity : ComponentActivity() {
 
                                     composable(route = BottomNavScreens.Dashboard.route) {
                                         HomeBackHandler(context = this@MainActivity)
-                                        ScreenDashboard(navController)
+                                        ScreenDashboard(navController, scaffoldState)
                                     }
 
                                     composable(route = Screens.ScreenArticle.route) {
@@ -350,6 +428,14 @@ class MainActivity : ComponentActivity() {
                                             navController = navController,
                                             modifier = Modifier,
                                         )
+                                    }
+
+                                    composable(route = Screens.ScreenChat.route) {
+                                        MyBackHandler(
+                                            navController = navController,
+                                            BottomNavScreens.Dashboard.route
+                                        )
+                                        ScreenChat(navController)
                                     }
 
                                     composable(route = Screens.ScreenTranslate.route) {
@@ -368,7 +454,10 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     composable(route = BottomNavScreens.Art.route) {
-                                        MyBackHandler(navController = navController)
+                                        MyBackHandler(
+                                            navController = navController,
+                                            BottomNavScreens.Dashboard.route
+                                        )
                                         ScreenArt(navController = navController)
                                     }
 
@@ -463,7 +552,10 @@ class MainActivity : ComponentActivity() {
                                     }
 
                                     composable(route = BottomNavScreens.Settings.route) {
-                                        MyBackHandler(navController = navController)
+                                        MyBackHandler(
+                                            navController = navController,
+                                            BottomNavScreens.Dashboard.route
+                                        )
                                         ScreenSettings(navController = navController)
                                     }
 
@@ -528,5 +620,12 @@ class MainActivity : ComponentActivity() {
         super.onStop()
 
         SettingsNotifier.stopTTS()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        SettingsNotifier.showLoadingDialog.value = false
+        SettingsNotifier.showAddTemplateDialog.value = false
+        SettingsNotifier.showDeleteTemplateDialog.value = false
     }
 }

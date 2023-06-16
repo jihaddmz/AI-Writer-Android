@@ -8,10 +8,7 @@ import com.android.volley.toolbox.Volley
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.util.SettingsNotifier
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.net.ssl.SSLException
@@ -286,7 +283,8 @@ object HelperChatGPT {
         length: Int,
         nbOfGenerations: Int = 1,
         coroutineScope: CoroutineScope,
-        verticalScrollState: ScrollState,
+        verticalScrollState: ScrollState?,
+        isChatSection: Boolean = false,
         onErrorAction: () -> Unit,
         onDoneAction: () -> Unit
     ) {
@@ -295,11 +293,25 @@ object HelperChatGPT {
         // creating a queue for request queue.
         val queue: RequestQueue = Volley.newRequestQueue(context)
         // creating a json object on below line.
-        val jsonHeaderObject: JSONObject = JSONObject()
-        jsonHeaderObject.put("role", "user")
-        jsonHeaderObject.put("content", query)
-
-        val jsonArrayHeader = JSONArray(arrayOf(jsonHeaderObject))
+        var jsonArrayHeader = JSONArray()
+        if (isChatSection) {
+            coroutineScope.launch(Dispatchers.IO) {
+                val listOfChats = App.databaseApp.daoApp.getAllChats();
+                val jsonHeaderObject: Array<JSONObject> = arrayOf()
+                listOfChats.forEachIndexed { index, modelChatResponse ->
+                    jsonHeaderObject[index] = JSONObject().put("role", modelChatResponse.role)
+                        .put("content", modelChatResponse.text)
+                }
+                jsonHeaderObject[jsonArrayHeader.length()] =
+                    JSONObject().put("role", "user").put("content", query)
+                jsonArrayHeader = JSONArray(arrayOf(jsonHeaderObject))
+            }
+        } else {
+            val jsonHeaderObject: JSONObject = JSONObject()
+            jsonHeaderObject.put("role", "user")
+            jsonHeaderObject.put("content", query)
+            jsonArrayHeader = JSONArray(arrayOf(jsonHeaderObject))
+        }
         val jsonObject: JSONObject = JSONObject()
         // adding params to json object.
         jsonObject.put("model", "gpt-3.5-turbo") // text-davinci-003 // gpt-3.5-turbo
@@ -371,10 +383,12 @@ object HelperChatGPT {
                                 )
 
                                 // scrolling the textfield output so the user don't need to scroll it manually
-                                coroutineScope.launch(Dispatchers.IO) {
-                                    verticalScrollState.scrollTo(
-                                        SettingsNotifier.output.value.length + 200,
-                                    )
+                                verticalScrollState?.let {
+                                    coroutineScope.launch(Dispatchers.IO) {
+                                        verticalScrollState.scrollTo(
+                                            SettingsNotifier.output.value.length + 200,
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -415,5 +429,95 @@ object HelperChatGPT {
         }
         // on below line adding our request to queue.
         queue.add(postRequest)
+    }
+
+    fun getChatResponseForChat(
+        query: String,
+        context: Context,
+        coroutineScope: CoroutineScope,
+        onErrorAction: (VolleyError) -> Unit,
+        onDoneAction: (String) -> Unit
+    ) {
+        val url = "https://api.openai.com/v1/chat/completions"
+        // setting text on for question on below line.
+        // creating a queue for request queue.
+        val queue: RequestQueue = Volley.newRequestQueue(context)
+        // creating a json object on below line.
+        var jsonArrayHeader: JSONArray
+        coroutineScope.launch(Dispatchers.IO) {
+            val listOfChats = App.databaseApp.daoApp.getAllChats()
+            val jsonHeaderObject: MutableList<JSONObject> = mutableListOf()
+            if (listOfChats.isNotEmpty()) {
+                listOfChats.forEachIndexed { index, modelChatResponse ->
+                    jsonHeaderObject.add(
+                        JSONObject().put("role", modelChatResponse.role)
+                            .put("content", modelChatResponse.text)
+                    )
+                }
+                jsonHeaderObject.add(JSONObject().put("role", "user").put("content", query))
+                jsonArrayHeader = JSONArray(jsonHeaderObject.toTypedArray())
+            } else {
+                jsonHeaderObject.add(JSONObject().put("role", "user").put("content", query))
+                jsonArrayHeader = JSONArray(jsonHeaderObject.toTypedArray())
+            }
+
+            val jsonObject: JSONObject = JSONObject()
+            // adding params to json object.
+            jsonObject.put("model", "gpt-3.5-turbo") // text-davinci-003 // gpt-3.5-turbo
+            jsonObject.put("messages", jsonArrayHeader)
+
+            // on below line making json object request.
+            val postRequest: JsonObjectRequest =
+                // on below line making json object request.
+                object : JsonObjectRequest(
+                    Method.POST, url, jsonObject, Response.Listener { response ->
+                        val totalNbOfToken: Int =
+                            response.getJSONObject("usage").getInt("total_tokens")
+                        HelperSharedPreference.incrementNbOfGenerationsConsumed()
+                        HelperSharedPreference.addToNbOfWordsGenerated((totalNbOfToken * 0.75).roundToInt())
+                        HelperFirebaseDatabase.setNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                        // on below line getting response message and setting it to text view.
+                        val responseMsg: String =
+                            response.getJSONArray("choices").getJSONObject(0)
+                                .getJSONObject("message").getString("content")
+                                .trim()
+                        onDoneAction(responseMsg)
+                    },
+                    // adding on error listener
+                    Response.ErrorListener { error ->
+                        Helpers.logD("error " + error)
+                        onErrorAction(error)
+                        if (error.cause is SSLException) {
+                            HelperUI.showToast(msg = App.getTextFromString(textID = R.string.no_connection))
+                        } else HelperUI.showToast(msg = App.getTextFromString(textID = R.string.something_went_wrong))
+
+                    }) {
+                    override fun getHeaders(): MutableMap<String, String> {
+                        val params: MutableMap<String, String> = HashMap()
+                        // adding headers on below line.
+                        params["Content-Type"] = "application/json"
+                        params["Authorization"] =
+                            "Bearer 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"
+                        return params;
+                    }
+                }
+
+            // on below line adding retry policy for our request.
+            postRequest.retryPolicy = object : RetryPolicy {
+                override fun getCurrentTimeout(): Int {
+                    return 50000
+                }
+
+                override fun getCurrentRetryCount(): Int {
+                    return 50000
+                }
+
+                @Throws(VolleyError::class)
+                override fun retry(error: VolleyError) {
+                }
+            }
+            // on below line adding our request to queue.
+            queue.add(postRequest)
+        }
     }
 }

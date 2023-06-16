@@ -2,8 +2,9 @@ package com.appsfourlife.draftogo
 
 import android.app.Application
 import android.content.Context
+import android.view.Window
 import androidx.appcompat.app.AppCompatDelegate
-import com.appsfourlife.draftogo.feature_generate_text.data.data_source.DatabaseApp
+import com.appsfourlife.draftogo.data.data_source.DatabaseApp
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.google.firebase.FirebaseApp
@@ -23,6 +24,7 @@ class App : Application() {
 
     companion object {
         lateinit var context: Context
+        lateinit var window: Window
         lateinit var databaseApp: DatabaseApp
         val listOfCVTypes by lazy { mutableListOf<String>() }
         val listOfLetterTypes by lazy { mutableListOf<String>() }
@@ -53,6 +55,9 @@ class App : Application() {
         // promptForPushNotifications will show the native Android notification permission prompt.
         // We recommend removing the following code and instead using an In-App Message to prompt for notification permission (See step 7)
         OneSignal.promptForPushNotifications();
+        OneSignal.addEmailSubscriptionObserver {
+
+        }
 
         Purchases.debugLogsEnabled = true
         Purchases.configure(
