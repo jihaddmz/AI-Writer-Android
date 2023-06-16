@@ -82,6 +82,9 @@ interface DaoApp {
     @Query("select * from table_chat")
     suspend fun getAllChats(): List<ModelChatResponse>
 
+    @Query("delete from table_chat where text=:text")
+    fun deleteChatByText(text: String)
+
     @Insert
     suspend fun insertChat(modelChatResponse: ModelChatResponse)
 

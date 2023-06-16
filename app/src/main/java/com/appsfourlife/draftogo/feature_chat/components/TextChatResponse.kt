@@ -18,7 +18,7 @@ import com.appsfourlife.draftogo.ui.theme.Shapes
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun TextChatResponse(modelChatResponse: ModelChatResponse) {
+fun TextChatResponse(modelChatResponse: ModelChatResponse, onClick: () -> Unit = {}) {
 
     val textColor = if (modelChatResponse.color == 1) {
         Color.White
@@ -42,7 +42,7 @@ fun TextChatResponse(modelChatResponse: ModelChatResponse) {
                 .combinedClickable(enabled = true, onLongClick = {
                     Helpers.copyToClipBoard(modelChatResponse.text, msgID = R.string.text_copied)
                 }, onClick = {
-
+                    onClick()
                 })
                 .padding(10.dp)
                 .fillMaxWidth()
@@ -57,10 +57,9 @@ fun TextChatResponse(modelChatResponse: ModelChatResponse) {
                 .combinedClickable(enabled = true, onLongClick = {
                     Helpers.copyToClipBoard(modelChatResponse.text, msgID = R.string.text_copied)
                 }, onClick = {
-
+                    onClick()
                 })
                 .padding(10.dp)
-                .fillMaxWidth()
         )
     }
 }

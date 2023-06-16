@@ -15,10 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavHostController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.components.AppBarTransparent
-import com.appsfourlife.draftogo.components.BottomSheetWriting
-import com.appsfourlife.draftogo.components.MySpacer
-import com.appsfourlife.draftogo.components.MyText
+import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.data.model.ModelChatResponse
 import com.appsfourlife.draftogo.feature_chat.components.SubmitChatQuery
 import com.appsfourlife.draftogo.feature_chat.components.TextChatResponse
@@ -28,10 +25,14 @@ import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+val queryChat =
+    mutableStateOf("")
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ScreenChat(navHostController: NavHostController) {
     HelperAnalytics.sendEvent("chat")
+    queryChat.value = ""
 
     val coroutineScope = rememberCoroutineScope()
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -39,6 +40,7 @@ fun ScreenChat(navHostController: NavHostController) {
     val listOfChats = remember {
         mutableStateOf(mutableListOf<ModelChatResponse>())
     }
+
 
     App.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
@@ -52,7 +54,10 @@ fun ScreenChat(navHostController: NavHostController) {
         navController = navHostController
     ) {
 
-        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.SpaceBetween) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
 
             AppBarTransparent(title = stringResource(id = R.string.chat)) {
                 App.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
@@ -82,7 +87,11 @@ fun ScreenChat(navHostController: NavHostController) {
 
                     items(listOfChats.value.size, key = { listOfChats.value[it].id }) { index ->
                         val modelChatResponse = listOfChats.value[index]
-                        TextChatResponse(modelChatResponse = modelChatResponse)
+                        TextChatResponse(modelChatResponse = modelChatResponse, onClick = {
+                            if (modelChatResponse.role == "user") {
+                                queryChat.value = modelChatResponse.text
+                            }
+                        })
                         MySpacer(type = "medium")
                     }
                 }
@@ -102,6 +111,7 @@ fun ScreenChat(navHostController: NavHostController) {
                     state.animateScrollToItem(100)
                 }
             }, onSubmitClick = {
+//                    showLoadingAnimation.value = true
                 coroutineScope.launch(Dispatchers.IO) {
                     listOfChats.value =
                         App.databaseApp.daoApp.getAllChats() as MutableList<ModelChatResponse>

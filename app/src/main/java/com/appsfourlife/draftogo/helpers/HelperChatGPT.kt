@@ -485,6 +485,7 @@ object HelperChatGPT {
                     },
                     // adding on error listener
                     Response.ErrorListener { error ->
+                        Helpers.logD("error " + error)
                         onErrorAction(error)
                         if (error.cause is SSLException) {
                             HelperUI.showToast(msg = App.getTextFromString(textID = R.string.no_connection))

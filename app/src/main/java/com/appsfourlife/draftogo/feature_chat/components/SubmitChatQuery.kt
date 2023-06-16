@@ -19,17 +19,20 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.data.model.ModelChatResponse
+import com.appsfourlife.draftogo.feature_chat.presentation.queryChat
 import com.appsfourlife.draftogo.feature_generate_text.components.DialogPricingType
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SubmitChatQuery(
     modifier: Modifier = Modifier,
-    onSubmitClick: (String) -> Unit,
+    onSubmitClick: () -> Unit,
     onClearClick: () -> Unit,
     onResponseDone: (String) -> Unit,
     onResponseError: (VolleyError) -> Unit
@@ -42,9 +45,7 @@ fun SubmitChatQuery(
     }
     val context = LocalContext.current
 
-    val query = remember {
-        mutableStateOf("")
-    }
+
     val connectionError = stringResource(id = R.string.no_connection)
     val showPricingDialogTypes = remember {
         mutableStateOf(false)
@@ -121,15 +122,15 @@ fun SubmitChatQuery(
 
         MyCardView(modifier = Modifier.fillMaxWidth(0.8f)) {
 
-            MyTextField(value = query.value, onValueChanged = {
-                query.value = it
+            MyTextField(value = queryChat.value, onValueChanged = {
+                queryChat.value = it
             }, placeholder = stringResource(id = R.string.type_your_message_here))
 
         }
 
         IconButton(modifier = Modifier, onClick = {
 
-            if (query.value.isEmpty())
+            if (queryChat.value.isEmpty())
                 return@IconButton
 
             if (!SettingsNotifier.isConnected.value) {
@@ -160,26 +161,41 @@ fun SubmitChatQuery(
             }
 
             HelperChatGPT.getChatResponseForChat(
-                query = query.value,
+                query = queryChat.value,
                 content,
                 coroutineScope = coroutineScope,
                 onErrorAction = {
                     onResponseError(it)
                 },
                 onDoneAction = {
-                    onResponseDone(it)
+                    coroutineScope.launch(Dispatchers.IO) {
+                        App.databaseApp.daoApp.deleteChatByText("...")
+                        onResponseDone(it)
+                    }
                 }
             )
             coroutineScope.launch(Dispatchers.IO) {
                 App.databaseApp.daoApp.insertChat(
                     ModelChatResponse(
                         role = "user",
-                        text = query.value,
+                        text = queryChat.value,
                         color = 1
                     )
                 )
-                query.value = ""
-                onSubmitClick(query.value)
+                queryChat.value = ""
+                onSubmitClick()
+
+                delay(1000)
+
+                App.databaseApp.daoApp.insertChat(
+                    ModelChatResponse(
+                        role = "system",
+                        text = "...",
+                        color = 0
+                    )
+                )
+                onSubmitClick()
+
             }
         }) {
             MyIcon(iconID = R.drawable.icon_send, contentDesc = "submit")

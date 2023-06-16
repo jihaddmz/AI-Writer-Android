@@ -112,7 +112,7 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
     /**
      * Subscribing users to email sender
      **/
-    if (SettingsNotifier.isConnected.value)
+    if (SettingsNotifier.isConnected.value && !HelperSharedPreference.getBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_SUBSCRIBED_TO_EMAIL_SENDER, false))
         LaunchedEffect(key1 = true, block = {
             coroutineScope.launch(Dispatchers.IO) {
                 HelperAPISender.subscribeUser(HelperAuth.auth.currentUser!!)

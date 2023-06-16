@@ -38,7 +38,8 @@ object HelperAPISender {
             .build()
 
         client.newCall(request).execute().use { response ->
-            Helpers.logD("response $response")
+            if (response.isSuccessful)
+                HelperSharedPreference.setBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_SUBSCRIBED_TO_EMAIL_SENDER, true)
         }
     }
 
@@ -68,7 +69,6 @@ object HelperAPISender {
             .build()
 
         client.newCall(request).execute().use { response ->
-            Helpers.logD("response $response")
         }
     }
 }
