@@ -56,6 +56,7 @@ fun DrawerListItem(
             App.getTextFromString(R.string.chat) -> R.drawable.icon_chat
             App.getTextFromString(R.string.art) -> R.drawable.icon_image
             App.getTextFromString(R.string.settings) -> R.drawable.icon_settings
+            App.getTextFromString(R.string.dashboard) -> R.drawable.icon_dashboard
 
             else -> {
                 if (imageUrl.isEmpty())

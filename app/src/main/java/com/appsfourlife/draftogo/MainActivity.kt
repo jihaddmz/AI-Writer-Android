@@ -151,6 +151,7 @@ class MainActivity : ComponentActivity() {
                             }
                             LaunchedEffect(key1 = true, block = {
                                 listOfNavigations.value = listOf(
+                                    App.getTextFromString(R.string.dashboard),
                                     App.getTextFromString(R.string.content),
                                     App.getTextFromString(
                                         R.string.chat
@@ -171,6 +172,9 @@ class MainActivity : ComponentActivity() {
                                             .padding(SpacersSize.medium),
                                         text = text,
                                     ) {
+
+                                        SettingsNotifier.resetValues() // clearing values
+
                                         coroutineScope.launch {
                                             scaffoldState.drawerState.animateTo(
                                                 DrawerValue.Closed,
@@ -183,6 +187,8 @@ class MainActivity : ComponentActivity() {
                                             navController.navigate(BottomNavScreens.Settings.route)
                                         } else if (text == App.getTextFromString(R.string.chat)) {
                                             navController.navigate(Screens.ScreenChat.route)
+                                        } else if (text == App.getTextFromString(R.string.dashboard)) {
+                                            navController.navigate(BottomNavScreens.Dashboard.route)
                                         } else {
                                             navController.navigate(BottomNavScreens.Art.route)
                                         }

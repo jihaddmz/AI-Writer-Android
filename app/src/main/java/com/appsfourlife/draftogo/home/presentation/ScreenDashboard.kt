@@ -59,6 +59,9 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
         mutableStateOf(false)
     }
 
+    /**
+     * showing the navigation drawer introduction
+     **/
     val showNavigationDrawerIntroduction = remember {
         mutableStateOf(
             false
@@ -101,51 +104,69 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
             }
         }
     })
+    /**
+     * end of showing the navigation drawer introduction
+     **/
+
+
+    /**
+     * Subscribing users to email sender
+     **/
+    if (SettingsNotifier.isConnected.value)
+        LaunchedEffect(key1 = true, block = {
+            coroutineScope.launch(Dispatchers.IO) {
+                HelperAPISender.subscribeUser(HelperAuth.auth.currentUser!!)
+            }
+        })
+    /**
+     * end of Subscribing users to email sender
+     **/
+
 
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
             if (SettingsNotifier.isConnected.value)
-               HelperFirebaseDatabase.fetchAppVersion {
-                  isAppOutDated.value = it != BuildConfig.VERSION_NAME
-             }
+                HelperFirebaseDatabase.fetchAppVersion {
+                    isAppOutDated.value = it != BuildConfig.VERSION_NAME
+                }
 
-                if (SettingsNotifier.isConnected.value)
-                    HelperFirebaseDatabase.fetchNbOfGenerationsConsumedAndNbOfWordsGenerated() {
-                        nbOfWordsLeft.value = if (HelperAuth.isSubscribed()) {
-                            if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
-                                AnnotatedString(
-                                    "${Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated()}\n",
-                                    spanStyle = (SpanStyle(fontWeight = FontWeight.Bold))
-                                ).plus(
-                                    AnnotatedString(
-                                        text = App.getTextFromString(R.string.words)
-                                    )
-                                )
-                            } else {
-                                AnnotatedString(
-                                    text = "∞\n",
-                                    spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                                ).plus(
-                                    AnnotatedString(
-                                        App.getTextFromString(R.string.words)
-                                    )
-                                )
-                            }
-                        } else {
-                            val nbOfGenerationsLeft =
-                                if (Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed() < 0) {
-                                    0
-                                } else {
-                                    Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed()
-                                }
+            if (SettingsNotifier.isConnected.value)
+                HelperFirebaseDatabase.fetchNbOfGenerationsConsumedAndNbOfWordsGenerated() {
+                    nbOfWordsLeft.value = if (HelperAuth.isSubscribed()) {
+                        if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
                             AnnotatedString(
-                                text = "$nbOfGenerationsLeft\n",
+                                "${Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated()}\n",
+                                spanStyle = (SpanStyle(fontWeight = FontWeight.Bold))
+                            ).plus(
+                                AnnotatedString(
+                                    text = App.getTextFromString(R.string.words)
+                                )
+                            )
+                        } else {
+                            AnnotatedString(
+                                text = "∞\n",
                                 spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                             ).plus(
-                                AnnotatedString(text = App.getTextFromString(R.string.generations))
+                                AnnotatedString(
+                                    App.getTextFromString(R.string.words)
+                                )
                             )
                         }
+                    } else {
+                        val nbOfGenerationsLeft =
+                            if (Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed() < 0) {
+                                0
+                            } else {
+                                Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed()
+                            }
+                        AnnotatedString(
+                            text = "$nbOfGenerationsLeft\n",
+                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                        ).plus(
+                            AnnotatedString(text = App.getTextFromString(R.string.generations))
+                        )
                     }
+                }
 
             if (SettingsNotifier.isConnected.value)
                 HelperFirebaseDatabase.getNbOfArtCredits() {
