@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
+import com.appsfourlife.draftogo.data.model.ModelFavoriteTemplate
 
 
 class StackWidgetService : RemoteViewsService() {

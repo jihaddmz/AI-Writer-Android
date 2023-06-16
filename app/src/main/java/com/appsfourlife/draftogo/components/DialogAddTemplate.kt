@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
+import com.appsfourlife.draftogo.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelTemplateIcon
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
 import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase

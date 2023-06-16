@@ -15,7 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
+import com.appsfourlife.draftogo.data.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
 import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.ui.theme.Shapes

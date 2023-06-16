@@ -8,13 +8,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 
 @Composable
 fun DrawerListItem(
     modifier: Modifier = Modifier,
     text: String,
-    imageUrl: String,
+    imageUrl: String = "",
     onClick: () -> Unit
 ) {
     Row(
@@ -27,7 +28,7 @@ fun DrawerListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
 
-        val iconID = when (text) {
+        val respectiveIconID = when (text) {
             stringResource(id = R.string.write_an_email) -> R.drawable.icon_email
             stringResource(id = R.string.write_a_blog) -> R.drawable.icon_blog
             stringResource(id = R.string.write_an_essay) -> R.drawable.icon_essay
@@ -51,6 +52,12 @@ fun DrawerListItem(
             stringResource(id = R.string.summarize_the_following_text) -> R.drawable.icon_summarize
             stringResource(id = R.string.correct_the_following_text) -> R.drawable.icon_grammar
             stringResource(id = R.string.translate_the_following_text) -> R.drawable.icon_translate
+            App.getTextFromString(R.string.content) -> R.drawable.icon_writing
+            App.getTextFromString(R.string.chat) -> R.drawable.icon_chat
+            App.getTextFromString(R.string.art) -> R.drawable.icon_image
+            App.getTextFromString(R.string.settings) -> R.drawable.icon_settings
+            App.getTextFromString(R.string.dashboard) -> R.drawable.icon_dashboard
+
             else -> {
                 if (imageUrl.isEmpty())
                     R.drawable.icon_custom
@@ -59,8 +66,8 @@ fun DrawerListItem(
             }
         }
 
-        if (iconID != 0)
-            MyImage(imageID = iconID, contentDesc = text)
+        if (respectiveIconID != 0)
+            MyImage(imageID = respectiveIconID, contentDesc = text)
         else
             MyUrlSvg(imageUrl = imageUrl, contentDesc = text)
 

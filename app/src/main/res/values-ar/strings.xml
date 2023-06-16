@@ -284,4 +284,10 @@
 
     <string name="draft">/درافت</string>
 
+    <string name="type_your_message_here">اكتب رسالتك هنا</string>
+    <string name="no_chats_found">لم يتم العثور على محادثات</string>
+    <string name="text_delete_all_chats_confirmation">هل أنت متأكد أنك تريد حذف كافة محفوظات الدردشة؟</string>
+    <string name="chat">محادثة</string>
+    <string name="introducing_navigation_changed">أصبح التنقل الآن في جانب الدرج ، بدلاً من التنقل السفلي ، لتجربة مستخدم أفضل. إذا كانت لديك أي أسئلة أو كنت تفضل التنقل السفلي ، فيرجى إرسالها في قسم التعليقات.</string>
+
 </resources>

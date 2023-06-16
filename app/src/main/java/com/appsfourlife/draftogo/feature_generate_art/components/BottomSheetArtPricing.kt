@@ -18,7 +18,7 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelPurchaseHistory
+import com.appsfourlife.draftogo.data.model.ModelPurchaseHistory
 import com.appsfourlife.draftogo.helpers.HelperDate
 import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference

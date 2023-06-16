@@ -68,7 +68,7 @@ class MyWidgetProvider : AppWidgetProvider() {
             intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
             val toastPendingIntent = PendingIntent.getBroadcast(
                 context, 0, toastIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
 
             rv.setPendingIntentTemplate(R.id.stack_view, toastPendingIntent)

@@ -277,4 +277,9 @@
     <string name="redeem_code">Redeem Code</string>
     <string name="redeem_code_desc">Write down the redeem code to activate the offer</string>
     <string name="draft">/draft</string>
+    <string name="type_your_message_here">Type your message here</string>
+    <string name="no_chats_found">No Chats Found</string>
+    <string name="text_delete_all_chats_confirmation">Are you sure you want to delete all chat history?</string>
+    <string name="chat">Chat</string>
+    <string name="introducing_navigation_changed">Navigation is now in the drawer side, rather than the in bottom navigation, for better user experience. If you have any questions or you prefer the bottom nav, please send it in the feedback section.</string>
 </resources>

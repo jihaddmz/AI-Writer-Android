@@ -9,14 +9,12 @@ import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.IconButton
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
@@ -26,6 +24,7 @@ import com.appsfourlife.draftogo.extensions.animateOffsetY
 import com.appsfourlife.draftogo.extensions.animateVisibility
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
+import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.ui.theme.Amber
 import com.appsfourlife.draftogo.ui.theme.Blue
@@ -37,6 +36,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.concurrent.timerTask
 
 
 @Composable
@@ -48,9 +49,19 @@ fun ScreenContent(
     val state = rememberLazyGridState()
     val coroutineScope = rememberCoroutineScope()
 
-
     SettingsNotifier.disableDrawerContent.value = false
     SettingsNotifier.enableSheetContent.value = false
+
+    val timer = remember {
+        mutableStateOf(0)
+    }
+    Timer().scheduleAtFixedRate(timerTask {
+        if (timer.value == 2)
+            return@timerTask
+        timer.value += 1
+    }, 1000, 1000)
+    if (timer.value == 2 && !HelperSharedPreference.getDontShowAnyWhereWritingPermission())
+        HelperUI.ShowAccessibilityPermissionRequester(true)
 
     LaunchedEffect(key1 = true, block = {
         coroutineScope.launch(Dispatchers.IO) {
@@ -98,7 +109,8 @@ fun ScreenContent(
 
         MySpacer(type = "small")
 
-        Box(modifier = modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+        Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
+
             MyTextLink(
                 text = stringResource(id = R.string.view_history),
                 modifier = Modifier
@@ -116,7 +128,6 @@ fun ScreenContent(
                             )
                         }
                     },
-                textAlign = TextAlign.End
             )
         }
 

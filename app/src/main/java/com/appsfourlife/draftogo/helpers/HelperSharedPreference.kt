@@ -19,6 +19,7 @@ object HelperSharedPreference {
      **/
     const val SP_SETTINGS_IS_FIRST_TIME_LAUNCHED = "is_first_time_launched"
     const val SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED = "is_first_time_v2_launched"
+    const val SP_SETTINGS_IS_FIRST_TIME_V230_LAUNCHED = "is_first_time_v230_launched"
 
 
     /**
@@ -43,6 +44,7 @@ object HelperSharedPreference {
     const val SP_SETTINGS_NB_0F_ARTS_GENERATED = "nb_0f_arts_generated"
     const val SP_SETTINGS_TYPE_OF_WRITING_MODEL = "type_of_writing_model"
     const val SP_SETTINGS_DONT_SHOW_ANYWHERE_WRITING_PERMISSION = "dont_show_anywhere_writing_permission"
+    const val SP_SETTINGS_SUBSCRIBED_TO_EMAIL_SENDER = "is_subscribed_email_sender"
 
 
     /**
