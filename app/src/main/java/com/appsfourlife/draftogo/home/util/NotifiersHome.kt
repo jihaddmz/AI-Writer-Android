@@ -1,7 +1,7 @@
 package com.appsfourlife.draftogo.home.util
 
 import androidx.compose.runtime.mutableStateOf
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
+import com.appsfourlife.draftogo.data.model.ModelFavoriteTemplate
 
 object NotifiersHome {
 

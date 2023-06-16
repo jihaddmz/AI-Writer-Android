@@ -36,6 +36,7 @@ import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Orange
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -466,27 +467,37 @@ fun TopBarArt(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(color = Blue)
                 .padding(SpacersSize.small),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            MyTextTitle(text = text, color = Color.White)
+            AppBarTransparent(title = text, modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .weight(1f)) {
+                navController.navigate(BottomNavScreens.Dashboard.route)
+            }
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .offset(y = ((-5).dp)),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.End
+            ) {
 
                 MyText(
                     modifier = Modifier
                         .padding(end = SpacersSize.small),
-                    color = Color.White,
+                    color = Color.Black,
                     text = stringResource(
                         id = R.string.nbof_credits,
                         NotifiersArt.credits.value
                     ),
                     textAlign = TextAlign.End
                 )
-                MyIcon(iconID = R.drawable.icon_star, contentDesc = "", tint = Color.Yellow)
+                MyIcon(iconID = R.drawable.icon_star, contentDesc = "", tint = Color.Black)
             }
         }
 

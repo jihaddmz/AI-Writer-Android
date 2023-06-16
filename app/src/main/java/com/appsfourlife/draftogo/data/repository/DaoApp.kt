@@ -1,10 +1,11 @@
-package com.appsfourlife.draftogo.feature_generate_text.data.repository
+package com.appsfourlife.draftogo.data.repository
 
 import androidx.room.*
+import com.appsfourlife.draftogo.data.model.ModelChatResponse
+import com.appsfourlife.draftogo.data.model.ModelFavoriteTemplate
+import com.appsfourlife.draftogo.data.model.ModelPurchaseHistory
+import com.appsfourlife.draftogo.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_art.data.model.ModelArtHistory
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelFavoriteTemplate
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelPurchaseHistory
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
 
 @Dao
 interface DaoApp {
@@ -74,4 +75,16 @@ interface DaoApp {
 
     @Query("select * from table_purchasehistory where date=:date")
     suspend fun getPurchaseHistory(date: String): ModelPurchaseHistory?
+
+    /**
+     * chats
+     **/
+    @Query("select * from table_chat")
+    suspend fun getAllChats(): List<ModelChatResponse>
+
+    @Insert
+    suspend fun insertChat(modelChatResponse: ModelChatResponse)
+
+    @Query("delete from table_chat")
+    suspend fun deleteAllChats()
 }

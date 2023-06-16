@@ -9,7 +9,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.navigation.NavHostController
-import com.appsfourlife.draftogo.feature_generate_text.data.model.ModelTemplate
+import com.appsfourlife.draftogo.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelComparedGenerationItem
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.google.android.gms.ads.rewarded.RewardedAd

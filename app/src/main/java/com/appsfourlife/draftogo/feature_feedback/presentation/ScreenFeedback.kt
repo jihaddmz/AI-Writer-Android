@@ -1,4 +1,4 @@
-package com.appsfourlife.draftogo.home.presentation
+package com.appsfourlife.draftogo.feature_feedback.presentation
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -14,6 +14,8 @@ import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.helpers.Constants
 import com.appsfourlife.draftogo.helpers.HelperIntent
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.BottomNavScreens
+import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @Composable
 fun ScreenFeedback(
@@ -23,23 +25,36 @@ fun ScreenFeedback(
         mutableStateOf("")
     }
 
-    TopBar(
-        text = stringResource(id = R.string.Feedback),
-        navController = navController,
-        hideNbOfGenerationsLeft = true
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
     ) {
+
+        AppBarTransparent(title = stringResource(id = R.string.Feedback)) {
+            SettingsNotifier.navHostController?.navigate(BottomNavScreens.Settings.route)
+        }
+
+        MySpacer(type = "large")
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(SpacersSize.medium),
+                .padding(
+                    start = SpacersSize.medium,
+                    end = SpacersSize.medium,
+                    bottom = SpacersSize.medium
+                ),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceEvenly
         ) {
 
             MyTipText(text = stringResource(id = R.string.feedback_title))
 
-           val type = myDropDown(label = stringResource(id = R.string.type), list = Constants.FEEDBACK_TYPES)
+            val type =
+                myDropDown(
+                    label = stringResource(id = R.string.type),
+                    list = Constants.FEEDBACK_TYPES
+                )
 
             MyCardView {
                 MyTextField(
@@ -59,7 +74,11 @@ fun ScreenFeedback(
                 isEnabled = feedback.value.isNotEmpty(),
                 text = stringResource(id = R.string.submit)
             ) {
-                HelperIntent.sendEmail("developer@appsfourlife.com", subject = type, message = feedback.value)
+                HelperIntent.sendEmail(
+                    "developer@appsfourlife.com",
+                    subject = type,
+                    message = feedback.value
+                )
             }
         }
     }

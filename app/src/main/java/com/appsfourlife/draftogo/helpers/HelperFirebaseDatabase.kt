@@ -42,6 +42,17 @@ object HelperFirebaseDatabase {
             }
     }
 
+    fun setNbOfGenerationsConsumedAndNbOfWordsGenerated() {
+        firestore.collection("users")
+            .document(HelperAuth.auth.currentUser?.email!!)
+            .set(
+                hashMapOf(
+                    "nbOfGenerationsConsumed" to HelperSharedPreference.getNbOfGenerationsConsumed(),
+                    "nbOfWordsGenerated" to HelperSharedPreference.getNbOfWordsGenerated(),
+                ), SetOptions.merge()
+            )
+    }
+
     fun fetchNbOfGenerationsConsumedAndNbOfWordsGenerated(onComplete: () -> Unit) {
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
