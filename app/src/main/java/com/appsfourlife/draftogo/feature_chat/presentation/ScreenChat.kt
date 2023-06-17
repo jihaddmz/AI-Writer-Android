@@ -104,6 +104,7 @@ fun ScreenChat(navHostController: NavHostController) {
                 coroutineScope.launch(Dispatchers.IO) {
                     App.databaseApp.daoApp.insertChat(
                         ModelChatResponse(
+                            App.databaseApp.daoApp.getChatMaxID() + 1,
                             role = "system",
                             text = it,
                             color = 0
