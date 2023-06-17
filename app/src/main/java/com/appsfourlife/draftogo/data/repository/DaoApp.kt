@@ -85,6 +85,9 @@ interface DaoApp {
     @Query("delete from table_chat where text=:text")
     fun deleteChatByText(text: String)
 
+    @Query("select max(id) from table_chat")
+    fun getChatMaxID(): Int
+
     @Insert
     suspend fun insertChat(modelChatResponse: ModelChatResponse)
 

@@ -177,6 +177,7 @@ fun SubmitChatQuery(
             coroutineScope.launch(Dispatchers.IO) {
                 App.databaseApp.daoApp.insertChat(
                     ModelChatResponse(
+                        App.databaseApp.daoApp.getChatMaxID() + 1,
                         role = "user",
                         text = queryChat.value,
                         color = 1
@@ -189,6 +190,7 @@ fun SubmitChatQuery(
 
                 App.databaseApp.daoApp.insertChat(
                     ModelChatResponse(
+                        App.databaseApp.daoApp.getChatMaxID() + 1,
                         role = "system",
                         text = "...",
                         color = 0

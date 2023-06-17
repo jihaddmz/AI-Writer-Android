@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.feature_chat.components
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -60,6 +61,7 @@ fun TextChatResponse(modelChatResponse: ModelChatResponse, onClick: () -> Unit =
                     onClick()
                 })
                 .padding(10.dp)
+                .animateContentSize()
         )
     }
 }
