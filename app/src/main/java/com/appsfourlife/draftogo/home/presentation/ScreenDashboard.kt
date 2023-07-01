@@ -112,7 +112,12 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
     /**
      * Subscribing users to email sender
      **/
-    if (SettingsNotifier.isConnected.value && !HelperSharedPreference.getBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_SUBSCRIBED_TO_EMAIL_SENDER, false))
+    if (SettingsNotifier.isConnected.value && !HelperSharedPreference.getBool(
+            HelperSharedPreference.SP_SETTINGS,
+            HelperSharedPreference.SP_SETTINGS_SUBSCRIBED_TO_EMAIL_SENDER,
+            false
+        )
+    )
         LaunchedEffect(key1 = true, block = {
             coroutineScope.launch(Dispatchers.IO) {
                 HelperAPISender.subscribeUser(HelperAuth.auth.currentUser!!)
@@ -132,46 +137,48 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
 
             if (SettingsNotifier.isConnected.value)
                 HelperFirebaseDatabase.fetchNbOfGenerationsConsumedAndNbOfWordsGenerated() {
-                    nbOfWordsLeft.value = if (HelperAuth.isSubscribed()) {
-                        if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
-                            AnnotatedString(
-                                "${Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated()}\n",
-                                spanStyle = (SpanStyle(fontWeight = FontWeight.Bold))
-                            ).plus(
+                    // todo uncomment this when we want to re-enable the paid plans
+                    nbOfWordsLeft.value =
+//                        if (HelperAuth.isSubscribed()) {
+//                            if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
+//                                AnnotatedString(
+//                                    "${Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated()}\n",
+//                                    spanStyle = (SpanStyle(fontWeight = FontWeight.Bold))
+//                                ).plus(
+//                                    AnnotatedString(
+//                                        text = App.getTextFromString(R.string.words)
+//                                    )
+//                                )
+//                            } else {
                                 AnnotatedString(
-                                    text = App.getTextFromString(R.string.words)
+                                    text = "∞\n",
+                                    spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                                ).plus(
+                                    AnnotatedString(
+                                        App.getTextFromString(R.string.words)
+                                    )
                                 )
-                            )
-                        } else {
-                            AnnotatedString(
-                                text = "∞\n",
-                                spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                            ).plus(
-                                AnnotatedString(
-                                    App.getTextFromString(R.string.words)
-                                )
-                            )
-                        }
-                    } else {
-                        val nbOfGenerationsLeft =
-                            if (Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed() < 0) {
-                                0
-                            } else {
-                                Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed()
-                            }
-                        AnnotatedString(
-                            text = "$nbOfGenerationsLeft\n",
-                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                        ).plus(
-                            AnnotatedString(text = App.getTextFromString(R.string.generations))
-                        )
-                    }
+//                            }
+//                        } else {
+//                            val nbOfGenerationsLeft =
+//                                if (Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed() < 0) {
+//                                    0
+//                                } else {
+//                                    Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed()
+//                                }
+//                            AnnotatedString(
+//                                text = "$nbOfGenerationsLeft\n",
+//                                spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+//                            ).plus(
+//                                AnnotatedString(text = App.getTextFromString(R.string.generations))
+//                            )
+//                        }
                 }
 
             if (SettingsNotifier.isConnected.value)
                 HelperFirebaseDatabase.getNbOfArtCredits() {
                     nbOfArtsLeft.value = AnnotatedString(
-                        text = "${HelperSharedPreference.getNbOfArtsCredits()}\n",
+                        text = "∞\n", // todo change this to HelperSharedPreference.getNbOfArtsCredits() when paid plans are enabled
                         spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                     ).plus(
                         AnnotatedString(
@@ -189,7 +196,7 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                 HelperFirebaseDatabase.getRenewalDate {
                     if (it != "null" && it != "")
                         if (it == HelperDate.getCurrentDateInString()) {
-                            HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                            HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGeneratedAndNbOfArtsGenerated()
                             HelperSharedPreference.setNbOfArtsGenerated(0)
                             HelperFirebaseDatabase.setRenewalDate()
                         } else {
@@ -203,7 +210,7 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                             )
                             dateNow?.let { dateNow ->
                                 if (dateNow.after(dateInFirebase)) {
-                                    HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                                    HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGeneratedAndNbOfArtsGenerated()
                                     HelperSharedPreference.setNbOfArtsGenerated(0)
                                     HelperFirebaseDatabase.setRenewalDate()
                                 }
@@ -322,6 +329,11 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                                 nb = listOfFavoriteTemplates.value.size,
                                 text = stringResource(id = R.string.templates),
                                 iconID = R.drawable.icon_template
+                            ),
+                            ModelDashboardUsage(
+                                nb = HelperSharedPreference.getNbOfVideosGenerated(),
+                                text = stringResource(id = R.string.videos),
+                                iconID = R.drawable.icon_video_pink
                             )
                         )
                         LazyVerticalGrid(

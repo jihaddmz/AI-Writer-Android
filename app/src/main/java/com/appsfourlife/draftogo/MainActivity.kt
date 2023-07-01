@@ -31,6 +31,9 @@ import com.appsfourlife.draftogo.feature_chat.presentation.ScreenChat
 import com.appsfourlife.draftogo.feature_feedback.presentation.ScreenFeedback
 import com.appsfourlife.draftogo.feature_generate_art.presentation.ScreenArt
 import com.appsfourlife.draftogo.feature_generate_text.presentation.*
+import com.appsfourlife.draftogo.feature_generate_video.presentations.ScreenVideoGenerated
+import com.appsfourlife.draftogo.feature_generate_video.presentations.ScreenVideoTemplates
+import com.appsfourlife.draftogo.feature_generate_video.utils.NotifiersVideo
 import com.appsfourlife.draftogo.helpers.*
 import com.appsfourlife.draftogo.home.presentation.ScreenDashboard
 import com.appsfourlife.draftogo.home.presentation.ScreenSettings
@@ -152,11 +155,12 @@ class MainActivity : ComponentActivity() {
                             LaunchedEffect(key1 = true, block = {
                                 listOfNavigations.value = listOf(
                                     App.getTextFromString(R.string.dashboard),
-                                    App.getTextFromString(R.string.content),
+                                    App.getTextFromString(R.string.completion),
                                     App.getTextFromString(
                                         R.string.chat
                                     ),
                                     App.getTextFromString(R.string.art),
+                                    App.getTextFromString(R.string.video),
                                     App.getTextFromString(R.string.settings)
                                 )
                             })
@@ -181,7 +185,7 @@ class MainActivity : ComponentActivity() {
                                                 anim = tween(durationMillis = 500)
                                             )
                                         }
-                                        if (text == App.getTextFromString(R.string.content)) {
+                                        if (text == App.getTextFromString(R.string.completion)) {
                                             navController.navigate(BottomNavScreens.Content.route)
                                         } else if (text == App.getTextFromString(R.string.settings)) {
                                             navController.navigate(BottomNavScreens.Settings.route)
@@ -189,7 +193,9 @@ class MainActivity : ComponentActivity() {
                                             navController.navigate(Screens.ScreenChat.route)
                                         } else if (text == App.getTextFromString(R.string.dashboard)) {
                                             navController.navigate(BottomNavScreens.Dashboard.route)
-                                        } else {
+                                        } else if (text == App.getTextFromString(R.string.video))
+                                            navController.navigate(BottomNavScreens.Video.route)
+                                        else {
                                             navController.navigate(BottomNavScreens.Art.route)
                                         }
                                     }
@@ -400,6 +406,22 @@ class MainActivity : ComponentActivity() {
                                         ScreenFeedback(navController = navController)
                                     }
 
+                                    composable(route = BottomNavScreens.Video.route) {
+                                        MyBackHandler(
+                                            navController = navController,
+                                            destRoute = BottomNavScreens.Dashboard.route
+                                        )
+                                        ScreenVideoTemplates(navController = navController)
+                                    }
+
+                                    composable(route = Screens.ScreenVideoGenerator.route) {
+                                        MyBackHandler(
+                                            navController = navController,
+                                            destRoute = BottomNavScreens.Video.route
+                                        )
+                                        ScreenVideoGenerated(navController = navController)
+                                    }
+
                                     composable(route = Screens.ScreenSignIn.route) {
                                         HomeBackHandler(context = this@MainActivity)
                                         ScreenSignIn(
@@ -580,6 +602,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         } catch (e: Exception) {
+            Helpers.logD("error ${e.message}")
         }
     }
 
@@ -596,6 +619,7 @@ class MainActivity : ComponentActivity() {
                     HelperAuth.auth.signInWithCredential(credential).addOnCompleteListener {
                         if (it.isSuccessful) {
                             HelperSharedPreference.setUsername(account.email!!)
+                            HelperFirebaseDatabase.fetchNbOfArtsAndVideosGenerated()
                             navController.navigate(BottomNavScreens.Dashboard.route) // from login screen to home screen
                         }
                     }
@@ -616,9 +640,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        NotifiersVideo.stopExoPlayers.value = false
+    }
+
     override fun onStop() {
         super.onStop()
 
+        NotifiersVideo.stopExoPlayers.value = true
         SettingsNotifier.stopTTS()
     }
 

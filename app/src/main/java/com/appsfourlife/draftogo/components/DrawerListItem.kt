@@ -52,11 +52,12 @@ fun DrawerListItem(
             stringResource(id = R.string.summarize_the_following_text) -> R.drawable.icon_summarize
             stringResource(id = R.string.correct_the_following_text) -> R.drawable.icon_grammar
             stringResource(id = R.string.translate_the_following_text) -> R.drawable.icon_translate
-            App.getTextFromString(R.string.content) -> R.drawable.icon_writing
+            App.getTextFromString(R.string.completion) -> R.drawable.icon_writing
             App.getTextFromString(R.string.chat) -> R.drawable.icon_chat
             App.getTextFromString(R.string.art) -> R.drawable.icon_image
             App.getTextFromString(R.string.settings) -> R.drawable.icon_settings
             App.getTextFromString(R.string.dashboard) -> R.drawable.icon_dashboard
+            App.getTextFromString(R.string.video) -> R.drawable.icon_video
 
             else -> {
                 if (imageUrl.isEmpty())

@@ -282,4 +282,13 @@
     <string name="text_delete_all_chats_confirmation">Are you sure you want to delete all chat history?</string>
     <string name="chat">Chat</string>
     <string name="introducing_navigation_changed">Navigation is now in the drawer side, rather than the in bottom navigation, for better user experience. If you have any questions or you prefer the bottom nav, please send it in the feedback section.</string>
+    <string name="video">Video\n</string>
+    <string name="video_templates">Video Templates</string>
+    <string name="use_template">Use Template</string>
+    <string name="provide_your_inputs">Provide Your Inputs</string>
+    <string name="video_is_generated">Video is Generated</string>
+    <string name="download_video">Download Video</string>
+    <string name="downloading_your_video">Downloading Your Video</string>
+    <string name="completion">Completion</string>
+    <string name="videos">Videos</string>
 </resources>

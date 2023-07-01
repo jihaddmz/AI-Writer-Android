@@ -17,11 +17,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.NavController
@@ -174,72 +171,73 @@ fun ScreenSettings(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
 
-                val isSubscribed = HelperAuth.isSubscribed()
-                if (isSubscribed) { // if the user is subscribed
-                    MyAnnotatedText(
-                        textAlign = TextAlign.Center,
-                        text = AnnotatedString(
-                            text = "${stringResource(id = R.string.subscription_status)}: ",
-                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                        ).plus(
-                            AnnotatedString(
-                                text = stringResource(
-                                    id = R.string.active
-                                ), spanStyle = SpanStyle(color = Color.Green)
-                            )
-                        ),
-                    )
-
-                    MySpacer(type = "small")
-
-                    MyOutlinedButton(text = stringResource(id = R.string.manage_subscription)) {
-                        if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_PLUS) {
-                            HelperIntent.navigateToPlayStorePlusSubscription()
-                        } else
-                            HelperIntent.navigateToPlayStoreSubscription()
-                    }
-
-                } else // if the user is not subscribed
-                    MyAnnotatedText(
-                        textAlign = TextAlign.Center,
-                        text = AnnotatedString(
-                            text = "${stringResource(id = R.string.subscription_status)}: ",
-                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                        ).plus(
-                            AnnotatedString(
-                                text = stringResource(
-                                    id = R.string.inactive
-                                ), spanStyle = SpanStyle(color = Color.Red)
-                            )
-                        ),
-                    )
-
-                MySpacer(type = "small")
-
-                if (HelperAuth.willRenew()) {
-                    MyAnnotatedText(
-                        textAlign = TextAlign.Center,
-                        text = AnnotatedString(
-                            text = "${stringResource(id = R.string.renewal_date)}: ",
-                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                        ).plus(AnnotatedString(text = HelperAuth.getExpirationDate())),
-                    )
-                } else {
-                    MyAnnotatedText(
-                        textAlign = TextAlign.Center,
-                        text = AnnotatedString(
-                            text = "${stringResource(id = R.string.renewal_date)}: ",
-                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                        ).plus(
-                            AnnotatedString(
-                                text = stringResource(id = R.string.not_renewable),
-                                spanStyle = SpanStyle(color = Color.Red)
-                            )
-                        ),
-                    )
-                }
-
-                MySpacer(type = "small")
+                // todo uncomment this when we want to re-enable the paid plans
+//                val isSubscribed = HelperAuth.isSubscribed()
+//                if (isSubscribed) { // if the user is subscribed
+//                    MyAnnotatedText(
+//                        textAlign = TextAlign.Center,
+//                        text = AnnotatedString(
+//                            text = "${stringResource(id = R.string.subscription_status)}: ",
+//                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+//                        ).plus(
+//                            AnnotatedString(
+//                                text = stringResource(
+//                                    id = R.string.active
+//                                ), spanStyle = SpanStyle(color = Color.Green)
+//                            )
+//                        ),
+//                    )
+//
+//                    MySpacer(type = "small")
+//
+//                    MyOutlinedButton(text = stringResource(id = R.string.manage_subscription)) {
+//                        if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_PLUS) {
+//                            HelperIntent.navigateToPlayStorePlusSubscription()
+//                        } else
+//                            HelperIntent.navigateToPlayStoreSubscription()
+//                    }
+//
+//                } else // if the user is not subscribed
+//                    MyAnnotatedText(
+//                        textAlign = TextAlign.Center,
+//                        text = AnnotatedString(
+//                            text = "${stringResource(id = R.string.subscription_status)}: ",
+//                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+//                        ).plus(
+//                            AnnotatedString(
+//                                text = stringResource(
+//                                    id = R.string.inactive
+//                                ), spanStyle = SpanStyle(color = Color.Red)
+//                            )
+//                        ),
+//                    )
+//
+//                MySpacer(type = "small")
+//
+//                if (HelperAuth.willRenew()) {
+//                    MyAnnotatedText(
+//                        textAlign = TextAlign.Center,
+//                        text = AnnotatedString(
+//                            text = "${stringResource(id = R.string.renewal_date)}: ",
+//                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+//                        ).plus(AnnotatedString(text = HelperAuth.getExpirationDate())),
+//                    )
+//                } else {
+//                    MyAnnotatedText(
+//                        textAlign = TextAlign.Center,
+//                        text = AnnotatedString(
+//                            text = "${stringResource(id = R.string.renewal_date)}: ",
+//                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+//                        ).plus(
+//                            AnnotatedString(
+//                                text = stringResource(id = R.string.not_renewable),
+//                                spanStyle = SpanStyle(color = Color.Red)
+//                            )
+//                        ),
+//                    )
+//                }
+//
+//                MySpacer(type = "small")
 
                 MyText(
                     modifier = Modifier

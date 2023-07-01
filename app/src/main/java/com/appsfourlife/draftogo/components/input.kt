@@ -3,12 +3,23 @@ package com.appsfourlife.draftogo.components
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,11 +33,20 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.extensions.animateOffsetX
 import com.appsfourlife.draftogo.feature_generate_text.components.DialogPricingType
-import com.appsfourlife.draftogo.helpers.*
-import com.appsfourlife.draftogo.ui.theme.*
+import com.appsfourlife.draftogo.helpers.Constants
+import com.appsfourlife.draftogo.helpers.HelperAuth
+import com.appsfourlife.draftogo.helpers.HelperChatGPT
+import com.appsfourlife.draftogo.helpers.HelperSharedPreference
+import com.appsfourlife.draftogo.helpers.HelperUI
+import com.appsfourlife.draftogo.helpers.Helpers
+import com.appsfourlife.draftogo.ui.theme.Amber
+import com.appsfourlife.draftogo.ui.theme.Blue
+import com.appsfourlife.draftogo.ui.theme.Rose
+import com.appsfourlife.draftogo.ui.theme.Shapes
+import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.timerTask
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterialApi::class)
@@ -209,19 +229,20 @@ fun input(
                              * if user is on base plan subscription and nb of words generated is at the max, prevent him from
                              * generating extra prompts
                              **/
-                            if (HelperAuth.isSubscribed())
-                                if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE && HelperSharedPreference.getNbOfWordsGenerated() >= Constants.BASE_PLAN_MAX_NB_OF_WORDS) {
-                                    showPricingDialogTypes.value = true
-                                    showPricingDialogTypesTitle.value =
-                                        App.getTextFromString(textID = R.string.you_have_reached_max_nb_of_words_generated)
-                                    return@clickable
-                                }
+                            // todo uncomment these when we want to re-enable the paid plans
+//                            if (HelperAuth.isSubscribed())
+//                                if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE && HelperSharedPreference.getNbOfWordsGenerated() >= Constants.BASE_PLAN_MAX_NB_OF_WORDS) {
+//                                    showPricingDialogTypes.value = true
+//                                    showPricingDialogTypesTitle.value =
+//                                        App.getTextFromString(textID = R.string.you_have_reached_max_nb_of_words_generated)
+//                                    return@clickable
+//                                }
 
-                            if (HelperSharedPreference.getNbOfGenerationsConsumed() >= 2 && !HelperAuth.isSubscribed()) { // if nbOfGenerationsConsumed is >= 2
-                                // and the user is not subscribed, force the user to subscribe
-                                showPricingDialogTypes.value = true
-                                showPricingDialogTypesTitle.value = ""
-                            } else {
+//                            if (HelperSharedPreference.getNbOfGenerationsConsumed() >= 2 && !HelperAuth.isSubscribed()) { // if nbOfGenerationsConsumed is >= 2
+//                                // and the user is not subscribed, force the user to subscribe
+//                                showPricingDialogTypes.value = true
+//                                showPricingDialogTypesTitle.value = ""
+//                            } else {
                                 keyboardController?.hide()
                                 showDialog.value = true
                                 generateText.value = App.getTextFromString(R.string.generating)
@@ -277,7 +298,7 @@ fun input(
                                         }, 1500)
                                     }
                                 }
-                            }
+//                            }
                         },
                     textAlign = TextAlign.Center,
                     text = generateText.value,

@@ -145,20 +145,21 @@ fun SubmitChatQuery(
              * if user is on base plan subscription and nb of words generated is at the max, prevent him from
              * generating extra prompts
              **/
-            if (HelperAuth.isSubscribed())
-                if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE && HelperSharedPreference.getNbOfWordsGenerated() >= Constants.BASE_PLAN_MAX_NB_OF_WORDS) {
-                    showPricingDialogTypes.value = true
-                    showPricingDialogTypesTitle.value =
-                        App.getTextFromString(textID = R.string.you_have_reached_max_nb_of_words_generated)
-                    return@IconButton
-                }
-
-            if (HelperSharedPreference.getNbOfGenerationsConsumed() >= 2 && !HelperAuth.isSubscribed()) { // if nbOfGenerationsConsumed is >= 2
-                // and the user is not subscribed, force the user to subscribe
-                showPricingDialogTypes.value = true
-                showPricingDialogTypesTitle.value = ""
-                return@IconButton
-            }
+            // todo uncomment this when we want to re-enable the paid plans
+//            if (HelperAuth.isSubscribed())
+//                if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE && HelperSharedPreference.getNbOfWordsGenerated() >= Constants.BASE_PLAN_MAX_NB_OF_WORDS) {
+//                    showPricingDialogTypes.value = true
+//                    showPricingDialogTypesTitle.value =
+//                        App.getTextFromString(textID = R.string.you_have_reached_max_nb_of_words_generated)
+//                    return@IconButton
+//                }
+//
+//            if (HelperSharedPreference.getNbOfGenerationsConsumed() >= 2 && !HelperAuth.isSubscribed()) { // if nbOfGenerationsConsumed is >= 2
+//                // and the user is not subscribed, force the user to subscribe
+//                showPricingDialogTypes.value = true
+//                showPricingDialogTypesTitle.value = ""
+//                return@IconButton
+//            }
 
             HelperChatGPT.getChatResponseForChat(
                 query = queryChat.value,

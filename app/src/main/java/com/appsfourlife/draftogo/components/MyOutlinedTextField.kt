@@ -1,5 +1,6 @@
 package com.appsfourlife.draftogo.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -19,9 +20,11 @@ fun MyOutlinedTextField(
     onValueChange: (String) -> Unit = {},
     placeHolder: String,
     value: MutableState<String>,
+    trailingIconID: Int = 0,
+    onTrailingIconClick: () -> Unit = {}
 ) {
 
-    val fontSize = when (rememberWindowInfo().screenWidthInfo){
+    val fontSize = when (rememberWindowInfo().screenWidthInfo) {
         is WindowInfo.WindowType.Compact -> 15.sp
         is WindowInfo.WindowType.Medium -> 20.sp
         else -> 24.sp
@@ -43,7 +46,17 @@ fun MyOutlinedTextField(
                 value.value = it
                 onValueChange(it)
             },
-            textStyle = TextStyle(fontSize = fontSize)
+            textStyle = TextStyle(fontSize = fontSize),
+            trailingIcon = {
+                if (trailingIconID != 0) {
+                    MyIcon(
+                        iconID = trailingIconID,
+                        contentDesc = "",
+                        modifier = Modifier.clickable {
+                            onTrailingIconClick()
+                        })
+                }
+            }
         )
     }
 }

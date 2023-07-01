@@ -35,11 +35,13 @@ fun BottomSheetArtHistory(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    coroutineScope.launch(Dispatchers.IO) {
-        NotifiersArt.listOfPromptHistory.value =
-            App.databaseApp.daoApp.getAllArts().sortedBy { it.dateTime }
-        NotifiersArt.listOfPromptHistory.value = NotifiersArt.listOfPromptHistory.value.reversed()
-    }
+    LaunchedEffect(key1 = true, block = {
+        coroutineScope.launch(Dispatchers.IO) {
+            NotifiersArt.listOfPromptHistory.value =
+                App.databaseApp.daoApp.getAllArts().sortedBy { it.dateTime }
+            NotifiersArt.listOfPromptHistory.value = NotifiersArt.listOfPromptHistory.value.reversed()
+        }
+    })
 
     Column(
         modifier = modifier
