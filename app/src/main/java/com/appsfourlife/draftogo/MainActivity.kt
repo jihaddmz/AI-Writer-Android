@@ -499,7 +499,7 @@ class MainActivity : ComponentActivity() {
                     HelperAuth.auth.signInWithCredential(credential).addOnCompleteListener {
                         if (it.isSuccessful) {
                             HelperSharedPreference.setUsername(account.email!!)
-                            HelperFirebaseDatabase.fetchNbOfArtsAndVideosAndChatAndCompletionWordsGenerated()
+//                            HelperFirebaseDatabase.fetchNbOfArtsAndVideosAndChatAndCompletionWordsGenerated()
                             navController.navigate(BottomNavScreens.Chat.route) // from login screen to home screen
                         }
                     }

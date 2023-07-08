@@ -20,10 +20,14 @@ import com.appsfourlife.draftogo.data.model.ModelChatResponse
 import com.appsfourlife.draftogo.feature_chat.components.SubmitChatQuery
 import com.appsfourlife.draftogo.feature_chat.components.TextChatResponse
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
+import com.appsfourlife.draftogo.helpers.HelperSharedPreference
+import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Timer
+import kotlin.concurrent.timerTask
 
 val queryChat =
     mutableStateOf("")
@@ -43,6 +47,19 @@ fun ScreenChat(navHostController: NavHostController) {
     val listOfChats = remember {
         mutableStateOf(mutableListOf<ModelChatResponse>())
     }
+
+    val timer = remember {
+        mutableStateOf(0)
+    }
+    LaunchedEffect(key1 = true, block = {
+        Timer().scheduleAtFixedRate(timerTask {
+            if (timer.value == 2)
+                return@timerTask
+            timer.value += 1
+        }, 1000, 1000)
+    })
+    if (timer.value == 2 && !HelperSharedPreference.getDontShowAnyWhereWritingPermission())
+        HelperUI.ShowAccessibilityPermissionRequester(true)
 
 
     App.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)

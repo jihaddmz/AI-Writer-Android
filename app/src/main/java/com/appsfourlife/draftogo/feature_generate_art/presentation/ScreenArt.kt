@@ -97,7 +97,7 @@ fun ScreenArt(
     val coroutineScope = rememberCoroutineScope()
     val sheetScaffoldState = rememberBottomSheetScaffoldState()
 
-    HelperFirebaseDatabase.getNbOfArtCredits()
+//    HelperFirebaseDatabase.getNbOfArtCredits()
 
     LaunchedEffect(key1 = true, block = {
         Timer().scheduleAtFixedRate(timerTask {
