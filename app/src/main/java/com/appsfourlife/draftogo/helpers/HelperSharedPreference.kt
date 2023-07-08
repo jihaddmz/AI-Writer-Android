@@ -43,6 +43,8 @@ object HelperSharedPreference {
     const val SP_SETTINGS_NB_0F_ARTS_CREDITS = "nb_0f_arts_credits"
     const val SP_SETTINGS_NB_0F_ARTS_GENERATED = "nb_0f_arts_generated"
     const val SP_SETTINGS_NB_0F_VIDEOS_GENERATED = "nb_0f_videos_generated"
+    const val SP_SETTINGS_NB_0F_CHAT_WORDS_GENERATED = "nb_0f_chat_words_generated"
+    const val SP_SETTINGS_NB_0F_COMPLETION_WORDS_GENERATED = "nb_0f_completion_words_generated"
     const val SP_SETTINGS_TYPE_OF_WRITING_MODEL = "type_of_writing_model"
     const val SP_SETTINGS_DONT_SHOW_ANYWHERE_WRITING_PERMISSION = "dont_show_anywhere_writing_permission"
     const val SP_SETTINGS_SUBSCRIBED_TO_EMAIL_SENDER = "is_subscribed_email_sender"
@@ -59,6 +61,22 @@ object HelperSharedPreference {
     /**
      * most common shared preferences keys
      **/
+
+    fun getNbOfChatWordsGenerated(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_CHAT_WORDS_GENERATED, 0)
+    }
+
+    fun setNbOfChatWordsGenerated(value: Int) {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_CHAT_WORDS_GENERATED, value)
+    }
+
+    fun getNbOfCompletionWordsGenerated(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_COMPLETION_WORDS_GENERATED, 0)
+    }
+
+    fun setNbOfCompletionWordsGenerated(value: Int) {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_COMPLETION_WORDS_GENERATED, value)
+    }
 
     fun getNbOfVideosGenerated(): Int {
         return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_VIDEOS_GENERATED, 0)

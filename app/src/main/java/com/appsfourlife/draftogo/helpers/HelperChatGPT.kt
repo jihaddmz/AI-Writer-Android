@@ -84,11 +84,7 @@ object HelperChatGPT {
         jsonObject.put("prompt", query)
         jsonObject.put("temperature", 0.4)
         jsonObject.put("max_tokens", Constants.MAX_GENERATION_LENGTH)
-//        jsonObject.put("frequency_penalty", 0.0)
-//        jsonObject.put("presence_penalty", 0.0)
         jsonObject.put("n", 1)
-//        jsonObject.put("stream", false)
-//        jsonObject.put("logprobs", null)
 
         // on below line making json object request.
         val postRequest: JsonObjectRequest =
@@ -108,6 +104,7 @@ object HelperChatGPT {
                         input = SettingsNotifier.input.value.text.trim(),
                         responseMsg
                     )
+                    HelperFirebaseDatabase.setNbOfCompletionWordsGenerated(totalNbOfToken)
                     onDoneAction(responseMsg)
                 },
                 // adding on error listener
@@ -183,6 +180,7 @@ object HelperChatGPT {
                         response.getJSONObject("usage").getInt("total_tokens")
                     HelperSharedPreference.incrementNbOfGenerationsConsumed()
                     HelperSharedPreference.addToNbOfWordsGenerated((totalNbOfToken * 0.75).roundToInt())
+                    HelperFirebaseDatabase.setNbOfCompletionWordsGenerated(totalNbOfToken)
                     // on below line getting response message and setting it to text view.
                     if (nbOfGenerations > 1) { // many output to generate
                         SettingsNotifier.outputList.clear() // this to not make the list append entries each time
@@ -334,6 +332,7 @@ object HelperChatGPT {
                         response.getJSONObject("usage").getInt("total_tokens")
                     HelperSharedPreference.incrementNbOfGenerationsConsumed()
                     HelperSharedPreference.addToNbOfWordsGenerated((totalNbOfToken * 0.75).roundToInt())
+                    HelperFirebaseDatabase.setNbOfCompletionWordsGenerated(totalNbOfToken)
                     // on below line getting response message and setting it to text view.
                     if (nbOfGenerations > 1) { // many output to generate
                         SettingsNotifier.outputList.clear() // this to not make the list append entries each time
@@ -476,6 +475,7 @@ object HelperChatGPT {
                         HelperSharedPreference.incrementNbOfGenerationsConsumed()
                         HelperSharedPreference.addToNbOfWordsGenerated((totalNbOfToken * 0.75).roundToInt())
                         HelperFirebaseDatabase.setNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                        HelperFirebaseDatabase.setNbOfChatWordsGenerated(totalNbOfToken)
                         // on below line getting response message and setting it to text view.
                         val responseMsg: String =
                             response.getJSONArray("choices").getJSONObject(0)

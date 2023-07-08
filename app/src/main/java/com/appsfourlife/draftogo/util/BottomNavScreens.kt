@@ -8,4 +8,5 @@ sealed class BottomNavScreens(val route: String, val iconID: Int, val labelID: I
     object Art : BottomNavScreens("screen_art", R.drawable.icon_image, R.string.art)
     object Dashboard : BottomNavScreens("screen_dashboard", R.drawable.icon_dashboard, R.string.dashboard)
     object Video : BottomNavScreens("screen_video", R.drawable.icon_custom, R.string.video)
+    object Chat : BottomNavScreens("screen_chat", R.drawable.icon_chat, R.string.chat)
 }

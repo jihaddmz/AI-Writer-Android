@@ -35,6 +35,7 @@ import com.appsfourlife.draftogo.home.listitems.UsageItem
 import com.appsfourlife.draftogo.home.model.ModelDashboardUsage
 import com.appsfourlife.draftogo.home.util.NotifiersHome.listOfFavoriteTemplates
 import com.appsfourlife.draftogo.ui.theme.*
+import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -150,14 +151,14 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
 //                                    )
 //                                )
 //                            } else {
-                                AnnotatedString(
-                                    text = "∞\n",
-                                    spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                                ).plus(
-                                    AnnotatedString(
-                                        App.getTextFromString(R.string.words)
-                                    )
-                                )
+                        AnnotatedString(
+                            text = "∞\n",
+                            spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+                        ).plus(
+                            AnnotatedString(
+                                App.getTextFromString(R.string.words)
+                            )
+                        )
 //                            }
 //                        } else {
 //                            val nbOfGenerationsLeft =
@@ -300,7 +301,19 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                             MyAnnotatedText(text = nbOfArtsLeft.value, textAlign = TextAlign.Center)
                         }
                         MyText(text = HelperAuth.auth.currentUser?.displayName!!)
-                        MyText(text = HelperAuth.auth.currentUser?.email!!)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            MyText(text = HelperAuth.auth.currentUser?.email!!)
+                            MyIcon(iconID = R.drawable.icon_settings, contentDesc = stringResource(
+                                id = R.string.settings
+                            ), modifier = Modifier.clickable {
+                                navController.navigate(BottomNavScreens.Settings.route)
+                            })
+
+                        }
                     }
 
                     MySpacer(type = "large")
@@ -312,11 +325,11 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
 
                         val listOfUsages = listOf(
                             ModelDashboardUsage(
-                                nb = HelperSharedPreference.getNbOfWordsGenerated(),
+                                nb = HelperSharedPreference.getNbOfChatWordsGenerated(),
                                 text = stringResource(
-                                    id = R.string.words
+                                    id = R.string.chat
                                 ),
-                                iconID = R.drawable.icon_article
+                                iconID = R.drawable.icon_chat_green
                             ),
                             ModelDashboardUsage(
                                 nb = HelperSharedPreference.getNbOfArtsGenerated(),
@@ -326,8 +339,8 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                                 iconID = R.drawable.icon_image
                             ),
                             ModelDashboardUsage(
-                                nb = listOfFavoriteTemplates.value.size,
-                                text = stringResource(id = R.string.templates),
+                                nb = HelperSharedPreference.getNbOfCompletionWordsGenerated(),
+                                text = stringResource(id = R.string.completion),
                                 iconID = R.drawable.icon_template
                             ),
                             ModelDashboardUsage(
@@ -347,7 +360,8 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                                 UsageItem(
                                     nb = current.nb,
                                     text = current.text,
-                                    imageID = current.iconID
+                                    imageID = current.iconID,
+                                    navController = navController
                                 )
                             }
                         }

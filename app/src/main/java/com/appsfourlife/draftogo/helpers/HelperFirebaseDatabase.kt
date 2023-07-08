@@ -96,7 +96,7 @@ object HelperFirebaseDatabase {
             }
     }
 
-    fun fetchNbOfArtsAndVideosGenerated() {
+    fun fetchNbOfArtsAndVideosAndChatAndCompletionWordsGenerated() {
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
             .get()
@@ -113,6 +113,20 @@ object HelperFirebaseDatabase {
                     HelperSharedPreference.setNbOfVideosGenerated(0)
                 } else {
                     HelperSharedPreference.setNbOfVideosGenerated(nbOfVideosGenerated.toInt())
+                }
+
+                val nbOfChatWordsGenerated = it.get("nbOfChatWordsGenerated") as Long?
+                if (nbOfChatWordsGenerated == null) {
+                    HelperSharedPreference.setNbOfChatWordsGenerated(0)
+                } else {
+                    HelperSharedPreference.setNbOfChatWordsGenerated(nbOfChatWordsGenerated.toInt())
+                }
+
+                val nbOfCompletionWordsGenerated = it.get("nbOfCompletionWordsGenerated") as Long?
+                if (nbOfCompletionWordsGenerated == null) {
+                    HelperSharedPreference.setNbOfCompletionWordsGenerated(0)
+                } else {
+                    HelperSharedPreference.setNbOfCompletionWordsGenerated(nbOfCompletionWordsGenerated.toInt())
                 }
             }
             .addOnFailureListener {
@@ -189,6 +203,8 @@ object HelperFirebaseDatabase {
                     "nbOfWordsGenerated" to 0,
                     "nbOfArtsGenerated" to 0,
                     "nbOfVideosGenerated" to 0,
+                    "nbOfChatWordsGenerated" to 0,
+                    "nbOfCompletionWordsGenerated" to 0,
                     "renewalDate" to HelperAuth.getExpirationDate()
                 ), SetOptions.merge()
             )
@@ -196,6 +212,8 @@ object HelperFirebaseDatabase {
         HelperSharedPreference.setNbOfArtsGenerated(0)
         HelperSharedPreference.setNbOfWordsGenerated(0)
         HelperSharedPreference.setNbOfVideosGenerated(0)
+        HelperSharedPreference.setNbOfChatWordsGenerated(0)
+        HelperSharedPreference.setNbOfCompletionWordsGenerated(0)
     }
 
     fun getRenewalDate(onQueryComplete: (String) -> Unit) {
@@ -363,6 +381,58 @@ object HelperFirebaseDatabase {
                     HelperSharedPreference.setNbOfVideosGenerated((nbOfVideosGenerated as Long + 1).toInt())
                     firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
                         .set(hashmap, SetOptions.merge())
+                }
+            }
+            .addOnFailureListener {
+
+            }
+    }
+
+    fun setNbOfChatWordsGenerated(value: Int) {
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val nbOfChatWordsGenerated = documentSnapshot.get("nbOfChatWordsGenerated") as Long?
+                if (nbOfChatWordsGenerated == null) {
+                    val hashmap = hashMapOf(
+                        "nbOfChatWordsGenerated" to value
+                    )
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                    HelperSharedPreference.setNbOfChatWordsGenerated(value)
+                } else {
+                    val hashmap = hashMapOf(
+                        "nbOfChatWordsGenerated" to nbOfChatWordsGenerated.toInt() + value
+                    )
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                    HelperSharedPreference.setNbOfChatWordsGenerated(nbOfChatWordsGenerated.toInt() + value)
+
+                }
+            }
+            .addOnFailureListener {
+
+            }
+    }
+
+    fun setNbOfCompletionWordsGenerated(value: Int) {
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val nbOfCompletionWordsGenerated = documentSnapshot.get("nbOfCompletionWordsGenerated") as Long?
+                if (nbOfCompletionWordsGenerated == null) {
+                    val hashmap = hashMapOf(
+                        "nbOfCompletionWordsGenerated" to value
+                    )
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                    HelperSharedPreference.setNbOfCompletionWordsGenerated(value)
+                } else {
+                    val hashmap = hashMapOf(
+                        "nbOfCompletionWordsGenerated" to nbOfCompletionWordsGenerated.toInt() + value
+                    )
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                    HelperSharedPreference.setNbOfCompletionWordsGenerated(nbOfCompletionWordsGenerated.toInt() + value)
+
                 }
             }
             .addOnFailureListener {
