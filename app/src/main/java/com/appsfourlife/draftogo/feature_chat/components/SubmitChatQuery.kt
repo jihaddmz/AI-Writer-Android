@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.android.volley.VolleyError
@@ -117,7 +118,7 @@ fun SubmitChatQuery(
                     showDialogClearConfirmation.value = true
             }
         }) {
-            MyIcon(iconID = R.drawable.clear, contentDesc = "clear")
+            MyIcon(iconID = R.drawable.clear, contentDesc = "clear", tint = Color.Red)
         }
 
         MyCardView(modifier = Modifier.fillMaxWidth(0.8f)) {
@@ -130,8 +131,10 @@ fun SubmitChatQuery(
 
         IconButton(modifier = Modifier, onClick = {
 
-            if (queryChat.value.isEmpty())
+            if (queryChat.value.isEmpty()) {
+                HelperUI.showToast(msg = App.getTextFromString(R.string.no_input_entered))
                 return@IconButton
+            }
 
             if (!SettingsNotifier.isConnected.value) {
                 HelperUI.showToast(
@@ -201,7 +204,7 @@ fun SubmitChatQuery(
 
             }
         }) {
-            MyIcon(iconID = R.drawable.icon_send, contentDesc = "submit")
+            MyIcon(iconID = R.drawable.icon_send, contentDesc = "submit", tint = Color.Green)
         }
     }
 }
