@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import com.appsfourlife.draftogo.data.model.ModelFavoriteTemplate
 
 
 class StackWidgetService : RemoteViewsService() {
@@ -18,7 +17,7 @@ class StackWidgetService : RemoteViewsService() {
 class StackRemoteViewsFactory(applicationContext: Context, intent: Intent?) :
     RemoteViewsService.RemoteViewsFactory {
 
-    private var listOfTemplates: MutableList<ModelFavoriteTemplate> = App.databaseApp.daoApp.getAllFavoriteTemplates() as MutableList<ModelFavoriteTemplate>
+    private var listOfWidgetsScreen: MutableList<String> = mutableListOf(App.getTextFromString(R.string.chat), App.getTextFromString(R.string.art))
     private val mContext = applicationContext
 
     override fun onCreate() {
@@ -31,11 +30,11 @@ class StackRemoteViewsFactory(applicationContext: Context, intent: Intent?) :
     override fun onDestroy() {
         // In onDestroy() you should tear down anything that was setup for your data source,
         // eg. cursors, connections, etc.
-        listOfTemplates.clear()
+//        listOfWidgetsScreen.clear()
     }
 
     override fun getCount(): Int {
-        return listOfTemplates.size
+        return listOfWidgetsScreen.size
     }
 
     override fun getViewAt(position: Int): RemoteViews {
@@ -43,7 +42,7 @@ class StackRemoteViewsFactory(applicationContext: Context, intent: Intent?) :
         // We construct a remote views item based on our widget item xml file, and set the
         // text based on the position.
         val rv = RemoteViews(mContext.packageName, R.layout.widget_item)
-        rv.setTextViewText(R.id.widget_item, listOfTemplates[position].query)
+        rv.setTextViewText(R.id.widget_item, listOfWidgetsScreen[position])
         // Next, we set a fill-intent which will be used to fill-in the pending intent template
         // which is set on the collection view in StackWidgetProvider.
         val extras = Bundle()
@@ -51,12 +50,12 @@ class StackRemoteViewsFactory(applicationContext: Context, intent: Intent?) :
         val fillInIntent = Intent()
         fillInIntent.putExtras(extras)
         rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent)
+//        rv.setOnClickPendingIntent(R.id.widget_item, PendingIntent.getBroadcast(mContext, 5, fillInIntent, PendingIntent.FLAG_IMMUTABLE))
         // You can do heaving lifting in here, synchronously. For example, if you need to
         // process an image, fetch something from the network, etc., it is ok to do it here,
         // synchronously. A loading view will show up in lieu of the actual contents in the
         // interim.
 //        try {
-//            println("Loading view $position")
 //            Thread.sleep(500)
 //        } catch (e: InterruptedException) {
 //            e.printStackTrace()
@@ -84,7 +83,7 @@ class StackRemoteViewsFactory(applicationContext: Context, intent: Intent?) :
     }
 
     override fun onDataSetChanged() {
-        listOfTemplates = App.databaseApp.daoApp.getAllFavoriteTemplates() as MutableList<ModelFavoriteTemplate>
+//        listOfTemplates = App.databaseApp.daoApp.getAllFavoriteTemplates() as MutableList<ModelFavoriteTemplate>
 //        listOfTemplates = App.databaseApp.daoApp.getAllFavoriteTemplates()
 //        getCount()
 //        onCreate()

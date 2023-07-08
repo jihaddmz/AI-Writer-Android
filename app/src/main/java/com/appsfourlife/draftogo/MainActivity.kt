@@ -26,7 +26,6 @@ import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.data.model.ModelTemplate
 import com.appsfourlife.draftogo.extensions.animateOffsetY
-import com.appsfourlife.draftogo.extensions.determineTemplateRoute
 import com.appsfourlife.draftogo.feature_chat.presentation.ScreenChat
 import com.appsfourlife.draftogo.feature_feedback.presentation.ScreenFeedback
 import com.appsfourlife.draftogo.feature_generate_art.presentation.ScreenArt
@@ -74,7 +73,6 @@ class MainActivity : ComponentActivity() {
     }
 
     @SuppressLint("UnrememberedMutableState")
-    @OptIn(ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -221,16 +219,20 @@ class MainActivity : ComponentActivity() {
                             ) {
 
                                 val route = remember {
-                                    mutableStateOf(Screens.ScreenEssay.route)
+                                    mutableStateOf(BottomNavScreens.Chat.route)
                                 }
 
                                 LaunchedEffect(key1 = true) {
                                     coroutineScope.launch(Dispatchers.Main) {
                                         delay(Constants.SPLASH_SCREEN_DURATION + 1000L)
-                                        if (intent.hasExtra("templateClickedQuery")) {
+                                        if (intent.hasExtra("widgetScreenClicked")) {
                                             val query =
-                                                intent.getStringExtra("templateClickedQuery")
-                                            Modifier.determineTemplateRoute(query!!, route)
+                                                intent.getStringExtra("widgetScreenClicked")
+                                            if (query == App.getTextFromString(R.string.chat))
+                                                route.value = BottomNavScreens.Chat.route
+                                            else
+                                                route.value = BottomNavScreens.Art.route
+
                                             navController.navigate(route.value)
                                         }
                                     }
