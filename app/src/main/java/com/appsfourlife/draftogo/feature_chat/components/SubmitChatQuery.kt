@@ -174,6 +174,7 @@ fun SubmitChatQuery(
                 content,
                 coroutineScope = coroutineScope,
                 onErrorAction = {
+                    App.databaseApp.daoApp.deleteChatByText("...")
                     onResponseError(it)
                 },
                 onDoneAction = {

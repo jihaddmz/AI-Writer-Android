@@ -37,6 +37,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
@@ -395,6 +396,7 @@ fun ScreenArt(
                             .fillMaxHeight(0.75f),
                         showCloseBtn = true,
                         showDialog = showDialog,
+                        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
                         negativeBtnText = stringResource(id = R.string.save_to_history),
                         positiveBtnText = stringResource(id = R.string.download),
                         onPositiveBtnClick = {
