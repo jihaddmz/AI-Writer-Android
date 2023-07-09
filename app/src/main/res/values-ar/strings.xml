@@ -209,7 +209,7 @@
     <string name="prompt_history">التاريخ الفوري</string>
     <string name="art_history_explanation">حدد مطالبة من السجل الخاص بك للصقها في حقل الإدخال</string>
     <string name="art_purchase_credits_desc">أطلق العنان لإبداعك باستخدام أداة الذكاء الاصطناعي الخاصة بنا</string>
-    <string name="arts_per_credits">إنشاء الفنون لكل اعتمادات (فن واحد لكل 1 رصيد)</string>
+    <string name="create_any_image_you_can_imagine">قم بإنشاء أي صورة يمكنك تخيلها</string>
     <string name="download_high_resolution_artwork">تنزيل عمل فني عالي الدقة</string>
     <string name="access_to_all_styles">الوصول إلى جميع الأنماط (10)</string>
     <string name="use_some_inspiration">استخدم بعض الإلهام</string>

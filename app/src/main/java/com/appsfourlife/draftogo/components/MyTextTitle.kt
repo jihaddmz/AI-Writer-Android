@@ -21,13 +21,14 @@ fun MyTextTitle(
     textAlign: TextAlign = TextAlign.Start,
     textStyle: TextStyle = TextStyle(),
     color: Color = Color.Black,
-    fontWeight: FontWeight = FontWeight.Normal
+    fontWeight: FontWeight = FontWeight.Normal,
+    baseFontSize: Int = 17
 ) {
 
     val fontSize = when (rememberWindowInfo().screenWidthInfo){
-        is WindowInfo.WindowType.Compact -> 17.sp
-        is WindowInfo.WindowType.Medium -> 30.sp
-        else -> 35.sp
+        is WindowInfo.WindowType.Compact -> baseFontSize.sp
+        is WindowInfo.WindowType.Medium -> (baseFontSize + 13).sp
+        else -> (baseFontSize + 18).sp
     }
 
     Text(

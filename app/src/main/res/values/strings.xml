@@ -207,7 +207,7 @@
     <string name="prompt_history">Prompt History</string>
     <string name="art_history_explanation">Select a prompt from your history to paste it in the input field</string>
     <string name="art_purchase_credits_desc">Unleash your creativity with our AI tool</string>
-    <string name="arts_per_credits">Create arts per credits (1 art per 1 credit)</string>
+    <string name="create_any_image_you_can_imagine">Create any image you can imagine</string>
     <string name="download_high_resolution_artwork">Download high resolution artwork</string>
     <string name="access_to_all_styles">Access to all styles (10+)</string>
     <string name="use_some_inspiration">Use some inspiration</string>
@@ -297,4 +297,11 @@
     <string name="add_new_chat_tip">Tap the add icon in the top right to add new session</string>
     <string name="this_item_cant_be_deleted">This chat cannot be deleted</string>
     <string name="download">Download</string>
+    <string name="chat_with_ai">Chat With AI</string>
+    <string name="save_your_chat_session">Save Your Chat Sessions</string>
+    <string name="introducing_draftogo">Free AI Chat And Image Generation App</string>
+    <string name="ai_chat_tool">Ai Chat Tool</string>
+    <string name="chat_about_anyhing">Chat about anything</string>
+    <string name="generate_in_any_language_you_want">Generate in any language you want</string>
+    <string name="free_app">Free App</string>
 </resources>

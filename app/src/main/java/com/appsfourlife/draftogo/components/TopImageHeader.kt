@@ -30,7 +30,10 @@ fun TopImageHeader(
     sheetScaffoldState: BottomSheetScaffoldState?,
     showQuitBtn: Boolean = true,
     drawableID: Int,
-    title: String
+    title: String,
+    brush: Brush = Brush.verticalGradient(listOf(Color.Transparent, Glass),
+    )
+
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -59,11 +62,7 @@ fun TopImageHeader(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(
-                            Brush.verticalGradient(
-                                listOf(Color.Transparent, Glass),
-//                                startY = startY,
-//                                endY = endY
-                            )
+                            brush
                         ),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
