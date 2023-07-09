@@ -103,7 +103,8 @@ fun ScreenChat(
             AppBarTransparent(
                 title = title1.value,
                 showSidebar = true,
-                scaffoldState = scaffoldState
+                showHelpIcon = true,
+                scaffoldState = scaffoldState,
             ) {
                 App.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
                 SettingsNotifier.navHostController?.navigate(BottomNavScreens.Dashboard.route)

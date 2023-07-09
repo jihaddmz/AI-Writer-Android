@@ -304,4 +304,10 @@
     <string name="chat_about_anyhing">Chat about anything</string>
     <string name="generate_in_any_language_you_want">Generate in any language you want</string>
     <string name="free_app">Free App</string>
+    <string name="how_to_regenerate_response">How to regenerate response?</string>
+    <string name="just_tap_the_input_you_want">Just tap the input you want and then click the send icon again</string>
+    <string name="how_to_generate_output_in_specific_language">How to generate output in specific language?</string>
+    <string name="append_the_language_you_want_at_the_end">Append the language you want at the end. For example: \"Write an email to my boss in french language\"</string>
+    <string name="how_to_copy_generated_text">How to copy generated text?</string>
+    <string name="long_click_the_generated_output">Long click the generated output</string>
 </resources>
