@@ -33,7 +33,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun SubmitChatQuery(
     modifier: Modifier = Modifier,
-    onSubmitClick: () -> Unit,
+    newChatID: Int = 0,
+    onSubmitClick: (Boolean, String) -> Unit,
     onClearClick: () -> Unit,
     onResponseDone: (String) -> Unit,
     onResponseError: (VolleyError) -> Unit
@@ -55,6 +56,10 @@ fun SubmitChatQuery(
         mutableStateOf("")
     }
 
+    var input = remember {
+        ""
+    }
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround,
@@ -68,7 +73,7 @@ fun SubmitChatQuery(
                 positiveBtnText = stringResource(id = R.string.yes),
                 onPositiveBtnClick = {
                     coroutineScope.launch(Dispatchers.IO) {
-                        App.databaseApp.daoApp.deleteAllChats()
+                        App.databaseApp.daoApp.deleteAllChatsByNewChatID(newChatID)
                         onClearClick()
                     }
                 }) {
@@ -184,11 +189,13 @@ fun SubmitChatQuery(
                         App.databaseApp.daoApp.getChatMaxID() + 1,
                         role = "user",
                         text = queryChat.value,
-                        color = 1
+                        color = 1,
+                        newChatID = newChatID
                     )
                 )
+                input = queryChat.value
+                onSubmitClick(true, input)
                 queryChat.value = ""
-                onSubmitClick()
 
                 delay(1000)
 
@@ -197,10 +204,11 @@ fun SubmitChatQuery(
                         App.databaseApp.daoApp.getChatMaxID() + 1,
                         role = "system",
                         text = "...",
-                        color = 0
+                        color = 0,
+                        newChatID = newChatID
                     )
                 )
-                onSubmitClick()
+                onSubmitClick(false, input)
 
             }
         }) {

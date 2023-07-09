@@ -4,6 +4,7 @@ import android.view.WindowManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -17,11 +18,14 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.data.model.ModelChatResponse
+import com.appsfourlife.draftogo.data.model.ModelNewChat
 import com.appsfourlife.draftogo.feature_chat.components.SubmitChatQuery
 import com.appsfourlife.draftogo.feature_chat.components.TextChatResponse
+import com.appsfourlife.draftogo.feature_chat.components.listOfNewChats
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.HelperUI
+import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +38,12 @@ val queryChat =
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun ScreenChat(navHostController: NavHostController) {
+fun ScreenChat(
+    navHostController: NavHostController,
+    scaffoldState: ScaffoldState,
+    title: String? = null,
+    newChatID: Int = 0
+) {
     HelperAnalytics.sendEvent("chat")
 
     LaunchedEffect(key1 = true, block = {
@@ -65,7 +74,8 @@ fun ScreenChat(navHostController: NavHostController) {
     App.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
     LaunchedEffect(key1 = true, block = {
-        listOfChats.value = App.databaseApp.daoApp.getAllChats() as MutableList<ModelChatResponse>
+        listOfChats.value =
+            App.databaseApp.daoApp.getAllChatsNyNewChatID(newChatID = newChatID) as MutableList<ModelChatResponse>
     })
 
     BottomSheetWriting(
@@ -79,7 +89,22 @@ fun ScreenChat(navHostController: NavHostController) {
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
-            AppBarTransparent(title = stringResource(id = R.string.chat)) {
+            val title1 = remember {
+                Helpers.logD("new chat id ${newChatID} title $title")
+                if (title == "Unnamed") {
+                    mutableStateOf(App.getTextFromString(R.string.new_chat))
+                } else
+                    mutableStateOf(title!!)
+//                } else
+//                    mutableStateOf(App.getTextFromString(R.string.chat))
+
+            }
+
+            AppBarTransparent(
+                title = title1.value,
+                showSidebar = true,
+                scaffoldState = scaffoldState
+            ) {
                 App.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
                 SettingsNotifier.navHostController?.navigate(BottomNavScreens.Dashboard.route)
             }
@@ -117,35 +142,59 @@ fun ScreenChat(navHostController: NavHostController) {
                 }
             }
 
-            SubmitChatQuery(modifier = Modifier.fillMaxWidth(), onResponseDone = {
-                coroutineScope.launch(Dispatchers.IO) {
-                    App.databaseApp.daoApp.insertChat(
-                        ModelChatResponse(
-                            App.databaseApp.daoApp.getChatMaxID() + 1,
-                            role = "system",
-                            text = it,
-                            color = 0
+            SubmitChatQuery(
+                modifier = Modifier.fillMaxWidth(),
+                newChatID = newChatID,
+                onResponseDone = {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        App.databaseApp.daoApp.insertChat(
+                            ModelChatResponse(
+                                App.databaseApp.daoApp.getChatMaxID() + 1,
+                                role = "system",
+                                text = it,
+                                color = 0,
+                                newChatID = newChatID
+                            )
                         )
-                    )
-                    listOfChats.value =
-                        App.databaseApp.daoApp.getAllChats() as MutableList<ModelChatResponse>
-                    state.animateScrollToItem(100)
-                }
-            }, onSubmitClick = {
-//                    showLoadingAnimation.value = true
-                coroutineScope.launch(Dispatchers.IO) {
-                    listOfChats.value =
-                        App.databaseApp.daoApp.getAllChats() as MutableList<ModelChatResponse>
-                    keyboardController?.hide()
-                    state.animateScrollToItem(100)
-                }
-            }, onResponseError = {
-            }, onClearClick = {
-                coroutineScope.launch(Dispatchers.IO) {
-                    listOfChats.value =
-                        App.databaseApp.daoApp.getAllChats() as MutableList<ModelChatResponse>
-                }
-            })
+                        listOfChats.value =
+                            App.databaseApp.daoApp.getAllChatsNyNewChatID(newChatID) as MutableList<ModelChatResponse>
+                        state.animateScrollToItem(100)
+                    }
+                },
+                onSubmitClick = { boolean, string ->
+                    coroutineScope.launch(Dispatchers.IO) {
+
+                        if (boolean) {
+                            if (newChatID != 0) { // if the user is coming from added new chat
+                                val newChat = App.databaseApp.daoApp.getNewChatByID(newChatID)
+                                if (newChat == null) {
+                                    title1.value = string
+                                    App.databaseApp.daoApp.insertNewChat(
+                                        ModelNewChat(
+                                            newChatID,
+                                            text = string
+                                        )
+                                    )
+                                    listOfNewChats.value = App.databaseApp.daoApp.getAllNewChats() as MutableList<ModelNewChat>
+                                }
+                            }
+                        }
+
+                        listOfChats.value =
+                            App.databaseApp.daoApp.getAllChatsNyNewChatID(newChatID) as MutableList<ModelChatResponse>
+                        keyboardController?.hide()
+                        state.animateScrollToItem(100)
+
+                    }
+                },
+                onResponseError = {
+                },
+                onClearClick = {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        listOfChats.value =
+                            App.databaseApp.daoApp.getAllChatsNyNewChatID(newChatID) as MutableList<ModelChatResponse>
+                    }
+                })
         }
     }
 }

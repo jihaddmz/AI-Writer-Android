@@ -18,14 +18,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.android.billingclient.api.*
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.data.model.ModelTemplate
 import com.appsfourlife.draftogo.extensions.animateOffsetY
+import com.appsfourlife.draftogo.feature_chat.components.SidebarNewChat
 import com.appsfourlife.draftogo.feature_chat.presentation.ScreenChat
 import com.appsfourlife.draftogo.feature_feedback.presentation.ScreenFeedback
 import com.appsfourlife.draftogo.feature_generate_art.presentation.ScreenArt
@@ -146,6 +149,11 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.fillMaxSize(),
                         scaffoldState = scaffoldState,
                         backgroundColor = Glass,
+                        drawerContent = {
+                            SidebarNewChat(scaffoldState, navController = navController)
+                        },
+                        drawerGesturesEnabled = false,
+                        drawerShape = DrawerShape,
                         bottomBar = {
                             val isBottomNavVisible = remember {
                                 mutableStateOf(false)
@@ -334,12 +342,30 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
 
-                                    composable(route = BottomNavScreens.Chat.route) {
+                                    composable(
+                                        route = BottomNavScreens.Chat.route + "?title={title},newChatID={newChatID}",
+                                        arguments = listOf(
+                                            navArgument("title") {
+                                                defaultValue = App.getTextFromString(R.string.chat)
+                                                type = NavType.StringType
+                                            },
+                                            navArgument("newChatID") {
+                                                defaultValue = 0
+                                                type = NavType.IntType
+                                            },
+                                        )
+                                    ) { navBackStackEntry ->
+
                                         MyBackHandler(
                                             navController = navController,
                                             BottomNavScreens.Dashboard.route
                                         )
-                                        ScreenChat(navController)
+                                        ScreenChat(
+                                            navController,
+                                            scaffoldState,
+                                            title = navBackStackEntry.arguments?.getString("title"),
+                                            newChatID = navBackStackEntry.arguments!!.getInt("newChatID")
+                                        )
                                     }
 
                                     composable(route = Screens.ScreenTranslate.route) {
