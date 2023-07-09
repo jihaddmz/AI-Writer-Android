@@ -393,10 +393,45 @@ fun ScreenArt(
                         modifier = Modifier
                             .fillMaxWidth()
                             .fillMaxHeight(0.75f),
+                        showCloseBtn = true,
                         showDialog = showDialog,
-                        negativeBtnText = stringResource(id = R.string.done),
-                        positiveBtnText = stringResource(id = R.string.save_to_history),
+                        negativeBtnText = stringResource(id = R.string.save_to_history),
+                        positiveBtnText = stringResource(id = R.string.download),
                         onPositiveBtnClick = {
+                            coroutineScope.launch(Dispatchers.IO) {
+                                if (bitmap.value != null) {
+                                    HelperImage.mSaveMediaToStorage(
+                                        bitmap.value
+                                    ) {
+                                        coroutineScope.launch(Dispatchers.Main) {
+                                            HelperUI.showToast(
+                                                App.context,
+                                                msg = App.getTextFromString(R.string.image_saved_to_gallery)
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    coroutineScope.launch(Dispatchers.IO) {
+                                        bitmap.value = BitmapFactory.decodeStream(
+                                            URL(imageUrl.value)
+                                                .openConnection()
+                                                .getInputStream()
+                                        )
+                                        HelperImage.mSaveMediaToStorage(
+                                            bitmap.value
+                                        ) {
+                                            coroutineScope.launch(Dispatchers.Main) {
+                                                HelperUI.showToast(
+                                                    App.context,
+                                                    msg = App.getTextFromString(R.string.image_saved_to_gallery)
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        onNegativeBtnClick = {
                             coroutineScope.launch(Dispatchers.IO) {
                                 if (App.databaseApp.daoApp.getArt(prompt.value) == null) {
                                     App.databaseApp.daoApp.insertArt(
@@ -428,11 +463,11 @@ fun ScreenArt(
                             }
                         }
                     ) {
-                        MyTipText(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            text = stringResource(id = R.string.tip_art_download_image)
-                        )
+//                        MyTipText(
+//                            modifier = Modifier
+//                                .fillMaxWidth(),
+//                            text = stringResource(id = R.string.tip_art_download_image)
+//                        )
 //                        Image(
 //                            modifier = Modifier
 //                                .fillMaxWidth()
@@ -443,41 +478,7 @@ fun ScreenArt(
                         MyUrlImage(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .fillMaxHeight(0.85f)
-                                .clickable {
-                                    coroutineScope.launch(Dispatchers.IO) {
-                                        if (bitmap.value != null) {
-                                            HelperImage.mSaveMediaToStorage(
-                                                bitmap.value
-                                            ) {
-                                                coroutineScope.launch(Dispatchers.Main) {
-                                                    HelperUI.showToast(
-                                                        App.context,
-                                                        msg = App.getTextFromString(R.string.image_saved_to_gallery)
-                                                    )
-                                                }
-                                            }
-                                        } else {
-                                            coroutineScope.launch(Dispatchers.IO) {
-                                                bitmap.value = BitmapFactory.decodeStream(
-                                                    URL(imageUrl.value)
-                                                        .openConnection()
-                                                        .getInputStream()
-                                                )
-                                                HelperImage.mSaveMediaToStorage(
-                                                    bitmap.value
-                                                ) {
-                                                    coroutineScope.launch(Dispatchers.Main) {
-                                                        HelperUI.showToast(
-                                                            App.context,
-                                                            msg = App.getTextFromString(R.string.image_saved_to_gallery)
-                                                        )
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                },
+                                .fillMaxHeight(0.8f),
                             imageUrl = imageUrl.value,
                             contentDesc = "",
                             contentScale = ContentScale.FillBounds

@@ -9,6 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -75,6 +76,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @OptIn(ExperimentalMaterialApi::class)
     @SuppressLint("UnrememberedMutableState")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -150,7 +152,26 @@ class MainActivity : ComponentActivity() {
                         scaffoldState = scaffoldState,
                         backgroundColor = Glass,
                         drawerContent = {
-                            SidebarNewChat(scaffoldState, navController = navController)
+                            SidebarNewChat(
+                                scaffoldState,
+                                navController = navController,
+                                onDeleteBtnClick = { modelNewChat ->
+                                    if (navBackStackEntry!!.arguments!!.getInt("newChatID") == modelNewChat.id) {
+                                        coroutineScope.launch {
+                                            scaffoldState.drawerState.animateTo(
+                                                DrawerValue.Closed,
+                                                tween(durationMillis = 1000)
+                                            )
+                                            navController.navigate(
+                                                BottomNavScreens.Chat.route + "?title=${
+                                                    App.getTextFromString(
+                                                        R.string.chat
+                                                    )
+                                                },newChatID=${0}"
+                                            )
+                                        }
+                                    }
+                                })
                         },
                         drawerGesturesEnabled = false,
                         drawerShape = DrawerShape,
@@ -188,7 +209,13 @@ class MainActivity : ComponentActivity() {
                                             if (screen == BottomNavScreens.Content && currentRoute != Screens.ScreenSignIn.route && currentRoute != BottomNavScreens.Dashboard.route && currentRoute != BottomNavScreens.Art.route && currentRoute != BottomNavScreens.Settings.route && currentRoute != Screens.ScreenFeedback.route) {
                                                 true
                                             } else {
-                                                currentRoute == screen.route
+                                                if (screen.route == BottomNavScreens.Chat.route && currentRoute!!.contains(
+                                                        BottomNavScreens.Chat.route
+                                                    )
+                                                )
+                                                    true
+                                                else
+                                                    currentRoute == screen.route
                                             }
                                         BottomNavigationItem(
                                             selected = isSelected,

@@ -39,7 +39,8 @@ fun AppBarTransparent(
             .fillMaxWidth()
             .padding(
                 top = SpacersSize.small,
-                bottom = SpacersSize.medium
+                bottom = SpacersSize.medium,
+                start = SpacersSize.small
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start

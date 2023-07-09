@@ -2,6 +2,7 @@ package com.appsfourlife.draftogo.feature_chat.components
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,9 +42,9 @@ import kotlinx.coroutines.launch
 
 var listOfNewChats = mutableStateOf(mutableListOf<ModelNewChat>())
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun SidebarNewChat(scaffoldState: ScaffoldState, navController: NavController) {
+fun SidebarNewChat(scaffoldState: ScaffoldState, navController: NavController, onDeleteBtnClick: (ModelNewChat) -> Unit) {
     val coroutineScope = rememberCoroutineScope()
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -124,11 +125,11 @@ fun SidebarNewChat(scaffoldState: ScaffoldState, navController: NavController) {
                     .animateContentSize()
             ) {
 
-                items(listOfNewChats.value.size) { index ->
+                items(listOfNewChats.value.size, key = { listOfNewChats.value[it].id }) { index ->
                     val current = listOfNewChats.value[index]
 
                     ItemDrawerChatSession(
-                        modifier = Modifier.animateContentSize(),
+                        modifier = Modifier.animateItemPlacement(),
                         modelNewChat = current,
                         listOfNewChats = listOfNewChats,
                         onClick = {
@@ -142,7 +143,10 @@ fun SidebarNewChat(scaffoldState: ScaffoldState, navController: NavController) {
                                 } else
                                     navController.navigate(BottomNavScreens.Chat.route + "?title=${current.text},newChatID=${current.id}")
                             }
-                        })
+                        },
+                    onDeleteBtnClick = {
+                        onDeleteBtnClick(it)
+                    })
 
                     MySpacer(type = "medium")
                 }

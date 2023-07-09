@@ -27,6 +27,7 @@ fun ItemDrawerChatSession(
     modifier: Modifier = Modifier,
     modelNewChat: ModelNewChat,
     listOfNewChats: MutableState<MutableList<ModelNewChat>>,
+    onDeleteBtnClick: (ModelNewChat) -> Unit,
     onClick: (String) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -53,10 +54,13 @@ fun ItemDrawerChatSession(
                     HelperUI.showToast(msg = App.context.getString(R.string.this_item_cant_be_deleted))
                 } else
                     coroutineScope.launch(Dispatchers.IO) {
+                        App.databaseApp.daoApp.deleteAllChatsByNewChatID(modelNewChat.id)
                         App.databaseApp.daoApp.deleteNewChat(modelNewChat)
                         listOfNewChats.value =
                             App.databaseApp.daoApp.getAllNewChats() as MutableList<ModelNewChat>
                     }
+
+                onDeleteBtnClick(modelNewChat)
             }) {
                 MyIcon(iconID = R.drawable.icon_delete, contentDesc = "delete item")
             }
