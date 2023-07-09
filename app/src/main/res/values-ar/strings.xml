@@ -290,4 +290,33 @@
     <string name="chat">محادثة</string>
     <string name="introducing_navigation_changed">أصبح التنقل الآن في جانب الدرج ، بدلاً من التنقل السفلي ، لتجربة مستخدم أفضل. إذا كانت لديك أي أسئلة أو كنت تفضل التنقل السفلي ، فيرجى إرسالها في قسم التعليقات.</string>
 
+    <string name="video">Video\n</string>
+    <string name="video_templates">Video Templates</string>
+    <string name="use_template">Use Template</string>
+    <string name="provide_your_inputs">Provide Your Inputs</string>
+    <string name="video_is_generated">Video is Generated</string>
+    <string name="download_video">Download Video</string>
+    <string name="downloading_your_video">Downloading Your Video</string>
+    <string name="completion">Completion</string>
+    <string name="videos">Videos</string>
+
+    <string name="image">صورة</string>
+    <string name="new_chat">دردشة جديدة</string>
+    <string name="collapse">ينهار</string>
+    <string name="add_new_chat_tip">اضغط على أيقونة الإضافة في الجزء العلوي الأيمن لإضافة جلسة جديدة</string>
+    <string name="this_item_cant_be_deleted">لا يمكن حذف هذه الدردشة</string>
+    <string name="download">تحميل</string>
+    <string name="chat_with_ai">الدردشة مع منظمة العفو الدولية</string>
+    <string name="save_your_chat_session">احفظ جلسات الدردشة الخاصة بك</string>
+    <string name="introducing_draftogo">تطبيق مجاني للدردشة وتوليد الصور من منظمة العفو الدولية</string>
+    <string name="ai_chat_tool">أداة الدردشة بالذكاء الاصطناعي</string>
+    <string name="chat_about_anyhing">تحدث عن أي شيء</string>
+    <string name="generate_in_any_language_you_want">تولد بأي لغة تريدها</string>
+    <string name="free_app">تطبيق مجاني</string>
+    <string name="how_to_regenerate_response">كيف تجدد الاستجابة؟</string>
+    <string name="just_tap_the_input_you_want">ما عليك سوى النقر فوق الإدخال الذي تريده ثم النقر فوق رمز الإرسال مرة أخرى</string>
+    <string name="how_to_generate_output_in_specific_language">كيف تولد مخرجات بلغة معينة؟</string>
+    <string name="append_the_language_you_want_at_the_end">قم بإلحاق اللغة التي تريدها في النهاية. على سبيل المثال: \"اكتب بريدًا إلكترونيًا إلى مديري باللغة الفرنسية \"</string>
+    <string name="how_to_copy_generated_text">كيف تنسخ النص الذي تم إنشاؤه؟</string>
+    <string name="long_click_the_generated_output">انقر لفترة طويلة على الناتج الناتج</string>
 </resources>
