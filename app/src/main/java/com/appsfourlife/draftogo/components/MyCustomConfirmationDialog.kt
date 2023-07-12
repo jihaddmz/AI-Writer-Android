@@ -26,6 +26,7 @@ fun MyCustomConfirmationDialog(
     properties: DialogProperties = DialogProperties(),
     negativeBtnText: String,
     positiveBtnText: String,
+    closeOnNegativeBtnClick: Boolean = true,
     showCloseBtn: Boolean = false,
     onNegativeBtnClick: () -> Unit = {},
     onPositiveBtnClick: () -> Unit,
@@ -59,10 +60,12 @@ fun MyCustomConfirmationDialog(
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceAround
             ) {
                 MyOutlinedButton(text = negativeBtnText) {
-                    showDialog.value = false
+                    if (closeOnNegativeBtnClick)
+                        showDialog.value = false
+
                     onNegativeBtnClick()
                 }
                 MyOutlinedButton(text = positiveBtnText) {

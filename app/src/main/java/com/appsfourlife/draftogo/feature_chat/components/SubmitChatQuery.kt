@@ -3,6 +3,7 @@ package com.appsfourlife.draftogo.feature_chat.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.android.volley.VolleyError
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
@@ -23,6 +25,8 @@ import com.appsfourlife.draftogo.data.model.ModelChatResponse
 import com.appsfourlife.draftogo.feature_chat.presentation.queryChat
 import com.appsfourlife.draftogo.feature_generate_text.components.DialogPricingType
 import com.appsfourlife.draftogo.helpers.*
+import com.appsfourlife.draftogo.ui.theme.Blue
+import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -68,6 +72,7 @@ fun SubmitChatQuery(
 
         if (showDialogClearConfirmation.value)
             MyCustomConfirmationDialog(
+                modifier = Modifier.padding(SpacersSize.medium),
                 showDialog = showDialogClearConfirmation,
                 negativeBtnText = stringResource(id = R.string.no),
                 positiveBtnText = stringResource(id = R.string.yes),
@@ -77,7 +82,7 @@ fun SubmitChatQuery(
                         onClearClick()
                     }
                 }) {
-                MyText(text = stringResource(id = R.string.text_delete_all_chats_confirmation))
+                MyText(text = stringResource(id = R.string.text_delete_all_chats_confirmation), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
             }
 
         if (showPricingDialogTypes.value && showPricingDialogTypesTitle.value == App.getTextFromString(
@@ -119,8 +124,14 @@ fun SubmitChatQuery(
 
         IconButton(onClick = {
             coroutineScope.launch(Dispatchers.IO) {
-                if (App.databaseApp.daoApp.getAllChats().isNotEmpty())
+                if (App.databaseApp.daoApp.getAllChatsNyNewChatID(newChatID).isNotEmpty())
                     showDialogClearConfirmation.value = true
+                else {
+                    coroutineScope.launch(Dispatchers.Main) {
+                        HelperUI.showToast(msg = App.getTextFromString(R.string.no_chats_found))
+                    }
+                }
+
             }
         }) {
             MyIcon(iconID = R.drawable.clear, contentDesc = "clear", tint = Color.Red)
@@ -213,7 +224,7 @@ fun SubmitChatQuery(
 
             }
         }) {
-            MyIcon(iconID = R.drawable.icon_send, contentDesc = "submit", tint = Color.Green)
+            MyIcon(iconID = R.drawable.icon_send, contentDesc = "submit", tint = Blue)
         }
     }
 }

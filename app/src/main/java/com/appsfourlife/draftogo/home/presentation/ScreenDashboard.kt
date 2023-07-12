@@ -439,7 +439,6 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                                     listOfFavoriteTemplates.value =
                                         App.databaseApp.daoApp.getAllFavoriteTemplates()
 
-                                    HelperUI.refreshWidget(context = context)
                                 }
                             }
 

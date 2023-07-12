@@ -26,6 +26,7 @@ import com.appsfourlife.draftogo.helpers.HelperAnalytics
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.helpers.Helpers
+import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
@@ -93,7 +94,10 @@ fun ScreenChat(
                 Helpers.logD("new chat id ${newChatID} title $title")
                 if (title == "Unnamed") {
                     mutableStateOf(App.getTextFromString(R.string.new_chat))
-                } else
+                } else if (newChatID == 0) {
+                    mutableStateOf(App.getTextFromString(R.string.chat))
+                }
+                else
                     mutableStateOf(title!!)
 //                } else
 //                    mutableStateOf(App.getTextFromString(R.string.chat))
@@ -144,7 +148,7 @@ fun ScreenChat(
             }
 
             SubmitChatQuery(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(bottom = SpacersSize.small),
                 newChatID = newChatID,
                 onResponseDone = {
                     coroutineScope.launch(Dispatchers.IO) {

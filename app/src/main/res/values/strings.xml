@@ -312,4 +312,6 @@
     <string name="append_the_language_you_want_at_the_end">Append the language you want at the end. For example: \"Write an email to my boss in french language\"</string>
     <string name="how_to_copy_generated_text">How to copy generated text?</string>
     <string name="long_click_the_generated_output">Long click the generated output</string>
+    <string name="image_resolution">Image Resolution</string>
+    <string name="saving_to_history_done">Saved to history</string>
 </resources>

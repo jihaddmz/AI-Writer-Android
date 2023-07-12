@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
+import androidx.compose.material.Text
 import androidx.compose.material.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,8 +36,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
@@ -53,7 +56,6 @@ import com.appsfourlife.draftogo.components.MySpacer
 import com.appsfourlife.draftogo.components.MyText
 import com.appsfourlife.draftogo.components.MyTextField
 import com.appsfourlife.draftogo.components.MyTextLink
-import com.appsfourlife.draftogo.components.MyTipText
 import com.appsfourlife.draftogo.components.MyUrlImage
 import com.appsfourlife.draftogo.components.myDropDown
 import com.appsfourlife.draftogo.components.myOptionsSelector
@@ -152,7 +154,7 @@ fun ScreenArt(
                         sheetScaffoldState = sheetScaffoldState,
                         onArtHistoryClick = {
                             prompt.value = it
-                            doneIconColor.value = Color.Green
+                            doneIconColor.value = Blue
                         }
                     )
                 } else {
@@ -175,7 +177,7 @@ fun ScreenArt(
                     Row(modifier = Modifier.clickable {
                         prompt.value =
                             ConstantsArt.LISTOF_ART_SHOWCASES[Random().nextInt(ConstantsArt.LISTOF_ART_SHOWCASES.size)].bio
-                        doneIconColor.value = Color.Green
+                        doneIconColor.value = Blue
                     }, verticalAlignment = Alignment.CenterVertically) {
                         MyTextLink(
                             text = stringResource(id = R.string.i_need_inspiration),
@@ -195,7 +197,7 @@ fun ScreenArt(
                             onValueChanged = {
                                 prompt.value = it
                                 if (it.isNotEmpty())
-                                    doneIconColor.value = Color.Green
+                                    doneIconColor.value = Blue
                                 else
                                     doneIconColor.value = Color.LightGray
                             },
@@ -238,7 +240,7 @@ fun ScreenArt(
                             IconButton(modifier = Modifier
                                 .padding(end = SpacersSize.small)
                                 .animateOffsetX(initialOffsetX = 70.dp),
-                                enabled = doneIconColor.value == Color.Green,
+                                enabled = doneIconColor.value == Blue,
                                 onClick = {
                                     HelperAnalytics.sendEvent("generate_art")
 
@@ -296,38 +298,47 @@ fun ScreenArt(
                                         tint = doneIconColor.value
                                     )
                                 MyAnimatedVisibility(visible = showLoadingIndicator.value) {
-                                    MyIconLoading(tint = Color.Green)
+                                    MyIconLoading(tint = Blue)
                                 }
                             } // end done icon
                         }
                     }
                 } // end input card
-                MyTipText(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = SpacersSize.medium),
-                    text = stringResource(id = R.string.generate_art_tip)
-                )
+                // todo uncomment when paid plans are re-enabled
+//                MyTipText(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = SpacersSize.medium),
+//                    text = stringResource(id = R.string.generate_art_tip)
+//                )
 
                 MySpacer(type = "large")
 
+                Text(
+                    text = "${stringResource(id = R.string.image_resolution)}:",
+                    modifier = Modifier.fillMaxWidth().padding(bottom = SpacersSize.small),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
                 resolution.value = myOptionsSelector(
                     list = listOf("256x256", "512x512", "1024x1024"),
                     defaultSelectedText = "512x512"
                 )
-                MyTipText(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = SpacersSize.medium),
-                    text = stringResource(id = R.string.art_res_tip)
-                )
+//                MyTipText(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = SpacersSize.medium),
+//                    text = stringResource(id = R.string.art_res_tip)
+//                )
 
                 MySpacer(type = "medium")
 
                 style.value = myDropDown(
                     modifier = Modifier.padding(horizontal = SpacersSize.medium),
                     list = ConstantsArt.LISTOF_ART_STYLES,
-                    label = stringResource(id = R.string.style)
+                    label = stringResource(id = R.string.style),
+                    horizontalArrangement = Arrangement.SpaceEvenly
                 )
 
                 MySpacer(type = "large")
@@ -395,8 +406,12 @@ fun ScreenArt(
                             .fillMaxWidth()
                             .fillMaxHeight(0.75f),
                         showCloseBtn = true,
+                        closeOnNegativeBtnClick = false,
                         showDialog = showDialog,
-                        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+                        properties = DialogProperties(
+                            dismissOnBackPress = false,
+                            dismissOnClickOutside = false
+                        ),
                         negativeBtnText = stringResource(id = R.string.save_to_history),
                         positiveBtnText = stringResource(id = R.string.download),
                         onPositiveBtnClick = {
@@ -434,6 +449,7 @@ fun ScreenArt(
                             }
                         },
                         onNegativeBtnClick = {
+                            HelperUI.showToast(msg = App.getTextFromString(R.string.saving_to_history_done))
                             coroutineScope.launch(Dispatchers.IO) {
                                 if (App.databaseApp.daoApp.getArt(prompt.value) == null) {
                                     App.databaseApp.daoApp.insertArt(

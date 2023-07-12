@@ -2,6 +2,7 @@ package com.appsfourlife.draftogo
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -16,6 +17,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -147,6 +149,7 @@ class MainActivity : ComponentActivity() {
 
                 AIWriterTheme {
 
+                    val currentRoute = navBackStackEntry?.destination?.route
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         scaffoldState = scaffoldState,
@@ -173,7 +176,8 @@ class MainActivity : ComponentActivity() {
                                     }
                                 })
                         },
-                        drawerGesturesEnabled = false,
+                        drawerGesturesEnabled = currentRoute?.contains(BottomNavScreens.Chat.route)
+                            ?: false,
                         drawerShape = DrawerShape,
                         bottomBar = {
                             val isBottomNavVisible = remember {
@@ -296,8 +300,20 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 NavHost(
                                     navController = navController,
-                                    startDestination = startScreenRoute
+                                    startDestination = startScreenRoute,
                                 ) {
+
+                                    /**
+                                     * this is only for devices equal or above android 12, so the first screen will be not arguments passed
+                                     **/
+                                    composable(route = BottomNavScreens.Chat.route) {
+                                        HomeBackHandler(context = LocalContext.current as Activity)
+                                        ScreenChat(
+                                            navHostController = navController,
+                                            scaffoldState = scaffoldState,
+                                        )
+                                    }
+
                                     // region composables
                                     composable(route = Screens.ScreenLaunch.route) {
                                         MyBackHandler(navController = navController)
@@ -390,7 +406,9 @@ class MainActivity : ComponentActivity() {
                                         ScreenChat(
                                             navController,
                                             scaffoldState,
-                                            title = navBackStackEntry.arguments?.getString("title"),
+                                            title = if (navBackStackEntry.arguments == null) App.getTextFromString(
+                                                R.string.chat
+                                            ) else navBackStackEntry.arguments?.getString("title"),
                                             newChatID = navBackStackEntry.arguments!!.getInt("newChatID")
                                         )
                                     }
