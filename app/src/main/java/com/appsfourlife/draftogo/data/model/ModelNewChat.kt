@@ -5,6 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "table_newchat")
 data class ModelNewChat(
-    @PrimaryKey(autoGenerate = true) var id: Int = 0,
+    @PrimaryKey() var id: Int = 0,
     var text: String
 )

@@ -101,6 +101,9 @@ fun AppBarTransparent(
                     stringResource(id = R.string.how_to_copy_generated_text) to stringResource(
                         id = R.string.long_click_the_generated_output
                     ),
+                    stringResource(id = R.string.how_to_generate_text_outside_app) to stringResource(
+                        id = R.string.how_to_generate_text_outside_app_answer
+                    ),
                 )
 
                 IconButton(onClick = {

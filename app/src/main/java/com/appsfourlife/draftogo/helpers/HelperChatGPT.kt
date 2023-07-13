@@ -485,6 +485,7 @@ object HelperChatGPT {
                     },
                     // adding on error listener
                     Response.ErrorListener { error ->
+                        Helpers.logD("error $error")
                         onErrorAction(error)
                         if (error.cause is SSLException) {
                             HelperUI.showToast(msg = App.getTextFromString(textID = R.string.no_connection))
@@ -496,7 +497,7 @@ object HelperChatGPT {
                         // adding headers on below line.
                         params["Content-Type"] = "application/json"
                         params["Authorization"] =
-                            "Bearer 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"
+                            "Bearer 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"
                         return params;
                     }
                 }
@@ -508,12 +509,12 @@ object HelperChatGPT {
                 }
 
                 override fun getCurrentRetryCount(): Int {
-                    return 50000
+                    return 3
                 }
 
-                @Throws(VolleyError::class)
-                override fun retry(error: VolleyError) {
+                override fun retry(error: VolleyError?) {
                 }
+
             }
             // on below line adding our request to queue.
             queue.add(postRequest)

@@ -82,7 +82,11 @@ fun SubmitChatQuery(
                         onClearClick()
                     }
                 }) {
-                MyText(text = stringResource(id = R.string.text_delete_all_chats_confirmation), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                MyText(
+                    text = stringResource(id = R.string.text_delete_all_chats_confirmation),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
             }
 
         if (showPricingDialogTypes.value && showPricingDialogTypesTitle.value == App.getTextFromString(
@@ -146,6 +150,7 @@ fun SubmitChatQuery(
         }
 
         IconButton(modifier = Modifier, onClick = {
+//            HelperAnalytics.sendEvent("chat")
 
             if (queryChat.value.isEmpty()) {
                 HelperUI.showToast(msg = App.getTextFromString(R.string.no_input_entered))
@@ -180,21 +185,6 @@ fun SubmitChatQuery(
 //                return@IconButton
 //            }
 
-            HelperChatGPT.getChatResponseForChat(
-                query = queryChat.value,
-                content,
-                coroutineScope = coroutineScope,
-                onErrorAction = {
-                    App.databaseApp.daoApp.deleteChatByText("...")
-                    onResponseError(it)
-                },
-                onDoneAction = {
-                    coroutineScope.launch(Dispatchers.IO) {
-                        App.databaseApp.daoApp.deleteChatByText("...")
-                        onResponseDone(it)
-                    }
-                }
-            )
             coroutineScope.launch(Dispatchers.IO) {
                 App.databaseApp.daoApp.insertChat(
                     ModelChatResponse(
@@ -209,7 +199,7 @@ fun SubmitChatQuery(
                 onSubmitClick(true, input)
                 queryChat.value = ""
 
-                delay(1000)
+                delay(500)
 
                 App.databaseApp.daoApp.insertChat(
                     ModelChatResponse(
@@ -222,7 +212,22 @@ fun SubmitChatQuery(
                 )
                 onSubmitClick(false, input)
 
+                HelperChatGPT.getChatResponseForChat(
+                    query = queryChat.value,
+                    content,
+                    coroutineScope = coroutineScope,
+                    onErrorAction = {
+                        onResponseError(it)
+                    },
+                    onDoneAction = {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            App.databaseApp.daoApp.deleteChatByText("...")
+                            onResponseDone(it)
+                        }
+                    }
+                )
             }
+
         }) {
             MyIcon(iconID = R.drawable.icon_send, contentDesc = "submit", tint = Blue)
         }

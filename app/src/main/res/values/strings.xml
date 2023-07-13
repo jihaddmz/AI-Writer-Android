@@ -302,10 +302,9 @@
     <string name="chat_with_ai">Chat With AI</string>
     <string name="save_your_chat_session">Save Your Chat Sessions</string>
     <string name="introducing_draftogo">Free AI Chat And Image Generation App</string>
-    <string name="ai_chat_tool">Ai Chat Tool</string>
+    <string name="ai_chat_tool">AI Chat Tool</string>
     <string name="chat_about_anyhing">Chat about anything</string>
     <string name="generate_in_any_language_you_want">Generate in any language you want</string>
-    <string name="free_app">Free App</string>
     <string name="how_to_regenerate_response">How to regenerate response?</string>
     <string name="just_tap_the_input_you_want">Just tap the input you want and then click the send icon again</string>
     <string name="how_to_generate_output_in_specific_language">How to generate output in specific language?</string>
@@ -314,4 +313,9 @@
     <string name="long_click_the_generated_output">Long click the generated output</string>
     <string name="image_resolution">Image Resolution</string>
     <string name="saving_to_history_done">Saved to history</string>
+    <string name="effortless_creativity">Effortless Creativity</string>
+    <string name="how_to_generate_text_outside_app">How to generate text outside the app?</string>
+    <string name="how_to_generate_text_outside_app_answer">Just start with /draft in the text field of the app you want followed by the input you want, wait for 2 sec and then your output will be generated. For example: \"/draft write an email to my boss\"\n\n But before that go the settings of the app to enable the permission</string>
+    <string name="v30_updates">V3.0 Updates</string>
+    <string name="v30_updates_explanation">- All of Draftogo tools is now completely for Free.\n\n- Navigation system has been reverted to bottom bar.\n\n- Completion feature has been removed due to users being using chat more, and all of the completion feature can, the chat can do with human like memory.\n\n- UI improvements and bug fixes</string>
 </resources>

@@ -312,7 +312,6 @@
     <string name="ai_chat_tool">أداة الدردشة بالذكاء الاصطناعي</string>
     <string name="chat_about_anyhing">تحدث عن أي شيء</string>
     <string name="generate_in_any_language_you_want">تولد بأي لغة تريدها</string>
-    <string name="free_app">تطبيق مجاني</string>
     <string name="how_to_regenerate_response">كيف تجدد الاستجابة؟</string>
     <string name="just_tap_the_input_you_want">ما عليك سوى النقر فوق الإدخال الذي تريده ثم النقر فوق رمز الإرسال مرة أخرى</string>
     <string name="how_to_generate_output_in_specific_language">كيف تولد مخرجات بلغة معينة؟</string>

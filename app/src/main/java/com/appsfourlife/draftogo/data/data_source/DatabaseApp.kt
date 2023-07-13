@@ -31,8 +31,8 @@ abstract class DatabaseApp : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // create table_arthistory table
 //                database.execSQL("CREATE TABLE IF NOT EXISTS `table_chat` (`id` INT NOT NULL, `role` text not null, `text` text not null, `color` int not null, primary key(`id`))")
-                database.execSQL("CREATE TABLE IF NOT EXISTS `table_newchat` (`id` INT NOT NULL, `text` text not null, primary key(`id`))")
                 database.execSQL("ALTER TABLE `table_chat` ADD COLUMN `newChatID` INT NOT NULL DEFAULT 0")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `table_newchat` (`id` INT NOT NULL default 0, `text` text not null, primary key(`id`))")
             }
         }
 

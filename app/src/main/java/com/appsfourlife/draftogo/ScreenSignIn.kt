@@ -57,7 +57,7 @@ fun ScreenSignIn(
             mutableStateOf(false)
         }
         TypeWriterEffect(
-            baseText = "${stringResource(id = R.string.app_name)}: ${stringResource(id = R.string.free_app)}",
+            baseText = "${stringResource(id = R.string.app_name)}: ${stringResource(id = R.string.effortless_creativity)}",
             outputText = textDraftogo,
             finished = finishedTextDraftogoAnimation,
             delay = 1000
@@ -69,7 +69,7 @@ fun ScreenSignIn(
                     spanStyle = SpanStyle(
                         color = Blue,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 50.sp
+                        fontSize = 40.sp
                     )
                 ).plus(
                     AnnotatedString(

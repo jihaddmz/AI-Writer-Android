@@ -35,6 +35,7 @@ import com.appsfourlife.draftogo.components.MySpacer
 import com.appsfourlife.draftogo.components.MyText
 import com.appsfourlife.draftogo.components.MyTextTitle
 import com.appsfourlife.draftogo.data.model.ModelNewChat
+import com.appsfourlife.draftogo.helpers.HelperAnalytics
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.BottomNavScreens
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +58,8 @@ fun SidebarNewChat(scaffoldState: ScaffoldState, navController: NavController, o
         ) {
             MyTextTitle(text = stringResource(id = R.string.new_chat), fontWeight = FontWeight.Bold)
             IconButton(onClick = {
+                HelperAnalytics.sendEvent("newChat")
+
                 coroutineScope.launch(Dispatchers.IO) {
                     val maxNewChatID = App.databaseApp.daoApp.getMaxNewChatID()
                     scaffoldState.drawerState.animateTo(

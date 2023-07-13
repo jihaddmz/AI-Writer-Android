@@ -20,6 +20,7 @@ object HelperSharedPreference {
     const val SP_SETTINGS_IS_FIRST_TIME_LAUNCHED = "is_first_time_launched"
     const val SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED = "is_first_time_v2_launched"
     const val SP_SETTINGS_IS_FIRST_TIME_V230_LAUNCHED = "is_first_time_v230_launched"
+    const val SP_SETTINGS_IS_FIRST_TIME_V30_LAUNCHED = "is_first_time_v30_launched"
 
 
     /**

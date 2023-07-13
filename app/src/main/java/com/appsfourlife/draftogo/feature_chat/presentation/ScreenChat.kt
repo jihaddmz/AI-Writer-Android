@@ -13,8 +13,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import com.appsfourlife.draftogo.App
+import com.appsfourlife.draftogo.BuildConfig
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
 import com.appsfourlife.draftogo.data.model.ModelChatResponse
@@ -22,10 +24,9 @@ import com.appsfourlife.draftogo.data.model.ModelNewChat
 import com.appsfourlife.draftogo.feature_chat.components.SubmitChatQuery
 import com.appsfourlife.draftogo.feature_chat.components.TextChatResponse
 import com.appsfourlife.draftogo.feature_chat.components.listOfNewChats
-import com.appsfourlife.draftogo.helpers.HelperAnalytics
+import com.appsfourlife.draftogo.helpers.HelperFirebaseDatabase
 import com.appsfourlife.draftogo.helpers.HelperSharedPreference
 import com.appsfourlife.draftogo.helpers.HelperUI
-import com.appsfourlife.draftogo.helpers.Helpers
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
@@ -45,7 +46,6 @@ fun ScreenChat(
     title: String? = null,
     newChatID: Int = 0
 ) {
-    HelperAnalytics.sendEvent("chat")
 
     LaunchedEffect(key1 = true, block = {
         queryChat.value = ""
@@ -57,18 +57,67 @@ fun ScreenChat(
     val listOfChats = remember {
         mutableStateOf(mutableListOf<ModelChatResponse>())
     }
+    val isAppOutDated = remember {
+        mutableStateOf(false)
+    }
 
     val timer = remember {
         mutableStateOf(0)
     }
+    val showDialogIntroducingChanges = remember {
+        mutableStateOf(false)
+    }
+    val showDialogAccessibilityPermission = remember {
+        mutableStateOf(false)
+    }
     LaunchedEffect(key1 = true, block = {
+        coroutineScope.launch(Dispatchers.IO) {
+            if (SettingsNotifier.isConnected.value)
+                HelperFirebaseDatabase.fetchAppVersion {
+                    isAppOutDated.value = it != BuildConfig.VERSION_NAME
+                }
+        }
         Timer().scheduleAtFixedRate(timerTask {
-            if (timer.value == 2)
-                return@timerTask
+            if (timer.value == 2) {
+                showDialogIntroducingChanges.value = HelperSharedPreference.getBool(
+                    HelperSharedPreference.SP_SETTINGS,
+                    HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V30_LAUNCHED,
+                    true
+                ) && !HelperSharedPreference.getBool(
+                    HelperSharedPreference.SP_SETTINGS,
+                    HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V230_LAUNCHED,
+                    true
+                )
+                showDialogAccessibilityPermission.value = !showDialogIntroducingChanges.value && !HelperSharedPreference.getDontShowAnyWhereWritingPermission()
+                cancel()
+            }
             timer.value += 1
         }, 1000, 1000)
     })
-    if (timer.value == 2 && !HelperSharedPreference.getDontShowAnyWhereWritingPermission())
+
+    val showAccessibilityOnClick = remember {
+        mutableStateOf(false)
+    }
+
+    if (showDialogIntroducingChanges.value) {
+
+        MyDialog(
+            showDialog = showDialogIntroducingChanges,
+            text = stringResource(id = R.string.v30_updates_explanation),
+            showOkBtn = true,
+            title = stringResource(id = R.string.v30_updates),
+            onOkBtnClick = {
+                showAccessibilityOnClick.value = true
+            })
+
+        HelperSharedPreference.setBool(
+            HelperSharedPreference.SP_SETTINGS,
+            HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V30_LAUNCHED,
+            false
+        )
+    }
+
+    if (showDialogAccessibilityPermission.value || showAccessibilityOnClick.value)
         HelperUI.ShowAccessibilityPermissionRequester(true)
 
 
@@ -90,14 +139,24 @@ fun ScreenChat(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
+            if (isAppOutDated.value) // if the app is outdated show the alert dialog to update
+                MyDialog(
+                    modifier = Modifier,
+                    showDialog = isAppOutDated,
+                    text = stringResource(id = R.string.app_is_outdated),
+                    title = stringResource(id = R.string.attention),
+                    properties = DialogProperties(
+                        dismissOnBackPress = true,
+                        dismissOnClickOutside = true,
+                    )
+                )
+
             val title1 = remember {
-                Helpers.logD("new chat id ${newChatID} title $title")
                 if (title == "Unnamed") {
                     mutableStateOf(App.getTextFromString(R.string.new_chat))
                 } else if (newChatID == 0) {
                     mutableStateOf(App.getTextFromString(R.string.chat))
-                }
-                else
+                } else
                     mutableStateOf(title!!)
 //                } else
 //                    mutableStateOf(App.getTextFromString(R.string.chat))
@@ -148,7 +207,9 @@ fun ScreenChat(
             }
 
             SubmitChatQuery(
-                modifier = Modifier.fillMaxWidth().padding(bottom = SpacersSize.small),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = SpacersSize.small),
                 newChatID = newChatID,
                 onResponseDone = {
                     coroutineScope.launch(Dispatchers.IO) {
@@ -180,7 +241,8 @@ fun ScreenChat(
                                             text = string
                                         )
                                     )
-                                    listOfNewChats.value = App.databaseApp.daoApp.getAllNewChats() as MutableList<ModelNewChat>
+                                    listOfNewChats.value =
+                                        App.databaseApp.daoApp.getAllNewChats() as MutableList<ModelNewChat>
                                 }
                             }
                         }
@@ -193,6 +255,12 @@ fun ScreenChat(
                     }
                 },
                 onResponseError = {
+                    coroutineScope.launch(Dispatchers.IO) {
+                        App.databaseApp.daoApp.deleteChatByText("...")
+
+                        listOfChats.value =
+                            App.databaseApp.daoApp.getAllChatsNyNewChatID(newChatID) as MutableList<ModelChatResponse>
+                    }
                 },
                 onClearClick = {
                     coroutineScope.launch(Dispatchers.IO) {
