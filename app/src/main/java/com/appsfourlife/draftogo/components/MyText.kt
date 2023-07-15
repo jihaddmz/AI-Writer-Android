@@ -24,25 +24,41 @@ fun MyText(
     textStyle: TextStyle = TextStyle(),
     color: Color = Color.Black,
     textDecoration: TextDecoration = TextDecoration.None,
-    fontWeight: FontWeight = FontWeight.Normal
+    fontWeight: FontWeight = FontWeight.Normal,
+    enableSingleLine: Boolean = false
 ) {
 
-    val fontSize = when (rememberWindowInfo().screenWidthInfo){
+    val fontSize = when (rememberWindowInfo().screenWidthInfo) {
         is WindowInfo.WindowType.Compact -> 14.sp
         is WindowInfo.WindowType.Medium -> 20.sp
         else -> 24.sp
     }
 
-    Text(
-        modifier = modifier.animateContentSize(animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)),
-        color = color,
-        textAlign = textAlign,
-        fontSize = fontSize,
-        text = text,
-        fontWeight = fontWeight,
-        style = textStyle,
-        textDecoration = textDecoration,
-        overflow = TextOverflow.Ellipsis
-    )
+    if (!enableSingleLine)
+        Text(
+            modifier = modifier.animateContentSize(animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)),
+            color = color,
+            textAlign = textAlign,
+            fontSize = fontSize,
+            text = text,
+            fontWeight = fontWeight,
+            style = textStyle,
+            textDecoration = textDecoration,
+            overflow = TextOverflow.Ellipsis
+        )
+     else {
+        Text(
+            modifier = modifier.animateContentSize(animationSpec = tween(durationMillis = Constants.ANIMATION_LENGTH)),
+            color = color,
+            textAlign = textAlign,
+            fontSize = fontSize,
+            text = text,
+            fontWeight = fontWeight,
+            style = textStyle,
+            textDecoration = textDecoration,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
 
 }

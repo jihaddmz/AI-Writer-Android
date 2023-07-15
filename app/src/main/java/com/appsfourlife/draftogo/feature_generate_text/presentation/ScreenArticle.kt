@@ -1,6 +1,11 @@
 package com.appsfourlife.draftogo.feature_generate_text.presentation
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.LinearProgressIndicator
@@ -13,7 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.components.BottomSheetWriting
+import com.appsfourlife.draftogo.components.Output
+import com.appsfourlife.draftogo.components.TopBar
+import com.appsfourlife.draftogo.components.input
+import com.appsfourlife.draftogo.components.length
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 
@@ -35,6 +44,7 @@ fun ScreenArticle(
         text = stringResource(id = R.string.write_an_article),
         navController = navController
     ) {
+
         if (showDialog.value)
             LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
 

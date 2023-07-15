@@ -209,7 +209,7 @@
     <string name="prompt_history">التاريخ الفوري</string>
     <string name="art_history_explanation">حدد مطالبة من السجل الخاص بك للصقها في حقل الإدخال</string>
     <string name="art_purchase_credits_desc">أطلق العنان لإبداعك باستخدام أداة الذكاء الاصطناعي الخاصة بنا</string>
-    <string name="arts_per_credits">إنشاء الفنون لكل اعتمادات (فن واحد لكل 1 رصيد)</string>
+    <string name="create_any_image_you_can_imagine">قم بإنشاء أي صورة يمكنك تخيلها</string>
     <string name="download_high_resolution_artwork">تنزيل عمل فني عالي الدقة</string>
     <string name="access_to_all_styles">الوصول إلى جميع الأنماط (10)</string>
     <string name="use_some_inspiration">استخدم بعض الإلهام</string>
@@ -290,4 +290,40 @@
     <string name="chat">محادثة</string>
     <string name="introducing_navigation_changed">أصبح التنقل الآن في جانب الدرج ، بدلاً من التنقل السفلي ، لتجربة مستخدم أفضل. إذا كانت لديك أي أسئلة أو كنت تفضل التنقل السفلي ، فيرجى إرسالها في قسم التعليقات.</string>
 
+    <string name="video">Video\n</string>
+    <string name="video_templates">Video Templates</string>
+    <string name="use_template">Use Template</string>
+    <string name="provide_your_inputs">Provide Your Inputs</string>
+    <string name="video_is_generated">Video is Generated</string>
+    <string name="download_video">Download Video</string>
+    <string name="downloading_your_video">Downloading Your Video</string>
+    <string name="completion">Completion</string>
+    <string name="videos">Videos</string>
+
+    <string name="image">صورة</string>
+    <string name="new_chat">دردشة جديدة</string>
+    <string name="collapse">ينهار</string>
+    <string name="add_new_chat_tip">اضغط على أيقونة الإضافة في الجزء العلوي الأيمن لإضافة جلسة جديدة</string>
+    <string name="this_item_cant_be_deleted">لا يمكن حذف هذه الدردشة</string>
+    <string name="download">تحميل</string>
+    <string name="chat_with_ai">الدردشة مع منظمة العفو الدولية</string>
+    <string name="save_your_chat_session">احفظ جلسات الدردشة الخاصة بك</string>
+    <string name="introducing_draftogo">تطبيق مجاني للدردشة وتوليد الصور من منظمة العفو الدولية</string>
+    <string name="ai_chat_tool">أداة الدردشة بالذكاء الاصطناعي</string>
+    <string name="chat_about_anyhing">تحدث عن أي شيء</string>
+    <string name="generate_in_any_language_you_want">تولد بأي لغة تريدها</string>
+    <string name="how_to_regenerate_response">كيف تجدد الاستجابة؟</string>
+    <string name="just_tap_the_input_you_want">ما عليك سوى النقر فوق الإدخال الذي تريده ثم النقر فوق رمز الإرسال مرة أخرى</string>
+    <string name="how_to_generate_output_in_specific_language">كيف تولد مخرجات بلغة معينة؟</string>
+    <string name="append_the_language_you_want_at_the_end">قم بإلحاق اللغة التي تريدها في النهاية. على سبيل المثال: \"اكتب بريدًا إلكترونيًا إلى مديري باللغة الفرنسية \"</string>
+    <string name="how_to_copy_generated_text">كيف تنسخ النص الذي تم إنشاؤه؟</string>
+    <string name="long_click_the_generated_output">انقر لفترة طويلة على الناتج الناتج</string>
+
+    <string name="image_resolution">دقة الصورة</string>
+    <string name="saving_to_history_done">تم الحفظ في التاريخ</string>
+    <string name="effortless_creativity">إبداع سهل</string>
+    <string name="how_to_generate_text_outside_app">كيفية إنشاء نص خارج التطبيق؟</string>
+    <string name="how_to_generate_text_outside_app_answer">ما عليك سوى البدء بـ /درافت في حقل النص الخاص بالتطبيق الذي تريده متبوعًا بالإدخال الذي تريده ، وانتظر لمدة ثانيتين ثم سيتم إنشاء مخرجاتك. على سبيل المثال: \ " /درافت اكتب بريدًا إلكترونيًا إلى رئيسي \" \n\n ولكن قبل ذلك انتقل إلى إعدادات التطبيق لتمكين الإذن</string>
+    <string name="v30_updates">تحديثات V3.0</string>
+    <string name="v30_updates_explanation">- جميع أدوات Draftogo مجانية تمامًا الآن. \n\n- تمت إعادة نظام التنقل إلى الشريط السفلي. \n\n- تمت إزالة ميزة الإكمال نظرًا لاستخدام المستخدمين للدردشة أكثر ، ويمكن لجميع ميزات الإكمال ، يمكن للدردشة أن تستخدم ذاكرة الإنسان.  \n\n- تحسينات في واجهة المستخدم وإصلاحات للأخطاء</string>
 </resources>

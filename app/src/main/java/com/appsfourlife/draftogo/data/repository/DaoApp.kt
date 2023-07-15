@@ -3,6 +3,7 @@ package com.appsfourlife.draftogo.data.repository
 import androidx.room.*
 import com.appsfourlife.draftogo.data.model.ModelChatResponse
 import com.appsfourlife.draftogo.data.model.ModelFavoriteTemplate
+import com.appsfourlife.draftogo.data.model.ModelNewChat
 import com.appsfourlife.draftogo.data.model.ModelPurchaseHistory
 import com.appsfourlife.draftogo.data.model.ModelTemplate
 import com.appsfourlife.draftogo.feature_generate_art.data.model.ModelArtHistory
@@ -82,6 +83,9 @@ interface DaoApp {
     @Query("select * from table_chat")
     suspend fun getAllChats(): List<ModelChatResponse>
 
+    @Query("select * from table_chat where newChatID=:newChatID")
+    suspend fun getAllChatsNyNewChatID(newChatID: Int): List<ModelChatResponse>
+
     @Query("delete from table_chat where text=:text")
     fun deleteChatByText(text: String)
 
@@ -93,4 +97,26 @@ interface DaoApp {
 
     @Query("delete from table_chat")
     suspend fun deleteAllChats()
+
+    @Query("delete from table_chat where newChatID=:newChatID")
+    suspend fun deleteAllChatsByNewChatID(newChatID: Int)
+
+    /**
+     * new chat
+     **/
+
+    @Query("select * from table_newchat where id=:id")
+    suspend fun getNewChatByID(id: Int): ModelNewChat?
+
+    @Query("select * from table_newchat")
+    suspend fun getAllNewChats(): List<ModelNewChat>
+
+    @Query("select max(id) from table_newchat")
+    suspend fun getMaxNewChatID(): Int?
+
+    @Insert
+    suspend fun insertNewChat(modelNewChat: ModelNewChat)
+
+    @Delete
+    suspend fun deleteNewChat(modelNewChat: ModelNewChat)
 }

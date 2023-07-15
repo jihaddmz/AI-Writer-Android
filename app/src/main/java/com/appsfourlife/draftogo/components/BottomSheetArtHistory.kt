@@ -1,6 +1,7 @@
 package com.appsfourlife.draftogo.components
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.BottomSheetScaffoldState
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.IconButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
+import com.appsfourlife.draftogo.ui.theme.Azure
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import kotlinx.coroutines.Dispatchers
@@ -35,11 +38,14 @@ fun BottomSheetArtHistory(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    coroutineScope.launch(Dispatchers.IO) {
-        NotifiersArt.listOfPromptHistory.value =
-            App.databaseApp.daoApp.getAllArts().sortedBy { it.dateTime }
-        NotifiersArt.listOfPromptHistory.value = NotifiersArt.listOfPromptHistory.value.reversed()
-    }
+    LaunchedEffect(key1 = true, block = {
+        coroutineScope.launch(Dispatchers.IO) {
+            NotifiersArt.listOfPromptHistory.value =
+                App.databaseApp.daoApp.getAllArts().sortedBy { it.dateTime }
+            NotifiersArt.listOfPromptHistory.value =
+                NotifiersArt.listOfPromptHistory.value.reversed()
+        }
+    })
 
     Column(
         modifier = modifier
@@ -65,7 +71,7 @@ fun BottomSheetArtHistory(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            MyIcon(iconID = R.drawable.icon_history, contentDesc = "", tint = Color.LightGray)
+            MyIcon(iconID = R.drawable.icon_history, contentDesc = "", tint = Azure)
             MySpacer(type = "small", widthOrHeight = "width")
             MyTextTitle(text = stringResource(id = R.string.prompt_history))
         }
@@ -79,30 +85,56 @@ fun BottomSheetArtHistory(
 
         MySpacer(type = "medium")
 
-        LazyVerticalGrid(columns = GridCells.Fixed(2),
+        LazyVerticalGrid(modifier = Modifier
+            .animateContentSize(),
+            columns = GridCells.Fixed(2),
             content = {
 
-                items(NotifiersArt.listOfPromptHistory.value.size) { index ->
+                items(
+                    NotifiersArt.listOfPromptHistory.value.size,
+                    key = { NotifiersArt.listOfPromptHistory.value[it].prompt }) { index ->
                     val current = NotifiersArt.listOfPromptHistory.value[index]
 
                     MyCardView(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(100.dp)
+                            .height(130.dp)
                             .padding(SpacersSize.small)
                             .clickable {
                                 coroutineScope.launch {
                                     sheetScaffoldState.bottomSheetState.collapse()
                                     onArtHistoryClick(current.prompt)
                                 }
-                            }
+                            }.animateItemPlacement()
                     ) {
-                        MyText(
-                            text = current.prompt,
-                            modifier = Modifier
-                                .padding(SpacersSize.medium),
-                            textAlign = TextAlign.Center
-                        )
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.SpaceAround
+                        ) {
+                            MyText(
+                                text = current.prompt,
+                                modifier = Modifier
+                                    .padding(SpacersSize.medium)
+                                    .fillMaxHeight(0.5f),
+                                textAlign = TextAlign.Center
+                            )
+
+                            IconButton(onClick = {
+                                coroutineScope.launch(Dispatchers.IO) {
+                                    App.databaseApp.daoApp.deleteArt(current)
+                                    NotifiersArt.listOfPromptHistory.value =
+                                        App.databaseApp.daoApp.getAllArts().sortedBy { it.dateTime }
+                                    NotifiersArt.listOfPromptHistory.value =
+                                        NotifiersArt.listOfPromptHistory.value.reversed()
+                                }
+                            }) {
+                                MyIcon(
+                                    iconID = R.drawable.icon_delete,
+                                    contentDesc = "delete",
+                                    tint = Color.Red
+                                )
+                            }
+                        }
                     }
                 }
             })

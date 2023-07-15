@@ -2,7 +2,9 @@ package com.appsfourlife.draftogo.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
@@ -10,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.appsfourlife.draftogo.R
@@ -36,7 +39,7 @@ fun MyDialog(
                 .padding(SpacersSize.medium),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            MyText(text = title, fontWeight = FontWeight.Bold)
+            Text(text = title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
 
             MySpacer(type = "medium")
 
@@ -45,7 +48,7 @@ fun MyDialog(
             MySpacer(type = "medium")
 
             if (showOkBtn){
-                MyButton(text = stringResource(id = R.string.ok)) {
+                MyButton(modifier = Modifier.fillMaxWidth().padding(horizontal = SpacersSize.medium), text = stringResource(id = R.string.ok)) {
                     showDialog.value = false
                     onOkBtnClick()
                 }

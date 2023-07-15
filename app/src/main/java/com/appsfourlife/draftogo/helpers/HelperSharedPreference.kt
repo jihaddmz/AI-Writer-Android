@@ -20,6 +20,7 @@ object HelperSharedPreference {
     const val SP_SETTINGS_IS_FIRST_TIME_LAUNCHED = "is_first_time_launched"
     const val SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED = "is_first_time_v2_launched"
     const val SP_SETTINGS_IS_FIRST_TIME_V230_LAUNCHED = "is_first_time_v230_launched"
+    const val SP_SETTINGS_IS_FIRST_TIME_V30_LAUNCHED = "is_first_time_v30_launched"
 
 
     /**
@@ -42,6 +43,9 @@ object HelperSharedPreference {
     const val SP_SETTINGS_IS_SAVED_OUTPUTS_ENABLED = "is_compare_outputs_enabled"
     const val SP_SETTINGS_NB_0F_ARTS_CREDITS = "nb_0f_arts_credits"
     const val SP_SETTINGS_NB_0F_ARTS_GENERATED = "nb_0f_arts_generated"
+    const val SP_SETTINGS_NB_0F_VIDEOS_GENERATED = "nb_0f_videos_generated"
+    const val SP_SETTINGS_NB_0F_CHAT_WORDS_GENERATED = "nb_0f_chat_words_generated"
+    const val SP_SETTINGS_NB_0F_COMPLETION_WORDS_GENERATED = "nb_0f_completion_words_generated"
     const val SP_SETTINGS_TYPE_OF_WRITING_MODEL = "type_of_writing_model"
     const val SP_SETTINGS_DONT_SHOW_ANYWHERE_WRITING_PERMISSION = "dont_show_anywhere_writing_permission"
     const val SP_SETTINGS_SUBSCRIBED_TO_EMAIL_SENDER = "is_subscribed_email_sender"
@@ -58,6 +62,30 @@ object HelperSharedPreference {
     /**
      * most common shared preferences keys
      **/
+
+    fun getNbOfChatWordsGenerated(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_CHAT_WORDS_GENERATED, 0)
+    }
+
+    fun setNbOfChatWordsGenerated(value: Int) {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_CHAT_WORDS_GENERATED, value)
+    }
+
+    fun getNbOfCompletionWordsGenerated(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_COMPLETION_WORDS_GENERATED, 0)
+    }
+
+    fun setNbOfCompletionWordsGenerated(value: Int) {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_COMPLETION_WORDS_GENERATED, value)
+    }
+
+    fun getNbOfVideosGenerated(): Int {
+        return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_VIDEOS_GENERATED, 0)
+    }
+
+    fun setNbOfVideosGenerated(value: Int) {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_VIDEOS_GENERATED, value)
+    }
 
     fun getDontShowAnyWhereWritingPermission(): Boolean {
         return getBool(SP_SETTINGS, SP_SETTINGS_DONT_SHOW_ANYWHERE_WRITING_PERMISSION, false)
@@ -77,10 +105,6 @@ object HelperSharedPreference {
 
     fun getNbOfArtsGenerated(): Int {
         return getInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_GENERATED, 0)
-    }
-
-    fun incrementNbOfArtsGenerated() {
-        setInt(SP_SETTINGS, SP_SETTINGS_NB_0F_ARTS_GENERATED, getNbOfArtsGenerated() + 1)
     }
 
     fun setNbOfArtsGenerated(value: Int) {
@@ -131,6 +155,10 @@ object HelperSharedPreference {
     fun addToNbOfWordsGenerated(value: Int) {
         val nbOfWordsGenerated = getNbOfWordsGenerated()
         setInt(SP_SETTINGS, SP_SETTINGS_NB_OF_WORDS_GENERATED, nbOfWordsGenerated + value)
+    }
+
+    fun setNbOfWordsGenerated(value: Int) {
+        setInt(SP_SETTINGS, SP_SETTINGS_NB_OF_WORDS_GENERATED, value)
     }
 
     fun incrementNbOfGenerationsConsumed() {

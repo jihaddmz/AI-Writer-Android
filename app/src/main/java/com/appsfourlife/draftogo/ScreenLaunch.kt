@@ -26,7 +26,7 @@ import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.Screens
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.timerTask
 
 @Composable
@@ -54,7 +54,7 @@ fun ScreenLaunch(
         val startScreenRoute = if (HelperSharedPreference.getUsername() == "") {
             Screens.ScreenSignIn.route
         } else {
-            BottomNavScreens.Dashboard.route
+            BottomNavScreens.Chat.route
         }
 
         Timer().schedule(timerTask {

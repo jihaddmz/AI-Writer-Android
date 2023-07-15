@@ -1,8 +1,6 @@
 package com.appsfourlife.draftogo.helpers
 
 import android.annotation.SuppressLint
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
@@ -11,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,9 +24,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.window.DialogProperties
 import com.appsfourlife.draftogo.App
-import com.appsfourlife.draftogo.MyWidgetProvider
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import java.util.*
 
 object HelperUI {
@@ -71,7 +70,7 @@ object HelperUI {
                         // request permission via start activity for result
                         context.startActivity(intent)
                     }) {
-                    Column {
+                    Column(modifier = Modifier.padding(SpacersSize.small)) {
                         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                             MyTextTitle(
                                 text = stringResource(id = R.string.permission_write_anywhere),
@@ -108,16 +107,5 @@ object HelperUI {
                     }
                 }
         }
-    }
-
-    fun refreshWidget(context: Context) {
-        val appWidgetManager =
-            AppWidgetManager.getInstance(context)
-        val thisAppWidget = ComponentName(
-            context.packageName,
-            MyWidgetProvider::class.java.name
-        )
-        val appWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget)
-        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.stack_view)
     }
 }

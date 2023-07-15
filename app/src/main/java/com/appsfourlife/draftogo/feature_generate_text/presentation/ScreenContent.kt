@@ -2,13 +2,22 @@ package com.appsfourlife.draftogo.feature_generate_text.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material.IconButton
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -19,7 +28,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.components.*
+import com.appsfourlife.draftogo.components.AppBarTransparent
+import com.appsfourlife.draftogo.components.DialogAddTemplate
+import com.appsfourlife.draftogo.components.DialogConfirmation
+import com.appsfourlife.draftogo.components.MyIcon
+import com.appsfourlife.draftogo.components.MySpacer
+import com.appsfourlife.draftogo.components.MyTextField
+import com.appsfourlife.draftogo.components.MyTextLink
 import com.appsfourlife.draftogo.extensions.animateOffsetY
 import com.appsfourlife.draftogo.extensions.animateVisibility
 import com.appsfourlife.draftogo.extensions.sectionsGridContent
@@ -30,13 +45,14 @@ import com.appsfourlife.draftogo.ui.theme.Amber
 import com.appsfourlife.draftogo.ui.theme.Blue
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
+import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.Screens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.Timer
 import kotlin.concurrent.timerTask
 
 
@@ -74,6 +90,10 @@ fun ScreenContent(
 
     Column(modifier = modifier.fillMaxSize()) {
 
+        AppBarTransparent(title = stringResource(id = R.string.completion)) {
+            navController.navigate(BottomNavScreens.Dashboard.route)
+        }
+
         if (SettingsNotifier.showAddTemplateDialog.value)
             DialogAddTemplate(
                 showDialog = SettingsNotifier.showAddTemplateDialog,
@@ -101,6 +121,8 @@ fun ScreenContent(
                     }
                 }
             }
+
+        MySpacer(type = "small")
 
         MainAppBar(
             navController = navController,

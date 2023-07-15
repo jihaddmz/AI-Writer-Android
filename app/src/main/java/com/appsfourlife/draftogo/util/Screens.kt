@@ -30,6 +30,6 @@ sealed class Screens(val route: String){
     object ScreenTranslate: Screens("screen_translate")
     object ScreenHistory: Screens("screen_history")
     object ScreenFeedback: Screens("screen_feedback")
-    object ScreenChat: Screens("screen_chat")
+    object ScreenVideoGenerator: Screens("screen_video_generator")
 
 }

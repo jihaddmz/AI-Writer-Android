@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.appsfourlife.draftogo.helpers.WindowInfo
@@ -16,12 +17,13 @@ fun MyUrlImage(
     imageUrl: String,
     contentDesc: String,
     contentScale: ContentScale = ContentScale.Crop,
+    baseSize: Dp = 32.dp
 ) {
     val imageSize =
         when (rememberWindowInfo().screenWidthInfo) {
-            is WindowInfo.WindowType.Compact -> 32.dp
-            is WindowInfo.WindowType.Medium -> 50.dp
-            else -> 70.dp
+            is WindowInfo.WindowType.Compact -> baseSize
+            is WindowInfo.WindowType.Medium -> baseSize + 18.dp
+            else -> baseSize + 38.dp
         }
 
     Image(
