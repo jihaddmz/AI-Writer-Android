@@ -83,11 +83,15 @@ fun ScreenChat(
                     HelperSharedPreference.SP_SETTINGS,
                     HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V30_LAUNCHED,
                     true
-                ) && !HelperSharedPreference.getBool(
+                ) && (!HelperSharedPreference.getBool(
                     HelperSharedPreference.SP_SETTINGS,
                     HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V230_LAUNCHED,
                     true
-                )
+                ) || !HelperSharedPreference.getBool(
+                    HelperSharedPreference.SP_SETTINGS,
+                    HelperSharedPreference.SP_SETTINGS_IS_FIRST_TIME_V2_LAUNCHED,
+                    true
+                ))
                 showDialogAccessibilityPermission.value = !showDialogIntroducingChanges.value && !HelperSharedPreference.getDontShowAnyWhereWritingPermission()
                 cancel()
             }

@@ -318,4 +318,12 @@
     <string name="append_the_language_you_want_at_the_end">قم بإلحاق اللغة التي تريدها في النهاية. على سبيل المثال: \"اكتب بريدًا إلكترونيًا إلى مديري باللغة الفرنسية \"</string>
     <string name="how_to_copy_generated_text">كيف تنسخ النص الذي تم إنشاؤه؟</string>
     <string name="long_click_the_generated_output">انقر لفترة طويلة على الناتج الناتج</string>
+
+    <string name="image_resolution">دقة الصورة</string>
+    <string name="saving_to_history_done">تم الحفظ في التاريخ</string>
+    <string name="effortless_creativity">إبداع سهل</string>
+    <string name="how_to_generate_text_outside_app">كيفية إنشاء نص خارج التطبيق؟</string>
+    <string name="how_to_generate_text_outside_app_answer">ما عليك سوى البدء بـ /درافت في حقل النص الخاص بالتطبيق الذي تريده متبوعًا بالإدخال الذي تريده ، وانتظر لمدة ثانيتين ثم سيتم إنشاء مخرجاتك. على سبيل المثال: \ " /درافت اكتب بريدًا إلكترونيًا إلى رئيسي \" \n\n ولكن قبل ذلك انتقل إلى إعدادات التطبيق لتمكين الإذن</string>
+    <string name="v30_updates">تحديثات V3.0</string>
+    <string name="v30_updates_explanation">- جميع أدوات Draftogo مجانية تمامًا الآن. \n\n- تمت إعادة نظام التنقل إلى الشريط السفلي. \n\n- تمت إزالة ميزة الإكمال نظرًا لاستخدام المستخدمين للدردشة أكثر ، ويمكن لجميع ميزات الإكمال ، يمكن للدردشة أن تستخدم ذاكرة الإنسان.  \n\n- تحسينات في واجهة المستخدم وإصلاحات للأخطاء</string>
 </resources>
