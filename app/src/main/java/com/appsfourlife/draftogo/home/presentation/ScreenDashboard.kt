@@ -35,6 +35,7 @@ import com.appsfourlife.draftogo.home.listitems.UsageItem
 import com.appsfourlife.draftogo.home.model.ModelDashboardUsage
 import com.appsfourlife.draftogo.home.util.NotifiersHome.listOfFavoriteTemplates
 import com.appsfourlife.draftogo.ui.theme.*
+import com.appsfourlife.draftogo.util.BottomNavScreens
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -112,7 +113,12 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
     /**
      * Subscribing users to email sender
      **/
-    if (SettingsNotifier.isConnected.value && !HelperSharedPreference.getBool(HelperSharedPreference.SP_SETTINGS, HelperSharedPreference.SP_SETTINGS_SUBSCRIBED_TO_EMAIL_SENDER, false))
+    if (SettingsNotifier.isConnected.value && !HelperSharedPreference.getBool(
+            HelperSharedPreference.SP_SETTINGS,
+            HelperSharedPreference.SP_SETTINGS_SUBSCRIBED_TO_EMAIL_SENDER,
+            false
+        )
+    )
         LaunchedEffect(key1 = true, block = {
             coroutineScope.launch(Dispatchers.IO) {
                 HelperAPISender.subscribeUser(HelperAuth.auth.currentUser!!)
@@ -132,46 +138,48 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
 
             if (SettingsNotifier.isConnected.value)
                 HelperFirebaseDatabase.fetchNbOfGenerationsConsumedAndNbOfWordsGenerated() {
-                    nbOfWordsLeft.value = if (HelperAuth.isSubscribed()) {
-                        if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
-                            AnnotatedString(
-                                "${Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated()}\n",
-                                spanStyle = (SpanStyle(fontWeight = FontWeight.Bold))
-                            ).plus(
-                                AnnotatedString(
-                                    text = App.getTextFromString(R.string.words)
-                                )
-                            )
-                        } else {
-                            AnnotatedString(
-                                text = "∞\n",
-                                spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
-                            ).plus(
-                                AnnotatedString(
-                                    App.getTextFromString(R.string.words)
-                                )
-                            )
-                        }
-                    } else {
-                        val nbOfGenerationsLeft =
-                            if (Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed() < 0) {
-                                0
-                            } else {
-                                Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed()
-                            }
+                    // todo uncomment this when we want to re-enable the paid plans
+                    nbOfWordsLeft.value =
+//                        if (HelperAuth.isSubscribed()) {
+//                            if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE) {
+//                                AnnotatedString(
+//                                    "${Constants.BASE_PLAN_MAX_NB_OF_WORDS - HelperSharedPreference.getNbOfWordsGenerated()}\n",
+//                                    spanStyle = (SpanStyle(fontWeight = FontWeight.Bold))
+//                                ).plus(
+//                                    AnnotatedString(
+//                                        text = App.getTextFromString(R.string.words)
+//                                    )
+//                                )
+//                            } else {
                         AnnotatedString(
-                            text = "$nbOfGenerationsLeft\n",
+                            text = "∞\n",
                             spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                         ).plus(
-                            AnnotatedString(text = App.getTextFromString(R.string.generations))
+                            AnnotatedString(
+                                App.getTextFromString(R.string.words)
+                            )
                         )
-                    }
+//                            }
+//                        } else {
+//                            val nbOfGenerationsLeft =
+//                                if (Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed() < 0) {
+//                                    0
+//                                } else {
+//                                    Constants.NB_OF_MAX_ALLOWED_GENERATIONS - HelperSharedPreference.getNbOfGenerationsConsumed()
+//                                }
+//                            AnnotatedString(
+//                                text = "$nbOfGenerationsLeft\n",
+//                                spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
+//                            ).plus(
+//                                AnnotatedString(text = App.getTextFromString(R.string.generations))
+//                            )
+//                        }
                 }
 
             if (SettingsNotifier.isConnected.value)
                 HelperFirebaseDatabase.getNbOfArtCredits() {
                     nbOfArtsLeft.value = AnnotatedString(
-                        text = "${HelperSharedPreference.getNbOfArtsCredits()}\n",
+                        text = "∞\n", // todo change this to HelperSharedPreference.getNbOfArtsCredits() when paid plans are enabled
                         spanStyle = SpanStyle(fontWeight = FontWeight.Bold)
                     ).plus(
                         AnnotatedString(
@@ -189,7 +197,7 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                 HelperFirebaseDatabase.getRenewalDate {
                     if (it != "null" && it != "")
                         if (it == HelperDate.getCurrentDateInString()) {
-                            HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                            HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGeneratedAndNbOfArtsGenerated()
                             HelperSharedPreference.setNbOfArtsGenerated(0)
                             HelperFirebaseDatabase.setRenewalDate()
                         } else {
@@ -203,7 +211,7 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                             )
                             dateNow?.let { dateNow ->
                                 if (dateNow.after(dateInFirebase)) {
-                                    HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGenerated()
+                                    HelperFirebaseDatabase.resetNbOfGenerationsConsumedAndNbOfWordsGeneratedAndNbOfArtsGenerated()
                                     HelperSharedPreference.setNbOfArtsGenerated(0)
                                     HelperFirebaseDatabase.setRenewalDate()
                                 }
@@ -293,7 +301,19 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                             MyAnnotatedText(text = nbOfArtsLeft.value, textAlign = TextAlign.Center)
                         }
                         MyText(text = HelperAuth.auth.currentUser?.displayName!!)
-                        MyText(text = HelperAuth.auth.currentUser?.email!!)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            MyText(text = HelperAuth.auth.currentUser?.email!!)
+                            MyIcon(iconID = R.drawable.icon_settings, contentDesc = stringResource(
+                                id = R.string.settings
+                            ), modifier = Modifier.clickable {
+                                navController.navigate(BottomNavScreens.Settings.route)
+                            })
+
+                        }
                     }
 
                     MySpacer(type = "large")
@@ -305,11 +325,11 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
 
                         val listOfUsages = listOf(
                             ModelDashboardUsage(
-                                nb = HelperSharedPreference.getNbOfWordsGenerated(),
+                                nb = HelperSharedPreference.getNbOfChatWordsGenerated(),
                                 text = stringResource(
-                                    id = R.string.words
+                                    id = R.string.chat
                                 ),
-                                iconID = R.drawable.icon_article
+                                iconID = R.drawable.icon_chat_green
                             ),
                             ModelDashboardUsage(
                                 nb = HelperSharedPreference.getNbOfArtsGenerated(),
@@ -319,9 +339,14 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                                 iconID = R.drawable.icon_image
                             ),
                             ModelDashboardUsage(
-                                nb = listOfFavoriteTemplates.value.size,
-                                text = stringResource(id = R.string.templates),
+                                nb = HelperSharedPreference.getNbOfCompletionWordsGenerated(),
+                                text = stringResource(id = R.string.completion),
                                 iconID = R.drawable.icon_template
+                            ),
+                            ModelDashboardUsage(
+                                nb = HelperSharedPreference.getNbOfVideosGenerated(),
+                                text = stringResource(id = R.string.videos),
+                                iconID = R.drawable.icon_video_pink
                             )
                         )
                         LazyVerticalGrid(
@@ -335,7 +360,8 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                                 UsageItem(
                                     nb = current.nb,
                                     text = current.text,
-                                    imageID = current.iconID
+                                    imageID = current.iconID,
+                                    navController = navController
                                 )
                             }
                         }
@@ -413,7 +439,6 @@ fun ScreenDashboard(navController: NavController, scaffoldState: ScaffoldState) 
                                     listOfFavoriteTemplates.value =
                                         App.databaseApp.daoApp.getAllFavoriteTemplates()
 
-                                    HelperUI.refreshWidget(context = context)
                                 }
                             }
 

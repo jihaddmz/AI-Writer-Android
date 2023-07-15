@@ -3,6 +3,7 @@ package com.appsfourlife.draftogo.feature_chat.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.IconButton
@@ -12,8 +13,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.android.volley.VolleyError
 import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
@@ -22,6 +25,8 @@ import com.appsfourlife.draftogo.data.model.ModelChatResponse
 import com.appsfourlife.draftogo.feature_chat.presentation.queryChat
 import com.appsfourlife.draftogo.feature_generate_text.components.DialogPricingType
 import com.appsfourlife.draftogo.helpers.*
+import com.appsfourlife.draftogo.ui.theme.Blue
+import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.SettingsNotifier
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -32,7 +37,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun SubmitChatQuery(
     modifier: Modifier = Modifier,
-    onSubmitClick: () -> Unit,
+    newChatID: Int = 0,
+    onSubmitClick: (Boolean, String) -> Unit,
     onClearClick: () -> Unit,
     onResponseDone: (String) -> Unit,
     onResponseError: (VolleyError) -> Unit
@@ -54,6 +60,10 @@ fun SubmitChatQuery(
         mutableStateOf("")
     }
 
+    var input = remember {
+        ""
+    }
+
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceAround,
@@ -62,16 +72,21 @@ fun SubmitChatQuery(
 
         if (showDialogClearConfirmation.value)
             MyCustomConfirmationDialog(
+                modifier = Modifier.padding(SpacersSize.medium),
                 showDialog = showDialogClearConfirmation,
                 negativeBtnText = stringResource(id = R.string.no),
                 positiveBtnText = stringResource(id = R.string.yes),
                 onPositiveBtnClick = {
                     coroutineScope.launch(Dispatchers.IO) {
-                        App.databaseApp.daoApp.deleteAllChats()
+                        App.databaseApp.daoApp.deleteAllChatsByNewChatID(newChatID)
                         onClearClick()
                     }
                 }) {
-                MyText(text = stringResource(id = R.string.text_delete_all_chats_confirmation))
+                MyText(
+                    text = stringResource(id = R.string.text_delete_all_chats_confirmation),
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
             }
 
         if (showPricingDialogTypes.value && showPricingDialogTypesTitle.value == App.getTextFromString(
@@ -113,11 +128,17 @@ fun SubmitChatQuery(
 
         IconButton(onClick = {
             coroutineScope.launch(Dispatchers.IO) {
-                if (App.databaseApp.daoApp.getAllChats().isNotEmpty())
+                if (App.databaseApp.daoApp.getAllChatsNyNewChatID(newChatID).isNotEmpty())
                     showDialogClearConfirmation.value = true
+                else {
+                    coroutineScope.launch(Dispatchers.Main) {
+                        HelperUI.showToast(msg = App.getTextFromString(R.string.no_chats_found))
+                    }
+                }
+
             }
         }) {
-            MyIcon(iconID = R.drawable.clear, contentDesc = "clear")
+            MyIcon(iconID = R.drawable.clear, contentDesc = "clear", tint = Color.Red)
         }
 
         MyCardView(modifier = Modifier.fillMaxWidth(0.8f)) {
@@ -129,9 +150,12 @@ fun SubmitChatQuery(
         }
 
         IconButton(modifier = Modifier, onClick = {
+//            HelperAnalytics.sendEvent("chat")
 
-            if (queryChat.value.isEmpty())
+            if (queryChat.value.isEmpty()) {
+                HelperUI.showToast(msg = App.getTextFromString(R.string.no_input_entered))
                 return@IconButton
+            }
 
             if (!SettingsNotifier.isConnected.value) {
                 HelperUI.showToast(
@@ -145,62 +169,67 @@ fun SubmitChatQuery(
              * if user is on base plan subscription and nb of words generated is at the max, prevent him from
              * generating extra prompts
              **/
-            if (HelperAuth.isSubscribed())
-                if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE && HelperSharedPreference.getNbOfWordsGenerated() >= Constants.BASE_PLAN_MAX_NB_OF_WORDS) {
-                    showPricingDialogTypes.value = true
-                    showPricingDialogTypesTitle.value =
-                        App.getTextFromString(textID = R.string.you_have_reached_max_nb_of_words_generated)
-                    return@IconButton
-                }
+            // todo uncomment this when we want to re-enable the paid plans
+//            if (HelperAuth.isSubscribed())
+//                if (HelperSharedPreference.getSubscriptionType() == Constants.SUBSCRIPTION_TYPE_BASE && HelperSharedPreference.getNbOfWordsGenerated() >= Constants.BASE_PLAN_MAX_NB_OF_WORDS) {
+//                    showPricingDialogTypes.value = true
+//                    showPricingDialogTypesTitle.value =
+//                        App.getTextFromString(textID = R.string.you_have_reached_max_nb_of_words_generated)
+//                    return@IconButton
+//                }
+//
+//            if (HelperSharedPreference.getNbOfGenerationsConsumed() >= 2 && !HelperAuth.isSubscribed()) { // if nbOfGenerationsConsumed is >= 2
+//                // and the user is not subscribed, force the user to subscribe
+//                showPricingDialogTypes.value = true
+//                showPricingDialogTypesTitle.value = ""
+//                return@IconButton
+//            }
 
-            if (HelperSharedPreference.getNbOfGenerationsConsumed() >= 2 && !HelperAuth.isSubscribed()) { // if nbOfGenerationsConsumed is >= 2
-                // and the user is not subscribed, force the user to subscribe
-                showPricingDialogTypes.value = true
-                showPricingDialogTypesTitle.value = ""
-                return@IconButton
-            }
-
-            HelperChatGPT.getChatResponseForChat(
-                query = queryChat.value,
-                content,
-                coroutineScope = coroutineScope,
-                onErrorAction = {
-                    onResponseError(it)
-                },
-                onDoneAction = {
-                    coroutineScope.launch(Dispatchers.IO) {
-                        App.databaseApp.daoApp.deleteChatByText("...")
-                        onResponseDone(it)
-                    }
-                }
-            )
             coroutineScope.launch(Dispatchers.IO) {
                 App.databaseApp.daoApp.insertChat(
                     ModelChatResponse(
                         App.databaseApp.daoApp.getChatMaxID() + 1,
                         role = "user",
                         text = queryChat.value,
-                        color = 1
+                        color = 1,
+                        newChatID = newChatID
                     )
                 )
+                input = queryChat.value
+                onSubmitClick(true, input)
                 queryChat.value = ""
-                onSubmitClick()
 
-                delay(1000)
+                delay(500)
 
                 App.databaseApp.daoApp.insertChat(
                     ModelChatResponse(
                         App.databaseApp.daoApp.getChatMaxID() + 1,
                         role = "system",
                         text = "...",
-                        color = 0
+                        color = 0,
+                        newChatID = newChatID
                     )
                 )
-                onSubmitClick()
+                onSubmitClick(false, input)
 
+                HelperChatGPT.getChatResponseForChat(
+                    query = queryChat.value,
+                    content,
+                    coroutineScope = coroutineScope,
+                    onErrorAction = {
+                        onResponseError(it)
+                    },
+                    onDoneAction = {
+                        coroutineScope.launch(Dispatchers.IO) {
+                            App.databaseApp.daoApp.deleteChatByText("...")
+                            onResponseDone(it)
+                        }
+                    }
+                )
             }
+
         }) {
-            MyIcon(iconID = R.drawable.icon_send, contentDesc = "submit")
+            MyIcon(iconID = R.drawable.icon_send, contentDesc = "submit", tint = Blue)
         }
     }
 }

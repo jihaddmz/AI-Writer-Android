@@ -20,7 +20,6 @@ import com.appsfourlife.draftogo.components.MySpacer
 import com.appsfourlife.draftogo.components.MyText
 import com.appsfourlife.draftogo.components.MyTextTitle
 import com.appsfourlife.draftogo.data.model.ModelFavoriteTemplate
-import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.home.listitems.FavoriteTemplateItem
 import com.appsfourlife.draftogo.home.util.NotifiersHome.listOfFavoriteTemplates
 import com.appsfourlife.draftogo.ui.theme.Shapes
@@ -113,7 +112,6 @@ fun BottomSheetFavoriteTemplates(
                         listOfFavoriteTemplates.value =
                             App.databaseApp.daoApp.getAllFavoriteTemplates()
 
-                        HelperUI.refreshWidget(context = context)
                     }
                 }
 

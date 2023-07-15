@@ -71,7 +71,7 @@ fun BottomSheetArtPricing(
             MySpacer(type = "medium")
 
             val listOfFeatures = listOf(
-                stringResource(id = R.string.arts_per_credits),
+                stringResource(id = R.string.create_any_image_you_can_imagine),
                 stringResource(id = R.string.download_high_resolution_artwork),
                 stringResource(id = R.string.access_to_all_styles),
                 stringResource(id = R.string.use_some_inspiration),

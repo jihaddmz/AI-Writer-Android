@@ -5,6 +5,7 @@ import com.appsfourlife.draftogo.feature_generate_art.notifiers.NotifiersArt
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelHistory
 import com.appsfourlife.draftogo.feature_generate_text.models.ModelTemplateIcon
 import com.appsfourlife.draftogo.util.SettingsNotifier
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -95,6 +96,44 @@ object HelperFirebaseDatabase {
             }
     }
 
+    fun fetchNbOfArtsAndVideosAndChatAndCompletionWordsGenerated() {
+        firestore.collection("users")
+            .document(HelperAuth.auth.currentUser?.email!!)
+            .get()
+            .addOnSuccessListener {
+                val nbOfArtsGenerated = it.get("nbOfArtsGenerated") as Long?
+                if (nbOfArtsGenerated == null) {
+                    HelperSharedPreference.setNbOfArtsGenerated(0)
+                } else {
+                    HelperSharedPreference.setNbOfArtsGenerated(nbOfArtsGenerated.toInt())
+                }
+
+                val nbOfVideosGenerated = it.get("nbOfVideosGenerated") as Long?
+                if (nbOfVideosGenerated == null) {
+                    HelperSharedPreference.setNbOfVideosGenerated(0)
+                } else {
+                    HelperSharedPreference.setNbOfVideosGenerated(nbOfVideosGenerated.toInt())
+                }
+
+                val nbOfChatWordsGenerated = it.get("nbOfChatWordsGenerated") as Long?
+                if (nbOfChatWordsGenerated == null) {
+                    HelperSharedPreference.setNbOfChatWordsGenerated(0)
+                } else {
+                    HelperSharedPreference.setNbOfChatWordsGenerated(nbOfChatWordsGenerated.toInt())
+                }
+
+                val nbOfCompletionWordsGenerated = it.get("nbOfCompletionWordsGenerated") as Long?
+                if (nbOfCompletionWordsGenerated == null) {
+                    HelperSharedPreference.setNbOfCompletionWordsGenerated(0)
+                } else {
+                    HelperSharedPreference.setNbOfCompletionWordsGenerated(nbOfCompletionWordsGenerated.toInt())
+                }
+            }
+            .addOnFailureListener {
+
+            }
+    }
+
     fun fetchHistory(
         list: MutableState<MutableList<ModelHistory>>,
         noHistory: MutableState<Boolean>,
@@ -156,15 +195,25 @@ object HelperFirebaseDatabase {
             }
     }
 
-    fun resetNbOfGenerationsConsumedAndNbOfWordsGenerated() {
+    fun resetNbOfGenerationsConsumedAndNbOfWordsGeneratedAndNbOfArtsGenerated() {
         firestore.collection("users")
             .document(HelperAuth.auth.currentUser?.email!!)
             .set(
                 hashMapOf(
                     "nbOfWordsGenerated" to 0,
+                    "nbOfArtsGenerated" to 0,
+                    "nbOfVideosGenerated" to 0,
+                    "nbOfChatWordsGenerated" to 0,
+                    "nbOfCompletionWordsGenerated" to 0,
                     "renewalDate" to HelperAuth.getExpirationDate()
                 ), SetOptions.merge()
             )
+
+        HelperSharedPreference.setNbOfArtsGenerated(0)
+        HelperSharedPreference.setNbOfWordsGenerated(0)
+        HelperSharedPreference.setNbOfVideosGenerated(0)
+        HelperSharedPreference.setNbOfChatWordsGenerated(0)
+        HelperSharedPreference.setNbOfCompletionWordsGenerated(0)
     }
 
     fun getRenewalDate(onQueryComplete: (String) -> Unit) {
@@ -278,5 +327,116 @@ object HelperFirebaseDatabase {
 
                 }
         }
+    }
+
+    fun fetchVideoTemplates(onSuccess: (DocumentSnapshot) -> Unit) {
+        firestore.collection("video_templates").get()
+            .addOnSuccessListener { querySnapshot ->
+                querySnapshot.documents.forEach { document ->
+                    onSuccess(document)
+                }
+            }.addOnFailureListener {
+
+            }
+    }
+
+    fun incrementNbOfArtsGenerated() {
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val nbOfArtsGenerated = documentSnapshot.get("nbOfArtsGenerated")
+                if (nbOfArtsGenerated == null){ // this field is not yet set in firebase
+                    val hashmap = hashMapOf(
+                        "nbOfArtsGenerated" to HelperSharedPreference.getNbOfArtsGenerated() + 1
+                    )
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                } else {
+                    val hashmap = hashMapOf(
+                        "nbOfArtsGenerated" to (nbOfArtsGenerated as Long).toInt() + 1
+                    )
+                    HelperSharedPreference.setNbOfArtsGenerated((nbOfArtsGenerated as Long + 1).toInt())
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                }
+            }
+            .addOnFailureListener {
+
+            }
+    }
+
+    fun incrementNbOfVideosGenerated() {
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val nbOfVideosGenerated = documentSnapshot.get("nbOfVideosGenerated")
+                if (nbOfVideosGenerated == null){ // this field is not yet set in firebase
+                    val hashmap = hashMapOf(
+                        "nbOfVideosGenerated" to HelperSharedPreference.getNbOfVideosGenerated() + 1
+                    )
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                } else {
+                    val hashmap = hashMapOf(
+                        "nbOfVideosGenerated" to (nbOfVideosGenerated as Long).toInt() + 1
+                    )
+                    HelperSharedPreference.setNbOfVideosGenerated((nbOfVideosGenerated as Long + 1).toInt())
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                }
+            }
+            .addOnFailureListener {
+
+            }
+    }
+
+    fun setNbOfChatWordsGenerated(value: Int) {
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val nbOfChatWordsGenerated = documentSnapshot.get("nbOfChatWordsGenerated") as Long?
+                if (nbOfChatWordsGenerated == null) {
+                    val hashmap = hashMapOf(
+                        "nbOfChatWordsGenerated" to value
+                    )
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                    HelperSharedPreference.setNbOfChatWordsGenerated(value)
+                } else {
+                    val hashmap = hashMapOf(
+                        "nbOfChatWordsGenerated" to nbOfChatWordsGenerated.toInt() + value
+                    )
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                    HelperSharedPreference.setNbOfChatWordsGenerated(nbOfChatWordsGenerated.toInt() + value)
+
+                }
+            }
+            .addOnFailureListener {
+
+            }
+    }
+
+    fun setNbOfCompletionWordsGenerated(value: Int) {
+        firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!).get()
+            .addOnSuccessListener { documentSnapshot ->
+                val nbOfCompletionWordsGenerated = documentSnapshot.get("nbOfCompletionWordsGenerated") as Long?
+                if (nbOfCompletionWordsGenerated == null) {
+                    val hashmap = hashMapOf(
+                        "nbOfCompletionWordsGenerated" to value
+                    )
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                    HelperSharedPreference.setNbOfCompletionWordsGenerated(value)
+                } else {
+                    val hashmap = hashMapOf(
+                        "nbOfCompletionWordsGenerated" to nbOfCompletionWordsGenerated.toInt() + value
+                    )
+                    firestore.collection("users").document(HelperAuth.auth.currentUser?.email!!)
+                        .set(hashmap, SetOptions.merge())
+                    HelperSharedPreference.setNbOfCompletionWordsGenerated(nbOfCompletionWordsGenerated.toInt() + value)
+
+                }
+            }
+            .addOnFailureListener {
+
+            }
     }
 }
