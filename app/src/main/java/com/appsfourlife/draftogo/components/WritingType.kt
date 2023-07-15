@@ -17,7 +17,6 @@ import com.appsfourlife.draftogo.App
 import com.appsfourlife.draftogo.R
 import com.appsfourlife.draftogo.data.model.ModelFavoriteTemplate
 import com.appsfourlife.draftogo.helpers.HelperAnalytics
-import com.appsfourlife.draftogo.helpers.HelperUI
 import com.appsfourlife.draftogo.ui.theme.Shapes
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import kotlinx.coroutines.Dispatchers
@@ -132,7 +131,6 @@ fun WritingType(
                                         ModelFavoriteTemplate(text, null, imageUrl)
                                     )
 
-                                HelperUI.refreshWidget(context)
                             }
                         } else {
                             starIconId.value = R.drawable.icon_outlined_star
@@ -145,7 +143,6 @@ fun WritingType(
                                     App.databaseApp.daoApp.deleteFavoriteTemplate(
                                         ModelFavoriteTemplate(text, null, imageUrl)
                                     )
-                                HelperUI.refreshWidget(context)
                             }
                         }
                     })

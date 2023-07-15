@@ -1,24 +1,25 @@
 package com.appsfourlife.draftogo.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.appsfourlife.draftogo.R
-import com.appsfourlife.draftogo.helpers.HelperAuth
 import com.appsfourlife.draftogo.helpers.WindowInfo
 import com.appsfourlife.draftogo.helpers.rememberWindowInfo
 import com.appsfourlife.draftogo.ui.theme.SpacersSize
 import com.appsfourlife.draftogo.util.BottomNavScreens
-import com.appsfourlife.draftogo.util.SettingsNotifier
 
 @Composable
 fun TopBar(
@@ -63,35 +64,36 @@ fun TopBar(
                 Text(text = text, color = Color.Black, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
             }
 
-            if (!HelperAuth.isSubscribed() && !hideNbOfGenerationsLeft) { // if user is not subscribed
-                val nbOfGenerationsLeft = 2 - SettingsNotifier.nbOfGenerationsConsumed.value;
-                if (nbOfGenerationsLeft <= 0) {
-                    MyText(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = SpacersSize.small),
-                        color = Color.Black,
-                        text = stringResource(
-                            id = R.string.left,
-                            0
-                        ),
-                        textAlign = TextAlign.End,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-                } else
-                    MyText(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = SpacersSize.small),
-                        color = Color.Black,
-                        text = stringResource(
-                            id = R.string.left,
-                            2 - SettingsNotifier.nbOfGenerationsConsumed.value
-                        ),
-                        textAlign = TextAlign.End,
-                        fontWeight = FontWeight.ExtraBold
-                    )
-            }
+            // todo uncomment this when we want to re-enable the paid plans
+//            if (!HelperAuth.isSubscribed() && !hideNbOfGenerationsLeft) { // if user is not subscribed
+//                val nbOfGenerationsLeft = 2 - SettingsNotifier.nbOfGenerationsConsumed.value;
+//                if (nbOfGenerationsLeft <= 0) {
+//                    MyText(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(end = SpacersSize.small),
+//                        color = Color.Black,
+//                        text = stringResource(
+//                            id = R.string.left,
+//                            0
+//                        ),
+//                        textAlign = TextAlign.End,
+//                        fontWeight = FontWeight.ExtraBold
+//                    )
+//                } else
+//                    MyText(
+//                        modifier = Modifier
+//                            .fillMaxWidth()
+//                            .padding(end = SpacersSize.small),
+//                        color = Color.Black,
+//                        text = stringResource(
+//                            id = R.string.left,
+//                            2 - SettingsNotifier.nbOfGenerationsConsumed.value
+//                        ),
+//                        textAlign = TextAlign.End,
+//                        fontWeight = FontWeight.ExtraBold
+//                    )
+//            }
         }
 
         MySpacer(type = "medium")
