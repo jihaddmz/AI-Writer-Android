@@ -399,10 +399,7 @@ class MainActivity : ComponentActivity() {
                                         )
                                     ) { navBackStackEntry ->
 
-                                        MyBackHandler(
-                                            navController = navController,
-                                            BottomNavScreens.Dashboard.route
-                                        )
+                                        HomeBackHandler(context = LocalContext.current as Activity)
                                         ScreenChat(
                                             navController,
                                             scaffoldState,
@@ -431,7 +428,7 @@ class MainActivity : ComponentActivity() {
                                     composable(route = BottomNavScreens.Art.route) {
                                         MyBackHandler(
                                             navController = navController,
-                                            BottomNavScreens.Dashboard.route
+                                            BottomNavScreens.Chat.route
                                         )
                                         ScreenArt(navController = navController)
                                     }
@@ -529,7 +526,7 @@ class MainActivity : ComponentActivity() {
                                     composable(route = BottomNavScreens.Settings.route) {
                                         MyBackHandler(
                                             navController = navController,
-                                            BottomNavScreens.Dashboard.route
+                                            BottomNavScreens.Chat.route
                                         )
                                         ScreenSettings(navController = navController)
                                     }
