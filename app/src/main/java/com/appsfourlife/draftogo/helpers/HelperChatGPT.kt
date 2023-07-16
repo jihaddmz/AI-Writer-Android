@@ -45,7 +45,7 @@ object HelperChatGPT {
                 // adding headers on below line.
                 params["Content-Type"] = "application/json"
                 params["Authorization"] =
-                    "Bearer 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"
+                    "Bearer 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"
                 return params;
             }
         }
@@ -120,7 +120,7 @@ object HelperChatGPT {
                     // adding headers on below line.
                     params["Content-Type"] = "application/json"
                     params["Authorization"] =
-                        "Bearer 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"
+                        "Bearer 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"
                     return params;
                 }
             }
