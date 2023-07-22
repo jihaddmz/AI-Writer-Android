@@ -39,7 +39,7 @@ fun ItemDrawerChatSession(
         }) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround,
+            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             MyText(
@@ -49,21 +49,22 @@ fun ItemDrawerChatSession(
                     .padding(SpacersSize.medium),
                 enableSingleLine = true
             )
-            IconButton(onClick = {
-                if (modelNewChat.text == App.getTextFromString(R.string.chat)) {
-                    HelperUI.showToast(msg = App.context.getString(R.string.this_item_cant_be_deleted))
-                } else
-                    coroutineScope.launch(Dispatchers.IO) {
-                        App.databaseApp.daoApp.deleteAllChatsByNewChatID(modelNewChat.id)
-                        App.databaseApp.daoApp.deleteNewChat(modelNewChat)
-                        listOfNewChats.value =
-                            App.databaseApp.daoApp.getAllNewChats() as MutableList<ModelNewChat>
-                    }
+            if (modelNewChat.text != App.getTextFromString(textID = R.string.chat))
+                IconButton(onClick = {
+                    if (modelNewChat.text == App.getTextFromString(R.string.chat)) {
+                        HelperUI.showToast(msg = App.context.getString(R.string.this_item_cant_be_deleted))
+                    } else
+                        coroutineScope.launch(Dispatchers.IO) {
+                            App.databaseApp.daoApp.deleteAllChatsByNewChatID(modelNewChat.id)
+                            App.databaseApp.daoApp.deleteNewChat(modelNewChat)
+                            listOfNewChats.value =
+                                App.databaseApp.daoApp.getAllNewChats() as MutableList<ModelNewChat>
+                        }
 
-                onDeleteBtnClick(modelNewChat)
-            }) {
-                MyIcon(iconID = R.drawable.icon_delete, contentDesc = "delete item")
-            }
+                    onDeleteBtnClick(modelNewChat)
+                }) {
+                    MyIcon(iconID = R.drawable.icon_delete, contentDesc = "delete item")
+                }
         }
     }
 }

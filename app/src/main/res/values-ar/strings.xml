@@ -321,7 +321,7 @@
 
     <string name="image_resolution">دقة الصورة</string>
     <string name="saving_to_history_done">تم الحفظ في التاريخ</string>
-    <string name="effortless_creativity">إبداع سهل</string>
+    <string name="aichat_and_image">AI الدردشة والصورةل</string>
     <string name="how_to_generate_text_outside_app">كيفية إنشاء نص خارج التطبيق؟</string>
     <string name="how_to_generate_text_outside_app_answer">ما عليك سوى البدء بـ /درافت في حقل النص الخاص بالتطبيق الذي تريده متبوعًا بالإدخال الذي تريده ، وانتظر لمدة ثانيتين ثم سيتم إنشاء مخرجاتك. على سبيل المثال: \ " /درافت اكتب بريدًا إلكترونيًا إلى رئيسي \" \n\n ولكن قبل ذلك انتقل إلى إعدادات التطبيق لتمكين الإذن</string>
     <string name="v30_updates">تحديثات V3.0</string>

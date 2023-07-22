@@ -57,7 +57,7 @@ fun ScreenSignIn(
             mutableStateOf(false)
         }
         TypeWriterEffect(
-            baseText = "${stringResource(id = R.string.app_name)}: ${stringResource(id = R.string.effortless_creativity)}",
+            baseText = "${stringResource(id = R.string.app_name)}: ${stringResource(id = R.string.aichat_and_image)}",
             outputText = textDraftogo,
             finished = finishedTextDraftogoAnimation,
             delay = 1000
