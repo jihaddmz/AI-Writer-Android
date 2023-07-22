@@ -43,13 +43,14 @@ fun AppBarTransparent(
             .padding(
                 top = SpacersSize.small,
                 bottom = SpacersSize.medium,
-                start = SpacersSize.small
+                start = SpacersSize.small,
+                end = SpacersSize.small
             ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(0.7f),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (showSidebar) {
@@ -80,7 +81,7 @@ fun AppBarTransparent(
         }
 
         if (showHelpIcon) {
-            Row {
+            Row(modifier = Modifier.fillMaxWidth(0.3f)) {
 
                 val expand = remember {
                     mutableStateOf(false)

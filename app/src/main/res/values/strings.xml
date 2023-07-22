@@ -313,7 +313,7 @@
     <string name="long_click_the_generated_output">Long click the generated output</string>
     <string name="image_resolution">Image Resolution</string>
     <string name="saving_to_history_done">Saved to history</string>
-    <string name="effortless_creativity">Effortless Creativity</string>
+    <string name="aichat_and_image">AI Chat &amp; Image</string>
     <string name="how_to_generate_text_outside_app">How to generate text outside the app?</string>
     <string name="how_to_generate_text_outside_app_answer">Just start with /draft in the text field of the app you want followed by the input you want, wait for 2 sec and then your output will be generated. For example: \"/draft write an email to my boss\"\n\n But before that go the settings of the app to enable the permission</string>
     <string name="v30_updates">V3.0 Updates</string>

@@ -52,7 +52,7 @@ fun SidebarNewChat(scaffoldState: ScaffoldState, navController: NavController, o
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = SpacersSize.small),
+                .padding(start = SpacersSize.medium),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {

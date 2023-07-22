@@ -332,7 +332,7 @@ fun ScreenArt(
 //                    text = stringResource(id = R.string.art_res_tip)
 //                )
 
-                MySpacer(type = "medium")
+                MySpacer(type = "large")
 
                 style.value = myDropDown(
                     modifier = Modifier.padding(horizontal = SpacersSize.medium),
