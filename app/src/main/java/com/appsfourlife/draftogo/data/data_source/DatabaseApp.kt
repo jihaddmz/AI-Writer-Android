@@ -27,6 +27,23 @@ abstract class DatabaseApp : RoomDatabase() {
 
         private var INSTANCE: DatabaseApp? = null
 
+        val MIGRATION_1_2: Migration = object : Migration(1, 2) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // create table_arthistory table
+                database.execSQL("CREATE TABLE IF NOT EXISTS `table_arthistory` (`prompt` TEXT NOT NULL, `imageUrl` TEXT NOT NULL, dateTime INTEGER NOT NULL, PRIMARY KEY(`prompt`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `table_favoritetemplates` (`query` TEXT NOT NULL, `imageUrl` TEXT NULL, iconID INTEGER NULL, PRIMARY KEY(`query`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `table_purchasehistory` (`date` TEXT NOT NULL, `price` FLOAT NOT NULL, 'type' TEXT NOT NULL, PRIMARY KEY(`date`))")
+            }
+        }
+
+        val MIGRATION_2_3: Migration = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                // create table_arthistory table
+//                database.execSQL("CREATE TABLE IF NOT EXISTS `table_purchasehistory` (`date` TEXT NOT NULL, `price` FLOAT NOT NULL, 'type' TEXT NOT NULL, PRIMARY KEY(`date`))")
+                database.execSQL("CREATE TABLE IF NOT EXISTS `table_chat` (`id` INT NOT NULL, `role` text not null, `text` text not null, `color` int not null, primary key(`id`))")
+            }
+        }
+
         val MIGRATION_3_4: Migration = object : Migration(3, 4) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 // create table_arthistory table
@@ -42,7 +59,7 @@ abstract class DatabaseApp : RoomDatabase() {
                     context,
                     DatabaseApp::class.java,
                     "db_generate_text"
-                ).allowMainThreadQueries().addMigrations(MIGRATION_3_4).build()
+                ).allowMainThreadQueries().addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4).build()
             }
 
             return INSTANCE
