@@ -100,7 +100,7 @@ fun BottomSheetWritePricing(
                     SubscriptionItem(
                         title = purchasePackage.product.title.split("(")[0].trim(),
                         description = purchasePackage.product.description,
-                        price = purchasePackage.product.price
+                        price = purchasePackage.product.price.formatted
                     ) {
 
                         Purchases.sharedInstance.purchaseProduct(
@@ -112,7 +112,7 @@ fun BottomSheetWritePricing(
                                     customerInfo: CustomerInfo
                                 ) {
                                     if (customerInfo.entitlements["premium"]?.isActive == true) {
-                                        val price = product.price.replace(product.price.filter { !it.isDigit() && it != '.' }, "")
+                                        val price = product.price.formatted.replace(product.price.formatted.filter { !it.isDigit() && it != '.' }, "")
                                         coroutineScope.launch(Dispatchers.IO) {
                                             if (App.databaseApp.daoApp.getPurchaseHistory(
                                                     HelperDate.parseDateToString(

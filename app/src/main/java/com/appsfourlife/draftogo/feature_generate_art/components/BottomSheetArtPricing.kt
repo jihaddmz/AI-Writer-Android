@@ -113,8 +113,9 @@ fun BottomSheetArtPricing(
                                         storeTransaction: StoreTransaction,
                                         customerInfo: CustomerInfo
                                     ) {
-                                        val price = product.price.replace(
-                                            product.price.filter { !it.isDigit() && it != '.' },
+                                        val price = product.price.formatted
+                                            .replace(
+                                            product.price.formatted.filter { !it.isDigit() && it != '.' },
                                             ""
                                         )
                                         coroutineScope.launch(Dispatchers.IO) {

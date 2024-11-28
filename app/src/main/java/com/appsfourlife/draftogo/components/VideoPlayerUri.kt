@@ -54,6 +54,9 @@ fun VideoView(
                 Lifecycle.Event.ON_RESUME -> {
                     exoPlayer.play()
                 }
+                else -> {
+
+                }
             }
         }
         val lifecycle = lifecycleOwner.value.lifecycle
